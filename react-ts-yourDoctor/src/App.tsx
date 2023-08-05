@@ -8,6 +8,12 @@ import DriverSignup from './pages/signup/driverSignup';
 import PatientSignup from './pages/signup/patientSignup';
 import HospitalSignup from './pages/signup/hospitalSignup';
 import LogIn from './pages/signup/login';
+import NurseProfileUpdate from './pages/updateProfile/nurseUpdateProfile';
+import DriverProfileUpdate from './pages/updateProfile/driverUpdateProfile';
+import DoctorProfileUpdate from './pages/updateProfile/doctorUpdateProfile';
+import PatientProfileUpdate from './pages/updateProfile/patientUpdateProfile';
+import DoctorHome from './pages/doctorPages/doctorHome';
+import PatientPrescription from './pages/doctorPages/prescriptionSubmission';
 
 export function App() {
   return (
@@ -21,6 +27,12 @@ export function App() {
       <Route path="/PatientSignup/" element={<PatientSignup />} />
       <Route path="/HospitalSignup/" element={<HospitalSignup />} />
       <Route path="/LogIn/" element={<LogIn />} />
+      <Route path="/doctorUpdateProfile/" element={<DoctorProfileUpdate/>}/>
+      <Route path="/doctorHome/" element ={<DoctorHome/>}/>
+      <Route path="/prescriptionSubmission/" element ={<PatientPrescription/>}/>
+      <Route path="/patientUpdateProfile/" element ={<PatientProfileUpdate/>} />
+      <Route path="/nurseUpdateProfile/" element ={<NurseProfileUpdate/>} />
+      <Route path="/driverUpdateProfile/" element ={<DriverProfileUpdate/>} />
     </Routes>
   );
 }

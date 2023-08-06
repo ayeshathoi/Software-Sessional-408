@@ -14,6 +14,9 @@ import DoctorProfileUpdate from './pages/updateProfile/doctorUpdateProfile';
 import PatientProfileUpdate from './pages/updateProfile/patientUpdateProfile';
 import DoctorHome from './pages/doctorPages/doctorHome';
 import PatientPrescription from './pages/doctorPages/prescriptionSubmission';
+import Appointments from './pages/userPages/appointments';
+import Tests from './pages/userPages/tests';
+import Ambulances from './pages/userPages/ambulance';
 import NurseHome from './pages/nursePages/nurseHome';
 import DriverHome from './pages/driverPages/driverHome';
 
@@ -53,6 +56,9 @@ export function App() {
           path="/driverHome/DriverProfileUpdate/"
           element={<DriverProfileUpdate />}
         />
+        <Route path="/appointments/" element={<Appointments />} />
+        <Route path="/tests/" element={<Tests />} />
+        <Route path="/ambulances/" element={<Ambulances />} />
       </Routes>
     </HashRouter>
   );

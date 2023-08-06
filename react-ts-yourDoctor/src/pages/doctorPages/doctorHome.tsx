@@ -109,7 +109,7 @@ function DoctorHome() {
       <div>
         <HeaderDoctor />
       </div>
-      <div className="pt-20 bg-teal-200">
+      <div className="pt-20 bg-indigo-100">
         <div className="flex justify-between mx-4 items-center">
           <div>
             <button
@@ -131,7 +131,7 @@ function DoctorHome() {
         </div>
       </div>
 
-      <div className="flex items-center justify-center bg-gray-100 h-screen">
+      <div className="flex items-center justify-center bg-blue-50 h-screen">
         <div className="flex flex-col items-center">
           <div className="mb-4">
             <img

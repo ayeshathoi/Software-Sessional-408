@@ -47,24 +47,17 @@ function LogIn() {
         <p>&</p>
       </div>
       <div className="w-screen h-screen flex items-center justify-center bg-white">
-        <div
-          className="flex flex-col items-center justify-center pt-20 bg-lightpink rounded-lg"
-          style={{
-            minWidth: '400px',
-            maxWidth: '600px',
-            backgroundColor: 'lightpink',
-          }}
-        >
+        <div className="pt-20 flex flex-col items-center justify-center pb-8 px-12 mb-8 border border-gray-300 round-lg bg-pink-50">
           <h1
-            style={{ fontWeight: 'bold', fontSize: '24px', color: 'darkred' }}
+            style={{ fontWeight: 'bold', fontSize: '24px', color: 'royalblue' }}
           >
             Log In
           </h1>
           <form onSubmit={handleSubmit} className="w-full">
-            <div className="mb-8">
+            <div className="mb-8 mt-4">
               <label
                 htmlFor="emailOrMobile"
-                className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15"
+                className="text-black px-2.5 text-lg justify-center font-semibold bg-indigo-300 py-2 h-15"
               >
                 Email or Mobile Number
               </label>
@@ -75,13 +68,13 @@ function LogIn() {
                 value={formData.emailOrMobile}
                 onChange={handleChange}
                 required
-                className="w-full rounded-md rounded-r-none  bg-pink-600 px-10 py-2 h-15"
+                className="w-full rounded-md rounded-r-none mt-4 bg-indigo-200 px-10 py-2 h-15"
               />
             </div>
             <div className="mb-8">
               <label
                 htmlFor="password"
-                className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15"
+                className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2 h-15"
               >
                 Password
               </label>
@@ -92,13 +85,13 @@ function LogIn() {
                 value={formData.password}
                 onChange={handleChange}
                 required
-                className="w-full rounded-md rounded-r-none  bg-pink-600 px-10 py-2 h-15"
+                className="w-full rounded-md rounded-r-none mt-4 bg-indigo-200 px-10 py-2 h-15"
               />
             </div>
             <div className="flex justify-center">
               <button
                 type="submit"
-                className="text-black px-2.5 text-lg font-semibold py-2 h-15 bg-pink-900"
+                className="text-black px-2.5 text-lg font-semibold py-2 h-15 bg-indigo-500"
               >
                 Log In
               </button>

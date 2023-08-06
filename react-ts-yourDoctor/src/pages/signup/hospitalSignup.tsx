@@ -5,13 +5,14 @@ import Footer from '../navbar/footer';
 
 function HospitalSignup() {
   const [formData, setFormData] = useState({
+    hospitalName: '',
     email: '',
-    mobile: '',
     password: '',
-    streetNumber: '',
+    street: '',
     thana: '',
     city: '',
     division: '',
+    pdfDocument: null,
   });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -62,24 +63,42 @@ function HospitalSignup() {
       <div
         className="flex flex-col items-center justify-center"
         style={{
-          backgroundColor: 'lightpink',
+          backgroundColor: 'ghostwhite',
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           backgroundPosition: 'center center',
           // opacity: 0.5, // Adjust the opacity as needed (0.0 to 1.0)
         }}
       >
-        <div className="pt-20 flex flex-col items-center justify-center">
+        <div className="pt-20 flex flex-col items-center justify-center pb-8 px-12 mb-8 border border-gray-300 round-lg bg-pink-50">
           <h1
-            style={{ fontWeight: 'bold', fontSize: '24px', color: 'darkred' }}
+            style={{ fontWeight: 'bold', fontSize: '24px', color: 'royalblue' }}
           >
             Hospital Signup
           </h1>
           <form onSubmit={handleSubmit}>
+            <div className="mb-8 mt-4">
+              <label
+                htmlFor="hospitalName"
+                className="text-black px-2 text-lg font-semibold bg-indigo-300 py-2"
+              >
+                Hospital Name
+              </label>
+              <input
+                type="text"
+                id="hospitalName"
+                name="hospitalName"
+                value={formData.hospitalName}
+                onChange={handleChange}
+                required
+                className="w-half rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
+              />
+            </div>
+
             <div className="mb-8">
               <label
                 htmlFor="email"
-                className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15"
+                className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
               >
                 Email
               </label>
@@ -90,30 +109,14 @@ function HospitalSignup() {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="w-half rounded-md rounded-r-none  bg-pink-600 px-10 py-2 h-15"
+                className="w-half rounded-md rounded-r-none  bg-indigo-200 px-3 py-2"
               />
             </div>
-            <div className="mb-8">
-              <label
-                htmlFor="mobile"
-                className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15"
-              >
-                Mobile Number
-              </label>
-              <input
-                type="text"
-                id="mobile"
-                name="mobile"
-                value={formData.mobile}
-                onChange={handleChange}
-                required
-                className="w-half rounded-md rounded-r-none  bg-pink-600 px-10 py-2 h-15"
-              />
-            </div>
+
             <div className="mb-8">
               <label
                 htmlFor="password"
-                className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15"
+                className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
               >
                 Password
               </label>
@@ -124,36 +127,31 @@ function HospitalSignup() {
                 value={formData.password}
                 onChange={handleChange}
                 required
-                className="w-half rounded-md rounded-r-none  bg-pink-600 px-10 py-2 h-15"
+                className="w-half rounded-md rounded-r-none  bg-indigo-200 px-3 py-2"
+              />
+            </div>
+            <div className="mb-8">
+              <label
+                htmlFor="street"
+                className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
+              >
+                Street No.
+              </label>
+              <input
+                type="text"
+                id="street"
+                name="street"
+                value={formData.street}
+                onChange={handleChange}
+                required
+                className="w-half rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
               />
             </div>
 
             <div className="mb-8">
-              <label className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15">
-                Full Address
-              </label>
-            </div>
-            <div className="mb-8">
-              <label
-                htmlFor="streetNumber"
-                className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15"
-              >
-                Street Number
-              </label>
-              <input
-                type="text"
-                id="streetNumber"
-                name="streetNumber"
-                value={formData.streetNumber}
-                onChange={handleChange}
-                required
-                className="w-half rounded-md rounded-r-none bg-pink-600 px-10 py-2 h-15"
-              />
-            </div>
-            <div className="mb-8">
               <label
                 htmlFor="thana"
-                className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15"
+                className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
               >
                 Thana
               </label>
@@ -164,13 +162,11 @@ function HospitalSignup() {
                 value={formData.thana}
                 onChange={handleChange}
                 required
-                className="w-half rounded-md rounded-r-none bg-pink-600 px-10 py-2 h-15"
+                className="w-20 rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
               />
-            </div>
-            <div className="mb-8">
               <label
                 htmlFor="city"
-                className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15"
+                className="text-black ml-2 px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
               >
                 City
               </label>
@@ -181,13 +177,11 @@ function HospitalSignup() {
                 value={formData.city}
                 onChange={handleChange}
                 required
-                className="w-half rounded-md rounded-r-none bg-pink-600 px-10 py-2 h-15"
+                className="w-20 rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
               />
-            </div>
-            <div className="mb-8">
               <label
                 htmlFor="division"
-                className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15"
+                className="text-black ml-2 px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
               >
                 Division
               </label>
@@ -198,15 +192,34 @@ function HospitalSignup() {
                 value={formData.division}
                 onChange={handleChange}
                 required
-                className="w-half rounded-md rounded-r-none bg-pink-600 px-10 py-2 h-15"
+                className="w-20 rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
               />
             </div>
-            <button
-              type="submit"
-              className="text-black px-2.5 text-lg font-semibold py-2 h-15 bg-violet-900"
-            >
-              Sign Up
-            </button>
+            <div className="mb-8">
+              <label
+                htmlFor="pdfDocument"
+                className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
+              >
+                PDF Document Submission
+              </label>
+              <input
+                type="file"
+                id="pdfDocument"
+                name="pdfDocument"
+                onChange={handleFileChange}
+                accept=".pdf"
+                className="w-half rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
+              />
+            </div>
+
+            <div className="flex justify-center">
+              <button
+                type="submit"
+                className="text-black px-2.5 text-lg font-semibold py-2  bg-indigo-500"
+              >
+                Sign Up
+              </button>
+            </div>
           </form>
         </div>
       </div>

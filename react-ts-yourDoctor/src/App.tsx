@@ -14,32 +14,47 @@ import DoctorProfileUpdate from './pages/updateProfile/doctorUpdateProfile';
 import PatientProfileUpdate from './pages/updateProfile/patientUpdateProfile';
 import DoctorHome from './pages/doctorPages/doctorHome';
 import PatientPrescription from './pages/doctorPages/prescriptionSubmission';
+import NurseHome from './pages/nursePages/nurseHome';
+import DriverHome from './pages/driverPages/driverHome';
 
 export function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="*" element={<NotFound />} />
-      <Route path="/ProfileOptions" element={<ProfileOptions />} />
-      <Route path="/DoctorSignup/" element={<DoctorSignup />} />
-      <Route path="/NurseSignup/" element={<NurseSignup />} />
-      <Route path="/DriverSignup/" element={<DriverSignup />} />
-      <Route path="/PatientSignup/" element={<PatientSignup />} />
-      <Route path="/HospitalSignup/" element={<HospitalSignup />} />
-      <Route path="/LogIn/" element={<LogIn />} />
-      <Route path="/doctorUpdateProfile/" element={<DoctorProfileUpdate/>}/>
-      <Route path="/doctorHome/" element ={<DoctorHome/>}/>
-      <Route path="/prescriptionSubmission/" element ={<PatientPrescription/>}/>
-      <Route path="/patientUpdateProfile/" element ={<PatientProfileUpdate/>} />
-      <Route path="/nurseUpdateProfile/" element ={<NurseProfileUpdate/>} />
-      <Route path="/driverUpdateProfile/" element ={<DriverProfileUpdate/>} />
-    </Routes>
-  );
-}
-export function WrappedApp() {
-  return (
     <HashRouter>
-      <App />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="*" element={<NotFound />} />
+        <Route path="/ProfileOptions" element={<ProfileOptions />} />
+        <Route path="/DoctorSignup/" element={<DoctorSignup />} />
+        <Route path="/NurseSignup/" element={<NurseSignup />} />
+        <Route path="/DriverSignup/" element={<DriverSignup />} />
+        <Route path="/PatientSignup/" element={<PatientSignup />} />
+        <Route path="/HospitalSignup/" element={<HospitalSignup />} />
+        <Route path="/LogIn/" element={<LogIn />} />
+        <Route
+          path="/doctorHome/DoctorProfileUpdate/"
+          element={<DoctorProfileUpdate />}
+        />
+        <Route path="/doctorHome/" element={<DoctorHome />} />
+        <Route path="/nurseHome/" element={<NurseHome />} />
+        <Route path="/driverHome/" element={<DriverHome />} />
+        <Route
+          path="/prescriptionSubmission/"
+          element={<PatientPrescription />}
+        />
+        <Route
+          path="/patientUpdateProfile/"
+          element={<PatientProfileUpdate />}
+        />
+        <Route
+          path="/nurseHome/NurseProfileUpdate/"
+          element={<NurseProfileUpdate />}
+        />
+        <Route
+          path="/driverHome/DriverProfileUpdate/"
+          element={<DriverProfileUpdate />}
+        />
+      </Routes>
     </HashRouter>
   );
 }
+export default App;

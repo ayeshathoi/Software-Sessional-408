@@ -38,12 +38,7 @@ function DriverProfileUpdate() {
       </div>
       <div className="flex">
         <div className="w-1/4 p-6 bg-white shadow-md">
-          
-          <img
-            src={Driver}
-            alt="Driver"
-            className="h-40 w-full object-cover"
-          />
+          <img src={Driver} alt="Driver" className="h-40 w-full object-cover" />
           <h2 className="text-xl font-semibold mb-2">XYZ</h2>
           <p className="text-gray-600">Driver</p>
         </div>
@@ -72,7 +67,7 @@ function DriverProfileUpdate() {
                   </div>
                 </div>
               </div>
-              
+
               {/* Contact Number */}
               <div className="mb-4">
                 <div className="flex">

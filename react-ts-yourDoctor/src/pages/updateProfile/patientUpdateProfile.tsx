@@ -7,7 +7,7 @@ function PatientProfileUpdate() {
     street: 'Zahir Raihan Road',
     thana: 'Chawkbazar',
     district: 'Dhaka',
-    contactNumber: '01123-345567'
+    contactNumber: '01123-345567',
   };
 
   const [formData, setFormData] = useState(initialData);
@@ -54,7 +54,7 @@ function PatientProfileUpdate() {
                 </div>
               </div>
             </div>
-            {/* thana*/}
+            {/* thana */}
             <div className="mb-4">
               <div className="flex">
                 <div className="w-1/2 bg-lightblue p-2 rounded-tl rounded-bl">
@@ -75,7 +75,7 @@ function PatientProfileUpdate() {
                 </div>
               </div>
             </div>
-            {/* district*/}
+            {/* district */}
             <div className="mb-4">
               <div className="flex">
                 <div className="w-1/2 bg-lightblue p-2 rounded-tl rounded-bl">
@@ -96,7 +96,7 @@ function PatientProfileUpdate() {
                 </div>
               </div>
             </div>
-            {/* contact no*/}
+            {/* contact no */}
             <div className="mb-4">
               <div className="flex">
                 <div className="w-1/2 bg-lightblue p-2 rounded-tl rounded-bl">

@@ -11,11 +11,11 @@ import AmbulanceImage from '@/assets/ambulance.jpg';
 import LoginImage from '@/assets/login.jpg';
 
 function ProfileOptions() {
-  const loginVariants = {
-    initial: { scale: 1 },
-    hover: { scale: 1.1 },
-    tap: { scale: 0.9 },
-  };
+  // const loginVariants = {
+  //   initial: { scale: 1 },
+  //   hover: { scale: 1.1 },
+  //   tap: { scale: 0.9 },
+  // };
 
   const shakeVariants = {
     hover: { x: [-5, 5, -5, 5, -5, 5, 0], transition: { duration: 0.5 } },

@@ -37,13 +37,9 @@ function NurseProfileUpdate() {
         <HeaderCommon />
       </div>
       <div className="flex">
-        <div className="w-1/4 p-6 bg-white shadow-md">
+        <div className="mt-16 w-1/4 p-6 bg-white shadow-md">
           {/* Nurse's Photo (if applicable) */}
-          <img
-            src={Nurse}
-            alt="Nurse"
-            className="h-40 w-full object-cover"
-          />
+          <img src={Nurse} alt="Nurse" className="h-40 w-full object-cover" />
           <h2 className="text-xl font-semibold mb-2">Labiba</h2>
           <p className="text-gray-600">{formData.designation}</p>
         </div>

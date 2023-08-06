@@ -20,7 +20,7 @@ function UserHome() {
           <h1 className="text-2xl font-semibold mb-2">Ayesha</h1>
           <p className="text-lg text-gray-600 mb-4">User</p>
           <p className="text-lg text-gray-600 mb-4">017XX-XXXXXX</p>
-          <div className="mt-4">
+          <div>
             <Link to="PatientProfileUpdate">
               <button
                 type="button"

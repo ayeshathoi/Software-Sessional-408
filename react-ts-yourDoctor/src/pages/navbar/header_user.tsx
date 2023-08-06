@@ -26,6 +26,9 @@ function HeaderUser() {
         >
           New Ambulance Service++
         </Link>
+        <p className="text-magenta-900 font-bold text-lg mr-4 hover:underline">
+          UserName
+        </p>
       </div>
     </div>
   );

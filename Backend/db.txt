@@ -1,0 +1,228 @@
+Tutorial : https://www.youtube.com/watch?v=BLl32FvcdVM
+NodeJS : https://nodejs.org/docs/latest-v18.x/api/
+
+ERD link : 
+https://lucid.app/lucidchart/31848bd1-652f-4f2f-beb1-b6730bc7d282/edit?page=0_0&invitationId=inv_90bfb86c-e5db-4470-88dc-dec0be0f474c#
+
+Health Check Up test : 
+https://www.uhlbd.com/page/health-check
+
+Render : https://render.com/
+Nodejs : https://www.youtube.com/playlist?list=PL_cUvD4qzbkwp6pxx27pqgohrsP8v1Wj2
+
+
+
+Pass : 391062
+Use pgAdmin and sql shell
+https://youtu.be/qWV4HfcOGhY?list=PLzAy3QBHoWZdxPXkD7UVymWm_Do3IdzwQ
+
+//—-------------------------------------------------------------------------------------------------------
+Entity : 
+USER : 
+
+CREATE TABLE users (
+  uid SERIAL PRIMARY KEY,
+  uname TEXT NOT NULL,
+  email TEXT NOT NULL,
+  pass TEXT NOT NULL,
+  mobile_no TEXT NOT NULL,
+  dob DATE NOT NULL,
+  gender TEXT NOT NULL
+);
+
+INSERT INTO users (uname, email, pass, mobile_no, dob, gender)
+VALUES ('Ishika', 'Ishika@gmail.com', 'hashed_password_123', '1234567890', '2000-07-23', 'male');
+
+INSERT INTO users (uname, email, pass, mobile_no, dob, gender)
+VALUES ('Labiba', 'Labiba@gmail.com', 'hashed_password_456', '9876543210', '1995-05-12', 'female');
+
+INSERT INTO users (uname, email, pass, mobile_no, dob, gender)
+VALUES ('Ayesha', 'ayesha@gmail.com', 'hashed_password_789', '5555555555', '1988-11-30', 'female');
+
+PATIENT:
+CREATE TABLE patient (
+  pid INTEGER PRIMARY KEY REFERENCES users(uid),
+  street TEXT NOT NULL,
+  thana TEXT NOT NULL,
+  city TEXT NOT NULL,
+  district TEXT NOT NULL
+);
+
+INSERT INTO patient (pid, street, thana, city, district)
+VALUES (4, 'C-1/1', 'Ramna', 'Dhaka', 'Dhaka');
+
+INSERT INTO patient (pid, street, thana, city, district)
+VALUES (5, '93/1', 'Paribag', 'Dhaka', 'Dhaka');
+
+DOCTOR
+//zoom link option
+CREATE TABLE doctor (
+  doctor_id INTEGER PRIMARY KEY REFERENCES users(uid),
+  designation TEXT NOT NULL,
+  speciality TEXT NOT NULL,
+  status TEXT NOT NULL,
+  document BYTEA
+);
+INSERT INTO doctor (doctor_id, designation, speciality, status, document)
+VALUES (1, 'Cardiologist', 'Heart Specialist', 'Active', NULL),
+   	(2, 'Orthopedic Surgeon', 'Orthopedics', 'Active', NULL),
+   	(3, 'Pediatrician', 'Pediatrics', 'Inactive', NULL);
+
+
+
+Doctor_hospital 
+CREATE TABLE doctor_hospital (
+  doctor_id INTEGER REFERENCES doctor(doctor_id),
+  hospital_id INTEGER REFERENCES hospital(hospital_id),
+  PRIMARY KEY (doctor_id, hospital_id)
+);
+INSERT INTO doctor_hospital (doctor_id, hospital_id)
+VALUES (1, 1),
+       (1, 2);
+
+INSERT INTO doctor_hospital (doctor_id, hospital_id)
+VALUES (2, 2),
+       (2, 1);
+
+INSERT INTO doctor_hospital (doctor_id, hospital_id)
+VALUES (3, 1);
+
+
+NURSE
+
+CREATE TABLE nurse (
+  nurse_id INTEGER PRIMARY KEY  REFERENCES users(uid),
+  designation TEXT NOT NULL,
+ hospital_id INTEGER NOT NULL REFERENCES hospital(hospital_id),
+  status TEXT NOT NULL,
+  document BYTEA
+);
+
+INSERT INTO nurse (nurse_id, designation, hospital_id, status)
+VALUES (6, 'Head Nurse', 1, 'Active');
+
+
+Driver
+CREATE TABLE driver (
+   driver_id INTEGER PRIMARY KEY  REFERENCES users(uid),
+  ambulance_type TEXT NOT NULL,
+hospital_id INTEGER REFERENCES hospital(hospital_id),
+  status TEXT NOT NULL,
+  document BYTEA
+);
+-- Inserting data for the first driver
+INSERT INTO driver (driver_id, ambulance_type, hospital_id,status)
+VALUES (8, 'Regular Ambulance',1, 'Active');
+
+
+
+
+
+
+
+
+Hospital : 
+CREATE TABLE hospital (
+  hospital_id SERIAL PRIMARY KEY,
+  hospital_name TEXT NOT NULL,
+  email TEXT NOT NULL,
+  pass TEXT NOT NULL,
+  mobile TEXT NOT NULL,
+  street TEXT NOT NULL,
+  thana TEXT NOT NULL,
+  city TEXT NOT NULL,
+  district TEXT NOT NULL
+);
+
+INSERT INTO hospital (hospital_name, email, pass, mobile, street, thana, city, district)
+VALUES ('DMC', 'DMC@gmail.com', 'dmcforever', '1234567890', 'C-1/1', 'Ramna', 'Dhaka', 'Dhaka');
+
+INSERT INTO hospital (hospital_name, email, pass, mobile, street, thana, city, district)
+VALUES ('GMC', 'GMC@gmail.com', 'gmcforever', '9876543210', '93/1', 'Paribag', 'Dhaka', 'Dhaka');
+
+
+TEST:
+CREATE TABLE test (
+  testID SERIAL PRIMARY KEY,
+  testname TEXT NOT NULL,
+  price DECIMAL NOT NULL,
+  hospital_id INTEGER REFERENCES hospital(hospital_id)
+);
+INSERT INTO test(testname,price,hospital_id)
+VALUES ('Blood Pressure',500,1);
+
+NURSE_TEST:
+CREATE TABLE nurse_test (
+  test_id INTEGER REFERENCES test(testID),
+  nurse_id INTEGER REFERENCES nurse(nurse_id),
+PRIMARY KEY (nurse_id,test_id)
+);
+
+INSERT INTO nurse_test (nurse_id,test_id)
+VALUES (6,1);
+
+
+
+Timeline : 
+// doctor list e visit rakha uchit chilo probably
+
+CREATE TABLE timeline (
+  timeline_id SERIAL PRIMARY KEY,
+  weekday TEXT NOT NULL,
+  slot INTEGER NOT NULL,
+  start_time TIME NOT NULL,
+  end_time TIME NOT NULL,
+  old_patient_fee DECIMAL NOT NULL,
+  new_patient_fee DECIMAL NOT NULL,
+doctor_id INTEGER REFERENCES doctor(doctor_id),
+  hospital_id INTEGER REFERENCES hospital(hospital_id)
+);
+
+INSERT INTO timeline (weekday, slot, start_time, end_time, old_patient_fee, new_patient_fee, doctor_id,hospital_id) VALUES 
+('Monday', 1, '09:00:00', '11:00:00', 100.00, 120.00,1, 1),
+('Monday', 2, '11:30:00', '13:30:00', 120.00, 140.00,2, 2), 
+('Tuesday', 1, '08:30:00', '10:30:00', 90.00, 110.00, 2,1), 
+('Tuesday', 2, '11:00:00', '13:00:00', 110.00, 130.00,3, 2), 
+('Wednesday', 1, '10:00:00', '12:00:00', 95.00, 115.00,1,2);
+
+Appointment : -- add total_fare, hospital_id
+CREATE TABLE appointment (
+  appoint_id SERIAL PRIMARY KEY,
+  type TEXT NOT NULL,
+  time TIMESTAMP NOT NULL,
+  status TEXT NOT NULL,
+  serial INTEGER NOT NULL,
+  rating DECIMAL,
+  complaint_text TEXT,
+  patient_id INTEGER REFERENCES patient(pid),
+  doctor_id INTEGER REFERENCES doctor(doctor_id),
+  nurse_id INTEGER REFERENCES nurse(nurse_id),
+  driver_id INTEGER REFERENCES driver(driver_id)
+);
+
+
+INSERT INTO appointment (type, time, status, serial, patient_id, doctor_id, nurse_id, driver_id)
+VALUES
+  ('Checkup'	  , '2023-08-01 10:00:00', 'Scheduled'  , 1,  4 , 	NULL,  6, 	NULL),
+  ('Ambulance'	  , '2023-08-02 15:30:00', 'Completed'  , 2, 4  , 	NULL,  NULL, 7),
+  ('Appointment' , '2023-08-03 12:45:00', 'In Progress' , 1, 5  , 1, 	NULL,  	NULL);
+
+
+//Ambulance Type
+CREATE TABLE ambulance (
+  ambulance_id SERIAL PRIMARY KEY,
+  ambulance_type TEXT NOT NULL,
+  abmbulance_fare DECIMAL NOT NULL,
+hospital_id INTEGER REFERENCES hospital(hospital_id)
+
+);
+INSERT INTO ambulance(ambulance_type,abmbulance_fare,hospital_id)
+VALUES ('regular',500,1);
+
+INSERT INTO ambulance(ambulance_type,abmbulance_fare,hospital_id)
+VALUES ('ICU',1000,1);
+
+
+
+
+//admin approval

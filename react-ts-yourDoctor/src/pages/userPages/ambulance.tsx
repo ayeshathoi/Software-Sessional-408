@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Header from '../navbar/header';
+import Header from '../navbar/header_user';
 import Footer from '../navbar/footer';
 import User from '@/assets/user.webp';
 
@@ -13,21 +13,22 @@ function Ambulances() {
   const ambulanceData = [
     { name: 'XYZ', date: '2023-08-17', time: '07:00 AM' },
     { name: 'ABC', date: '2023-06-09', time: '04:00 pM' },
-   
+
     // more ambulance data...
   ];
 
   const currentDate = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
 
-  const upcomingAmbulances = ambulanceData.filter(ambulance => {
+  const upcomingAmbulances = ambulanceData.filter((ambulance) => {
     return selectedSection === 'upcoming' && ambulance.date > currentDate;
   });
 
-  const previousAmbulances = ambulanceData.filter(ambulance => {
+  const previousAmbulances = ambulanceData.filter((ambulance) => {
     return selectedSection === 'previous' && ambulance.date <= currentDate;
   });
 
-  const ambulancesToShow = selectedSection === 'upcoming' ? upcomingAmbulances : previousAmbulances;
+  const ambulancesToShow =
+    selectedSection === 'upcoming' ? upcomingAmbulances : previousAmbulances;
 
   return (
     <>
@@ -46,20 +47,31 @@ function Ambulances() {
         <div className="w-1/2 ml-8">
           <div className="flex justify-between items-center mb-4">
             <button
-              className={`px-4 py-2 rounded-lg ${selectedSection === 'upcoming' ? 'bg-blue-600 text-white' : 'bg-white text-blue-600'} hover:bg-blue-600 hover:text-white`}
+              className={`px-4 py-2 rounded-lg ${
+                selectedSection === 'upcoming'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-white text-blue-600'
+              } hover:bg-blue-600 hover:text-white`}
               onClick={() => handleSectionChange('upcoming')}
             >
               Upcoming
             </button>
             <button
-              className={`px-4 py-2 rounded-lg ${selectedSection === 'previous' ? 'bg-blue-600 text-white' : 'bg-white text-blue-600'} hover:bg-blue-600 hover:text-white`}
+              className={`px-4 py-2 rounded-lg ${
+                selectedSection === 'previous'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-white text-blue-600'
+              } hover:bg-blue-600 hover:text-white`}
               onClick={() => handleSectionChange('previous')}
             >
               Previous
             </button>
           </div>
           <div className="bg-white p-4 rounded-lg shadow-md">
-            <h2 className="text-lg font-semibold mb-3">{selectedSection === 'upcoming' ? 'Upcoming' : 'Previous'} Services</h2>
+            <h2 className="text-lg font-semibold mb-3">
+              {selectedSection === 'upcoming' ? 'Upcoming' : 'Previous'}{' '}
+              Services
+            </h2>
             <ul className="space-y-4">
               {ambulancesToShow.map((ambulance, index) => (
                 <li key={index} className="flex justify-between items-center">

@@ -19,6 +19,7 @@ import Tests from './pages/userPages/tests';
 import Ambulances from './pages/userPages/ambulance';
 import NurseHome from './pages/nursePages/nurseHome';
 import DriverHome from './pages/driverPages/driverHome';
+import UserHome from './pages/userPages/userHome';
 
 export function App() {
   return (
@@ -45,7 +46,7 @@ export function App() {
           element={<PatientPrescription />}
         />
         <Route
-          path="/patientUpdateProfile/"
+          path="/userHome/PatientProfileUpdate/"
           element={<PatientProfileUpdate />}
         />
         <Route
@@ -56,9 +57,10 @@ export function App() {
           path="/driverHome/DriverProfileUpdate/"
           element={<DriverProfileUpdate />}
         />
-        <Route path="/appointments/" element={<Appointments />} />
-        <Route path="/tests/" element={<Tests />} />
-        <Route path="/ambulances/" element={<Ambulances />} />
+        <Route path="/userHome/Appointments/" element={<Appointments />} />
+        <Route path="/userHome/Tests/" element={<Tests />} />
+        <Route path="/userHome/Ambulances/" element={<Ambulances />} />
+        <Route path="/userHome/" element={<UserHome />} />
       </Routes>
     </HashRouter>
   );

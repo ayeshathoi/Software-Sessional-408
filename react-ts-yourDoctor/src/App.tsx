@@ -14,6 +14,9 @@ import DoctorProfileUpdate from './pages/updateProfile/doctorUpdateProfile';
 import PatientProfileUpdate from './pages/updateProfile/patientUpdateProfile';
 import DoctorHome from './pages/doctorPages/doctorHome';
 import PatientPrescription from './pages/doctorPages/prescriptionSubmission';
+import Appointments from './pages/userPages/appointments';
+import Tests from './pages/userPages/tests';
+import Ambulances from './pages/userPages/ambulance';
 
 export function App() {
   return (
@@ -33,6 +36,9 @@ export function App() {
       <Route path="/patientUpdateProfile/" element ={<PatientProfileUpdate/>} />
       <Route path="/nurseUpdateProfile/" element ={<NurseProfileUpdate/>} />
       <Route path="/driverUpdateProfile/" element ={<DriverProfileUpdate/>} />
+      <Route path="/appointments/" element ={<Appointments/>} />
+      <Route path="/tests/" element ={<Tests/>} />
+      <Route path="/ambulances/" element ={<Ambulances/>} />
     </Routes>
   );
 }

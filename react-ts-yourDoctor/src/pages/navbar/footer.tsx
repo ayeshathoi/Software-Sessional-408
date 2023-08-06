@@ -2,7 +2,7 @@ function Footer() {
   return (
     <nav>
       <div className="flex items-center justify-between fixed z-30 w-full py-5 bg-indigo-300 bottom-0">
-        <p>THE END</p>
+        <p>{/*THE END*/}</p>
       </div>
     </nav>
   );

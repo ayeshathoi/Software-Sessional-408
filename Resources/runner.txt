@@ -1,0 +1,8 @@
+//Please ensure that the Node.js version used for running the project is greater than 18. Your attention to this requirement is greatly appreciated as it ensures compatibility and optimal performance throughout the project's execution.
+
+Necessary commands to run:
+npm install
+npm run dev
+
+vite installation command:
+npm install vite@latest

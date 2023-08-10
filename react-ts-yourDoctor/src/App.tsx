@@ -1,4 +1,4 @@
-import { HashRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
 import NotFound from './pages/NotFound';
 import ProfileOptions from './pages/signup/profileOptions';
@@ -23,7 +23,7 @@ import UserHome from './pages/userPages/userHome';
 
 export function App() {
   return (
-    <HashRouter>
+    <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="*" element={<NotFound />} />
@@ -42,7 +42,7 @@ export function App() {
         <Route path="/nurseHome/" element={<NurseHome />} />
         <Route path="/driverHome/" element={<DriverHome />} />
         <Route
-          path="/prescriptionSubmission/"
+          path="/doctorHome/PatientPrescription/"
           element={<PatientPrescription />}
         />
         <Route
@@ -62,7 +62,7 @@ export function App() {
         <Route path="/userHome/Ambulances/" element={<Ambulances />} />
         <Route path="/userHome/" element={<UserHome />} />
       </Routes>
-    </HashRouter>
+    </BrowserRouter>
   );
 }
 export default App;

@@ -245,12 +245,12 @@ function DoctorHome() {
                   <div className="text-right">
                     <p className="text-sm text-gray-500">{patient.date}</p>
                     <p className="text-sm text-gray-500">{patient.time}</p>
-                    <a
-                      href={patient.prescriptionLink}
+                    <Link
+                      to="PatientPrescription"
                       className="text-blue-600 hover:underline"
                     >
                       Prescription
-                    </a>
+                    </Link>
                   </div>
                 </li>
               ))}

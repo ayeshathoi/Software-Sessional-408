@@ -1,27 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import Header from '../navbar/header';
 import Footer from '../navbar/footer';
 
 function PatientProfileUpdate() {
-  const initialData = {
-    street: 'Zahir Raihan Road',
-    thana: 'Chawkbazar',
-    district: 'Dhaka',
-    contactNumber: '01123-345567',
+  const [formData, setFormData] = useState({});
+  const [isEditing, setIsEditing] = useState(false);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get('/api/getUserProfile'); // Replace with your backend API endpoint
+      if (response.data) {
+        setFormData(response.data);
+      } else {
+        console.error('Error fetching user profile data');
+      }
+    } catch (error) {
+      console.error('Error occurred while fetching user profile data:', error);
+    }
   };
 
-  const [formData, setFormData] = useState(initialData);
-  const [isEditing, setIsEditing] = useState(false);
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleUpdate = () => {
-    // Replace this with your update logic to send formData to the server
-    console.log('Updated Data:', formData);
-    setIsEditing(false);
+  const handleUpdate = async () => {
+    try {
+      const response = await axios.put('/api/updateUserProfile', formData);
+      if (response.status === 200) {
+        console.log('Profile updated successfully');
+        setIsEditing(false);
+      } else {
+        console.error('Error updating profile');
+      }
+    } catch (error) {
+      console.error('Error occurred while updating profile:', error);
+    }
   };
 
   return (
@@ -120,6 +139,7 @@ function PatientProfileUpdate() {
           </form>
           {isEditing ? (
             <button
+              type="submit"
               onClick={handleUpdate}
               className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
             >
@@ -127,6 +147,7 @@ function PatientProfileUpdate() {
             </button>
           ) : (
             <button
+              type="button"
               onClick={() => setIsEditing(true)}
               className="mt-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
             >

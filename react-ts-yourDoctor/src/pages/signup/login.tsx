@@ -1,4 +1,6 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, ChangeEvent, FormEvent } from 'react';
+import axios from 'axios';
 import Navbar from '../navbar/header';
 import Footer from '../navbar/footer';
 
@@ -16,27 +18,11 @@ function LogIn() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const formDataToSend = new FormData();
-      formDataToSend.append('emailOrMobile', formData.emailOrMobile);
-      formDataToSend.append('password', formData.password);
-
-      // Replace the following code with your backend API call using Axios or Fetch
-      const response = await fetch('/api/login', {
-        method: 'POST',
-        body: formDataToSend,
+      await axios.post('http://localhost:3000/login', formData).then((res) => {
+        console.log('here is the form', res.data);
       });
-
-      // Handle the response from the backend (e.g., show success message, redirect, etc.)
-      if (response.ok) {
-        console.log('Login successful');
-        // Redirect to the user dashboard or any other authenticated page
-      } else {
-        console.error('Login failed');
-        // Handle error response from the backend (e.g., show error message, etc.)
-      }
-    } catch (error) {
-      console.error('Error occurred while login:', error);
-      // Handle any network or other errors that may occur during login
+    } catch (err) {
+      console.log(err);
     }
   };
 

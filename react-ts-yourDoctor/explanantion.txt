@@ -8,3 +8,12 @@ useEffect- ei function tao backend er sathe connect er time e use hobe, er vitor
 kichu kichu page e egula akhono add kora hoy nai.
 
 ar hocche
+
+SignUp/Register
+
+http://localhost:3000/registerDoctor
+http://localhost:3000/registerDriver
+http://localhost:3000/registerNurse
+http://localhost:3000/registerHospital
+http://localhost:3000/registerUser
+http://localhost:3000/login

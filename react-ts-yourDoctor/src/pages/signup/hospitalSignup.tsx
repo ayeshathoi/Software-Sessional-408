@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, ChangeEvent, FormEvent } from 'react';
+import axios from 'axios';
 import Navbar from '../navbar/header';
 import Footer from '../navbar/footer';
 
@@ -21,37 +22,22 @@ function HospitalSignup() {
   };
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files && e.target.files[0];
-    if (file) {
-      setFormData((prevFormData) => ({ ...prevFormData, pdfDocument: file }));
-    }
+    console.log('pending', e.target);
+    // const file = e.target.files && e.target.files[0];
+    // if (file) {
+    //   setFormData((prevFormData) => ({ ...prevFormData, pdfDocument: file }));
+    // }
   };
-
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const formDataToSend = new FormData();
-      Object.entries(formData).forEach(([key, value]) => {
-        formDataToSend.append(key, value);
-      });
-
-      // Replace the following code with your backend API call using Axios or Fetch
-      const response = await fetch('/api/signup', {
-        method: 'POST',
-        body: formDataToSend,
-      });
-
-      // Handle the response from the backend (e.g., show success message, redirect, etc.)
-      if (response.ok) {
-        console.log('Signup successful');
-        // Redirect to a success page or login page
-      } else {
-        console.error('Signup failed');
-        // Handle error response from the backend (e.g., show error message, etc.)
-      }
-    } catch (error) {
-      console.error('Error occurred while signup:', error);
-      // Handle any network or other errors that may occur during signup
+      await axios
+        .post('http://localhost:3000/registerHospital', formData)
+        .then((res) => {
+          console.log('here is the form', res.data);
+        });
+    } catch (err) {
+      console.log(err);
     }
   };
 

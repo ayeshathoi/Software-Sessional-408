@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 /* eslint-disable import/extensions */
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';

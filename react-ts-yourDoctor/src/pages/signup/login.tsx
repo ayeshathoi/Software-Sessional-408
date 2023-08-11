@@ -1,10 +1,12 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, ChangeEvent, FormEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from '../navbar/header';
 import Footer from '../navbar/footer';
 
 function LogIn() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     emailOrMobile: '',
     password: '',
@@ -20,6 +22,22 @@ function LogIn() {
     try {
       await axios.post('http://localhost:3000/login', formData).then((res) => {
         console.log('here is the form', res.data);
+
+        const { userId } = res.data; // Replace with actual key
+        const { userType } = res.data; // Replace with actual key
+        let userProfileUrl = '';
+        if (userType === 'doctor') {
+          userProfileUrl = `/doctorHome/${userId}`;
+        } else if (userType === 'patient') {
+          userProfileUrl = `/userHome/${userId}`;
+        } else if (userType === 'driver') {
+          userProfileUrl = `/driverHome/${userId}`;
+        } else if (userType === 'nurse') {
+          userProfileUrl = `/nurseHome/${userId}`;
+        } else if (userType === 'hospital') {
+          userProfileUrl = `/hospitalHome/${userId}`;
+        }
+        navigate(userProfileUrl);
       });
     } catch (err) {
       console.log(err);

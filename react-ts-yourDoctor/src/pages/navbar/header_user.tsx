@@ -7,7 +7,7 @@ function HeaderUser() {
       <Header />
       <p>&</p>
 
-      <div className="pt-20 flex justify-between items-center fixed w-full bg-teal-200">
+      <div className="pt-20 flex justify-between items-center fixed w-full bg-indigo-100">
         <Link
           to="ProfileOptions"
           className="mx-4 text-magenta-900 font-bold text-lg mr-4 hover:underline"

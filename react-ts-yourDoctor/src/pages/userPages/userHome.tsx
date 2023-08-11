@@ -12,7 +12,7 @@ function UserHome() {
       <div>
         <Header />
       </div>
-      <div className="mt-10 flex items-center justify-center bg-gray-100 h-screen">
+      <div className="mt-10 flex items-center justify-center h-screen bg-blue-50">
         <div className="flex flex-col items-center">
           <div className="mb-4">
             <img src={User} alt="User" className="w-32 h-32 rounded-full" />

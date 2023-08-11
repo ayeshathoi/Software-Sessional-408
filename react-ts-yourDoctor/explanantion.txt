@@ -17,3 +17,5 @@ http://localhost:3000/registerNurse
 http://localhost:3000/registerHospital
 http://localhost:3000/registerUser
 http://localhost:3000/login
+
+Login e backend e usertype=table name rakha lagbe navigation er jonne.

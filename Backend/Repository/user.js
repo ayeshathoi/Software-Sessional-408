@@ -156,9 +156,7 @@ const create_nurse = async (username,email,pass,mobile,dob,gender,designation,do
       const user = create_user(username,email,pass,mobile,dob,gender);
       
       const nid = await findpid(email);
-      console.log(nid);
       const nid2 = nid[0].uid.toString();
-      console.log(nid2);
       const stat = "pending";
       const hid = await findhid(hospital_name);
       const hid2 = hid[0].hospital_id.toString();
@@ -171,27 +169,25 @@ const create_nurse = async (username,email,pass,mobile,dob,gender,designation,do
   }
 };
 
-const CREATE_DRIVER = "INSERT INTO " + constant.TABLE_DRIVER +  "("
-                    constant.TABLE_DRIVER_ID + "," +
+const CREATE_DRIVER = "INSERT INTO " + constant.TABLE_DRIVER +
+                    "(" + constant.TABLE_DRIVER_ID + "," +
                     constant.TABLE_DRIVER_STATUS + "," +
-                    constant.TABLE_DRIVER_DOCUMENT +
-                    constant.TABLE_DRIVER_AMBULANCE_TYPE +
-                    constant.TABLE_DRIVER_HOSPITAL + ")" +
-                    "VALUES ($1, $2, $3, $4 , $5);"
+                    constant.TABLE_DRIVER_DOCUMENT + "," +
+                    constant.TABLE_DRIVER_AMBULANCE_TYPE + ","+
+                    constant.TABLE_DRIVER_HOSPITAL + ")" + 
+                    "VALUES ($1, $2, $3, $4,$5);"
 
 //hospital er bepar ta dekhte hobe ekhane
 const create_driver = async (username,email,pass,mobile,dob,gender,type,document,hospital_name) => {
   try {
       const client = await getConnection.connect();
       const user = create_user(username,email,pass,mobile,dob,gender);
-      
       const drid = await findpid(email);
-      console.log(drid);
       const drid2 = drid[0].uid.toString();
-      console.log(drid2);
       const stat = "pending";
       result = "";
-      if(hospital_name == null){
+      console.log(type);
+      if(hospital_name != null){
       const hid = await findhid(hospital_name);
       const hid2 = hid[0].hospital_id.toString();
       result = await client.query(CREATE_DRIVER, [drid2,stat,document,type,hid2]);

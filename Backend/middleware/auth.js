@@ -5,7 +5,7 @@ const user = require('../Repository/user');
 const secretKey = "secretKey";
 
 //middleware function to verify the jwt token and find the user who is currently logged in
-async function verify(req,res,next){
+async function hospital_verify(req,res,next){
     const cookie  = req.header('cookie');
     if(!cookie) return res.redirect('/patient/hospital/testnames');
     //const token = cookie.split(' ')[1].split('=')[1]
@@ -21,7 +21,28 @@ async function verify(req,res,next){
     }
 }
 
+async function user_verify(req,res,next){
+    const cookie  = req.header('cookie');
+    const token = cookie.split('=')[1];
+    if(!cookie) 
+    {
+        return res.redirect('/patient/user/testnames');
+    }
+    try{
+        const verified = jwt.verify(token, secretKey).uid;
+        req.user =await userController.getUserDetailsByID(verified);
+        console.log(req.user);
+        next();
+    }
+    catch(err){
+        res.status(400).send('Invalid Token');
+    }
+}
+        
+
 
 module.exports = {
-    verify,
+    hospital_verify,
+    user_verify
+
 }

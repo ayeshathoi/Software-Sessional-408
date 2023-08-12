@@ -1,6 +1,5 @@
 const user = require('../Repository/user');
 const http_status = require('./HTTPStatus');
-const bcryptjs = require('bcryptjs'); // Use bcryptjs library for hashing
 
 const create_hospital = async (req, res,hashedPassword) => {
     const hospital_name = req.body.hospital_name;
@@ -22,12 +21,72 @@ const create_hospital = async (req, res,hashedPassword) => {
     }
 };
 
-const getUserDetailsByID = async (req, res) => {
+const create_patient = async (req, res,hashedPassword) => {
+    const username = req.body.uname;
+    const email = req.body.email;
+    const pass = hashedPassword;
+    const mobile = req.body.mobile;
+    const gender = req.body.gender;
+    const dob = req.body.dob;
+    const street = req.body.street;
+    const thana = req.body.thana;
+    const city = req.body.city;
+    const district = req.body.district;
     try {
-        console.log(req.params.uid);
-        const uid = req.params.uid;
+        const new_patient = user.create_patient(username,email,pass,mobile,dob,gender,street,thana,city,district);
+        res.status(http_status.CREATED).json({ created: true });
+    } catch (error) {
+        console.error(error);
+        res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while creating the patient.' });
+    }
+};
+
+
+const create_nurse = async (req, res,hashedPassword) => {
+    const username = req.body.uname;
+    const email = req.body.email;
+    const pass = hashedPassword;
+    const mobile = req.body.mobile;
+    const dob = req.body.dob;
+    const gender = req.body.gender;
+    const designation = req.body.designation;
+    const document = null;
+    const hospital_name = req.body.hospital_name;
+    try {
+        console.log(hospital_name);
+        const new_nurse = user.create_nurse(username,email,pass,mobile,dob,gender,designation,document,hospital_name);
+        res.status(http_status.CREATED).json({ created: true });
+    } catch (error) {
+        console.error(error);
+        res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while creating the nurse.' });
+    }
+};
+
+const create_driver = async (req, res,hashedPassword) => {
+    const username = req.body.uname;
+    const email = req.body.email;
+    const pass = hashedPassword;
+    const mobile = req.body.mobile;
+    const dob = req.body.dob;
+    const gender = req.body.gender;
+    const type = req.body.type;
+    const document = null;
+    const hospital_name = req.body.hospital_name;
+    console.log(hospital_name);
+    try {
+        const new_driver = user.create_driver(username,email,pass,mobile,dob,gender,type,document,hospital_name);
+        res.status(http_status.CREATED).json({ created: true });
+    } catch (error) {
+        console.error(error);
+        res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while creating the driver.' });
+    }
+};
+
+const getUserDetailsByID = async (uid, res) => {
+    try {
+        console.log(uid);
         const userDetails = await user.GET_USER_DETAIL(uid);
-        res.status(http_status.OK).json(userDetails);
+        return userDetails;
     } catch (error) {
         console.error(error);
         res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while fetching user details.' });
@@ -36,10 +95,9 @@ const getUserDetailsByID = async (req, res) => {
 
 const getUserDetailsByEmail = async (req, res) => {
     try {
-        
         const email = req.body.email;
         const userDetails = await user.GET_USER_DETAILEmail(email);
-        res.status(http_status.OK).json(userDetails);
+        return userDetails;
     } catch (error) {
         console.error(error);
         res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while fetching user details.' });
@@ -75,5 +133,8 @@ module.exports = {
     getUserDetailsByEmail,
     getHospitalDetailsByEmail,
     create_hospital,
-    getHospitalDetailsByID
+    getHospitalDetailsByID,
+    create_patient,
+    create_nurse,
+    create_driver
 };

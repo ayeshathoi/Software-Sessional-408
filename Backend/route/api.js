@@ -16,7 +16,7 @@ router.use("/driver", require('./driver'))
 router.use("/appointment", require('./booking'))
 
 
-router.use("/auth", require('./testauth'))
+router.use("/auth", require('./auth'))
 
 module.exports = router;
 

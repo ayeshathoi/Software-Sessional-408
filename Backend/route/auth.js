@@ -1,6 +1,6 @@
 const bcrypt= require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const {verify} = require('../middleware/testauth');
+const {verify} = require('../middleware/auth');
 const error = require('../Controller/HTTPStatus');
 const createhos = require('../Controller/user');
 const errors = [];

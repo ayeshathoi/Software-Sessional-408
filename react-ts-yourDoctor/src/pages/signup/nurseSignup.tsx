@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../navbar/header';
 import Footer from '../navbar/footer';
 
@@ -21,6 +22,8 @@ function NurseSignup() {
     pdfDocument: null,
   });
 
+  const navigate = useNavigate();
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
@@ -40,6 +43,7 @@ function NurseSignup() {
         .post('http://localhost:3000/registerNurse', formData)
         .then((res) => {
           console.log('here is the form', res.data);
+          navigate('/LogIn');
         });
     } catch (err) {
       console.log(err);

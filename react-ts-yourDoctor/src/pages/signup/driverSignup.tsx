@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../navbar/header';
 import Footer from '../navbar/footer';
 
@@ -19,6 +20,8 @@ function DriverSignup() {
     workplace: '',
     pdfDocument: null,
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -39,6 +42,7 @@ function DriverSignup() {
         .post('http://localhost:3000/registerDriver', formData)
         .then((res) => {
           console.log('here is the form', res.data);
+          navigate('/LogIn'); // signup er por login kora lagbe
         });
     } catch (err) {
       console.log(err);

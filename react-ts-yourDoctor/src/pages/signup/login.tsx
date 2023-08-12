@@ -1,9 +1,20 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, ChangeEvent, FormEvent } from 'react';
+import Cookies from 'universal-cookie';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from '../navbar/header';
 import Footer from '../navbar/footer';
+
+const cookies = new Cookies();
+
+const checkAuth = () => {
+  return !(cookies.get('token') === undefined || cookies.get('token') === null);
+};
+
+const logout = () => {
+  cookies.remove('token', { path: '/' });
+};
 
 function LogIn() {
   const navigate = useNavigate();
@@ -111,3 +122,4 @@ function LogIn() {
 }
 
 export default LogIn;
+export { checkAuth, logout };

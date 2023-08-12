@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../navbar/header';
 import Footer from '../navbar/footer';
 
@@ -26,6 +27,8 @@ function PatientSignup() {
     setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
   };
 
+  const navigate = useNavigate();
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
@@ -33,6 +36,7 @@ function PatientSignup() {
         .post('http://localhost:3000/registerUser', formData)
         .then((res) => {
           console.log('here is the form', res.data);
+          navigate('/LogIn');
         });
     } catch (err) {
       console.log(err);

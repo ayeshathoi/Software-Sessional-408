@@ -1,4 +1,6 @@
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 import Header from '../navbar/header_user';
 import Footer from '../navbar/footer';
 import User from '@/assets/user.webp';
@@ -7,6 +9,25 @@ import AmbulanceImage from '@/assets/ambulance.jpg';
 import HealthCheckImage from '@/assets/healthcheckhome.jpg';
 
 function UserHome() {
+  const [user, setUser] = useState({
+    name: '',
+    contact: '',
+  });
+  const { userid } = useParams();
+  useEffect(() => {
+    axios
+      .get('http://localhost:3000/api/userprofile/${userid}')
+      .then((res) => {
+        setUser(res.data.data);
+      })
+      .catch((error) => {
+        console.error('userprofile not found', error);
+      });
+  }, [userid]);
+
+  if (!user) {
+    return <div>Loading...</div>; // Display a loading message while fetching data
+  }
   return (
     <>
       <div>
@@ -17,9 +38,9 @@ function UserHome() {
           <div className="mb-4">
             <img src={User} alt="User" className="w-32 h-32 rounded-full" />
           </div>
-          <h1 className="text-2xl font-semibold mb-2">Ayesha</h1>
+          <h1 className="text-2xl font-semibold mb-2">Name:{user.name}</h1>
           <p className="text-lg text-gray-600 mb-4">User</p>
-          <p className="text-lg text-gray-600 mb-4">017XX-XXXXXX</p>
+          <p className="text-lg text-gray-600 mb-4">Contact:{user.contact}</p>
           <div>
             <Link to="PatientProfileUpdate">
               <button

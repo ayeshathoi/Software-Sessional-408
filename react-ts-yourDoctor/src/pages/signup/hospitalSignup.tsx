@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../navbar/header';
 import Footer from '../navbar/footer';
 
@@ -15,6 +16,8 @@ function HospitalSignup() {
     division: '',
     pdfDocument: null,
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -35,6 +38,7 @@ function HospitalSignup() {
         .post('http://localhost:3000/registerHospital', formData)
         .then((res) => {
           console.log('here is the form', res.data);
+          navigate('/LogIn');
         });
     } catch (err) {
       console.log(err);

@@ -178,5 +178,5 @@ Content-Type: application/json
 POST http://localhost:3000/auth/logout
 
 cookie: auth-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJob3NwaXRhbF9pZCI6MTgsImlhdCI6MTY5MTc3ODE2NiwiZXhwIjoxNjkxNzgxNzY2fQ.O6fuOjqj5-ZtLpRiqehlcMCNEuO9PcRcfCyIgwl4roE
-####
+
 GET http://localhost:3000/auth/hospital_id

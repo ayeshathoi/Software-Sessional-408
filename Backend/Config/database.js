@@ -14,4 +14,5 @@ const config = {
   ssl: true
 };
 
+
 module.exports = new Pool(config);

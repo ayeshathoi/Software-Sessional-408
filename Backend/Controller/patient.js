@@ -56,7 +56,9 @@ const doctor_name_search = async (req, res) => {
 }
 
 const choose_test = async (req, res) => {
+    console.log("ASCHIIIIII");
     try {
+       
         const hospital = req.body.name;
         console.log(hospital)
         const testDetails = await user.checkUpHospitalDetails(hospital);
@@ -70,7 +72,6 @@ const choose_test = async (req, res) => {
 const update_profile = async (req, res) => {
     try {
         const pid = req.params.id;
-        //street,thana,city, district,pid,mobile
         const street = req.body.street;
         const thana = req.body.thana;
         const city = req.body.city;

@@ -16,6 +16,12 @@ router.use("/driver", require('./driver'))
 router.use("/appointment", require('./booking'))
 
 
-router.use("/", require('./auth'))
+router.use("/auth", require('./testauth'))
 
 module.exports = router;
+
+
+// app.get('/protected-route', verifyToken, (req, res) => {
+//     res.json({ message: 'Protected route accessed', user: req.user });
+//   });
+  

@@ -85,4 +85,12 @@ module.exports = {
     TABLE_APPOINTMENT_DOCTOR_ID : `doctor_id`,
     TABLE_APPOINTMENT_NURSE_ID : `nurse_id`,
     TABLE_APPOINTMENT_DRIVER_ID : `driver_id`,  
+
+    //USER TYPE
+    USER_TYPE_PATIENT : `patient`,
+    USER_TYPE_DOCTOR : `doctor`,
+    USER_TYPE_NURSE : `nurse`,
+    USER_TYPE_DRIVER : `driver`,
+    USER_TYPE_HOSPITAL : `hospital`,
+    //APPOINTMENT TYPE
 }

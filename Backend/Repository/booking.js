@@ -3,23 +3,6 @@ const constant = require("./constants")
 const user = require("./user")
 
 
-
-// Checkup
-//Ambulance
-//Appointment
-
-// TABLE_APPOINTMENT_ID : `appoint_id`,
-// TABLE_APPOINTMENT_TYPE : `type`,
-// TABLE_APPOINTMENT_TIME : `time`,
-// TABLE_APPOINTMENT_STATUS : `status`,
-// TABLE_APPOINTMENT_SERIAL : `serial`,
-// TABLE_APPOINTMENT_RATING : `rating`,
-// TABLE_APPOINTMENT_COMPLAINT_TEXT : `complaint_text`,
-// TABLE_APPOINTMENT_PATIENT_ID : `patient_id`,
-// TABLE_APPOINTMENT_DOCTOR_ID : `doctor_id`,
-// TABLE_APPOINTMENT_NURSE_ID : `nurse_id`,
-// TABLE_APPOINTMENT_DRIVER_ID : `driver_id
-
 const booking = "INSERT INTO " + constant.TABLE_APPOINTMENT + " ("
                 + constant.TABLE_APPOINTMENT_TYPE + ", "
                 + constant.TABLE_APPOINTMENT_TIME + ", "

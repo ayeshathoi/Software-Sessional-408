@@ -8,8 +8,11 @@ const email    = require('./Config/email');
 
 const port = process.env.PORT || 3000;
 
-app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
+app.listen(port, async () => {
+    try{
+        console.log(`listening on http://localhost:${port}`);
+    } catch(err) {
+        console.log("Error starting up database: " + err);
+        process.exit(1);
+    }
 });
-
-app.use(bodyParser.json());

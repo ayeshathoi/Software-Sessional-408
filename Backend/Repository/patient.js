@@ -112,6 +112,7 @@ const CheckUP_Hospital = "SELECT t.testname,t.price, h.hospital_name from test t
                          "where h.hospital_name = $1"
 const checkUpHospitalDetails = async (hospital) => {
     try {
+        console.log("HELLOOOOO");
         const client = await getConnection.connect();
         const result = await client.query(CheckUP_Hospital, [hospital]);
         client.release();

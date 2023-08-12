@@ -23,7 +23,7 @@ const editProfile = async (req, res) => {
     try
     {
         const result = await user.update_profile(designation, hospital, nurse_id,mobile);
-        res.status(http_status.OK).json({ "updated nurse profile": updated });
+        res.status(http_status.OK).json({ "updated nurse profile": "updated" });
     }
     catch(error)
     {

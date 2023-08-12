@@ -209,12 +209,12 @@ const create_driver = async (username,email,pass,mobile,dob,gender,type,document
 
 
 //-------------------------------------------------------------------------
-const UserDetail = "SELECT * FROM users where uname = $1"
+const UserDetail = "SELECT * FROM users where uid = $1"
 
-const GET_USER_DETAIL = async (name) => {
+const GET_USER_DETAIL = async (uid) => {
     try {
         const client = await getConnection.connect();
-        const result = await client.query(UserDetail, [name]);
+        const result = await client.query(UserDetail, [uid]);
         client.release();
         return result.rows;
     }
@@ -254,6 +254,58 @@ const GET_USER_DETAIL = async (name) => {
 // }
 
 
+//-------------------------------------------------------------------------
+//-------------------------------------------------------------------------
+const UserDetailbyEmail = "SELECT * FROM users where email = $1"
+
+const GET_USER_DETAILEmail = async (email) => {
+    try {
+        const client = await getConnection.connect();
+        const result = await client.query(UserDetailbyEmail, [email]);
+        client.release();
+        return result.rows;
+    }
+    catch (error) {
+        console.error('Error fetching data:', error.message);
+        throw error;
+    }
+};
+
+//-------------------------------------------------------------------------
+const HospitalDetail = "SELECT * FROM hospital where email = $1"
+
+const GET_HOSPITAL_DETAIL = async (email) => {
+    try {
+        const client = await getConnection.connect();
+        const result = await client.query(HospitalDetail, [email]);
+        client.release();
+        return result.rows;
+    }
+    catch (error) {
+        console.error('Error fetching data:', error.message);
+        throw error;
+    }
+};
+
+
+const HospitalDetailbyId = "SELECT * FROM hospital where hospital_id = $1"
+
+const GET_HOSPITAL_DETAILID = async (hospital_id) => {
+    try {
+        const client = await getConnection.connect();
+        const result = await client.query(HospitalDetailbyId, [hospital_id]);
+        client.release();
+        return result.rows;
+    }
+    catch (error) {
+        console.error('Error fetching data:', error.message);
+        throw error;
+    }
+};
+
+
+
+
 
 
 
@@ -268,6 +320,9 @@ module.exports = {
                   create_nurse,
                   create_driver,
                   GET_USER_DETAIL,
+                  GET_USER_DETAILEmail,
+                    GET_HOSPITAL_DETAIL,
+                    GET_HOSPITAL_DETAILID
                 //   usernameAvailable,
                 //   emailAvailable,
                 //   updatePassword

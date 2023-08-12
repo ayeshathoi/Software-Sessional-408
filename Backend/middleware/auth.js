@@ -1,27 +1,27 @@
-const { errorInfo } = require("../Controller/HTTPStatus");
-const HttpStatus = require("../Controller/HTTPStatus");
+require('dotenv').config();
 const jwt = require('jsonwebtoken');
-const constant = require("../Repository/constants");
+const userController = require('../Controller/user');
+const user = require('../Repository/user');
+const secretKey = "secretKey";
 
-const JWT_SECRET_KEY = 'i-do-not-care-what-the-key-is'
+//middleware function to verify the jwt token and find the user who is currently logged in
+async function verify(req,res,next){
+    const cookie  = req.header('cookie');
+    if(!cookie) return res.redirect('/patient/hospital/testnames');
+    //const token = cookie.split(' ')[1].split('=')[1]
+    const token = cookie.split('=')[1];
+    try{
+        const verified = jwt.verify(token, secretKey).hospital_id;
+        console.log(verified);
+        req.user =await userController.getHospitalDetailsByID(verified);
+        next();
 
-const addUserToRequest = (req, res, next) => {
-    const authHeader = req.headers.authorization;
-
-    if (authHeader) {
-        const token = authHeader.split(' ')[1];
-
-        jwt.verify(token, JWT_SECRET_KEY, (err, user) => {
-            if (err) {
-                res.status(HttpStatus.UNAUTHORIZED).json(errorInfo(`Invalid 'authorization' Token`, err));
-            } else {
-                req.user = user;
-                next()
-            }
-        });
-    } else {
-        next()
+    }catch(err){
+        res.status(400).send('Invalid Token');
     }
-};
+}
 
-module.exports = {addUserToRequest}
+
+module.exports = {
+    verify,
+}

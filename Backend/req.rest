@@ -1,45 +1,34 @@
 # User Details
-GET http://localhost:3000/user/JohnDoe
+GET http://localhost:3000/user/3
 
 
 
 ############
-POST http://localhost:3000/register
-Content-Type: application/json
+# POST http://localhost:3000/register
+# Content-Type: application/json
 
 
-{
-    "username": "ayesha athoi",
-    "email" : "ayeshaathoi68@gmail.com",
-    "password": "12345678",
-    "mobile_no": "01700000000",
-    "dob" : "06-10-1999",
-    "gender" : "female"
-}
-
-
-############
-POST http://localhost:3000/login
-Content-Type: application/json
-
-{
-    "email" : "alice@gmail.com",
-    "password": "hashed_password_123"
-}
-
+# {
+#     "username": "ayesha athoi",
+#     "email" : "ayeshaathoi68@gmail.com",
+#     "password": "12345678",
+#     "mobile_no": "01700000000",
+#     "dob" : "06-10-1999",
+#     "gender" : "female"
+# }
 
 
 ###
 
-###
+### patient list
 GET http://localhost:3000/doctor/1
-###
+### hospital available doctor list
 GET http://localhost:3000/hospital/doctor/2
-###
+### hospital available nurse list
 GET http://localhost:3000/hospital/nurse/1
-###
+### hospital available driver list
 http://localhost:3000/hospital/driver/1
-####
+#### update test price
 POST http://localhost:3000/hospital/updateprice/1
 Content-Type: application/json
 
@@ -47,51 +36,51 @@ Content-Type: application/json
     "testname" : "SUGARTEST",
     "price":400
 }
-####
+#### add test from hospital
 POST http://localhost:3000/hospital/addtest/1
 Content-Type: application/json
 
 {
-    "testname" : "Blood Test",
+    "testname" : "CBC Test",
     "price":400
 }
-####
+#### show complaint
 GET http://localhost:3000/hospital/complaint/2
 
-###
+### driver -  patient list
 GET http://localhost:3000/driver/7
-###
+### driver - edit profile
 PUT http://localhost:3000/driver/editProfile/7
 Content-Type: application/json
 
 {
-    "hospital": "GMC",
+    "hospital": "DMC",
     "mobile": "01700000000"
 }
-####
+#### nurse patient list
 GET http://localhost:3000/nurse/6
 
 
-####
+#### nurse - edit profile
 PUT http://localhost:3000/nurse/editProfile/6
 Content-Type: application/json
 
 {
-    "designation": "Junior Nurse",
+    "designation": "Senior Nurse",
     "hospital": "DMC",
     "mobile": "01700000000"
 }
 
 
 
-####
+#### doctor speciality search
 POST http://localhost:3000/patient/speciality/1
 Content-Type: application/json
 
 {
     "speciality": "Heart Specialist"
 }
-####
+#### doctor name search
 POST http://localhost:3000/patient/name/1
 Content-Type: application/json
 
@@ -99,15 +88,15 @@ Content-Type: application/json
     "name": "JohnDoe"
 }
 
-####
+#### patient appoinment list
 
 GET http://localhost:3000/patient/appointment/5
-###
+### patient ambulance list
 GET http://localhost:3000/patient/ambulance/4
-###
+### patient checkup list
 GET http://localhost:3000/patient/checkup/4
 ################
-POST http://localhost:3000/patient/test
+POST http://localhost:3000/patient/hospital/testnames
 Content-Type: application/json
 
 {
@@ -115,25 +104,79 @@ Content-Type: application/json
 }
 
 
-#######
+####### patient edit profile
 
 POST http://localhost:3000/patient/4
 Content-Type: application/json
 
 {
     "street" : "C-3/2",
-    "thana" : "Moghbazar",
+    "thana" : "Palashi",
     "city" : "Dhaka",
     "district" : "Rajhshahi",
     "mobile" : "0153230000"
 }
 
 
-##########
-POST http://localhost:3000/review/1
+########## rating and complaint dite parbo
+POST http://localhost:3000/review/2
 Content-Type: application/json
 
 {
     "rating" : 4,
     "complaint_text" : "Rude"
 }
+
+
+
+
+#####
+POST http://localhost:3000/auth/login 
+Content-Type: application/json
+
+{
+  "username": "JaneSmith",
+  "password": "hashed_password_456"
+}
+
+
+
+###
+GET http://localhost:3000/auth/verify
+Host: localhost:3000
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjIsInVzZXJuYW1lIjoiSmFuZVNtaXRoIiwiaWF0IjoxNjkxNjcwMzk0LCJleHAiOjE2OTIxMDIzOTR9.9sh7HoQZUusW32F5sxhdGZMOKxQ63b-e0_Xf-B2wAxw
+
+###
+
+
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+    "hospital_name": "CUMC",
+    "email" : "CUMC@Gmail.com",
+    "password": "12345678",
+    "mobile": "01700000000",
+    "street" : "C-3/2",
+    "thana" : "Palashi",
+    "city" : "Dhaka",
+    "district" : "Rajhshahi"
+}
+
+
+###
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "email" : "CUMC@Gmail.com",
+    "password": "12345678"
+}
+
+
+###
+POST http://localhost:3000/auth/logout
+
+cookie: auth-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJob3NwaXRhbF9pZCI6MTgsImlhdCI6MTY5MTc3ODE2NiwiZXhwIjoxNjkxNzgxNzY2fQ.O6fuOjqj5-ZtLpRiqehlcMCNEuO9PcRcfCyIgwl4roE
+####
+GET http://localhost:3000/auth/hospital_id

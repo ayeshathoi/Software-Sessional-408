@@ -1,0 +1,139 @@
+# User Details
+GET http://localhost:3000/user/JohnDoe
+
+
+
+############
+POST http://localhost:3000/register
+Content-Type: application/json
+
+
+{
+    "username": "ayesha athoi",
+    "email" : "ayeshaathoi68@gmail.com",
+    "password": "12345678",
+    "mobile_no": "01700000000",
+    "dob" : "06-10-1999",
+    "gender" : "female"
+}
+
+
+############
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+    "email" : "alice@gmail.com",
+    "password": "hashed_password_123"
+}
+
+
+
+###
+
+###
+GET http://localhost:3000/doctor/1
+###
+GET http://localhost:3000/hospital/doctor/2
+###
+GET http://localhost:3000/hospital/nurse/1
+###
+http://localhost:3000/hospital/driver/1
+####
+POST http://localhost:3000/hospital/updateprice/1
+Content-Type: application/json
+
+{
+    "testname" : "SUGARTEST",
+    "price":400
+}
+####
+POST http://localhost:3000/hospital/addtest/1
+Content-Type: application/json
+
+{
+    "testname" : "Blood Test",
+    "price":400
+}
+####
+GET http://localhost:3000/hospital/complaint/2
+
+###
+GET http://localhost:3000/driver/7
+###
+PUT http://localhost:3000/driver/editProfile/7
+Content-Type: application/json
+
+{
+    "hospital": "GMC",
+    "mobile": "01700000000"
+}
+####
+GET http://localhost:3000/nurse/6
+
+
+####
+PUT http://localhost:3000/nurse/editProfile/6
+Content-Type: application/json
+
+{
+    "designation": "Junior Nurse",
+    "hospital": "DMC",
+    "mobile": "01700000000"
+}
+
+
+
+####
+POST http://localhost:3000/patient/speciality/1
+Content-Type: application/json
+
+{
+    "speciality": "Heart Specialist"
+}
+####
+POST http://localhost:3000/patient/name/1
+Content-Type: application/json
+
+{
+    "name": "JohnDoe"
+}
+
+####
+
+GET http://localhost:3000/patient/appointment/5
+###
+GET http://localhost:3000/patient/ambulance/4
+###
+GET http://localhost:3000/patient/checkup/4
+################
+POST http://localhost:3000/patient/test
+Content-Type: application/json
+
+{
+    "name" : "DMC"
+}
+
+
+#######
+
+POST http://localhost:3000/patient/4
+Content-Type: application/json
+
+{
+    "street" : "C-3/2",
+    "thana" : "Moghbazar",
+    "city" : "Dhaka",
+    "district" : "Rajhshahi",
+    "mobile" : "0153230000"
+}
+
+
+##########
+POST http://localhost:3000/review/1
+Content-Type: application/json
+
+{
+    "rating" : 4,
+    "complaint_text" : "Rude"
+}

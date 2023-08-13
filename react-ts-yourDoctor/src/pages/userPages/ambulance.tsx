@@ -25,7 +25,7 @@ function Ambulances() {
     axios
       .get(`http://localhost:3000/patient/ambulance/4`)
       .then((response) => {
-        setuserData(response.data.data); // Set the fetched data to the state
+        setuserData(response.data[0]); // Set the fetched data to the state
       })
       .catch((error) => {
         console.error('Error fetching user profile:', error);
@@ -55,7 +55,7 @@ function Ambulances() {
           <div className="mb-4">
             <img src={User} alt="User" className="w-32 h-32 rounded-full" />
           </div>
-          <h1 className="text-2xl font-semibold mb-2">Ayesha</h1>
+          <h1 className="text-2xl font-semibold mb-2">Patient-Name</h1>
           <p className="text-lg text-gray-600 mb-4">User</p>
           <p className="text-lg text-gray-600 mb-4">017XX-XXXXXX</p>
         </div>
@@ -102,11 +102,11 @@ function Ambulances() {
             </ul>
           </div> */}
           <div>
-            <h2 className="text-lg font-semibold mb-3">Doctor List</h2>
+            <h2 className="text-lg font-semibold mb-3">Ambulance Order</h2>
             <ul className="space-y-4">
               <li className="flex justify-between items-center">
                 <div>
-                  <p className="text-lg font-semibold">Name: {user.uname}</p>
+                  <p className="text-lg font-semibold">Driver : {user.uname}</p>
                   <p className="text-gray-600">Time: {user.time}</p>
                 </div>
                 <div className="text-right">
@@ -130,3 +130,4 @@ function Ambulances() {
 }
 
 export default Ambulances;
+

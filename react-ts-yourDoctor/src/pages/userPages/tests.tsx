@@ -1,34 +1,52 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
 import Header from '../navbar/header_user';
 import Footer from '../navbar/footer';
 import User from '@/assets/user.webp';
 
 function Tests() {
-  const [selectedSection, setSelectedSection] = useState('upcoming');
+  // const [selectedSection, setSelectedSection] = useState('upcoming');
 
-  const handleSectionChange = (section) => {
-    setSelectedSection(section);
-  };
+  // const handleSectionChange = (section) => {
+  //   setSelectedSection(section);
+  // };
 
-  const nurseData = [
-    { name: 'Tasnia', date: '2023-08-22', time: '10:00 AM' },
-    { name: 'Labiba', date: '2023-07-21', time: '11:00 AM' },
-
-    // more nurse data...
-  ];
-
-  const currentDate = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
-
-  const upcomingNurses = nurseData.filter((nurse) => {
-    return selectedSection === 'upcoming' && nurse.date > currentDate;
+  const [user, setuserData] = useState({
+    uname: '',
+    time: '',
+    testname: '',
+    price: '',
   });
 
-  const previousNurses = nurseData.filter((nurse) => {
-    return selectedSection === 'previous' && nurse.date <= currentDate;
-  });
+  const { userid } = useParams();
 
-  const nursesToShow =
-    selectedSection === 'upcoming' ? upcomingNurses : previousNurses;
+  useEffect(() => {
+    // Make the HTTP GET request to the backend API
+    axios
+      .get(`http://localhost:3000/patient/checkup/4`)
+      .then((response) => {
+        console.log('here entered');
+        setuserData(response.data.data); // Set the fetched data to the state
+        console.log(response.data.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching user profile:', error);
+      });
+  }, [userid]);
+
+  // const currentDate = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
+
+  // const upcomingDoctors = doctorData.filter((doctor) => {
+  //   return selectedSection === 'upcoming' && doctor.date > currentDate;
+  // });
+
+  // const previousDoctors = doctorData.filter((doctor) => {
+  //   return selectedSection === 'previous' && doctor.date <= currentDate;
+  // });
+
+  // const doctorsToShow =
+  //   selectedSection === 'upcoming' ? upcomingDoctors : previousDoctors;
 
   return (
     <>
@@ -45,7 +63,7 @@ function Tests() {
           <p className="text-lg text-gray-600 mb-4">017XX-XXXXXX</p>
         </div>
         <div className="w-1/2 ml-8">
-          <div className="flex justify-between items-center mb-4">
+          {/* <div className="flex justify-between items-center mb-4">
             <button
               className={`px-4 py-2 rounded-lg ${
                 selectedSection === 'upcoming'
@@ -66,23 +84,41 @@ function Tests() {
             >
               Previous
             </button>
-          </div>
-          <div className="bg-white p-4 rounded-lg shadow-md">
+          </div> */}
+          {/* <div className="bg-white p-4 rounded-lg shadow-md">
             <h2 className="text-lg font-semibold mb-3">
-              {selectedSection === 'upcoming' ? 'Upcoming' : 'Previous'} Nurses
+              {selectedSection === 'upcoming' ? 'Upcoming' : 'Previous'} Doctors
             </h2>
             <ul className="space-y-4">
-              {nursesToShow.map((nurse, index) => (
+              {doctorsToShow.map((doctor, index) => (
                 <li key={index} className="flex justify-between items-center">
                   <div>
-                    <p className="text-lg font-semibold">{nurse.name}</p>
+                    <p className="text-lg font-semibold">{doctor.name}</p>
+                    <p className="text-gray-600">{doctor.specialist}</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm text-gray-500">{nurse.date}</p>
-                    <p className="text-sm text-gray-500">{nurse.time}</p>
+                    <p className="text-sm text-gray-500">{doctor.date}</p>
+                    <p className="text-sm text-gray-500">{doctor.time}</p>
                   </div>
                 </li>
               ))}
+            </ul>
+          </div> */}
+          <div>
+            <h2 className="text-lg font-semibold mb-3">Doctor List</h2>
+            <ul className="space-y-4">
+              <li className="flex justify-between items-center">
+                <div>
+                  <p className="text-lg font-semibold">Name: {user.uname}</p>
+                  <p className="text-gray-600">Time: {user.time}</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-sm text-gray-500">
+                    Ambulance Type: {user.testname}
+                  </p>
+                  <p className="text-sm text-gray-500">Fee: {user.price}</p>
+                </div>
+              </li>
             </ul>
           </div>
         </div>

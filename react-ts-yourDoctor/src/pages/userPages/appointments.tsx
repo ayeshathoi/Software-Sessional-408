@@ -26,7 +26,7 @@ function Appointments() {
     axios
       .get(`http://localhost:3000/patient/appointment/5`)
       .then((response) => {
-        setuserData(response.data.data); // Set the fetched data to the state
+        setuserData(response.data[0]); // Set the fetched data to the state
       })
       .catch((error) => {
         console.error('Error fetching user profile:', error);
@@ -133,3 +133,4 @@ function Appointments() {
 }
 
 export default Appointments;
+

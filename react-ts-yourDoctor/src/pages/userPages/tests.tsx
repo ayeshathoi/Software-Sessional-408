@@ -22,13 +22,20 @@ function Tests() {
   const { userid } = useParams();
 
   useEffect(() => {
+    // jodi patient er kono test na thake taile mara kheye jay
     // Make the HTTP GET request to the backend API
     axios
-      .get(`http://localhost:3000/patient/checkup/4`)
+      .get(`http://localhost:3000/patient/checkup/` + userid)
       .then((response) => {
-        console.log('here entered');
-        setuserData(response.data.data); // Set the fetched data to the state
-        console.log(response.data.data);
+        setuserData(response.data[0]);
+
+
+        user.uname = response.data[0].uname;
+        user.time = response.data[0].time;
+        user.testname = response.data[0].testname;
+        user.price = response.data[0].price;
+        console.log(user.uname);
+        
       })
       .catch((error) => {
         console.error('Error fetching user profile:', error);
@@ -58,7 +65,7 @@ function Tests() {
           <div className="mb-4">
             <img src={User} alt="User" className="w-32 h-32 rounded-full" />
           </div>
-          <h1 className="text-2xl font-semibold mb-2">Ayesha</h1>
+          <h1 className="text-2xl font-semibold mb-2">Patient-name</h1>
           <p className="text-lg text-gray-600 mb-4">User</p>
           <p className="text-lg text-gray-600 mb-4">017XX-XXXXXX</p>
         </div>
@@ -105,16 +112,16 @@ function Tests() {
             </ul>
           </div> */}
           <div>
-            <h2 className="text-lg font-semibold mb-3">Doctor List</h2>
+            <h2 className="text-lg font-semibold mb-3">Check up List</h2>
             <ul className="space-y-4">
               <li className="flex justify-between items-center">
                 <div>
-                  <p className="text-lg font-semibold">Name: {user.uname}</p>
+                  <p className="text-lg font-semibold">Nurse : {user.uname}</p>
                   <p className="text-gray-600">Time: {user.time}</p>
                 </div>
                 <div className="text-right">
                   <p className="text-sm text-gray-500">
-                    Ambulance Type: {user.testname}
+                    Test Name: {user.testname}
                   </p>
                   <p className="text-sm text-gray-500">Fee: {user.price}</p>
                 </div>
@@ -131,3 +138,4 @@ function Tests() {
 }
 
 export default Tests;
+

@@ -1,23 +1,21 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import Navbar from '../navbar/header';
 import Footer from '../navbar/footer';
 
 function HospitalSignup() {
   const [formData, setFormData] = useState({
-    hospitalName: '',
+    hospital_name: '',
     email: '',
     password: '',
+    mobile : '',
     street: '',
     thana: '',
     city: '',
-    division: '',
+    district: '',
     pdfDocument: null,
   });
-
-  const navigate = useNavigate();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -26,24 +24,21 @@ function HospitalSignup() {
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     console.log('pending', e.target);
-    // const file = e.target.files && e.target.files[0];
-    // if (file) {
-    //   setFormData((prevFormData) => ({ ...prevFormData, pdfDocument: file }));
-    // }
   };
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
     try {
-      await axios
-        .post('http://localhost:3000/registerHospital', formData)
-        .then((res) => {
-          console.log('here is the form', res.data);
-          navigate('/LogIn');
-        });
+      console.log('Form data before submission:', formData);
+  
+      const response = await axios.post('http://localhost:3000/auth/register/hospital', formData);
+  
+      console.log('Server response:', response.data);
     } catch (err) {
-      console.log(err);
+      console.error('Error submitting form:', err);
     }
   };
+  
 
   return (
     <>
@@ -69,16 +64,16 @@ function HospitalSignup() {
           <form onSubmit={handleSubmit}>
             <div className="mb-8 mt-4">
               <label
-                htmlFor="hospitalName"
+                htmlFor="hospital_name"
                 className="text-black px-2 text-lg font-semibold bg-indigo-300 py-2"
               >
                 Hospital Name
               </label>
               <input
                 type="text"
-                id="hospitalName"
-                name="hospitalName"
-                value={formData.hospitalName}
+                id="hospital_name"
+                name="hospital_name"
+                value={formData.hospital_name}
                 onChange={handleChange}
                 required
                 className="w-half rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
@@ -120,6 +115,25 @@ function HospitalSignup() {
                 className="w-half rounded-md rounded-r-none  bg-indigo-200 px-3 py-2"
               />
             </div>
+
+            <div className="mb-8">
+              <label
+                htmlFor="Mobile"
+                className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
+              >
+                Mobile No.
+              </label>
+              <input
+                type="text"
+                id="mobile"
+                name="mobile"
+                value={formData.mobile}
+                onChange={handleChange}
+                required
+                className="w-half rounded-md rounded-r-none  bg-indigo-200 px-3 py-2"
+              />
+            </div>
+            
             <div className="mb-8">
               <label
                 htmlFor="street"
@@ -170,16 +184,16 @@ function HospitalSignup() {
                 className="w-20 rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
               />
               <label
-                htmlFor="division"
+                htmlFor="district"
                 className="text-black ml-2 px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
               >
-                Division
+                district
               </label>
               <input
                 type="text"
-                id="division"
-                name="division"
-                value={formData.division}
+                id="district"
+                name="district"
+                value={formData.district}
                 onChange={handleChange}
                 required
                 className="w-20 rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
@@ -209,6 +223,9 @@ function HospitalSignup() {
               >
                 Sign Up
               </button>
+
+
+              
             </div>
           </form>
         </div>

@@ -10,15 +10,17 @@ import HealthCheckImage from '@/assets/healthcheckhome.jpg';
 
 function UserHome() {
   const [user, setUser] = useState({
-    name: '',
-    contact: '',
+    uname: '',
+    email: ''
   });
   const { userid } = useParams();
   useEffect(() => {
     axios
-      .get('http://localhost:3000/api/userprofile/${userid}')
+      .get('http://localhost:3000/user/frontend/' + userid )
       .then((res) => {
-        setUser(res.data.data);
+        setUser(res.data[0]);
+        user.uname = res.data[0].uname;
+        user.email = res.data[0].email;
       })
       .catch((error) => {
         console.error('userprofile not found', error);
@@ -38,9 +40,9 @@ function UserHome() {
           <div className="mb-4">
             <img src={User} alt="User" className="w-32 h-32 rounded-full" />
           </div>
-          <h1 className="text-2xl font-semibold mb-2">Name:{user.name}</h1>
+          <h1 className="text-2xl font-semibold mb-2">{user.uname}</h1>
           <p className="text-lg text-gray-600 mb-4">User</p>
-          <p className="text-lg text-gray-600 mb-4">Contact:{user.contact}</p>
+          <p className="text-lg text-gray-600 mb-4">{user.email}</p>
           <div>
             <Link to="PatientProfileUpdate">
               <button

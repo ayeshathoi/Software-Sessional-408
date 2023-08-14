@@ -33,8 +33,6 @@ CREATE TABLE hospital (
   district TEXT NOT NULL
 );
 
-
-
 CREATE TABLE doctor (
   doctor_id INTEGER PRIMARY KEY REFERENCES users(uid),
   designation TEXT NOT NULL,
@@ -60,9 +58,11 @@ CREATE TABLE timeline (
   slot INTEGER NOT NULL,
   start_time TIME NOT NULL,
   end_time TIME NOT NULL,
+  meeting_type TEXT NOT NULL,
   doctor_id INTEGER REFERENCES doctor(doctor_id),
   hospital_id INTEGER REFERENCES hospital(hospital_id)
 );
+
 
 
 CREATE TABLE nurse (
@@ -87,7 +87,7 @@ CREATE TABLE driver (
   document TEXT ,
   document_content BYTEA
 );
-
+select * from test;
 CREATE TABLE test (
   testID SERIAL PRIMARY KEY,
   testname TEXT NOT NULL,
@@ -137,5 +137,19 @@ CREATE TABLE ambulance (
   driver_id INTEGER REFERENCES driver(driver_id)
 );
 
-// prescription
-// chatbox
+
+CREATE TABLE Booking_TESTS (
+      test_id INTEGER REFERENCES test(testid),
+      booking_id INTEGER REFERENCES booking(booking_id),
+      PRIMARY KEY (test_id, booking_id)
+);
+
+
+CREATE TABLE Chat_message (
+    msg_id SERIAL PRIMARY KEY,
+    booking_id INTEGER REFERENCES booking(booking_id),
+    sender_id INT NOT NULL,
+    message TEXT NOT NULL,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+//prescription table

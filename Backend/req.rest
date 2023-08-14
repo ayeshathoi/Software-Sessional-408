@@ -4,7 +4,12 @@ GET http://localhost:3000/user/frontend/5
 
 ###
 ### patient list
-GET http://localhost:3000/doctor/12
+POST http://localhost:3000/doctor/patientlist/12
+Content-Type: application/json
+
+{
+    "hospital_name" : "DMC"
+}
 ####
 ### hospital available doctor list
 GET http://localhost:3000/hospital/doctor/1
@@ -355,4 +360,44 @@ Content-Type: application/json
     "patient_mobile" : "01700000000",
     "driver_id" : 9,
     "hospital_name" : "DMC"
+}
+
+
+############
+POST http://localhost:3000/doctor/addschedule/14
+Content-Type: application/json
+
+{
+    "timeline" : [
+    {
+        "weekday": "Monday",
+        "slot": 20,
+        "start_time": "08:00:00",
+        "end_time": "12:00:00",
+        "hospital_name": "DMC"
+    },
+    {
+        "weekday": "TUESDAY",
+        "slot": 20,
+        "start_time": "09:00:00",
+        "end_time": "13:00:00"
+    }
+    
+]
+}
+####
+POST http://localhost:3000/comment/add/2
+Content-Type: application/json
+
+{
+    "booking_id" : 1,
+    "message" : "Hello"
+}
+
+####
+POST http://localhost:3000/comment/get/2
+Content-Type: application/json
+
+{
+    "booking_id" : 1
 }

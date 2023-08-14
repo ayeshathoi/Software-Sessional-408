@@ -86,6 +86,7 @@ module.exports = {
     TABLE_DOCTOR_TIMELINE_ID : `timeline_id`,
     TABLE_DOCTOR_TIMELINE_WEEKDAY : `weekday`,
     TABLE_DOCTOR_TIMELINE_SLOT : `slot`,
+    TABLE_TIMELINE_MEETING_TYPE : `meeting_type`,
     TABLE_DOCTOR_TIMELINE_START_TIME : `start_time`,
     TABLE_DOCTOR_TIMELINE_END_TIME : `end_time`,
     TABLE_DOCTOR_TIMELINE_DOCTOR_ID : `doctor_id`,
@@ -119,5 +120,11 @@ module.exports = {
     TABLE_AMBULANCE_FARE : `ambulance_fare`,
     TABLE_AMBULANCE_HOSPITAL_ID : `hospital_id`,
     TABLE_AMBULANCE_DRIVER_ID : `driver_id`,
-
+    //CHAT Message
+    TABLE_CHAT_MESSAGE : `Chat_message`,
+    TABLE_CHAT_MESSAGE_ID : `msg_id`,
+    TABLE_CHAT_MESSAGE_BOOKING_ID : `booking_id`,
+    TABLE_CHAT_MESSAGE_SENDER_ID : `sender_id`,
+    TABLE_CHAT_MESSAGE_MESSAGE : `message`,
+    TABLE_CHAT_MESSAGE_TIMESTAMP : `timestamp`,
 }

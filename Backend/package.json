@@ -24,6 +24,7 @@
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
     "pg": "^8.11.2",
+    "router-promise": "^2.1.0",
     "start": "^5.1.0",
     "url": "^0.11.1",
     "util": "^0.12.5"

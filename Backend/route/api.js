@@ -9,7 +9,6 @@ router.use("/nurse", require('./nurse'))
 router.use("/driver", require('./driver'))
 router.use("/booking", require('./booking'))
 router.use("/auth", require('./auth'))
-
-
+router.use("/comment", require('./commentBox'))
 module.exports = router;
 

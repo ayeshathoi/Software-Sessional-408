@@ -2,15 +2,29 @@ const user = require('../Repository/patient')
 const http_status = require('./HTTPStatus')
 
 
-const appointmentDetails = async (req, res) => {
+const inperson_Appointments = async (req, res) => {
     try {
         const pid = req.params.id;
-        const appointmentDetails = await user.getAppintmentDetails(pid);
+        const appointmentDetails = await user.InpersonAppointments(pid);
         res.status(http_status.OK).json(appointmentDetails);
     } catch (error) {
         res.status(http_status.BAD_REQUEST).json({ error: 'An error occurred while fetching user details.' });
     }
 }
+
+const zoom_Appointments = async (req, res) => {
+    try {
+        const pid = req.params.id;
+        const appointmentDetails = await user.onlineAppointments(pid);
+        res.status(http_status.OK).json(appointmentDetails);
+    } catch (error) {
+        res.status(http_status.BAD_REQUEST).json({ error: 'An error occurred while fetching user details.' });
+    }
+}
+
+
+
+
 
 const ambulanceDetails = async (req, res) => {
     try {
@@ -26,7 +40,8 @@ const checkUpDetails = async (req, res) => {
     try {
         const pid = req.params.id;
         const checkUpDetails = await user.checkUpDetails(pid);
-        res.status(http_status.OK).json(checkUpDetails);
+        console.log(checkUpDetails);
+        res.send(checkUpDetails);
     } catch (error) {
         res.status(http_status.BAD_REQUEST).json({ error: 'An error occurred while fetching user details.' });
     }
@@ -88,7 +103,8 @@ const update_profile = async (req, res) => {
 
 
 module.exports = {
-    appointmentDetails,
+    inperson_Appointments,
+    zoom_Appointments,
     ambulanceDetails,
     checkUpDetails,
     doctor_speciality_search,

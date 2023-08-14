@@ -1,20 +1,20 @@
 const getConnection = require('../Config/database');
 const constant = require("./constants")
-//patient type alada korte hobeee
-const appointmentDetails = "SELECT u.uname, d.designation, d.speciality,t."+constant.TABLE_DOCTOR_TIMELINE_NEW_PATIENT_FEE+" "+
-                            "FROM appointment a " +
-                            "JOIN doctor d ON a.doctor_id = d.doctor_id " +
-                            "JOIN users u ON d.doctor_id = u.uid " +
-                            "JOIN doctor_hospital dh ON d.doctor_id = dh.doctor_id " +
-                            "JOIN timeline t ON d.doctor_id = t.doctor_id AND dh.hospital_id = t.hospital_id " +
-                            "WHERE a.patient_id = $1 AND a.type = 'Appointment'"
 
-const getAppintmentDetails = async (pid) => {
+// booking er moddhe hospital id na thakar mane hocche online meeting
+const appointmentDetails = "SELECT u.uname, b.time, b.date, d.zoom_link, d.designation, d.speciality, b.total_price "+
+                            "FROM booking b " +
+                            "JOIN doctor d ON b.doctor_id = d.doctor_id " +
+                            "JOIN users u ON d.doctor_id = u.uid " +
+                            "WHERE b.patient_id = $1 AND b.type = 'Appointment' AND b.hospital_id IS NULL"
+
+const onlineAppointments = async (pid) => {
     try {
         const client = await getConnection.connect();
-        const result = await client.query(appointmentDetails, [pid]);
+        const zoomMeeting = await client.query(appointmentDetails, [pid]);
+
         client.release();
-        return result.rows;
+        return zoomMeeting.rows;
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
@@ -22,7 +22,34 @@ const getAppintmentDetails = async (pid) => {
     }
 };
 
-const CheckUP = "SELECT a.time, t.testname, t.price,u.uname FROM appointment a " +
+const inperson = "SELECT u.uname, b.time, b.date,d.designation, h.hospital_name, d.speciality, b.total_price "+
+                            "FROM booking b " +
+                            "JOIN doctor d ON b.doctor_id = d.doctor_id " +
+                            "JOIN hospital h ON b.hospital_id = h.hospital_id " +
+                            "JOIN users u ON d.doctor_id = u.uid " +
+                            "WHERE b.patient_id = $1 AND b.type = 'Appointment' AND b.hospital_id IS NOT NULL"
+
+const InpersonAppointments = async (pid) => {
+    try {
+        const client = await getConnection.connect();
+        const inpersonMeeting = await client.query(inperson, [pid]);
+
+        client.release();
+        return inpersonMeeting.rows;
+    }
+    catch (error) {
+        console.error('Error fetching data:', error.message);
+        throw error;
+    }
+};
+
+
+
+
+
+
+
+const CheckUP = "SELECT a.time, t.testname, t.price,u.uname FROM booking a " +
                 "JOIN nurse_test nt ON a.nurse_id = nt.nurse_id " +
                 "JOIN users u ON nt.nurse_id = u.uid "+
                 "JOIN test t ON t.testID = nt.test_id " + 
@@ -126,10 +153,7 @@ const checkUpHospitalDetails = async (hospital) => {
         
 //yourDoctor.com/AmbulanceSearch/:Thana
 
-//Booking
-//yourDoctor.com/Booking/appointment
-//yourDoctor.com/Booking/HealthCheckBook
-//yourDoctor.com/booking/ambulanceReq
+
 
 
 
@@ -164,7 +188,8 @@ const update_profile = async (street,thana,city, district,pid,mobile) => {
 
 
 module.exports = { 
-    getAppintmentDetails,
+    InpersonAppointments,
+    onlineAppointments,
     checkUpDetails,
     ambulanceDetails,
     doctorSpecialitySearch,

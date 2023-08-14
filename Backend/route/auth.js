@@ -36,7 +36,7 @@ router.post('/register/nurse', async (req, res) => {
 router.post('/register/doctor', async (req, res) => {
     const hashedPassword = await bcrypt.hash(req.body.password, await bcrypt.genSalt(10));
     let result;
-    result = await createhos.create_hospital(req,res,hashedPassword);
+    result = await createhos.create_doctor(req,res,hashedPassword);
 });
 
 router.post('/register/driver', async (req, res) => {

@@ -1,48 +1,87 @@
 # User Details
-GET http://localhost:3000/user/3
-
-
-
-############
-# POST http://localhost:3000/register
-# Content-Type: application/json
-
-
-# {
-#     "username": "ayesha athoi",
-#     "email" : "ayeshaathoi68@gmail.com",
-#     "password": "12345678",
-#     "mobile_no": "01700000000",
-#     "dob" : "06-10-1999",
-#     "gender" : "female"
-# }
+GET http://localhost:3000/user/frontend/5
 
 
 ###
-
 ### patient list
-GET http://localhost:3000/doctor/1
+GET http://localhost:3000/doctor/12
+####
 ### hospital available doctor list
-GET http://localhost:3000/hospital/doctor/2
+GET http://localhost:3000/hospital/doctor/1
 ### hospital available nurse list
 GET http://localhost:3000/hospital/nurse/1
 ### hospital available driver list
+GET http://localhost:3000/hospital/driver/1
+####
+
+GET http://localhost:3000/hospital/booking/1
+####
+POST http://localhost:3000/hospital/booking/complaint/1
+Content-Type: application/json
+
+{
+    "booking_id" : 4
+}
+
+####
+POST  http://localhost:3000/hospital/update/employee/1
+Content-Type: application/json
+
+{
+    "email": "rahma123@gmail.com"
+}
+#### nurse
+POST  http://localhost:3000/hospital/update/employee/1
+Content-Type: application/json
+
+{
+    "email": "ayeshaathoi68@gmail.com"
+}
+###
+
+#### driver
+POST  http://localhost:3000/hospital/update/employee/1
+Content-Type: application/json
+
+{
+    "email": "ayeshamostofa@gmail.com"
+}
+###
+GET http://localhost:3000/hospital/pending/patient/1
+###
+POST  http://localhost:3000/hospital/pending/test/1
+Content-Type: application/json
+
+{
+    "booking_id" : 15
+}
+###
 http://localhost:3000/hospital/driver/1
-#### update test price
+#### update test price done
+#####
+POST http://localhost:3000/hospital/assign/nurse/1
+Content-Type: application/json
+
+{
+    "nurse_email" : "ayeshaathoi68@gmail.com",
+    "booking_id" : 1
+}
+#####
+
 POST http://localhost:3000/hospital/updateprice/1
 Content-Type: application/json
 
 {
-    "testname" : "SUGARTEST",
+    "testname" : "Blood Test",
     "price":400
 }
-#### add test from hospital
+#### add test from hospital done
 POST http://localhost:3000/hospital/addtest/1
 Content-Type: application/json
 
 {
-    "testname" : "CBC Test",
-    "price":400
+    "testname" : "X-Ray",
+    "price":500
 }
 #### show complaint
 GET http://localhost:3000/hospital/complaint/2
@@ -89,8 +128,12 @@ Content-Type: application/json
 }
 
 #### patient appoinment list
-
-GET http://localhost:3000/patient/appointment/5
+//inperson
+GET http://localhost:3000/patient/appointment/inperson/2
+#####
+GET http://localhost:3000/patient/appointment/online/2
+//zoom
+###
 ### patient ambulance list
 GET http://localhost:3000/patient/ambulance/4
 ### patient checkup list
@@ -123,8 +166,8 @@ POST http://localhost:3000/review/2
 Content-Type: application/json
 
 {
-    "rating" : 4,
-    "complaint_text" : "Rude"
+    "rating" : 5,
+    "complaint_text" : "NICE"
 }
 
 
@@ -153,14 +196,14 @@ POST http://localhost:3000/auth/register/hospital
 Content-Type: application/json
 
 {
-    "hospital_name": "CUMC",
-    "email" : "CUMC@Gmail.com",
+    "hospital_name": "CMC",
+    "email" : "CMCpublic@Gmail.com",
     "password": "12345678",
-    "mobile": "01700000000",
+    "mobile": "01742241244",
     "street" : "C-3/2",
-    "thana" : "Palashi",
-    "city" : "Dhaka",
-    "district" : "Rajhshahi"
+    "thana" : "Cumilla Sadar",
+    "city" : "Cumilla",
+    "district" : "CTG"
 }
 
 
@@ -170,16 +213,16 @@ POST http://localhost:3000/auth/register/patient
 Content-Type: application/json
 
 {
-    "uname": "Noshin Nawal",
-    "email" : "Noshinnawal03@gmail.com",
+    "uname": "Ayesha Binte Mostofa",
+    "email" : "ayeshaathoi62@gmail.com",
     "password": "12345678",
-    "mobile": "01700040000",
+    "mobile": "01742241244",
     "gender": "female",
     "dob" : "06-10-1999",
     "street" : "C-3/2",
-    "thana" : "Palashi",
+    "thana" : "Moghbazar",
     "city" : "Dhaka",
-    "district" : "Rajhshahi"
+    "district" : "Dhaka"
 }
 
 ###
@@ -188,13 +231,18 @@ POST  http://localhost:3000/auth/register/driver
 Content-Type: application/json
 
 {
-    "uname": "Fabiha Tasneem",
-    "email" : "Fabiha03@gmail.com",
+    "uname": "Ayesha Mostofa",
+    "email" : "ayeshamostofa@gmail.com",
     "password": "12345678",
-    "mobile": "01700040000",
+    "mobile": "01742241244",
     "gender": "female",
     "dob" : "06-10-1999",
     "type" : "Regular",
+    "fare" : 500,
+    "street" : "C-3/2",
+    "thana" : "Moghbazar",
+    "city" : "Dhaka",
+    "district" : "Dhaka",
     "hospital_name" : "DMC"
 }
 
@@ -205,19 +253,37 @@ POST  http://localhost:3000/auth/register/nurse
 Content-Type: application/json
 
 {
-    "uname": "Maneesha",
-    "email" : "Fabiha03@gmail.com",
+    "uname": "Ayesha Athoi",
+    "email" : "ayeshaathoi68@gmail.com",
     "password": "12345678",
-    "mobile": "01700040000",
-    "gender": "female",
+    "mobile": "01742241244",
     "dob" : "06-10-1999",
-    "designation" : "Headddd Nurse",
+    "gender": "female",
+    "designation" : "Head Nurse",
     "hospital_name" : "DMC"
 }
 
 ###
+POST http://localhost:3000/auth/register/doctor
+Content-Type: application/json
 
+{
+    "uname": "Ayesha Athoi",
+    "email" : "rahma123@gmail.com",
+    "password": "12345678",
+    "mobile": "01742241244",
+    "dob" : "06-10-1999",
+    "gender": "female",
+    "qualification" : "MBBS",
+    "designation" : "Surgeon",
+    "speciality" : "Heart Specialist",
+    "zoom_link" : "https://zoom.us/j/123456789",
+    "old_patient_fee" : 500,
+    "new_patient_fee" : 1000,
+    "hospital_name" : ["DMC","CMC"]
+}
 
+###
 
 
 POST http://localhost:3000/auth/login
@@ -235,3 +301,58 @@ POST http://localhost:3000/auth/logout
 cookie: auth-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJob3NwaXRhbF9pZCI6MTgsImlhdCI6MTY5MTc3ODE2NiwiZXhwIjoxNjkxNzgxNzY2fQ.O6fuOjqj5-ZtLpRiqehlcMCNEuO9PcRcfCyIgwl4roE
 
 GET http://localhost:3000/auth/hospital_id
+
+
+
+#####
+POST http://localhost:3000/booking/2/appointment
+Content-Type: application/json
+
+{
+    "price" : 500,
+    "time" : "10:00 AM",
+    "date" : "2021-02-02",
+    "payment_method" : "Bkash",
+    "payment_status" : "Paid",
+    "patient_mobile" : "01700000000",
+    "doctor_id" : 12,
+    "hospital_name" : "DMC"
+}
+
+###
+POST http://localhost:3000/booking/2/checkup
+Content-Type: application/json
+
+{
+    "price": 900,
+    "time" : "10:00 AM",
+    "date" : "2021-02-02",
+    "payment_method" : "Bkash",
+    "payment_status" : "Paid",
+    "patient_mobile" : "01700000000",
+    "hospital_name" : "DMC",
+    "test_names" : ["Blood Test","X-Ray"]
+}
+####
+POST http://localhost:3000/booking/2/select/test
+Content-Type: application/json
+
+{
+    "hospital_name" : "DMC",
+    "test_names" : ["Blood Test","X-Ray"]
+}
+####
+
+POST http://localhost:3000/booking/2/ambulance
+Content-Type: application/json
+
+{
+    "price" : 1500,
+    "time" : "10:00 AM",
+    "date" : "2021-02-02",
+    "payment_method" : "Bkash",
+    "payment_status" : "Paid",
+    "patient_mobile" : "01700000000",
+    "driver_id" : 9,
+    "hospital_name" : "DMC"
+}

@@ -1,12 +1,11 @@
 const getConnection = require('../Config/database');
 const constant = require("./constants")
 
-const UPDATE_Rating_Complaint = " UPDATE appointment SET rating = $1, complaint_text = $2 WHERE appoint_id = $3"
-
-const update_rating_complaint = async (rating, complaint, appointment_id) => {
+const INSERT_Rating_Complaint = " INSERT INTO review (rating, complaint_text, booking_id) VALUES ($1, $2, $3)"
+const rating_complaint_insert = async (rating, complaint, booking_id) => {
     try {
         const client = await getConnection.connect();
-        const result = await client.query(UPDATE_Rating_Complaint, [rating, complaint, appointment_id]);
+        const result = await client.query(INSERT_Rating_Complaint, [rating, complaint, booking_id]);
         client.release();
         return result.rows;
     }
@@ -16,5 +15,5 @@ const update_rating_complaint = async (rating, complaint, appointment_id) => {
     }
 }
  module.exports = {
-    update_rating_complaint
+    rating_complaint_insert
  }

@@ -5,7 +5,7 @@ const user = require("./user")
 
 //appointment e total fare rakhte hobe
 const patientList =         "SELECT u.uname, u."+ constant.TABLE_USER_MOBILE_NO + ", a.time " +
-                            "FROM appointment a " +
+                            "FROM booking a " +
                             "JOIN nurse n ON a.nurse_id = n.nurse_id " +
                             "JOIN users u ON a.patient_id = u.uid " +
                             "WHERE a.nurse_id = $1 AND a.type = 'Checkup'"

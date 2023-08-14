@@ -7,9 +7,9 @@ router.use("/doctor", require('./doctor'))
 router.use("/hospital", require('./hospital'))
 router.use("/nurse", require('./nurse'))
 router.use("/driver", require('./driver'))
-router.use("/appointment", require('./booking'))
-
-
+router.use("/booking", require('./booking'))
 router.use("/auth", require('./auth'))
 
+
 module.exports = router;
+

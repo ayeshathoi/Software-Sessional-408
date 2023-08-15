@@ -17,10 +17,10 @@ function Home() {
         <Navbar />
         <p>&</p>
       </div>
-      <div className="pt-20 flex justify-end bg-indigo-100">
+      <div className="pt-20 flex justify-end bg-green-100">
         <Link
           to="ProfileOptions"
-          className="inline-block bg-magenta-900 bg-indigo-400 mr-24 font-bold text-lg px-4 py-2 rounded-lg hover:bg-magenta-800"
+          className="inline-block bg-magenta-900 bg-green-400 mr-24 font-bold text-lg px-4 py-2 rounded-lg hover:bg-magenta-800"
         >
           SignUp/SignIn
         </Link>

@@ -64,7 +64,7 @@ function HospitalHome() {
       {/* Side Navigation Bar */}
       <div className="bg-gray-800 text-white w-1/5 h-screen">
         <div className="p-4">
-          <h2 className="text-xl font-semibold mb-4">Driver Dashboard</h2>
+          <h2 className="text-xl font-semibold mb-4">Hospital Dashboard</h2>
           <ul className="space-y-2">
             <li>
               <Link

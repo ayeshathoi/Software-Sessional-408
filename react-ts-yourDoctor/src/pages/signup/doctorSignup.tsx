@@ -1,5 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, ChangeEvent, FormEvent } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../navbar/header';
 import Footer from '../navbar/footer';
 
@@ -23,43 +25,32 @@ function DoctorSignup() {
     pdfDocument: null,
   });
 
+  const navigate = useNavigate();
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
   };
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files && e.target.files[0];
-    if (file) {
-      setFormData((prevFormData) => ({ ...prevFormData, pdfDocument: file }));
-    }
+    console.log('pending', e.target);
+    // const file = e.target.files && e.target.files[0];
+    // if (file) {
+    //   setFormData((prevFormData) => ({ ...prevFormData, pdfDocument: file }));
+    // }
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const formDataToSend = new FormData();
-      Object.entries(formData).forEach(([key, value]) => {
-        formDataToSend.append(key, value);
-      });
-
-      // Replace the following code with your backend API call using Axios or Fetch
-      const response = await fetch('/api/signup', {
-        method: 'POST',
-        body: formDataToSend,
-      });
-
-      // Handle the response from the backend (e.g., show success message, redirect, etc.)
-      if (response.ok) {
-        console.log('Signup successful');
-        // Redirect to a success page or login page
-      } else {
-        console.error('Signup failed');
-        // Handle error response from the backend (e.g., show error message, etc.)
-      }
-    } catch (error) {
-      console.error('Error occurred while signup:', error);
-      // Handle any network or other errors that may occur during signup
+      await axios
+        .post('http://localhost:3000/registerDoctor', formData)
+        .then((res) => {
+          console.log('here is the form', res.data);
+          navigate('/LogIn');
+        });
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -71,24 +62,27 @@ function DoctorSignup() {
       <div
         className="flex flex-col items-center justify-center"
         style={{
-          backgroundColor: 'lightpink',
+          backgroundColor: 'ghostwhite',
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           backgroundPosition: 'center center',
           // opacity: 0.5, // Adjust the opacity as needed (0.0 to 1.0)
         }}
       >
-        <div className="pt-20 flex flex-col items-center justify-center">
+        <div className="pt-20 flex flex-col items-center justify-center pb-8 px-12 mb-8 border border-gray-300 round-lg bg-pink-50">
           <h1
-            style={{ fontWeight: 'bold', fontSize: '24px', color: 'darkred' }}
+            style={{ fontWeight: 'bold', fontSize: '24px', color: 'royalblue' }}
           >
             Doctor Signup
           </h1>
-          <form onSubmit={handleSubmit}>
+          <form
+            onSubmit={handleSubmit}
+            className="grid grid-cols-2 gap-y-0 gap-x-6 ml-32 mt-4"
+          >
             <div className="mb-8">
               <label
                 htmlFor="firstName"
-                className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2"
+                className="text-black px-2 text-lg font-semibold bg-indigo-300 py-2"
               >
                 First Name
               </label>
@@ -99,13 +93,13 @@ function DoctorSignup() {
                 value={formData.firstName}
                 onChange={handleChange}
                 required
-                className="w-half rounded-md rounded-r-none bg-pink-600 px-10 py-2 h-15"
+                className="w-half rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
               />
             </div>
             <div className="mb-8">
               <label
                 htmlFor="lastName"
-                className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15"
+                className="text-black px-2 text-lg font-semibold bg-indigo-300 py-2"
               >
                 Last Name
               </label>
@@ -116,13 +110,13 @@ function DoctorSignup() {
                 value={formData.lastName}
                 onChange={handleChange}
                 required
-                className="w-half rounded-md rounded-r-none bg-pink-600 px-10 py-2 h-15"
+                className="w-half rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
               />
             </div>
             <div className="mb-8">
               <label
                 htmlFor="email"
-                className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15"
+                className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
               >
                 Email
               </label>
@@ -133,13 +127,13 @@ function DoctorSignup() {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="w-half rounded-md rounded-r-none  bg-pink-600 px-10 py-2 h-15"
+                className="w-half rounded-md rounded-r-none  bg-indigo-200 px-3 py-2"
               />
             </div>
             <div className="mb-8">
               <label
                 htmlFor="mobile"
-                className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15"
+                className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
               >
                 Mobile Number
               </label>
@@ -150,13 +144,13 @@ function DoctorSignup() {
                 value={formData.mobile}
                 onChange={handleChange}
                 required
-                className="w-half rounded-md rounded-r-none  bg-pink-600 px-10 py-2 h-15"
+                className="w-half rounded-md rounded-r-none  bg-indigo-200 px-3 py-2"
               />
             </div>
             <div className="mb-8">
               <label
                 htmlFor="password"
-                className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15"
+                className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
               >
                 Password
               </label>
@@ -167,14 +161,14 @@ function DoctorSignup() {
                 value={formData.password}
                 onChange={handleChange}
                 required
-                className="w-half rounded-md rounded-r-none  bg-pink-600 px-10 py-2 h-15"
+                className="w-half rounded-md rounded-r-none  bg-indigo-200 px-3 py-2"
               />
             </div>
-            <div className="mb-8">
-              <label className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15">
+            <div className="mb-8 flex items-center">
+              <label className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2">
                 Date of Birth
               </label>
-              <div className="mb-8">
+              <div className="ml-4 flex space-x-2">
                 <input
                   type="text"
                   placeholder="Day"
@@ -182,7 +176,7 @@ function DoctorSignup() {
                   value={formData.day}
                   onChange={handleChange}
                   required
-                  className="w-33 ml-4 rounded-md rounded-r-none bg-pink-600 px-10 py-2 h-15"
+                  className="w-16 rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
                 />
                 <input
                   type="text"
@@ -191,7 +185,7 @@ function DoctorSignup() {
                   value={formData.month}
                   onChange={handleChange}
                   required
-                  className="w-33 ml-4 rounded-md rounded-r-none bg-pink-600 px-10 py-2 h-15"
+                  className="w-16 rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
                 />
                 <input
                   type="text"
@@ -200,18 +194,17 @@ function DoctorSignup() {
                   value={formData.year}
                   onChange={handleChange}
                   required
-                  className="w-33 ml-4 rounded-md rounded-r-none bg-pink-600 px-10 py-2 h-15"
+                  className="w-20 rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
                 />
               </div>
             </div>
-            <div className="mb-8">
-              <div className="mb-4">
-                <label className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15">
-                  Gender
-                </label>
-              </div>
-              <div className="mb-8">
-                <label className="bg-fuchsia-900 px-2.5 text-lg font-semibold py-2 h-15">
+
+            <div className="mb-8 flex items-center">
+              <label className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2">
+                Gender
+              </label>
+              <div className="ml-4 flex space-x-4">
+                <span className="bg-indigo-100 px-2.5 text-lg font-semibold py-2">
                   <input
                     type="radio"
                     name="gender"
@@ -220,8 +213,8 @@ function DoctorSignup() {
                     onChange={handleChange}
                   />{' '}
                   Male
-                </label>
-                <label className="bg-fuchsia-900 px-2.5 text-lg font-semibold py-2 h-15">
+                </span>
+                <span className="bg-indigo-100 px-2.5 text-lg font-semibold py-2">
                   <input
                     type="radio"
                     name="gender"
@@ -230,8 +223,8 @@ function DoctorSignup() {
                     onChange={handleChange}
                   />{' '}
                   Female
-                </label>
-                <label className="bg-fuchsia-900 px-2.5 text-lg font-semibold py-2 h-15">
+                </span>
+                <span className="bg-indigo-100 px-2.5 text-lg font-semibold py-2">
                   <input
                     type="radio"
                     name="gender"
@@ -240,13 +233,14 @@ function DoctorSignup() {
                     onChange={handleChange}
                   />{' '}
                   Custom
-                </label>
+                </span>
               </div>
             </div>
+
             <div className="mb-8">
               <label
                 htmlFor="designation"
-                className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15"
+                className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
               >
                 Designation
               </label>
@@ -257,13 +251,13 @@ function DoctorSignup() {
                 value={formData.designation}
                 onChange={handleChange}
                 required
-                className="w-half rounded-md rounded-r-none bg-pink-600 px-10 py-2 h-15"
+                className="w-half rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
               />
             </div>
             <div className="mb-8">
               <label
                 htmlFor="workplace1"
-                className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15"
+                className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
               >
                 Workplace 1 (Compulsory)
               </label>
@@ -274,13 +268,13 @@ function DoctorSignup() {
                 value={formData.workplace1}
                 onChange={handleChange}
                 required
-                className="w-half rounded-md rounded-r-none bg-pink-600 px-10 py-2 h-15"
+                className="w-half rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
               />
             </div>
             <div className="mb-8">
               <label
                 htmlFor="workplace2"
-                className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15"
+                className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
               >
                 Workplace 2 (Optional)
               </label>
@@ -290,13 +284,13 @@ function DoctorSignup() {
                 name="workplace2"
                 value={formData.workplace2}
                 onChange={handleChange}
-                className="w-half rounded-md rounded-r-none bg-pink-600 px-10 py-2 h-15"
+                className="w-half rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
               />
             </div>
             <div className="mb-8">
               <label
                 htmlFor="workplace3"
-                className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15"
+                className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
               >
                 Workplace 3 (Optional)
               </label>
@@ -306,13 +300,13 @@ function DoctorSignup() {
                 name="workplace3"
                 value={formData.workplace3}
                 onChange={handleChange}
-                className="w-half rounded-md rounded-r-none bg-pink-600 px-10 py-2 h-15"
+                className="w-half rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
               />
             </div>
             <div className="mb-8">
               <label
                 htmlFor="specialization"
-                className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15"
+                className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
               >
                 Specialization
               </label>
@@ -323,13 +317,13 @@ function DoctorSignup() {
                 value={formData.specialization}
                 onChange={handleChange}
                 required
-                className="w-half rounded-md rounded-r-none bg-pink-600 px-10 py-2 h-15"
+                className="w-half rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
               />
             </div>
             <div className="mb-8">
               <label
                 htmlFor="zoomLink"
-                className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15"
+                className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
               >
                 Zoom Meeting Link
               </label>
@@ -339,13 +333,13 @@ function DoctorSignup() {
                 name="zoomLink"
                 value={formData.zoomLink}
                 onChange={handleChange}
-                className="w-half rounded-md rounded-r-none bg-pink-600 px-10 py-2 h-15"
+                className="w-half rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
               />
             </div>
-            <div className="mb-8">
+            <div className="col-span-2 mb-8">
               <label
                 htmlFor="pdfDocument"
-                className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15"
+                className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
               >
                 PDF Document Submission
               </label>
@@ -355,15 +349,17 @@ function DoctorSignup() {
                 name="pdfDocument"
                 onChange={handleFileChange}
                 accept=".pdf"
-                className="w-half rounded-md rounded-r-none bg-pink-600 px-10 py-2 h-15"
+                className="w-half rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
               />
             </div>
-            <button
-              type="submit"
-              className="text-black px-2.5 text-lg font-semibold py-2 h-15 bg-violet-900"
-            >
-              Sign Up
-            </button>
+            <div className="col-span-2 flex justify-center">
+              <button
+                type="submit"
+                className="text-black px-2.5 text-lg font-semibold py-2  bg-indigo-500"
+              >
+                Sign Up
+              </button>
+            </div>
           </form>
         </div>
       </div>

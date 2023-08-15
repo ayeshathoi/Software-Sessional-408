@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 function NotFound() {
   return (
     <>
-      <h1>GO BACK</h1>
+      <h1>Page Not found</h1>
       <Link to="/" style={{ color: 'blue' }}>
-        BLEH
+        Go to home page.
       </Link>
     </>
   );

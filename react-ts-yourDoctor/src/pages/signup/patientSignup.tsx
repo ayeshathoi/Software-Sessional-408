@@ -1,5 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, ChangeEvent, FormEvent } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../navbar/header';
 import Footer from '../navbar/footer';
 
@@ -14,7 +16,7 @@ function PatientSignup() {
     month: '',
     year: '',
     gender: 'male', // Default value
-    streetNumber: '',
+    street: '',
     thana: '',
     city: '',
     division: '',
@@ -25,38 +27,19 @@ function PatientSignup() {
     setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
   };
 
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files && e.target.files[0];
-    if (file) {
-      setFormData((prevFormData) => ({ ...prevFormData, pdfDocument: file }));
-    }
-  };
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const formDataToSend = new FormData();
-      Object.entries(formData).forEach(([key, value]) => {
-        formDataToSend.append(key, value);
-      });
-
-      // Replace the following code with your backend API call using Axios or Fetch
-      const response = await fetch('/api/signup', {
-        method: 'POST',
-        body: formDataToSend,
-      });
-
-      // Handle the response from the backend (e.g., show success message, redirect, etc.)
-      if (response.ok) {
-        console.log('Signup successful');
-        // Redirect to a success page or login page
-      } else {
-        console.error('Signup failed');
-        // Handle error response from the backend (e.g., show error message, etc.)
-      }
-    } catch (error) {
-      console.error('Error occurred while signup:', error);
-      // Handle any network or other errors that may occur during signup
+      await axios
+        .post('http://localhost:3000/registerUser', formData)
+        .then((res) => {
+          console.log('here is the form', res.data);
+          navigate('/LogIn');
+        });
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -68,24 +51,27 @@ function PatientSignup() {
       <div
         className="flex flex-col items-center justify-center"
         style={{
-          backgroundColor: 'lightpink',
+          backgroundColor: 'ghostwhite',
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           backgroundPosition: 'center center',
           // opacity: 0.5, // Adjust the opacity as needed (0.0 to 1.0)
         }}
       >
-        <div className="pt-20 flex flex-col items-center justify-center">
+        <div className="pt-20 flex flex-col items-center justify-center pb-8 px-12 mb-8 border border-gray-300 round-lg bg-pink-50">
           <h1
-            style={{ fontWeight: 'bold', fontSize: '24px', color: 'darkred' }}
+            style={{ fontWeight: 'bold', fontSize: '24px', color: 'royalblue' }}
           >
             Patient Signup
           </h1>
-          <form onSubmit={handleSubmit}>
+          <form
+            onSubmit={handleSubmit}
+            className="grid grid-cols-2 gap-y-0 gap-x-6 ml-32 mt-4"
+          >
             <div className="mb-8">
               <label
                 htmlFor="firstName"
-                className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2"
+                className="text-black px-2 text-lg font-semibold bg-indigo-300 py-2"
               >
                 First Name
               </label>
@@ -96,13 +82,13 @@ function PatientSignup() {
                 value={formData.firstName}
                 onChange={handleChange}
                 required
-                className="w-half rounded-md rounded-r-none bg-pink-600 px-10 py-2 h-15"
+                className="w-half rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
               />
             </div>
             <div className="mb-8">
               <label
                 htmlFor="lastName"
-                className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15"
+                className="text-black px-2 text-lg font-semibold bg-indigo-300 py-2"
               >
                 Last Name
               </label>
@@ -113,13 +99,13 @@ function PatientSignup() {
                 value={formData.lastName}
                 onChange={handleChange}
                 required
-                className="w-half rounded-md rounded-r-none bg-pink-600 px-10 py-2 h-15"
+                className="w-half rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
               />
             </div>
             <div className="mb-8">
               <label
                 htmlFor="email"
-                className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15"
+                className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
               >
                 Email
               </label>
@@ -130,13 +116,13 @@ function PatientSignup() {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="w-half rounded-md rounded-r-none  bg-pink-600 px-10 py-2 h-15"
+                className="w-half rounded-md rounded-r-none  bg-indigo-200 px-3 py-2"
               />
             </div>
             <div className="mb-8">
               <label
                 htmlFor="mobile"
-                className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15"
+                className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
               >
                 Mobile Number
               </label>
@@ -147,13 +133,13 @@ function PatientSignup() {
                 value={formData.mobile}
                 onChange={handleChange}
                 required
-                className="w-half rounded-md rounded-r-none  bg-pink-600 px-10 py-2 h-15"
+                className="w-half rounded-md rounded-r-none  bg-indigo-200 px-3 py-2"
               />
             </div>
             <div className="mb-8">
               <label
                 htmlFor="password"
-                className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15"
+                className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
               >
                 Password
               </label>
@@ -164,14 +150,14 @@ function PatientSignup() {
                 value={formData.password}
                 onChange={handleChange}
                 required
-                className="w-half rounded-md rounded-r-none  bg-pink-600 px-10 py-2 h-15"
+                className="w-half rounded-md rounded-r-none  bg-indigo-200 px-3 py-2"
               />
             </div>
-            <div className="mb-8">
-              <label className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15">
+            <div className="mb-8 flex items-center">
+              <label className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2">
                 Date of Birth
               </label>
-              <div className="mb-8">
+              <div className="ml-4 flex space-x-2">
                 <input
                   type="text"
                   placeholder="Day"
@@ -179,7 +165,7 @@ function PatientSignup() {
                   value={formData.day}
                   onChange={handleChange}
                   required
-                  className="w-33 ml-4 rounded-md rounded-r-none bg-pink-600 px-10 py-2 h-15"
+                  className="w-16 rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
                 />
                 <input
                   type="text"
@@ -188,7 +174,7 @@ function PatientSignup() {
                   value={formData.month}
                   onChange={handleChange}
                   required
-                  className="w-33 ml-4 rounded-md rounded-r-none bg-pink-600 px-10 py-2 h-15"
+                  className="w-16 rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
                 />
                 <input
                   type="text"
@@ -197,18 +183,17 @@ function PatientSignup() {
                   value={formData.year}
                   onChange={handleChange}
                   required
-                  className="w-33 ml-4 rounded-md rounded-r-none bg-pink-600 px-10 py-2 h-15"
+                  className="w-20 rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
                 />
               </div>
             </div>
-            <div className="mb-8">
-              <div className="mb-4">
-                <label className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15">
-                  Gender
-                </label>
-              </div>
-              <div className="mb-8">
-                <label className="bg-fuchsia-900 px-2.5 text-lg font-semibold py-2 h-15">
+
+            <div className="mb-8 flex items-center">
+              <label className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2">
+                Gender
+              </label>
+              <div className="ml-4 flex space-x-4">
+                <span className="bg-indigo-100 px-2.5 text-lg font-semibold py-2">
                   <input
                     type="radio"
                     name="gender"
@@ -217,8 +202,8 @@ function PatientSignup() {
                     onChange={handleChange}
                   />{' '}
                   Male
-                </label>
-                <label className="bg-fuchsia-900 px-2.5 text-lg font-semibold py-2 h-15">
+                </span>
+                <span className="bg-indigo-100 px-2.5 text-lg font-semibold py-2">
                   <input
                     type="radio"
                     name="gender"
@@ -227,8 +212,8 @@ function PatientSignup() {
                     onChange={handleChange}
                   />{' '}
                   Female
-                </label>
-                <label className="bg-fuchsia-900 px-2.5 text-lg font-semibold py-2 h-15">
+                </span>
+                <span className="bg-indigo-100 px-2.5 text-lg font-semibold py-2">
                   <input
                     type="radio"
                     name="gender"
@@ -237,35 +222,32 @@ function PatientSignup() {
                     onChange={handleChange}
                   />{' '}
                   Custom
-                </label>
+                </span>
               </div>
             </div>
-            <div className="mb-8">
-              <label className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15">
-                Full Address
-              </label>
-            </div>
+
             <div className="mb-8">
               <label
-                htmlFor="streetNumber"
-                className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15"
+                htmlFor="street"
+                className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
               >
-                Street Number
+                Street No.
               </label>
               <input
                 type="text"
-                id="streetNumber"
-                name="streetNumber"
-                value={formData.streetNumber}
+                id="street"
+                name="street"
+                value={formData.street}
                 onChange={handleChange}
                 required
-                className="w-half rounded-md rounded-r-none bg-pink-600 px-10 py-2 h-15"
+                className="w-half rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
               />
             </div>
+
             <div className="mb-8">
               <label
                 htmlFor="thana"
-                className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15"
+                className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
               >
                 Thana
               </label>
@@ -276,13 +258,11 @@ function PatientSignup() {
                 value={formData.thana}
                 onChange={handleChange}
                 required
-                className="w-half rounded-md rounded-r-none bg-pink-600 px-10 py-2 h-15"
+                className="w-20 rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
               />
-            </div>
-            <div className="mb-8">
               <label
                 htmlFor="city"
-                className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15"
+                className="text-black ml-2 px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
               >
                 City
               </label>
@@ -293,13 +273,11 @@ function PatientSignup() {
                 value={formData.city}
                 onChange={handleChange}
                 required
-                className="w-half rounded-md rounded-r-none bg-pink-600 px-10 py-2 h-15"
+                className="w-20 rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
               />
-            </div>
-            <div className="mb-8">
               <label
                 htmlFor="division"
-                className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15"
+                className="text-black ml-2 px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
               >
                 Division
               </label>
@@ -310,15 +288,18 @@ function PatientSignup() {
                 value={formData.division}
                 onChange={handleChange}
                 required
-                className="w-half rounded-md rounded-r-none bg-pink-600 px-10 py-2 h-15"
+                className="w-20 rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
               />
             </div>
-            <button
-              type="submit"
-              className="text-black px-2.5 text-lg font-semibold py-2 h-15 bg-violet-900"
-            >
-              Sign Up
-            </button>
+
+            <div className="col-span-2 flex justify-center">
+              <button
+                type="submit"
+                className="text-black px-2.5 text-lg font-semibold py-2  bg-indigo-500"
+              >
+                Sign Up
+              </button>
+            </div>
           </form>
         </div>
       </div>

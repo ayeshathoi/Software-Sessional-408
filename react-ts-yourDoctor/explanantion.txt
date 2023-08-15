@@ -1,0 +1,21 @@
+coed gulay return er vitore shob designning er kaj ,
+upore function gular majhe , 
+useState- eta ui e value gula initialize kore,
+handle.....- ei type er function gula ui er kono value te kono change hoile ki hobe eta handle kore-egular majhe 
+handleSubmit- backend e formData pathanor kaj korbe[eta akhono complete kora hoy nai backend er sathe connect korar somoy thik kora lagbe]
+useEffect- ei function tao backend er sathe connect er time e use hobe, er vitore setTimeout diye ja likha ogula dummy formData
+
+kichu kichu page e egula akhono add kora hoy nai.
+
+ar hocche
+
+SignUp/Register
+
+http://localhost:3000/registerDoctor
+http://localhost:3000/registerDriver
+http://localhost:3000/registerNurse
+http://localhost:3000/registerHospital
+http://localhost:3000/registerUser
+http://localhost:3000/login
+
+Login e backend e usertype=table name rakha lagbe navigation er jonne.

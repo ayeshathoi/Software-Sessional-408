@@ -1,4 +1,4 @@
-import { HashRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
 import NotFound from './pages/NotFound';
 import ProfileOptions from './pages/signup/profileOptions';
@@ -14,16 +14,14 @@ import DoctorProfileUpdate from './pages/updateProfile/doctorUpdateProfile';
 import PatientProfileUpdate from './pages/updateProfile/patientUpdateProfile';
 import DoctorHome from './pages/doctorPages/doctorHome';
 import PatientPrescription from './pages/doctorPages/prescriptionSubmission';
-import Appointments from './pages/userPages/appointments';
-import Tests from './pages/userPages/tests';
-import Ambulances from './pages/userPages/ambulance';
 import NurseHome from './pages/nursePages/nurseHome';
 import DriverHome from './pages/driverPages/driverHome';
 import UserHome from './pages/userPages/userHome';
+import HospitalHome from './pages/hospitalPages/hospitalHome';
 
 export function App() {
   return (
-    <HashRouter>
+    <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="*" element={<NotFound />} />
@@ -35,34 +33,33 @@ export function App() {
         <Route path="/HospitalSignup/" element={<HospitalSignup />} />
         <Route path="/LogIn/" element={<LogIn />} />
         <Route
-          path="/doctorHome/DoctorProfileUpdate/"
+          path="/doctorHome/:userid/DoctorProfileUpdate/"
           element={<DoctorProfileUpdate />}
         />
-        <Route path="/doctorHome/" element={<DoctorHome />} />
-        <Route path="/nurseHome/" element={<NurseHome />} />
-        <Route path="/driverHome/" element={<DriverHome />} />
+        <Route path="/doctorHome/:userid" element={<DoctorHome />} />
+        <Route path="/nurseHome/:userid" element={<NurseHome />} />
+        <Route path="/driverHome/:userid" element={<DriverHome />} />
         <Route
-          path="/prescriptionSubmission/"
+          path="/doctorHome/:userid/PatientPrescription/"
           element={<PatientPrescription />}
         />
         <Route
-          path="/userHome/PatientProfileUpdate/"
+          path="/userHome/:userid/PatientProfileUpdate/"
           element={<PatientProfileUpdate />}
         />
         <Route
-          path="/nurseHome/NurseProfileUpdate/"
+          path="/nurseHome/:userid/NurseProfileUpdate/"
           element={<NurseProfileUpdate />}
         />
         <Route
-          path="/driverHome/DriverProfileUpdate/"
+          path="/driverHome/:userid/DriverProfileUpdate/"
           element={<DriverProfileUpdate />}
         />
-        <Route path="/userHome/Appointments/" element={<Appointments />} />
-        <Route path="/userHome/Tests/" element={<Tests />} />
-        <Route path="/userHome/Ambulances/" element={<Ambulances />} />
-        <Route path="/userHome/" element={<UserHome />} />
+
+        <Route path="/userHome/:userid" element={<UserHome />} />
+        <Route path="/hospitalHome/:userid" element={<HospitalHome />} />
       </Routes>
-    </HashRouter>
+    </BrowserRouter>
   );
 }
 export default App;

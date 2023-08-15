@@ -1,17 +1,20 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, ChangeEvent, FormEvent } from 'react';
+import axios from 'axios';
 import Navbar from '../navbar/header';
 import Footer from '../navbar/footer';
 
 function HospitalSignup() {
   const [formData, setFormData] = useState({
+    hospital_name: '',
     email: '',
-    mobile: '',
     password: '',
-    streetNumber: '',
+    mobile : '',
+    street: '',
     thana: '',
     city: '',
-    division: '',
+    district: '',
+    pdfDocument: null,
   });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -20,39 +23,22 @@ function HospitalSignup() {
   };
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files && e.target.files[0];
-    if (file) {
-      setFormData((prevFormData) => ({ ...prevFormData, pdfDocument: file }));
-    }
+    console.log('pending', e.target);
   };
-
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
     try {
-      const formDataToSend = new FormData();
-      Object.entries(formData).forEach(([key, value]) => {
-        formDataToSend.append(key, value);
-      });
-
-      // Replace the following code with your backend API call using Axios or Fetch
-      const response = await fetch('/api/signup', {
-        method: 'POST',
-        body: formDataToSend,
-      });
-
-      // Handle the response from the backend (e.g., show success message, redirect, etc.)
-      if (response.ok) {
-        console.log('Signup successful');
-        // Redirect to a success page or login page
-      } else {
-        console.error('Signup failed');
-        // Handle error response from the backend (e.g., show error message, etc.)
-      }
-    } catch (error) {
-      console.error('Error occurred while signup:', error);
-      // Handle any network or other errors that may occur during signup
+      console.log('Form data before submission:', formData);
+  
+      const response = await axios.post('http://localhost:3000/auth/register/hospital', formData);
+  
+      console.log('Server response:', response.data);
+    } catch (err) {
+      console.error('Error submitting form:', err);
     }
   };
+  
 
   return (
     <>
@@ -62,24 +48,42 @@ function HospitalSignup() {
       <div
         className="flex flex-col items-center justify-center"
         style={{
-          backgroundColor: 'lightpink',
+          backgroundColor: 'ghostwhite',
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           backgroundPosition: 'center center',
           // opacity: 0.5, // Adjust the opacity as needed (0.0 to 1.0)
         }}
       >
-        <div className="pt-20 flex flex-col items-center justify-center">
+        <div className="pt-20 flex flex-col items-center justify-center pb-8 px-12 mb-8 border border-gray-300 round-lg bg-pink-50">
           <h1
-            style={{ fontWeight: 'bold', fontSize: '24px', color: 'darkred' }}
+            style={{ fontWeight: 'bold', fontSize: '24px', color: 'royalblue' }}
           >
             Hospital Signup
           </h1>
           <form onSubmit={handleSubmit}>
+            <div className="mb-8 mt-4">
+              <label
+                htmlFor="hospital_name"
+                className="text-black px-2 text-lg font-semibold bg-indigo-300 py-2"
+              >
+                Hospital Name
+              </label>
+              <input
+                type="text"
+                id="hospital_name"
+                name="hospital_name"
+                value={formData.hospital_name}
+                onChange={handleChange}
+                required
+                className="w-half rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
+              />
+            </div>
+
             <div className="mb-8">
               <label
                 htmlFor="email"
-                className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15"
+                className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
               >
                 Email
               </label>
@@ -90,30 +94,14 @@ function HospitalSignup() {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="w-half rounded-md rounded-r-none  bg-pink-600 px-10 py-2 h-15"
+                className="w-half rounded-md rounded-r-none  bg-indigo-200 px-3 py-2"
               />
             </div>
-            <div className="mb-8">
-              <label
-                htmlFor="mobile"
-                className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15"
-              >
-                Mobile Number
-              </label>
-              <input
-                type="text"
-                id="mobile"
-                name="mobile"
-                value={formData.mobile}
-                onChange={handleChange}
-                required
-                className="w-half rounded-md rounded-r-none  bg-pink-600 px-10 py-2 h-15"
-              />
-            </div>
+
             <div className="mb-8">
               <label
                 htmlFor="password"
-                className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15"
+                className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
               >
                 Password
               </label>
@@ -124,36 +112,50 @@ function HospitalSignup() {
                 value={formData.password}
                 onChange={handleChange}
                 required
-                className="w-half rounded-md rounded-r-none  bg-pink-600 px-10 py-2 h-15"
+                className="w-half rounded-md rounded-r-none  bg-indigo-200 px-3 py-2"
               />
             </div>
 
             <div className="mb-8">
-              <label className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15">
-                Full Address
-              </label>
-            </div>
-            <div className="mb-8">
               <label
-                htmlFor="streetNumber"
-                className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15"
+                htmlFor="Mobile"
+                className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
               >
-                Street Number
+                Mobile No.
               </label>
               <input
                 type="text"
-                id="streetNumber"
-                name="streetNumber"
-                value={formData.streetNumber}
+                id="mobile"
+                name="mobile"
+                value={formData.mobile}
                 onChange={handleChange}
                 required
-                className="w-half rounded-md rounded-r-none bg-pink-600 px-10 py-2 h-15"
+                className="w-half rounded-md rounded-r-none  bg-indigo-200 px-3 py-2"
               />
             </div>
+            
+            <div className="mb-8">
+              <label
+                htmlFor="street"
+                className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
+              >
+                Street No.
+              </label>
+              <input
+                type="text"
+                id="street"
+                name="street"
+                value={formData.street}
+                onChange={handleChange}
+                required
+                className="w-half rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
+              />
+            </div>
+
             <div className="mb-8">
               <label
                 htmlFor="thana"
-                className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15"
+                className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
               >
                 Thana
               </label>
@@ -164,13 +166,11 @@ function HospitalSignup() {
                 value={formData.thana}
                 onChange={handleChange}
                 required
-                className="w-half rounded-md rounded-r-none bg-pink-600 px-10 py-2 h-15"
+                className="w-20 rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
               />
-            </div>
-            <div className="mb-8">
               <label
                 htmlFor="city"
-                className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15"
+                className="text-black ml-2 px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
               >
                 City
               </label>
@@ -181,32 +181,52 @@ function HospitalSignup() {
                 value={formData.city}
                 onChange={handleChange}
                 required
-                className="w-half rounded-md rounded-r-none bg-pink-600 px-10 py-2 h-15"
+                className="w-20 rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
+              />
+              <label
+                htmlFor="district"
+                className="text-black ml-2 px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
+              >
+                district
+              </label>
+              <input
+                type="text"
+                id="district"
+                name="district"
+                value={formData.district}
+                onChange={handleChange}
+                required
+                className="w-20 rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
               />
             </div>
             <div className="mb-8">
               <label
-                htmlFor="division"
-                className="text-black px-2.5 text-lg font-semibold bg-fuchsia-300 py-2 h-15"
+                htmlFor="pdfDocument"
+                className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
               >
-                Division
+                PDF Document Submission
               </label>
               <input
-                type="text"
-                id="division"
-                name="division"
-                value={formData.division}
-                onChange={handleChange}
-                required
-                className="w-half rounded-md rounded-r-none bg-pink-600 px-10 py-2 h-15"
+                type="file"
+                id="pdfDocument"
+                name="pdfDocument"
+                onChange={handleFileChange}
+                accept=".pdf"
+                className="w-half rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
               />
             </div>
-            <button
-              type="submit"
-              className="text-black px-2.5 text-lg font-semibold py-2 h-15 bg-violet-900"
-            >
-              Sign Up
-            </button>
+
+            <div className="flex justify-center">
+              <button
+                type="submit"
+                className="text-black px-2.5 text-lg font-semibold py-2  bg-indigo-500"
+              >
+                Sign Up
+              </button>
+
+
+              
+            </div>
           </form>
         </div>
       </div>

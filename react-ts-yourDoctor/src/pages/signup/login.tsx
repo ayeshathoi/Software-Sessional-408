@@ -72,64 +72,71 @@ function LogIn() {
         <p>&</p>
       </div>
       <div className="w-screen h-screen flex items-center justify-center bg-white">
-        <div className="pt-20 flex flex-col items-center justify-center pb-8 px-12 mb-8 border border-gray-300 round-lg bg-pink-50">
-          <h1
-            style={{ fontWeight: 'bold', fontSize: '24px', color: 'royalblue' }}
+        <div className="w-full max-w-md">
+          <form
+            className="bg-white shadow-lg rounded px-12 pt-6 pb-8 mb-4"
+            onSubmit={handleSubmit}
           >
-            Log In
-          </h1>
-          <form onSubmit={handleSubmit} className="w-full">
-            <div className="mb-8 mt-4">
+            <div className="text-gray-800 text-2xl flex justify-center border-b-2 py-2 mb-4">
+              Log In
+            </div>
+            <div className="mb-4">
               <label
+                className="block text-gray-700 text-sm font-normal mb-2"
                 htmlFor="email"
-                className="text-black px-2.5 text-lg justify-center font-semibold bg-indigo-300 py-2 h-15"
               >
-                Email or Mobile Number
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  name="email"
+                  type="email"
+                  value={formData.email}
+                  placeholder="Email"
+                  onChange={handleChange}
+                  required
+                />
               </label>
-              <input
-                type="text"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                className="w-full rounded-md rounded-r-none mt-4 bg-indigo-200 px-10 py-2 h-15"
-              />
             </div>
-            <div className="mb-8">
+            <div className="mb-6">
               <label
+                className="block text-gray-700 text-sm font-normal mb-2"
                 htmlFor="password"
-                className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2 h-15"
               >
-                Password
+                <input
+                  className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:shadow-outline"
+                  name="password"
+                  type="password"
+                  value={formData.password}
+                  placeholder="Password"
+                  onChange={handleChange}
+                  required
+                />
               </label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                required
-                className="w-full rounded-md rounded-r-none mt-4 bg-indigo-200 px-10 py-2 h-15"
-              />
             </div>
-            <div className="flex justify-center">
+            <div className="flex items-center justify-between">
               <button
+                className="px-4 py-2 rounded text-white inline-block shadow-lg bg-blue-500 hover:bg-blue-600 focus:bg-blue-700"
                 type="submit"
-                className="text-black px-2.5 text-lg font-semibold py-2 h-15 bg-indigo-500"
               >
                 Log In
               </button>
+              <a
+                className="inline-block align-baseline font-normal text-sm text-blue-500 hover:text-blue-800"
+                href="/passwordreset"
+              >
+                Forgotten your Password?
+              </a>
             </div>
           </form>
+          <p className="text-center text-gray-500 text-xs">
+            &copy;2023 yourDoctor. All rights reserved.
+          </p>
         </div>
       </div>
-      <div className="mt-16">
-        <Footer />
-      </div>
+      <Footer />
     </>
   );
 }
 
 export default LogIn;
 export { checkAuth, logout };
+

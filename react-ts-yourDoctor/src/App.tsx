@@ -63,10 +63,8 @@ export function App() {
 
         <Route path="/doctorSearch/:userid" element={<DoctorSearch />} />
         <Route path="/AmbulanceSearch/:userid" element={<AmbulanceSearch />} />
-
       </Routes>
     </BrowserRouter>
   );
 }
 export default App;
-

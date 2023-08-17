@@ -15,7 +15,7 @@ function Navbar() {
   };
   return (
     <nav>
-      <div className="flex items-center justify-between fixed top-0 z-30 w-full py-2 bg-indigo-300">
+      <div className="flex items-center justify-between fixed top-0 z-30 w-full py-2 bg-green-300">
         <div className="flex items-center w-5/6 mx-auto">
           <div>
             <Link to="/">
@@ -42,12 +42,12 @@ function Navbar() {
                     value={searchValue}
                     onChange={handleChange}
                     required
-                    className="w-full rounded-md rounded-r-none bg-indigo-50 px-10 py-2 h-15"
+                    className="w-full rounded-md rounded-r-none bg-green-50 px-10 py-2 h-15"
                   />
                   <button
                     type="submit"
                     onClick={handleSearchIconClick}
-                    className=" text-white px-2.5 text-lg font-semibold bg-indigo-500 py-2 h-15"
+                    className=" text-white px-2.5 text-lg font-semibold bg-green-500 py-2 h-15"
                   >
                     <MagnifyingGlassIcon className="h-5 w-5" />
                   </button>

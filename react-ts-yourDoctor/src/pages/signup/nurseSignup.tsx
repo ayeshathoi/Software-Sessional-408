@@ -18,15 +18,14 @@ import Footer from '../navbar/footer';
 
 function NurseSignup() {
   const [formData, setFormData] = useState({
-    name: '',
+    uname: '',
     email: '',
     mobile: '',
     password: '',
     dob: '',
     gender: 'male', // Default value
     designation: '',
-    hospital: '',
-    qualification: '',
+    hospital_name: '',
     pdfDocument: null,
   });
 
@@ -90,8 +89,8 @@ function NurseSignup() {
           >
             <TextField
               label="Name"
-              name="firstName"
-              value={formData.name}
+              name="uname"
+              value={formData.uname}
               onChange={handleChange}
               variant="outlined"
               required
@@ -177,19 +176,9 @@ function NurseSignup() {
             />
 
             <TextField
-              label="Qualification"
-              name="qualification"
-              value={formData.qualification}
-              onChange={handleChange}
-              variant="outlined"
-              required
-              className="w-full"
-            />
-
-            <TextField
               label="Hospital(Compulsory)"
-              name="hospital"
-              value={formData.hospital}
+              name="hospital_name"
+              value={formData.hospital_name}
               onChange={handleChange}
               variant="outlined"
               required

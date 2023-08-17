@@ -41,19 +41,28 @@ function LogIn() {
             maxAge: COOKIE_AGE,
           });
 
-          const userId = 17; // Replace with actual key
           // const { res.data.type } = res.data; // Replace with actual key
           console.log('here is the type', res.data.type);
           let userProfileUrl = '';
           if (res.data.type === 'doctor') {
+            const userId = res.data.uid;
+            console.log('here is the uid', res.data.uid);
             userProfileUrl = `/doctorHome/${userId}/`;
           } else if (res.data.type === 'patient') {
+            const userId = res.data.uid;
+            console.log('here is the uid', res.data.uid);
             userProfileUrl = `/userHome/${userId}/`;
           } else if (res.data.type === 'driver') {
+            const userId = res.data.uid;
+            console.log('here is the uid', res.data.uid);
             userProfileUrl = `/driverHome/${userId}/`;
           } else if (res.data.type === 'nurse') {
+            const userId = res.data.uid;
+            console.log('here is the uid', res.data.uid);
             userProfileUrl = `/nurseHome/${userId}/`;
           } else if (res.data.type === 'hospital') {
+            const userId = res.data.uid;
+            console.log('here is the uid', res.data.uid);
             userProfileUrl = `/hospitalHome/${userId}/`;
           }
           navigate(userProfileUrl);

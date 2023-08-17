@@ -7,6 +7,7 @@ import Navbar from '../navbar/header';
 import Footer from '../navbar/footer';
 
 const cookies = new Cookies();
+const COOKIE_AGE = 31536000;
 
 const checkAuth = () => {
   return !(cookies.get('token') === undefined || cookies.get('token') === null);
@@ -19,7 +20,7 @@ const logout = () => {
 function LogIn() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    emailOrMobile: '',
+    email: '',
     password: '',
   });
 
@@ -31,25 +32,32 @@ function LogIn() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:3000/login', formData).then((res) => {
-        console.log('here is the form', res.data);
+      await axios
+        .post('http://localhost:3000/auth/login', formData)
+        .then((res) => {
+          console.log('here is the form', res.data);
+          cookies.set('token', res.data.backendCookie, {
+            path: '/',
+            maxAge: COOKIE_AGE,
+          });
 
-        const { userId } = res.data; // Replace with actual key
-        const { userType } = res.data; // Replace with actual key
-        let userProfileUrl = '';
-        if (userType === 'doctor') {
-          userProfileUrl = `/doctorHome/${userId}`;
-        } else if (userType === 'patient') {
-          userProfileUrl = `/userHome/${userId}`;
-        } else if (userType === 'driver') {
-          userProfileUrl = `/driverHome/${userId}`;
-        } else if (userType === 'nurse') {
-          userProfileUrl = `/nurseHome/${userId}`;
-        } else if (userType === 'hospital') {
-          userProfileUrl = `/hospitalHome/${userId}`;
-        }
-        navigate(userProfileUrl);
-      });
+          const userId = 17; // Replace with actual key
+          // const { res.data.type } = res.data; // Replace with actual key
+          console.log('here is the type', res.data.type);
+          let userProfileUrl = '';
+          if (res.data.type === 'doctor') {
+            userProfileUrl = `/doctorHome/${userId}/`;
+          } else if (res.data.type === 'patient') {
+            userProfileUrl = `/userHome/${userId}/`;
+          } else if (res.data.type === 'driver') {
+            userProfileUrl = `/driverHome/${userId}/`;
+          } else if (res.data.type === 'nurse') {
+            userProfileUrl = `/nurseHome/${userId}/`;
+          } else if (res.data.type === 'hospital') {
+            userProfileUrl = `/hospitalHome/${userId}/`;
+          }
+          navigate(userProfileUrl);
+        });
     } catch (err) {
       console.log(err);
     }
@@ -80,6 +88,7 @@ function LogIn() {
                   name="email"
                   type="email"
                   placeholder="Email"
+                  value={formData.email}
                   onChange={handleChange}
                   required
                 />
@@ -94,6 +103,7 @@ function LogIn() {
                   className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:shadow-outline"
                   name="password"
                   type="password"
+                  value={formData.password}
                   placeholder="Password"
                   onChange={handleChange}
                   required

@@ -2,29 +2,39 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import {
+  Button,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  TextField,
+} from '@mui/material';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Navbar from '../navbar/header';
 import Footer from '../navbar/footer';
 
 function PatientSignup() {
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
+    uname: '',
     email: '',
     mobile: '',
     password: '',
-    day: '',
-    month: '',
-    year: '',
+    dob: '',
     gender: 'male', // Default value
     street: '',
     thana: '',
     city: '',
-    division: '',
+    district: '',
   });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
+  };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleDateChange = (date: any) => {
+    setFormData((prevData) => ({ ...prevData, dob: date }));
   };
 
   const navigate = useNavigate();
@@ -33,7 +43,7 @@ function PatientSignup() {
     e.preventDefault();
     try {
       await axios
-        .post('http://localhost:3000/registerUser', formData)
+        .post('http://localhost:3000/auth/register/patient', formData)
         .then((res) => {
           console.log('here is the form', res.data);
           navigate('/LogIn');
@@ -49,7 +59,7 @@ function PatientSignup() {
         <Navbar />
       </div>
       <div
-        className="flex flex-col items-center justify-center"
+        className="flex flex-col items-center justify-center mt-36"
         style={{
           backgroundColor: 'ghostwhite',
           backgroundSize: 'cover',
@@ -66,239 +76,127 @@ function PatientSignup() {
           </h1>
           <form
             onSubmit={handleSubmit}
-            className="grid grid-cols-2 gap-y-0 gap-x-6 ml-32 mt-4"
+            className="grid grid-cols-2 gap-y-4 gap-x-6 mt-4"
           >
-            <div className="mb-8">
-              <label
-                htmlFor="firstName"
-                className="text-black px-2 text-lg font-semibold bg-indigo-300 py-2"
-              >
-                First Name
-              </label>
-              <input
-                type="text"
-                id="firstName"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
-                required
-                className="w-half rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
-              />
-            </div>
-            <div className="mb-8">
-              <label
-                htmlFor="lastName"
-                className="text-black px-2 text-lg font-semibold bg-indigo-300 py-2"
-              >
-                Last Name
-              </label>
-              <input
-                type="text"
-                id="lastName"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-                required
-                className="w-half rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
-              />
-            </div>
-            <div className="mb-8">
-              <label
-                htmlFor="email"
-                className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
-              >
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                className="w-half rounded-md rounded-r-none  bg-indigo-200 px-3 py-2"
-              />
-            </div>
-            <div className="mb-8">
-              <label
-                htmlFor="mobile"
-                className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
-              >
-                Mobile Number
-              </label>
-              <input
-                type="text"
-                id="mobile"
-                name="mobile"
-                value={formData.mobile}
-                onChange={handleChange}
-                required
-                className="w-half rounded-md rounded-r-none  bg-indigo-200 px-3 py-2"
-              />
-            </div>
-            <div className="mb-8">
-              <label
-                htmlFor="password"
-                className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
-              >
-                Password
-              </label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                required
-                className="w-half rounded-md rounded-r-none  bg-indigo-200 px-3 py-2"
-              />
-            </div>
-            <div className="mb-8 flex items-center">
-              <label className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2">
-                Date of Birth
-              </label>
-              <div className="ml-4 flex space-x-2">
-                <input
-                  type="text"
-                  placeholder="Day"
-                  name="day"
-                  value={formData.day}
-                  onChange={handleChange}
-                  required
-                  className="w-16 rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
-                />
-                <input
-                  type="text"
-                  placeholder="Month"
-                  name="month"
-                  value={formData.month}
-                  onChange={handleChange}
-                  required
-                  className="w-16 rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
-                />
-                <input
-                  type="text"
-                  placeholder="Year"
-                  name="year"
-                  value={formData.year}
-                  onChange={handleChange}
-                  required
-                  className="w-20 rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
-                />
-              </div>
-            </div>
+            <TextField
+              label="Name"
+              name="uname"
+              value={formData.uname}
+              onChange={handleChange}
+              variant="outlined"
+              required
+              className="w-full"
+            />
+            <TextField
+              label="Password"
+              name="password"
+              type="password"
+              value={formData.password}
+              onChange={handleChange}
+              variant="outlined"
+              required
+              className="w-full"
+            />
 
-            <div className="mb-8 flex items-center">
-              <label className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2">
+            <TextField
+              label="Email"
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              variant="outlined"
+              required
+              className="w-full"
+            />
+            <TextField
+              label="Mobile Number"
+              name="mobile"
+              value={formData.mobile}
+              onChange={handleChange}
+              variant="outlined"
+              required
+              className="w-full"
+            />
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                label="Date of Birth"
+                value={formData.dob}
+                onChange={handleDateChange}
+              />
+            </LocalizationProvider>
+            <div>
+              <label
+                htmlFor="Gender"
+                className="text-gray-400 text-sm font-semibold "
+              >
                 Gender
               </label>
-              <div className="ml-4 flex space-x-4">
-                <span className="bg-indigo-100 px-2.5 text-lg font-semibold py-2">
-                  <input
-                    type="radio"
-                    name="gender"
-                    value="male"
-                    checked={formData.gender === 'male'}
-                    onChange={handleChange}
-                  />{' '}
-                  Male
-                </span>
-                <span className="bg-indigo-100 px-2.5 text-lg font-semibold py-2">
-                  <input
-                    type="radio"
-                    name="gender"
-                    value="female"
-                    checked={formData.gender === 'female'}
-                    onChange={handleChange}
-                  />{' '}
-                  Female
-                </span>
-                <span className="bg-indigo-100 px-2.5 text-lg font-semibold py-2">
-                  <input
-                    type="radio"
-                    name="gender"
-                    value="custom"
-                    checked={formData.gender === 'custom'}
-                    onChange={handleChange}
-                  />{' '}
-                  Custom
-                </span>
-              </div>
+              <RadioGroup
+                row
+                name="gender"
+                value={formData.gender}
+                onChange={handleChange}
+                className="inline-flex"
+              >
+                <FormControlLabel
+                  value="male"
+                  control={<Radio />}
+                  label="Male"
+                />
+                <FormControlLabel
+                  value="female"
+                  control={<Radio />}
+                  label="Female"
+                />
+                <FormControlLabel
+                  value="custom"
+                  control={<Radio />}
+                  label="Custom"
+                />
+              </RadioGroup>
             </div>
 
-            <div className="mb-8">
-              <label
-                htmlFor="street"
-                className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
-              >
-                Street No.
-              </label>
-              <input
-                type="text"
-                id="street"
-                name="street"
-                value={formData.street}
-                onChange={handleChange}
-                required
-                className="w-half rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
-              />
-            </div>
+            <TextField
+              label="Street"
+              name="street"
+              value={formData.street}
+              onChange={handleChange}
+              variant="outlined"
+              required
+              className="w-full"
+            />
+            <TextField
+              label="Thana"
+              name="thana"
+              value={formData.thana}
+              onChange={handleChange}
+              variant="outlined"
+              required
+              className="w-full"
+            />
 
-            <div className="mb-8">
-              <label
-                htmlFor="thana"
-                className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
-              >
-                Thana
-              </label>
-              <input
-                type="text"
-                id="thana"
-                name="thana"
-                value={formData.thana}
-                onChange={handleChange}
-                required
-                className="w-20 rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
-              />
-              <label
-                htmlFor="city"
-                className="text-black ml-2 px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
-              >
-                City
-              </label>
-              <input
-                type="text"
-                id="city"
-                name="city"
-                value={formData.city}
-                onChange={handleChange}
-                required
-                className="w-20 rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
-              />
-              <label
-                htmlFor="division"
-                className="text-black ml-2 px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
-              >
-                Division
-              </label>
-              <input
-                type="text"
-                id="division"
-                name="division"
-                value={formData.division}
-                onChange={handleChange}
-                required
-                className="w-20 rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
-              />
-            </div>
-
+            <TextField
+              label="City"
+              name="city"
+              value={formData.city}
+              onChange={handleChange}
+              variant="outlined"
+              required
+              className="w-full"
+            />
+            <TextField
+              label="District"
+              name="district"
+              value={formData.district}
+              onChange={handleChange}
+              variant="outlined"
+              required
+              className="w-full"
+            />
             <div className="col-span-2 flex justify-center">
-              <button
-                type="submit"
-                className="text-black px-2.5 text-lg font-semibold py-2  bg-indigo-500"
-              >
+              <Button type="submit" variant="contained" color="success">
                 Sign Up
-              </button>
+              </Button>
             </div>
           </form>
         </div>

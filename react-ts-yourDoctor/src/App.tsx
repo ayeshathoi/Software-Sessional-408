@@ -18,6 +18,8 @@ import NurseHome from './pages/nursePages/nurseHome';
 import DriverHome from './pages/driverPages/driverHome';
 import UserHome from './pages/userPages/userHome';
 import HospitalHome from './pages/hospitalPages/hospitalHome';
+import DoctorSearch from './pages/search/doctorSearch';
+import AmbulanceSearch from './pages/search/AmbulanceSearch';
 
 export function App() {
   return (
@@ -58,8 +60,13 @@ export function App() {
 
         <Route path="/userHome/:userid" element={<UserHome />} />
         <Route path="/hospitalHome/:userid" element={<HospitalHome />} />
+
+        <Route path="/doctorSearch/:userid" element={<DoctorSearch />} />
+        <Route path="/AmbulanceSearch/:userid" element={<AmbulanceSearch />} />
+
       </Routes>
     </BrowserRouter>
   );
 }
 export default App;
+

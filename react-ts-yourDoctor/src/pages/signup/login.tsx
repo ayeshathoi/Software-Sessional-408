@@ -127,4 +127,3 @@ function LogIn() {
 
 export default LogIn;
 export { checkAuth, logout };
-

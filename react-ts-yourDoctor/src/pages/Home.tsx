@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 /* eslint-disable import/extensions */
-import { Link } from 'react-router-dom';
 import Appointment from '@/assets/appointment.jpg';
 import Navbar from '@/pages/navbar/header.tsx';
 import Search from '@/assets/searchdoctor.png';
@@ -17,16 +16,8 @@ function Home() {
         <Navbar />
         <p>&</p>
       </div>
-      <div className="pt-20 flex justify-end bg-green-100">
-        <Link
-          to="ProfileOptions"
-          className="inline-block bg-magenta-900 bg-green-400 mr-24 font-bold text-lg px-4 py-2 rounded-lg hover:bg-magenta-800"
-        >
-          SignUp/SignIn
-        </Link>
-      </div>
+      <div className="pt-20 flex justify-end bg-indigo-100" />
       <div className="grid grid-cols-3 gap-4 mt-14 mx-auto max-w-6xl">
-        {/* First Row */}
         <div className="flex flex-col items-center">
           <img src={Search} alt="Search" className="h-40 w-full object-cover" />
           <p className="text-purple-800 font-bold text-lg">
@@ -40,7 +31,7 @@ function Home() {
             className="h-40 w-full object-cover"
           />
           <p className="text-purple-800 font-bold text-lg">
-            Book Doctor Appointment Image
+            Book Doctor Appointment
           </p>
         </div>
         <div className="flex flex-col items-center">
@@ -60,7 +51,7 @@ function Home() {
             className="h-40 w-full object-cover"
           />
           <p className="text-purple-800 font-bold text-lg">
-            Online Consultation vis Zoom
+            Online Consultation via Zoom
           </p>
         </div>
         <div className="flex flex-col items-center">

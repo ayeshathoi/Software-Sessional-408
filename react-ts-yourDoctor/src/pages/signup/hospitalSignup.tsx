@@ -9,7 +9,7 @@ function HospitalSignup() {
     hospital_name: '',
     email: '',
     password: '',
-    mobile : '',
+    mobile: '',
     street: '',
     thana: '',
     city: '',
@@ -27,18 +27,20 @@ function HospitalSignup() {
   };
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     try {
       console.log('Form data before submission:', formData);
-  
-      const response = await axios.post('http://localhost:3000/auth/register/hospital', formData);
-  
+
+      const response = await axios.post(
+        'http://localhost:3000/auth/register/hospital',
+        formData
+      );
+
       console.log('Server response:', response.data);
     } catch (err) {
       console.error('Error submitting form:', err);
     }
   };
-  
 
   return (
     <>
@@ -133,7 +135,7 @@ function HospitalSignup() {
                 className="w-half rounded-md rounded-r-none  bg-indigo-200 px-3 py-2"
               />
             </div>
-            
+
             <div className="mb-8">
               <label
                 htmlFor="street"
@@ -223,9 +225,6 @@ function HospitalSignup() {
               >
                 Sign Up
               </button>
-
-
-              
             </div>
           </form>
         </div>

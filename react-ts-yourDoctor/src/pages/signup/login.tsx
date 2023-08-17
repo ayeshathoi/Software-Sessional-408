@@ -7,6 +7,7 @@ import Navbar from '../navbar/header';
 import Footer from '../navbar/footer';
 
 const cookies = new Cookies();
+const COOKIE_AGE = 31536000;
 
 const checkAuth = () => {
   return !(cookies.get('token') === undefined || cookies.get('token') === null);
@@ -19,7 +20,7 @@ const logout = () => {
 function LogIn() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    emailOrMobile: '',
+    email: '',
     password: '',
   });
 
@@ -31,25 +32,34 @@ function LogIn() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:3000/login', formData).then((res) => {
-        console.log('here is the form', res.data);
+      console.log('form data', formData.email);
+      await axios
+        .post('http://localhost:3000/auth/login', formData)
+        .then((res) => {
+          console.log('sign in res', res);
+          cookies.set('token', res.data.backendCookie, {
+            path: '/',
+            maxAge: COOKIE_AGE,
+          });
 
-        const { userId } = res.data; // Replace with actual key
-        const { userType } = res.data; // Replace with actual key
-        let userProfileUrl = '';
-        if (userType === 'doctor') {
-          userProfileUrl = `/doctorHome/${userId}`;
-        } else if (userType === 'patient') {
-          userProfileUrl = `/userHome/${userId}`;
-        } else if (userType === 'driver') {
-          userProfileUrl = `/driverHome/${userId}`;
-        } else if (userType === 'nurse') {
-          userProfileUrl = `/nurseHome/${userId}`;
-        } else if (userType === 'hospital') {
-          userProfileUrl = `/hospitalHome/${userId}`;
-        }
-        navigate(userProfileUrl);
-      });
+          const userId = 5; // Replace with actual key
+          const { userType } = res.data.type; // Replace with actual key
+          console.log('here is type', res.data.type);
+          let userProfileUrl = '';
+          if (userType === 'doctor') {
+            userProfileUrl = `/doctorHome/${userId}/`;
+          } else if (userType === 'patient') {
+            userProfileUrl = `/userHome/${userId}/`;
+          } else if (userType === 'driver') {
+            userProfileUrl = `/driverHome/${userId}/`;
+          } else if (userType === 'nurse') {
+            userProfileUrl = `/nurseHome/${userId}/`;
+          } else if (res.data.type === 'hospital') {
+            console.log('here is the hospital', `/hospitalHome/${userId}/`);
+            userProfileUrl = `/hospitalHome/${userId}/`;
+          }
+          navigate(userProfileUrl);
+        });
     } catch (err) {
       console.log(err);
     }
@@ -71,16 +81,16 @@ function LogIn() {
           <form onSubmit={handleSubmit} className="w-full">
             <div className="mb-8 mt-4">
               <label
-                htmlFor="emailOrMobile"
+                htmlFor="email"
                 className="text-black px-2.5 text-lg justify-center font-semibold bg-indigo-300 py-2 h-15"
               >
                 Email or Mobile Number
               </label>
               <input
                 type="text"
-                id="emailOrMobile"
-                name="emailOrMobile"
-                value={formData.emailOrMobile}
+                id="email"
+                name="email"
+                value={formData.email}
                 onChange={handleChange}
                 required
                 className="w-full rounded-md rounded-r-none mt-4 bg-indigo-200 px-10 py-2 h-15"

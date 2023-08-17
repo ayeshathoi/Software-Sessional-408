@@ -34,13 +34,16 @@ function UserHome() {
       .catch((error) => {
         console.error('userprofile not found', error);
       });
-  }, [userid]);
+  }, [user, userid]);
 
   if (!user) {
     return <div>Loading...</div>; // Display a loading message while fetching data
   }
 
-  const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+  const handleChange = (
+    _event: React.ChangeEvent<object>,
+    newValue: number
+  ) => {
     setValue(newValue);
   };
 

@@ -7,8 +7,7 @@ import Footer from '../navbar/footer';
 
 function NurseSignup() {
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
+    Name: '',
     email: '',
     mobile: '',
     password: '',
@@ -17,7 +16,7 @@ function NurseSignup() {
     year: '',
     gender: 'male', // Default value
     designation: '',
-    workplace: '',
+    hospital: '',
     qualification: '',
     pdfDocument: null,
   });
@@ -36,11 +35,12 @@ function NurseSignup() {
     //   setFormData((prevFormData) => ({ ...prevFormData, pdfDocument: file }));
     // }
   };
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       await axios
-        .post('http://localhost:3000/registerNurse', formData)
+        .post('http://localhost:3000/register/nurse', formData)
         .then((res) => {
           console.log('here is the form', res.data);
           navigate('/LogIn');
@@ -55,152 +55,146 @@ function NurseSignup() {
       <div>
         <Navbar />
       </div>
-      <div
-        className="flex flex-col items-center justify-center"
-        style={{
-          backgroundColor: 'ghostwhite',
-          backgroundSize: 'cover',
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'center center',
-          // opacity: 0.5, // Adjust the opacity as needed (0.0 to 1.0)
-        }}
-      >
-        <div className="pt-20 flex flex-col items-center justify-center pb-8 px-12 mb-8 border border-gray-300 round-lg bg-pink-50">
-          <h1
-            style={{ fontWeight: 'bold', fontSize: '24px', color: 'royalblue' }}
-          >
-            Nurse Signup
+      <div className="flex flex-col items-center justify-center">
+        <div className="pt-40 pb-20 px-20 rounded-3xl shadow-2xl">
+          <h1 className="text-4xl font-bold text-indigo-500 mt-10">
+            Nurse SignUp
           </h1>
-          <form
-            onSubmit={handleSubmit}
-            className="grid grid-cols-2 gap-y-0 gap-x-6 ml-32 mt-4"
-          >
+          <p className="text-sm text-gray-300 mt-5">
+            Please fill in this form to create an account!
+          </p>
+          <hr />
+
+          <form onSubmit={handleSubmit}>
+            <label
+              htmlFor="Name"
+              className="gap-2 text-gray-400 text-sm font-semibold "
+            >
+              Name
+            </label>
             <div className="mb-8">
-              <label
-                htmlFor="firstName"
-                className="text-black px-2 text-lg font-semibold bg-indigo-300 py-2"
-              >
-                First Name
-              </label>
               <input
                 type="text"
-                id="firstName"
-                name="firstName"
-                value={formData.firstName}
+                id="Name"
+                name="Name"
+                value={formData.Name}
+                placeholder="Name"
                 onChange={handleChange}
                 required
-                className="w-half rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
+                className="w-half rounded-md rounded-lg bg-gray-200 px-3 py-2"
               />
             </div>
+            <label
+              htmlFor="email"
+              className="text-gray-400 text-sm font-semibold "
+            >
+              Email
+            </label>
             <div className="mb-8">
-              <label
-                htmlFor="lastName"
-                className="text-black px-2 text-lg font-semibold bg-indigo-300 py-2"
-              >
-                Last Name
-              </label>
-              <input
-                type="text"
-                id="lastName"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-                required
-                className="w-half rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
-              />
-            </div>
-            <div className="mb-8">
-              <label
-                htmlFor="email"
-                className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
-              >
-                Email
-              </label>
               <input
                 type="email"
                 id="email"
                 name="email"
+                placeholder="Email"
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="w-half rounded-md rounded-r-none  bg-indigo-200 px-3 py-2"
+                className="w-half rounded-md rounded-lg  bg-gray-200 px-3 py-2"
               />
             </div>
+            <label
+              htmlFor="mobile"
+              className="text-gray-400 text-sm font-semibold "
+            >
+              Mobile Number
+            </label>
+
             <div className="mb-8">
-              <label
-                htmlFor="mobile"
-                className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
-              >
-                Mobile Number
-              </label>
               <input
                 type="text"
                 id="mobile"
                 name="mobile"
+                placeholder="Mobile number"
                 value={formData.mobile}
                 onChange={handleChange}
                 required
-                className="w-half rounded-md rounded-r-none  bg-indigo-200 px-3 py-2"
+                className="w-half rounded-md rounded-lg  bg-gray-200 px-3 py-2"
               />
             </div>
+            <label
+              htmlFor="password"
+              className="text-gray-400 text-sm font-semibold "
+            >
+              Password
+            </label>
             <div className="mb-8">
-              <label
-                htmlFor="password"
-                className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
-              >
-                Password
-              </label>
               <input
                 type="password"
                 id="password"
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
+                placeholder="Password"
                 required
-                className="w-half rounded-md rounded-r-none  bg-indigo-200 px-3 py-2"
+                className="w-half rounded-md rounded-lg  bg-gray-200 px-3 py-2"
               />
             </div>
+            <label
+              htmlFor="dob"
+              className="text-gray-400 text-sm font-semibold "
+            >
+              Date of Birth
+            </label>
             <div className="mb-8 flex items-center">
-              <label className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2">
-                Date of Birth
-              </label>
-              <div className="ml-4 flex space-x-2">
-                <input
-                  type="text"
-                  placeholder="Day"
-                  name="day"
-                  value={formData.day}
-                  onChange={handleChange}
-                  required
-                  className="w-16 rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
-                />
-                <input
-                  type="text"
-                  placeholder="Month"
-                  name="month"
-                  value={formData.month}
-                  onChange={handleChange}
-                  required
-                  className="w-16 rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
-                />
-                <input
-                  type="text"
-                  placeholder="Year"
-                  name="year"
-                  value={formData.year}
-                  onChange={handleChange}
-                  required
-                  className="w-20 rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
-                />
+              <div className="flex space-x-4">
+                <span className="bg-gray-200 px-2.5 text-lg rounded-lg font-semibold py-2">
+                  <input
+                    type="number"
+                    id="day"
+                    name="day"
+                    value={formData.day}
+                    onChange={handleChange}
+                    placeholder="DD"
+                    required
+                    className="w-16 rounded-md rounded-lg bg-gray-200 px-3 py-2"
+                  />
+                </span>
+                <span className="bg-gray-200 px-2.5 text-lg rounded-lg font-semibold py-2">
+                  <input
+                    type="number"
+                    id="month"
+                    name="month"
+                    value={formData.month}
+                    onChange={handleChange}
+                    placeholder="MM"
+                    required
+                    className="w-16 rounded-md rounded-lg bg-gray-200 px-3 py-2"
+                  />
+                </span>
+                <span className="bg-gray-200 px-2.5 text-lg rounded-lg font-semibold py-2">
+                  <input
+                    type="number"
+                    id="year"
+                    name="year"
+                    value={formData.year}
+                    onChange={handleChange}
+                    placeholder="YYYY"
+                    required
+                    className="w-20 rounded-md rounded-lg bg-gray-200 px-3 py-2"
+                  />
+                </span>
               </div>
             </div>
 
+            <label
+              htmlFor="Gender"
+              className="text-gray-400 text-sm font-semibold "
+            >
+              Gender
+            </label>
             <div className="mb-8 flex items-center">
-              <label className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2">
-                Gender
-              </label>
-              <div className="ml-4 flex space-x-4">
-                <span className="bg-indigo-100 px-2.5 text-lg font-semibold py-2">
+              <div className="flex space-x-4">
+                <span className="bg-gray-200 text-gray-400 px-2.5 text-sm rounded-sm font-semibold py-2">
                   <input
                     type="radio"
                     name="gender"
@@ -210,7 +204,7 @@ function NurseSignup() {
                   />{' '}
                   Male
                 </span>
-                <span className="bg-indigo-100 px-2.5 text-lg font-semibold py-2">
+                <span className="bg-gray-200 text-gray-400 px-2.5 text-sm rounded-sm font-semibold py-2">
                   <input
                     type="radio"
                     name="gender"
@@ -220,7 +214,7 @@ function NurseSignup() {
                   />{' '}
                   Female
                 </span>
-                <span className="bg-indigo-100 px-2.5 text-lg font-semibold py-2">
+                <span className="bg-gray-200 text-gray-400 px-2.5 text-sm rounded-sm font-semibold py-2">
                   <input
                     type="radio"
                     name="gender"
@@ -232,14 +226,31 @@ function NurseSignup() {
                 </span>
               </div>
             </div>
-
+            <label
+              htmlFor="Workplace"
+              className="text-gray-400 text-sm font-semibold "
+            >
+              Workplace
+            </label>
             <div className="mb-8">
-              <label
-                htmlFor="designation"
-                className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
-              >
-                Designation
-              </label>
+              <input
+                type="text"
+                id="Hospital"
+                name="Hospital"
+                value={formData.hospital}
+                onChange={handleChange}
+                required
+                className="w-half rounded-md rounded-lg bg-gray-200 px-3 py-2"
+              />
+            </div>
+
+            <label
+              htmlFor="Designation"
+              className="text-gray-400 text-sm font-semibold "
+            >
+              Designation
+            </label>
+            <div className="mb-8">
               <input
                 type="text"
                 id="designation"
@@ -247,65 +258,47 @@ function NurseSignup() {
                 value={formData.designation}
                 onChange={handleChange}
                 required
-                className="w-half rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
+                className="w-half rounded-md rounded-lg bg-gray-200 px-3 py-2"
               />
             </div>
+            <label
+              htmlFor="qualification"
+              className="text-gray-400 text-sm font-semibold "
+            >
+              Qualification
+            </label>
             <div className="mb-8">
-              <label
-                htmlFor="workplace"
-                className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
-              >
-                Workplace(Compulsory)
-              </label>
-              <input
-                type="text"
-                id="workplace"
-                name="workplace"
-                value={formData.workplace}
-                onChange={handleChange}
-                required
-                className="w-half rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
-              />
-            </div>
-
-            <div className="mb-8">
-              <label
-                htmlFor="qualification"
-                className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
-              >
-                Qualification
-              </label>
               <input
                 type="text"
                 id="qualification"
                 name="qualification"
+                placeholder="qualification"
                 value={formData.qualification}
                 onChange={handleChange}
                 required
-                className="w-half rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
+                className="w-half rounded-md rounded-lg bg-gray-200 px-3 py-2"
               />
             </div>
-
+            <label
+              htmlFor="pdfDocument"
+              className="text-black px-2.5 text-sm font-semibold py-2 "
+            >
+              PDF Document Submission
+            </label>
             <div className="col-span-2 mb-8">
-              <label
-                htmlFor="pdfDocument"
-                className="text-black px-2.5 text-lg font-semibold bg-indigo-300 py-2 "
-              >
-                PDF Document Submission
-              </label>
               <input
                 type="file"
                 id="pdfDocument"
                 name="pdfDocument"
                 onChange={handleFileChange}
                 accept=".pdf"
-                className="w-half rounded-md rounded-r-none bg-indigo-200 px-3 py-2"
+                className="w-half rounded-md rounded-lg bg-gray-200 px-3 py-2"
               />
             </div>
             <div className="col-span-2 flex justify-center">
               <button
                 type="submit"
-                className="text-black px-2.5 text-lg font-semibold py-2  bg-indigo-500"
+                className="bg-indigo-300 text-white px-2.5 text-lg rounded-lg font-semibold py-2"
               >
                 Sign Up
               </button>
@@ -313,7 +306,8 @@ function NurseSignup() {
           </form>
         </div>
       </div>
-      <div className="mt-16">
+
+      <div>
         <Footer />
       </div>
     </>

@@ -131,7 +131,7 @@ const DOC_HOS = "INSERT INTO " + constant.TABLE_DOCTOR_HOSPITAL +
 
 const create_doctor = async (username,email,pass,mobile,dob,gender,qualification,designation,speciality,zoom,old_fee,new_fee,
         document,
-        document_content,hospital_name) => {
+        document_content,hospital_names) => {
   try {
       const client = await getConnection.connect();
       const user_type = "doctor";
@@ -141,9 +141,9 @@ const create_doctor = async (username,email,pass,mobile,dob,gender,qualification
       const stat = "pending";
       const result = await client.query(CREATE_DOCTOR, [doctorid,qualification,designation,speciality,stat,
         zoom,old_fee,new_fee,document,document_content]);
-      const sz = hospital_name.length;
+      const sz = hospital_names.length;
         for(var i = 0; i < sz; i++){
-            const hid = await findhid(hospital_name[i]);
+            const hid = await findhid(hospital_names[i]);
             const hid2 = hid[0].hospital_id.toString();
             const result2 = await client.query(DOC_HOS, [doctorid,hid2]);
         }  

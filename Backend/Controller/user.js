@@ -114,7 +114,7 @@ const create_doctor = async (req, res,hashedPassword) => {
     const zoom_link = req.body.zoom_link;
     const old_patient_fee = req.body.old_patient_fee;
     const new_patient_fee = req.body.new_patient_fee;
-    const hospital_name  = req.body.hospital_name; 
+    const { hospital_name } = req.body; 
     const document = null;
     const document_content = null;
     try

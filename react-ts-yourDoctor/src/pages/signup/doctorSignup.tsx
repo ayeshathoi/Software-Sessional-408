@@ -16,8 +16,26 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Navbar from '../navbar/header';
 import Footer from '../navbar/footer';
 
+interface FormData {
+  uname: string;
+  email: string;
+  mobile: string;
+  password: string;
+  dob: string;
+  gender: string;
+  designation: string;
+  hospital_name: string[]; // Define hospital_name as a string array
+  newHospital: string;
+  speciality: string;
+  zoomLink: string;
+  pdfDocument: File | null;
+  qualification: string;
+  old_patient_fee: number;
+  new_patient_fee: number;
+}
+
 function DoctorSignup() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     uname: '',
     email: '',
     mobile: '',
@@ -25,12 +43,14 @@ function DoctorSignup() {
     dob: '',
     gender: 'male', // Default value
     designation: '',
-    workplace1: '',
-    workplace2: '',
-    workplace3: '',
-    specialization: '',
+    hospital_name: [],
+    newHospital: '',
+    speciality: '',
     zoomLink: '',
     pdfDocument: null,
+    qualification: '',
+    old_patient_fee: 0,
+    new_patient_fee: 0,
   });
 
   const navigate = useNavigate();
@@ -38,6 +58,12 @@ function DoctorSignup() {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
+  };
+  const handleHospitalChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      hospital_name: e.target.value.split(',').map((name) => name.trim()),
+    }));
   };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDateChange = (date: any) => {
@@ -178,11 +204,10 @@ function DoctorSignup() {
               required
               className="w-full"
             />
-
             <TextField
-              label="Specialization"
-              name="specialization"
-              value={formData.specialization}
+              label="Qualification"
+              name="qualification"
+              value={formData.qualification}
               onChange={handleChange}
               variant="outlined"
               required
@@ -190,9 +215,9 @@ function DoctorSignup() {
             />
 
             <TextField
-              label="Workplace 1 (Compulsory)"
-              name="workplace1"
-              value={formData.workplace1}
+              label="Speciality"
+              name="speciality"
+              value={formData.speciality}
               onChange={handleChange}
               variant="outlined"
               required
@@ -200,23 +225,39 @@ function DoctorSignup() {
             />
 
             <TextField
-              label="Workplace 2 (Optional)"
-              name="workplace2"
-              value={formData.workplace2}
+              label="Hospital Names"
+              name="hospital_name"
+              value={formData.hospital_name.join(', ')}
+              onChange={handleHospitalChange}
+              variant="outlined"
+              className="w-full"
+              multiline
+              rows={1}
+              inputProps={{
+                style: { minHeight: '20px' },
+              }}
+            />
+            <TextField
+              label="Old Patient Fee"
+              name="old_patient_fee"
+              type="number"
+              value={formData.old_patient_fee}
               onChange={handleChange}
               variant="outlined"
+              required
               className="w-full"
             />
 
             <TextField
-              label="Workplace 3 (Optional)"
-              name="workplace3"
-              value={formData.workplace3}
+              label="New Patient Fee"
+              name="new_patient_fee"
+              type="number"
+              value={formData.new_patient_fee}
               onChange={handleChange}
               variant="outlined"
+              required
               className="w-full"
             />
-
             <TextField
               label="Zoom Meeting Link"
               name="zoomLink"

@@ -18,14 +18,19 @@ import Footer from '../navbar/footer';
 
 function DriverSignup() {
   const [formData, setFormData] = useState({
-    name: '',
+    uname: '',
     email: '',
     mobile: '',
     password: '',
     dob: '',
     gender: 'male', // Default value
-    qualification: '',
-    workplace: '',
+    type: '',
+    fare: '',
+    street: '',
+    thana: '',
+    city: '',
+    district: '',
+    hospital_name: '',
     pdfDocument: null,
   });
 
@@ -52,7 +57,7 @@ function DriverSignup() {
     e.preventDefault();
     try {
       await axios
-        .post('http://localhost:3000/register/driver', formData)
+        .post('http://localhost:3000/auth/register/driver', formData)
         .then((res) => {
           console.log('here is the form', res.data);
           navigate('/LogIn'); // signup er por login kora lagbe
@@ -89,8 +94,8 @@ function DriverSignup() {
           >
             <TextField
               label="Name"
-              name="firstName"
-              value={formData.name}
+              name="uname"
+              value={formData.uname}
               onChange={handleChange}
               variant="outlined"
               required
@@ -166,9 +171,18 @@ function DriverSignup() {
             </div>
 
             <TextField
-              label="Qualification"
-              name="qualification"
-              value={formData.qualification}
+              label="Type"
+              name="type"
+              value={formData.type}
+              onChange={handleChange}
+              variant="outlined"
+              required
+              className="w-full"
+            />
+            <TextField
+              label="Fare"
+              name="fare"
+              value={formData.fare}
               onChange={handleChange}
               variant="outlined"
               required
@@ -176,14 +190,51 @@ function DriverSignup() {
             />
 
             <TextField
-              label="Workplace (Compulsory)"
-              name="workplace"
-              value={formData.workplace}
+              label="Street"
+              name="street"
+              value={formData.street}
               onChange={handleChange}
               variant="outlined"
+              required
+              className="w-full"
+            />
+            <TextField
+              label="Thana"
+              name="thana"
+              value={formData.thana}
+              onChange={handleChange}
+              variant="outlined"
+              required
               className="w-full"
             />
 
+            <TextField
+              label="City"
+              name="city"
+              value={formData.city}
+              onChange={handleChange}
+              variant="outlined"
+              required
+              className="w-full"
+            />
+            <TextField
+              label="District"
+              name="district"
+              value={formData.district}
+              onChange={handleChange}
+              variant="outlined"
+              required
+              className="w-full"
+            />
+            <TextField
+              label="Hospital Name"
+              name="hospital_name"
+              value={formData.hospital_name}
+              onChange={handleChange}
+              variant="outlined"
+              required
+              className="w-full"
+            />
             <div className="col-span-2 mb-8">
               <label
                 htmlFor="pdfDocument"

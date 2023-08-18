@@ -69,7 +69,8 @@ router.post('/login', async (req, res) => {
                     }
                     res.cookie('auth-token', token, options);
                     if(errors.length == 0){
-                        res.send({ type : "hospital", backendCookie : token});
+                        const hospital_id=result[0].hospital_id;
+                        res.send({ uid : hospital_id,type : "hospital", backendCookie : token});
                 
                     }
                 }
@@ -87,8 +88,10 @@ router.post('/login', async (req, res) => {
                 }
             res.cookie('auth-token', token, options);
             if(errors.length == 0){
+                const user=userRes[0].user_type;
+                const uid=userRes[0].uid;
                 //change it to nurses,doctors,drivers, patient or add type to user table to store usertype
-                res.send({ type : "user", backendCookie : token});    
+                res.send({uid : uid, type : user, backendCookie : token});    
                 }
             }
         }

@@ -416,3 +416,8 @@ Content-Type: application/json
 }
 ###
 GET http://localhost:3000/patient/ambulanceall
+
+####
+GET http://localhost:3000/nurse/30
+###
+GET http://localhost:3000/driver/29

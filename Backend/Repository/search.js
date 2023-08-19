@@ -82,6 +82,8 @@ const driverSearchByPatientThana = async (uid) => {
 
 const all = "SELECT * FROM " + constant.TABLE_DRIVER ;
 
+const one = "SELECT * FROM " + constant.TABLE_DRIVER + " WHERE " + constant.TABLE_DRIVER_ID + " = $1"
+
 const driverAll = async () => {
     try {
         const client = await getConnection.connect();
@@ -113,12 +115,42 @@ const driverAll = async () => {
     }
 }
 
+const onedriver = async (did) => {
+    try {
+        const client = await getConnection.connect();
+        const result = await client.query(one,[did]);
+        const hospital_id = result.rows[0].hospital_id;
+        const driver = await client.query(userDetail,[result.rows[0].driver_id]);
+        result.rows[0].driver_name = driver.rows[0].uname;
+        result.rows[0].driver_phone = driver.rows[0].mobile_no;
+        if(hospital_id == null){
+            result.rows[0].hospital = "Self";
+        }
+        else {
+        const hospital_name = await client.query(hospitalname,[hospital_id]);
+        result.rows[0].hospital = hospital_name.rows[0].hospital_name;
+        result.rows[0].street = hospital_name.rows[0].street;
+        result.rows[0].city = hospital_name.rows[0].city;
+        result.rows[0].thana = hospital_name.rows[0].thana;
+        result.rows[0].district = hospital_name.rows[0].district;
+        }
+        client.release();
+        return result.rows;
+    }
+    catch (error) {
+        console.error('Error fetching data:', error.message);
+        throw error;
+    }
+}
+
+
 
 
 
 module.exports = {
     driverSearchByThana,
     driverSearchByPatientThana,
-    driverAll
+    driverAll,
+    onedriver
 
 }

@@ -40,8 +40,9 @@ const alldriver = async (req, res) => {
 };
 
 
+
 module.exports = {
     Driver_search_Thana,
     patient_thana,
-    alldriver
+    alldriver,
 };

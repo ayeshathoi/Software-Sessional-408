@@ -152,6 +152,8 @@ Content-Type: application/json
 }
 ###
 GET http://localhost:3000/patient/doctorall
+###
+GET http://localhost:3000/patient/testall
 
 
 ####### patient edit profile

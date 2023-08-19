@@ -163,11 +163,7 @@ function BookDoctor() {
                       label="Online"
                     />
                     <FormControlLabel
-                      value={
-                        formData.hospital_name === 'Online'
-                          ? null
-                          : formData.hospital_name
-                      }
+                      value={hospitalName}
                       control={<Radio />}
                       label={hospitalName}
                     />

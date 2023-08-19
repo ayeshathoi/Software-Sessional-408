@@ -4,11 +4,13 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {
+  Autocomplete,
   Button,
   Card,
   CardContent,
   CardMedia,
   Grid,
+  TextField,
   Typography,
 } from '@mui/material';
 import Header from '../navbar/header';
@@ -27,6 +29,7 @@ interface Doctor {
 
 function DoctorSearch() {
   const [user, setuserData] = useState<Doctor[]>([]);
+  const [searchTerm, setSearchTerm] = useState<string>('');
 
   const { userid } = useParams();
   const navigate = useNavigate();
@@ -44,6 +47,30 @@ function DoctorSearch() {
       });
   }, [userid]);
 
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const getUniqueSpecialties = () => {
+    // Create a Set to store unique specialties
+    const uniqueSpecialtiesSet = new Set();
+
+    // Iterate through user data and add specialties to the Set
+    user.forEach((doctor) => {
+      if (!uniqueSpecialtiesSet.has(doctor.speciality)) {
+        uniqueSpecialtiesSet.add(doctor.speciality);
+      }
+    });
+
+    // Convert the Set back to an array
+    const uniqueSpecialtiesArray = Array.from(uniqueSpecialtiesSet);
+
+    return uniqueSpecialtiesArray;
+  };
+  const filteredDoctors = user.filter((doctor) =>
+    doctor.speciality.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <>
       <div>
@@ -51,7 +78,20 @@ function DoctorSearch() {
       </div>
 
       <div className="text-above-line my-10 text-left p-20 ">
-        <p className="text-gray-400">Search</p>
+        <Autocomplete
+          options={getUniqueSpecialties()} // Get unique specialties from user data
+          getOptionLabel={(option) => option}
+          renderInput={(params) => (
+            <TextField
+              // eslint-disable-next-line react/jsx-props-no-spreading
+              {...params}
+              label="Type the Speciality"
+              variant="outlined"
+              value={searchTerm}
+              onChange={handleSearchChange}
+            />
+          )}
+        />
         <hr className="line-below-text my-4 border-t-2 border-gray-300" />
 
         <div className="flex justify-end items-center">
@@ -64,7 +104,7 @@ function DoctorSearch() {
 
         <div className="flex">
           <div
-            className="side-nav bg-indigo-200 p-4 w-60 rounded-lg border-2 border-gray-300"
+            className="side-nav bg-green-200 p-4 w-60 rounded-lg border-2 border-gray-300"
             style={{ height: 'fit-content' }}
           >
             <div className="side-nav-item">
@@ -102,7 +142,7 @@ function DoctorSearch() {
 
           <div className="flex ml-4">
             <Grid container spacing={3}>
-              {user.map((doctor, index) => (
+              {filteredDoctors.map((doctor, index) => (
                 <Grid item xs={4} key={index}>
                   <Card>
                     <CardMedia
@@ -128,7 +168,7 @@ function DoctorSearch() {
 
                       <Button
                         variant="contained"
-                        color="primary"
+                        color="inherit"
                         onClick={() =>
                           navigate('/BookDoctor', {
                             state: {

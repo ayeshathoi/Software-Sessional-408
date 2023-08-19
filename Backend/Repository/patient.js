@@ -97,7 +97,7 @@ const DoctorSearchBySpeciality = "SELECT u.uname,u.mobile_no,u.email, d.designat
                            "FROM doctor d " +
                            "JOIN users u ON d.doctor_id = u.uid " +
                            "JOIN timeline t ON d.doctor_id = t.doctor_id " +
-                           "WHERE d.speciality = $1 ANd d.employee_status = 'Available'";
+                           "WHERE d.speciality = $1 AND d.employee_status = 'Available'";
 //patient type
 const doctorSpecialitySearch = async (speciality) => {
     try {
@@ -114,11 +114,11 @@ const doctorSpecialitySearch = async (speciality) => {
     }
 };
 // yourDoctor.com/DoctorSearch/:NAME
-const DoctorSearchByName =  "SELECT u.uname,u.mobile_no, d.designation, d.speciality,t.new_patient_fee " + 
+const DoctorSearchByName =  "SELECT u.uname,u.mobile_no, d.designation, d.speciality,d.new_patient_fee " + 
                             "FROM doctor d " +
                             "JOIN users u ON d.doctor_id = u.uid " +
                             "JOIN timeline t ON d.doctor_id = t.doctor_id " +
-                            "WHERE u.uname = $1 AND d.status = 'Active'";
+                            "WHERE u.uname = $1 AND d.employee_status = 'Available'";
 
 // yourDoctor.com/DoctorSearch/:Speciality
 const doctorNameSearch = async (name) => {
@@ -206,6 +206,20 @@ const doctorAllSearch = async () => {
     }
 };
 
+const TestList="SELECT t.testname,t.price ,h.hospital_name " +"FROM test t "+"JOIN hospital h ON t.hospital_id = h.hospital_id " ;
+const testAllSearch = async () => {
+    try {
+        const client = await getConnection.connect();
+        const result = await client.query(TestList);
+        console.log("Here ",result.rows)
+        client.release();
+        return result.rows;
+    }
+    catch (error) {
+        console.error('Error fetching data:', error.message);
+        throw error;
+    }
+};
 module.exports = { 
     InpersonAppointments,
     onlineAppointments,
@@ -215,5 +229,6 @@ module.exports = {
     doctorNameSearch,
     checkUpHospitalDetails,
     update_profile,
-    doctorAllSearch
+    doctorAllSearch,
+    testAllSearch
 }

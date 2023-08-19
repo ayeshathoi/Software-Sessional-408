@@ -10,5 +10,6 @@ router.use("/driver", require('./driver'))
 router.use("/booking", require('./booking'))
 router.use("/auth", require('./auth'))
 router.use("/comment", require('./commentBox'))
+router.use("/search", require('./search'))
 module.exports = router;
 

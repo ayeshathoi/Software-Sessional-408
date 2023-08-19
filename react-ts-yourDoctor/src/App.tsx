@@ -20,6 +20,9 @@ import UserHome from './pages/userPages/userHome';
 import HospitalHome from './pages/hospitalPages/hospitalHome';
 import DoctorSearch from './pages/search/doctorSearch';
 import AmbulanceSearch from './pages/search/AmbulanceSearch';
+import BookDoctor from './pages/Booking/BookDoctor';
+// import BookCheckup from './pages/Booking/BookCheckup';
+import BookAmbulance from './pages/Booking/BookAmbulance';
 
 export function App() {
   return (
@@ -61,10 +64,25 @@ export function App() {
         <Route path="/userHome/:userid" element={<UserHome />} />
         <Route path="/hospitalHome/:userid" element={<HospitalHome />} />
 
-        <Route path="/doctorSearch/:userid" element={<DoctorSearch />} />
-        <Route path="/AmbulanceSearch/:userid" element={<AmbulanceSearch />} />
+        {/* <Route path="/doctorSearch/:userid" element={<DoctorSearch />} />
+        <Route path="/AmbulanceSearch/:userid" element={<AmbulanceSearch />} /> */}
+        <Route
+          path="/userHome/:userid/DoctorSearch/"
+          element={<DoctorSearch />}
+        />
+        {/* <Route
+          path="/userHome/:userid/BookCheckup/"
+          element={<BookCheckup />}
+        /> */}
+        <Route
+          path="/userHome/:userid/AmbulanceSearch/"
+          element={<AmbulanceSearch />}
+        />
+        <Route path="/BookDoctor/" element={<BookDoctor />} />
+        <Route path="/BookAmbulance/" element={<BookAmbulance />} />
       </Routes>
     </BrowserRouter>
   );
 }
+
 export default App;

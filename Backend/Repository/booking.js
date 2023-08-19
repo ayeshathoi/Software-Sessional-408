@@ -37,7 +37,7 @@ const appointmentBooking = async (type,price,time,date,payment_method,payment_st
         const serial = "-1"; //not known yet
         const stat = "approved";
         const client = await getConnection.connect();
-        //console.log(hospital_name);
+        console.log("hhhh",hospital_name);
         if(hospital_name !=null){
             const hid = await user.findhid(hospital_name);
             const hid2 = hid[0].hospital_id;
@@ -182,10 +182,9 @@ const bookingAmbulance = async (type,price,time,date,payment_method,payment_stat
         const stat = "approved";
         const client = await getConnection.connect();
         
-        if (hospital_name != null)
+        if (hospital_name == "self")
         {const hid = await user.findhid(hospital_name);
         const hid2 = hid[0].hospital_id;
-        console.log(driver_id)
         const result = await client.query(ambulance, [type,price,time,date,payment_method,payment_status,
             patient_mobile,stat,patient_id,driver_id,hid2]);
             client.release();

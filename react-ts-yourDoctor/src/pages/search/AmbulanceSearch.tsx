@@ -60,7 +60,7 @@ function AmbulanceSearch() {
                 <MagnifyingGlassIcon className="h-5 w-5" />
               </button>
             </div>
-            
+
             <div className="flex justify-center items-center">
               <h1 className="text-gray-400 p-2">4 results around This thana</h1>
             </div>
@@ -105,8 +105,6 @@ function AmbulanceSearch() {
             </div>
           </div>
         </div>
-
-
       </div>
 
       <div className="mt-16">

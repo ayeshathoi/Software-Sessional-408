@@ -129,7 +129,7 @@ POST http://localhost:3000/patient/name/1
 Content-Type: application/json
 
 {
-    "name": "JohnDoe"
+    "uname": "Ayesha Athoi"
 }
 
 #### patient appoinment list
@@ -150,6 +150,8 @@ Content-Type: application/json
 {
     "name" : "DMC"
 }
+###
+GET http://localhost:3000/patient/doctorall
 
 
 ####### patient edit profile
@@ -310,18 +312,18 @@ GET http://localhost:3000/auth/hospital_id
 
 
 #####
-POST http://localhost:3000/booking/2/appointment
+POST http://localhost:3000/booking/32/appointment
 Content-Type: application/json
 
 {
-    "price" : 500,
+    "price" : 400,
     "time" : "10:00 AM",
-    "date" : "2021-02-02",
+    "date" : "2023-12-02",
     "payment_method" : "Bkash",
     "payment_status" : "Paid",
     "patient_mobile" : "01700000000",
-    "doctor_id" : 12,
-    "hospital_name" : "DMC"
+    "doctor_id" : 27,
+    "hospital_name" : null
 }
 
 ###

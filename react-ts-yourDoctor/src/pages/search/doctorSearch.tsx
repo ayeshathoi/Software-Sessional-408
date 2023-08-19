@@ -1,33 +1,43 @@
+/* eslint-disable react/no-array-index-key */
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Paper from '@mui/material/Paper';
-import TabPanel from '@mui/lab/TabPanel';
-import Box from '@mui/material/Box';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import {
+  Button,
+  Card,
+  CardContent,
+  CardMedia,
+  Grid,
+  Typography,
+} from '@mui/material';
 import Header from '../navbar/header';
 import Footer from '../navbar/footer';
 
+interface Doctor {
+  uname: string;
+  mobile_no: string;
+  email: string;
+  speciality: string;
+  designation: string;
+  new_patient_fee: number;
+  hospital_name: string;
+  doctor_id: number;
+}
+
 function DoctorSearch() {
-  const [user, setuserData] = useState({
-    uname: '',
-    mobile: '',
-    meeting_type: '',
-    speciality: '',
-    new_patient_fee: '',
-    profilepic: '',
-  });
+  const [user, setuserData] = useState<Doctor[]>([]);
 
   const { userid } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Make the HTTP GET request to the backend API
     axios
-      .get(`http://localhost:3000/search/doctor/byname`)
+      .get(`http://localhost:3000/patient/doctorall`)
       // api call
       .then((response) => {
-        setuserData(response.data[0]); // Set the fetched data to the state
+        setuserData(response.data); // Set the fetched data to the state
       })
       .catch((error) => {
         console.error('Error fetching user profile:', error);
@@ -41,7 +51,7 @@ function DoctorSearch() {
       </div>
 
       <div className="text-above-line my-10 text-left p-20 ">
-        <p className="text-gray-400">Search/{user.speciality}</p>
+        <p className="text-gray-400">Search</p>
         <hr className="line-below-text my-4 border-t-2 border-gray-300" />
 
         <div className="flex justify-end items-center">
@@ -90,43 +100,54 @@ function DoctorSearch() {
             </div>
           </div>
 
-          <div className="flex pt-20 px-10  ">
-            <div className="grid grid-cols-3 gap-10">
-              <div className="card bg-white shadow-lg rounded-lg overflow-hidden ">
-                <div className="card-image">
-                  <img
-                    src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg"
-                    alt="Card Image"
-                  />
-                </div>
-                <div className="card-title">
-                  <h3>Card Title</h3>
-                </div>
-                <div className="card-description">
-                  <p>Card description goes here.</p>
-                </div>
-                <div className="card-button">
-                  <button
-                    type="submit"
-                    className="bg-indigo-300 text-white 
-                   px-2.5 text-sm rounded-lg font-semibold items-center"
-                  >
-                    Book
-                  </button>
-                </div>
-              </div>
+          <div className="flex ml-4">
+            <Grid container spacing={3}>
+              {user.map((doctor, index) => (
+                <Grid item xs={4} key={index}>
+                  <Card>
+                    <CardMedia
+                      component="img"
+                      alt="Doctor"
+                      height="200"
+                      image="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg"
+                    />
+                    <CardContent>
+                      <Typography variant="h6">{doctor.uname}</Typography>
+                      <Typography variant="body2">
+                        Speciality: {doctor.speciality}
+                      </Typography>
+                      <Typography variant="body2">
+                        Designation: {doctor.designation}
+                      </Typography>
+                      <Typography variant="body2">
+                        New Patient Fee: {doctor.new_patient_fee}
+                      </Typography>
+                      <Typography variant="body2">
+                        Hospital: {doctor.hospital_name}
+                      </Typography>
 
-              {/* Add more card components here */}
-              <div className="card bg-white shadow-lg rounded-lg overflow-hidden">
-                {/* Card content goes here */}
-              </div>
-
-              <div className="card bg-white shadow-lg rounded-lg overflow-hidden">
-                {/* Card content goes here */}
-              </div>
-
-              {/* Add more cards as needed */}
-            </div>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() =>
+                          navigate('/BookDoctor', {
+                            state: {
+                              doctorName: doctor.uname,
+                              doctorId: doctor.doctor_id,
+                              newPatientFee: doctor.new_patient_fee,
+                              hospitalName: doctor.hospital_name,
+                              userId: userid,
+                            },
+                          })
+                        }
+                      >
+                        Book
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
           </div>
         </div>
       </div>

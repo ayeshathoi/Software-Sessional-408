@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -61,7 +62,7 @@ function BookAmbulance() {
                 value="Cash"
                 onChange={handleChange}
                 required
-                className="w-half rounded-md rounded-lg bg-gray-200 px-3 py-2"
+                className="w-half rounded-md  bg-gray-200 px-3 py-2"
               />
               <label className="ml-4 mt-6 text-sm font-bold text-gray-400">
                 Cash
@@ -75,7 +76,7 @@ function BookAmbulance() {
                 value="Bkash"
                 onChange={handleChange}
                 required
-                className="w-half rounded-md rounded-lg bg-gray-200 px-3 py-2"
+                className="w-half rounded-md  bg-gray-200 px-3 py-2"
               />
               <label className="ml-4 mt-6 text-sm font-bold text-gray-400">
                 Bkash
@@ -89,7 +90,7 @@ function BookAmbulance() {
                 value="Bkash"
                 onChange={handleChange}
                 required
-                className="w-half rounded-md rounded-lg bg-gray-200 px-3 py-2"
+                className="w-half rounded-md  bg-gray-200 px-3 py-2"
               />
               <label className="ml-4 mt-6 text-sm font-bold text-gray-400">
                 Nagad
@@ -103,7 +104,7 @@ function BookAmbulance() {
                 value="Bkash"
                 onChange={handleChange}
                 required
-                className="w-half rounded-md rounded-lg bg-gray-200 px-3 py-2"
+                className="w-half rounded-md  bg-gray-200 px-3 py-2"
               />
               <label className="ml-4 mt-6 text-sm font-bold text-gray-400">
                 Rocket
@@ -128,7 +129,7 @@ function BookAmbulance() {
                     placeholder="Your Name"
                     onChange={handleChange}
                     required
-                    className="w-half rounded-md rounded-lg bg-gray-200 px-3 py-2"
+                    className="w-half rounded-md bg-gray-200 px-3 py-2"
                   />
                 </div>
                 <div className="mb-8">
@@ -140,7 +141,7 @@ function BookAmbulance() {
                     value={formData.mobile}
                     onChange={handleChange}
                     required
-                    className="w-half rounded-md rounded-lg  bg-gray-200 px-3 py-2"
+                    className="w-half rounded-md  bg-gray-200 px-3 py-2"
                   />
                 </div>
                 <div className="mb-8">
@@ -152,7 +153,7 @@ function BookAmbulance() {
                     value={formData.Date}
                     onChange={handleChange}
                     required
-                    className="w-half rounded-md rounded-lg text-gray-400 bg-gray-200 px-3 py-2"
+                    className="w-half rounded-md text-gray-400 bg-gray-200 px-3 py-2"
                   />
 
                   <input
@@ -163,7 +164,7 @@ function BookAmbulance() {
                     value={formData.Time}
                     onChange={handleChange}
                     required
-                    className="w-half rounded-md rounded-lg text-gray-400 bg-gray-200 px-3 py-2 ml-5"
+                    className="w-half rounded-md text-gray-400 bg-gray-200 px-3 py-2 ml-5"
                   />
                   <div className="mt-4">Total Cost: 500</div>
                 </div>

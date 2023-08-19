@@ -37,7 +37,7 @@ const appointmentBooking = async (type,price,time,date,payment_method,payment_st
         const serial = "-1"; //not known yet
         const stat = "approved";
         const client = await getConnection.connect();
-        //console.log(hospital_name);
+        console.log("hhhh",hospital_name);
         if(hospital_name !=null){
             const hid = await user.findhid(hospital_name);
             const hid2 = hid[0].hospital_id;

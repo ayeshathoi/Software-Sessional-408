@@ -93,17 +93,18 @@ const ambulanceDetails = async (pid) => {
 //Doctor Search BY name
 //Doctor Search By Speciality
 
-const DoctorSearchBySpeciality = "SELECT u.uname,u.mobile_no, d.designation, d.speciality,t.new_patient_fee " + 
+const DoctorSearchBySpeciality = "SELECT u.uname,u.mobile_no,u.email, d.designation, d.speciality,d.new_patient_fee,t.meeting_type " + 
                            "FROM doctor d " +
                            "JOIN users u ON d.doctor_id = u.uid " +
                            "JOIN timeline t ON d.doctor_id = t.doctor_id " +
-                           "WHERE d.speciality = $1 AND d.status = 'Active'";
+                           "WHERE d.speciality = $1 ANd d.employee_status = 'Available'";
 //patient type
 const doctorSpecialitySearch = async (speciality) => {
     try {
         const client = await getConnection.connect();
         console.log(speciality)
         const result = await client.query(DoctorSearchBySpeciality, [speciality]);
+        console.log("Here ",result.rows)
         client.release();
         return result.rows;
     }
@@ -185,7 +186,25 @@ const update_profile = async (street,thana,city, district,pid,mobile) => {
     }
 }
 
+const DoctorList= "SELECT u.uname,u.mobile_no,u.email, d.designation, d.speciality,d.new_patient_fee, d.doctor_id, h.hospital_name " + 
+                  "FROM doctor d " +
+                  "JOIN users u ON d.doctor_id = u.uid "+
+                  "JOIN doctor_hospital dh ON d.doctor_id = dh.doctor_id " +
+                  "JOIN hospital h ON dh.hospital_id = h.hospital_id "  ;
 
+const doctorAllSearch = async () => {
+    try {
+        const client = await getConnection.connect();
+        const result = await client.query(DoctorList);
+        console.log("Here ",result.rows)
+        client.release();
+        return result.rows;
+    }
+    catch (error) {
+        console.error('Error fetching data:', error.message);
+        throw error;
+    }
+};
 
 module.exports = { 
     InpersonAppointments,
@@ -195,5 +214,6 @@ module.exports = {
     doctorSpecialitySearch,
     doctorNameSearch,
     checkUpHospitalDetails,
-    update_profile
+    update_profile,
+    doctorAllSearch
 }

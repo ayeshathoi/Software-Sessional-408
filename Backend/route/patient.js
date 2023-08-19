@@ -13,4 +13,5 @@ router.get('/ambulance/hospital/:id', patient.ambulanceDetails);
 router.get('/checkup/:id', patient.checkUpDetails);
 router.post('/hospital/testnames', patient.choose_test);
 router.post('/updateProfile/:id', patient.update_profile);
+router.get('/doctorall', patient.doctor_all_search);
 module.exports = router;

@@ -22,20 +22,20 @@ const onlineAppointments = async (pid) => {
     }
 };
 
-const inperson = "SELECT u.uname, b.time, b.date,d.designation, h.hospital_name, d.speciality, b.total_price "+
+const all = "SELECT u.uname, b.time, b.date,d.designation, h.hospital_name, d.speciality, b.total_price "+
                             "FROM booking b " +
                             "JOIN doctor d ON b.doctor_id = d.doctor_id " +
                             "JOIN hospital h ON b.hospital_id = h.hospital_id " +
                             "JOIN users u ON d.doctor_id = u.uid " +
-                            "WHERE b.patient_id = $1 AND b.type = 'Appointment' AND b.hospital_id IS NOT NULL"
+                            "WHERE b.patient_id = $1 AND b.type = 'Appointment'"
 
-const InpersonAppointments = async (pid) => {
+const allAppointments = async (pid) => {
     try {
         const client = await getConnection.connect();
-        const inpersonMeeting = await client.query(inperson, [pid]);
+        const allMeeting = await client.query(all, [pid]);
 
         client.release();
-        return inpersonMeeting.rows;
+        return allMeeting.rows;
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
@@ -49,7 +49,7 @@ const InpersonAppointments = async (pid) => {
 
 
 
-const CheckUP = "SELECT a.time, t.testname, t.price,u.uname FROM booking a " +
+const CheckUP = "SELECT a.time,a.date, t.testname, t.price,u.uname FROM booking a " +
                 "JOIN nurse_test nt ON a.nurse_id = nt.nurse_id " +
                 "JOIN users u ON nt.nurse_id = u.uid "+
                 "JOIN test t ON t.testID = nt.test_id " + 
@@ -70,17 +70,35 @@ const checkUpDetails = async (pid) => {
 };
 
 //driver er hospital eishob fixed kra lagbe
-const Ambulance = "SELECT a.time, u.uname, d.ambulance_type " +
-                  "FROM appointment a " +
+const Ambulance = "SELECT a.time,a.date, u.uname, d.ambulance_type,a.hospital_id,a.total_price " +
+                  "FROM booking a " +
                   "JOIN driver d ON a.driver_id = d.driver_id " +
                   "JOIN users u ON d.driver_id = u.uid " +
                   //"JOIN ambulance am ON d.ambulance_type = am.ambulance_type " +
                   "WHERE a.patient_id = $1 AND a.type = 'Ambulance'";
 
+const hospitalname = "SELECT hospital_name,street,city,thana,district FROM hospital WHERE hospital_id = $1"
 const ambulanceDetails = async (pid) => {
     try {
         const client = await getConnection.connect();
         const result = await client.query(Ambulance, [pid]);
+        for (let i = 0; i < result.rows.length; i++) 
+        {
+            const hospital_id = result.rows[i].hospital_id;
+        if(result.rows[i].hospital_id == null){
+            result.rows[i].hospital = "Self";
+        }
+
+        else {
+        const hospital_name = await client.query(hospitalname,[hospital_id]);
+        result.rows[i].hospital = hospital_name.rows[i].hospital_name;
+        result.rows[i].street = hospital_name.rows[i].street;
+        result.rows[i].city = hospital_name.rows[i].city;
+        result.rows[i].thana = hospital_name.rows[i].thana;
+        result.rows[i].district = hospital_name.rows[i].district;
+        }
+    }
+
         client.release();
         return result.rows;
     }
@@ -221,7 +239,7 @@ const testAllSearch = async () => {
     }
 };
 module.exports = { 
-    InpersonAppointments,
+    allAppointments,
     onlineAppointments,
     checkUpDetails,
     ambulanceDetails,

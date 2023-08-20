@@ -2,11 +2,14 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import axios from 'axios';
 import Header from '../navbar/header_nd';
 import Footer from '../navbar/footer';
 import User from '@/assets/user.webp';
+import PatientArray from './patient_list';
+import HealthCheckImage from '@/assets/healthcheckhome.jpg';
 
 function NurseHome() {
   const [user, setUser] = useState({
@@ -90,6 +93,20 @@ function NurseHome() {
             </Tabs>
           </Paper>
         </div>
+        <Box flexGrow={3} className="p-8">
+          {value === 0 && (
+            <div>
+              <img
+                src={HealthCheckImage}
+                alt="Checkup"
+                className="w-48 h-48 rounded-full mx-auto mb-4"
+              />
+              <h2 className="text-xl font-semibold mb-2">Checkup</h2>
+              <PatientArray />
+              {/* Add content related to appointments */}
+            </div>
+          )}
+        </Box>
       </div>
       <div className="mt-16">
         <Footer />

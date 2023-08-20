@@ -65,7 +65,7 @@ function DriverProfileUpdate() {
   const handleUpdate = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.post(
+      const response = await axios.put(
         `http://localhost:3000/driver/editProfile/${driver_id}`,
         formData
       );

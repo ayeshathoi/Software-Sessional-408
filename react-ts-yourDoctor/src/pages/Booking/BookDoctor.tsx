@@ -91,6 +91,8 @@ function BookDoctor() {
     } catch (err) {
       console.log(err);
     }
+    navigate(`/userHome/${userid}/`);
+    
   };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDateChange = (date: any) => {

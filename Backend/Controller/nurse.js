@@ -6,7 +6,7 @@ const getPatient_List = async (req, res) => {
     const nurse_id = req.params.id;
     try {
         const result = await user.patientListDetails_nurse(nurse_id);
-        res.status(http_status.OK).json({ result });
+        res.send(result)
     } catch (error) {
         console.error('Error getting available nurse:', error.message);
         res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred.' });

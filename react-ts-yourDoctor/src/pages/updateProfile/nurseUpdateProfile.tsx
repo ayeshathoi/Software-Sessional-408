@@ -1,35 +1,80 @@
-import React, { useState } from 'react';
-import HeaderCommon from '../navbar/headerCommon';
+import { SetStateAction, useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';import HeaderCommon from '../navbar/headerCommon';
+import axios from 'axios';
 import Footer from '../navbar/footer';
 import Nurse from '@/assets/nurse.jpg';
 
+interface FormData {
+  hospital: string;
+  designation: string;
+  mobile: string;
+}
+
+interface ProfileSectionProps {
+  label: string;
+  value: string;
+  isEditing: boolean;
+  onChange: (field: string, value: string) => void;
+}
+
+function ProfileSection({ label, value, isEditing, onChange }: ProfileSectionProps) {
+  return (
+    <div className="mb-4">
+      <div className="flex">
+        <div className="w-1/2 bg-lightblue p-2 rounded-tl rounded-bl">
+          <label className="font-semibold">{label}:</label>
+        </div>
+        <div className="w-1/2 border border-lightblue rounded-tr rounded-br">
+          {isEditing ? (
+            <input
+              type="text"
+              value={value}
+              onChange={(e) => onChange(label, e.target.value)}
+              className="w-full rounded border-none px-3 py-2"
+            />
+          ) : (
+            <p>{value}</p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function NurseProfileUpdate() {
-  const initialData = {
-    workplace: 'City Hospital',
-    designation: 'Nurse',
-    contactNumber: '123-456-7890',
+  const { nurse_id } = useParams<{ nurse_id: string }>();
+  const initialData: FormData = {
+    hospital: 'City Medical Hospital',
+    designation: 'Senior Nurse',
+    mobile: '123-456-7890',
   };
+
 
   const [formData, setFormData] = useState(initialData);
   const [isEditing, setIsEditing] = useState(false);
-  const [pdfFile, setPdfFile] = useState(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
-
-  const handlePdfChange = (e) => {
-    const file = e.target.files[0];
-    setPdfFile(file);
+  //const { doctor_id } = useParams();
+  const handleUpdate = async () => {
+    try {
+      setIsLoading(true);
+      const response = await axios.post(
+        `http://localhost:3000/doctor/update-profile/${nurse_id}`,
+        formData
+      );
+      console.log('Updated Data:', response.data);
+      setIsEditing(false);
+    } catch (error) {
+      console.error('Error updating doctor profile:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
-
-  const handleUpdate = () => {
-    // Replace this with your update logic to send formData and pdfFile to the server
-    console.log('Updated Data:', formData);
-    console.log('Uploaded PDF:', pdfFile);
-    setIsEditing(false);
-  };
+  
 
   return (
     <>
@@ -37,115 +82,56 @@ function NurseProfileUpdate() {
         <HeaderCommon />
       </div>
       <div className="flex">
-        <div className="mt-16 w-1/4 p-6 bg-white shadow-md">
-          {/* Nurse's Photo (if applicable) */}
-          <img src={Nurse} alt="Nurse" className="h-40 w-full object-cover" />
-          <h2 className="text-xl font-semibold mb-2">Labiba</h2>
-          <p className="text-gray-600">{formData.designation}</p>
+        {/* Doctor's Photo, Name, and Specialist */}
+        <div className="w-1/4 p-6 bg-white shadow-md">
+          <img src={Nurse} alt="Doctor" className="h-40 w-full object-cover" />
+          {/* <h2 className="text-xl font-semibold mb-2">{user.name}</h2>
+          <p className="text-gray-600">{formData.speciality}</p> */}
         </div>
         <div className="w-3/4 p-6 bg-lightpink">
           <div className="w-96 p-6 rounded-lg bg-white shadow-md">
             <h1 className="text-2xl font-bold mb-4">Update Nurse Profile</h1>
             <form>
-              {/* Workplace */}
-              <div className="mb-4">
-                <div className="flex">
-                  <div className="w-1/2 bg-lightblue p-2 rounded-tl rounded-bl">
-                    <label className="font-semibold">Workplace:</label>
-                  </div>
-                  <div className="w-1/2 border border-lightblue rounded-tr rounded-br">
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        name="workplace"
-                        value={formData.workplace}
-                        onChange={handleChange}
-                        className="w-full rounded border-none px-3 py-2"
-                      />
-                    ) : (
-                      <p>{formData.workplace}</p>
-                    )}
-                  </div>
-                </div>
-              </div>
-              {/* Designation */}
-              <div className="mb-4">
-                <div className="flex">
-                  <div className="w-1/2 bg-lightblue p-2 rounded-tl rounded-bl">
-                    <label className="font-semibold">Designation:</label>
-                  </div>
-                  <div className="w-1/2 border border-lightblue rounded-tr rounded-br">
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        name="designation"
-                        value={formData.designation}
-                        onChange={handleChange}
-                        className="w-full rounded border-none px-3 py-2"
-                      />
-                    ) : (
-                      <p>{formData.designation}</p>
-                    )}
-                  </div>
-                </div>
-              </div>
-              {/* Contact Number */}
-              <div className="mb-4">
-                <div className="flex">
-                  <div className="w-1/2 bg-lightblue p-2 rounded-tl rounded-bl">
-                    <label className="font-semibold">Contact Number:</label>
-                  </div>
-                  <div className="w-1/2 border border-lightblue rounded-tr rounded-br">
-                    {isEditing ? (
-                      <input
-                        type="tel"
-                        name="contactNumber"
-                        value={formData.contactNumber}
-                        onChange={handleChange}
-                        className="w-full rounded border-none px-3 py-2"
-                      />
-                    ) : (
-                      <p>{formData.contactNumber}</p>
-                    )}
-                  </div>
-                </div>
-              </div>
-              {/* Upload PDF */}
-              <div className="mb-4">
-                <div className="flex">
-                  <div className="w-1/2 bg-lightblue p-2 rounded-tl rounded-bl">
-                    <label className="font-semibold">Upload PDF:</label>
-                  </div>
-                  <div className="w-1/2 border border-lightblue rounded-tr rounded-br">
-                    {isEditing ? (
-                      <input
-                        type="file"
-                        accept=".pdf"
-                        onChange={handlePdfChange}
-                        className="w-full rounded border-none px-3 py-2"
-                      />
-                    ) : (
-                      <p>Uploaded PDF Filename</p>
-                    )}
-                  </div>
-                </div>
-              </div>
+              
+              {/* designation */}
+              <ProfileSection
+              label="Designation"
+              value={formData.designation}
+              isEditing={isEditing}
+              onChange={handleChange}
+              />
+              {/* workplace */}
+              <ProfileSection
+              label="Workplace"
+              value={formData.hospital}
+              isEditing={isEditing}
+              onChange={handleChange}
+              />
+              
+              {/* Contact no. */}
+              <ProfileSection
+              label="Contact no"
+              value={formData.mobile}
+              isEditing={isEditing}
+              onChange={handleChange}
+              />
             </form>
-            {isEditing ? (
-              <button
-                onClick={handleUpdate}
-                className="mt-4 mx-auto px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-              >
-                Update
-              </button>
-            ) : (
-              <button
-                onClick={() => setIsEditing(true)}
-                className="mt-4 mx-auto px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-              >
-                Edit Profile
-              </button>
-            )}
+            {isLoading ? (
+            <button className="mt-4 mx-auto px-4 py-2 bg-blue-500 text-white rounded cursor-not-allowed">
+              Updating...
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={isEditing ? handleUpdate : () => setIsEditing(true)}
+              className={`mt-4 mx-auto px-4 py-2 ${
+                isEditing ? 'bg-blue-500' : 'bg-green-500'
+              } text-white rounded hover:bg-${isEditing ? 'blue-600' : 'green-600'}`}
+            >
+              {isEditing ? 'Update' : 'Edit Profile'}
+            </button>
+          )}
+
           </div>
         </div>
       </div>

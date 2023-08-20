@@ -1,6 +1,8 @@
 const user = require('../Repository/doctor')
 const http_status = require('./HTTPStatus')
 
+//const fs = require('fs'); // Import the fs module to work with files
+
 
 const getPatient_List = async (req, res) => {
     const doctor_id = req.params.id;
@@ -29,7 +31,52 @@ const addSchedule = async (req, res) => {
     
 };
 
+// const addPrescription = async (req, res) => {
+//     const { pid, doctor_id } = req.body;
+
+//     try {
+//         if (!req.file) {
+//             return res.status(http_status.BAD_REQUEST).json({ error: 'Prescription PDF file is required.' });
+//         }
+
+//         const prescription_pdf = fs.readFileSync(req.file.path);
+
+//         const result = await user.addPrescription(pid, doctor_id, prescription_pdf);
+
+//         fs.unlinkSync(req.file.path);
+
+//         res.send(result);
+//     } catch (error) {
+//         console.error('Error adding prescription:', error.message);
+//         res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while adding prescription.' });
+//     }
+// };
+
+
+// Controller function to update a doctor's profile
+const updateDoctorProfile = async (req, res) => {
+    try{
+        const doctor_id = req.params.doctor_id;
+        const speciality=req.body.speciality;
+        const designation=req.body.designation;
+        const qualification=req.body.qualification;
+        const contactNumber=req.body.contactNumber;
+
+    
+        const updated = await user.updateDoctorProfile(doctor_id, speciality, designation, qualification, contactNumber);
+
+        res.status(http_status.OK).json(updated);
+    } catch (error) {
+        console.error('Error updating doctor profile:', error.message);
+        res.status(http_status.BAD_REQUEST).json({ error: 'An error occurred while updating doctor profile.' });
+    }
+};
+
+
+
 module.exports = {
     getPatient_List,
+    updateDoctorProfile,
+    //addPrescription,
     addSchedule
 }

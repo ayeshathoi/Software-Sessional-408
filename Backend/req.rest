@@ -134,15 +134,15 @@ Content-Type: application/json
 
 #### patient appoinment list
 //inperson
-GET http://localhost:3000/patient/appointment/2
+GET http://localhost:3000/patient/appointment/inperson/17
 #####
 GET http://localhost:3000/patient/appointment/online/2
 //zoom
 ###
 ### patient ambulance list
-GET http://localhost:3000/patient/ambulance/2
+GET http://localhost:3000/patient/ambulance/4
 ### patient checkup list
-GET http://localhost:3000/patient/checkup/2
+GET http://localhost:3000/patient/checkup/4
 ################
 POST http://localhost:3000/patient/hospital/testnames
 Content-Type: application/json
@@ -390,26 +390,6 @@ Content-Type: application/json
 ]
 }
 ####
-# POST http://localhost:3000/doctor/addPrescription
-# Content-Type: multipart/form-data
-
-# pid=123
-# doctor_id=456
-# prescription_pdf=@./prescription.pdf
-
-
-
-#####
-POST  http://localhost:3000/doctor/update-profile/27
-Content-Type: application/json
-
-{
-    "speciality": "Cardiologist",
-    "designation": "Senior Consultant",
-    "qualification": "MD,phD",
-    "contactNumber": "01711223344"
-}
-#####
 POST http://localhost:3000/comment/add/2
 Content-Type: application/json
 
@@ -441,43 +421,3 @@ GET http://localhost:3000/patient/ambulanceall
 GET http://localhost:3000/nurse/30
 ###
 GET http://localhost:3000/driver/29
-####
-GET http://localhost:3000/nurse/6/checkup
-
-####
-POST http://localhost:3000/patient/updateProfile/2
-Content-Type: application/json
-
-{
-    "street":"391",
-    "thana":"Moghbazar",
-    "city":"Dhaka",
-    "district":"Barishal",
-    "mobile":"01700000000"
-}
-
-
-###
-PUT http://localhost:3000/nurse/editProfile/6
-Content-Type: application/json
-
-{
-    "designation":"Senior Nurse",
-    "hospital":"CMC",
-    "mobile":"01700000000"
-  
-}
-
-###
-PUT http://localhost:3000/driver/editProfile/7
-Content-Type: application/json
-
-{
-    "hospital":"CMC",
-    "mobile":"01700000000"
-  
-}
-
-
-####
-GET http://localhost:3000/driver/order/9

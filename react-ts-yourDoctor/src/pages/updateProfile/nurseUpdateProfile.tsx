@@ -1,6 +1,7 @@
 import { SetStateAction, useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';import HeaderCommon from '../navbar/headerCommon';
+import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
+import HeaderCommon from '../navbar/headerCommon';
 import Footer from '../navbar/footer';
 import Nurse from '@/assets/nurse.jpg';
 
@@ -17,7 +18,12 @@ interface ProfileSectionProps {
   onChange: (field: string, value: string) => void;
 }
 
-function ProfileSection({ label, value, isEditing, onChange }: ProfileSectionProps) {
+function ProfileSection({
+  label,
+  value,
+  isEditing,
+  onChange,
+}: ProfileSectionProps) {
   return (
     <div className="mb-4">
       <div className="flex">
@@ -49,7 +55,6 @@ function NurseProfileUpdate() {
     mobile: '123-456-7890',
   };
 
-
   const [formData, setFormData] = useState(initialData);
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -58,7 +63,7 @@ function NurseProfileUpdate() {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
-  //const { doctor_id } = useParams();
+  // const { doctor_id } = useParams();
   const handleUpdate = async () => {
     try {
       setIsLoading(true);
@@ -74,7 +79,6 @@ function NurseProfileUpdate() {
       setIsLoading(false);
     }
   };
-  
 
   return (
     <>
@@ -92,46 +96,46 @@ function NurseProfileUpdate() {
           <div className="w-96 p-6 rounded-lg bg-white shadow-md">
             <h1 className="text-2xl font-bold mb-4">Update Nurse Profile</h1>
             <form>
-              
               {/* designation */}
               <ProfileSection
-              label="Designation"
-              value={formData.designation}
-              isEditing={isEditing}
-              onChange={handleChange}
+                label="Designation"
+                value={formData.designation}
+                isEditing={isEditing}
+                onChange={handleChange}
               />
               {/* workplace */}
               <ProfileSection
-              label="Workplace"
-              value={formData.hospital}
-              isEditing={isEditing}
-              onChange={handleChange}
+                label="Workplace"
+                value={formData.hospital}
+                isEditing={isEditing}
+                onChange={handleChange}
               />
-              
+
               {/* Contact no. */}
               <ProfileSection
-              label="Contact no"
-              value={formData.mobile}
-              isEditing={isEditing}
-              onChange={handleChange}
+                label="Contact no"
+                value={formData.mobile}
+                isEditing={isEditing}
+                onChange={handleChange}
               />
             </form>
             {isLoading ? (
-            <button className="mt-4 mx-auto px-4 py-2 bg-blue-500 text-white rounded cursor-not-allowed">
-              Updating...
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={isEditing ? handleUpdate : () => setIsEditing(true)}
-              className={`mt-4 mx-auto px-4 py-2 ${
-                isEditing ? 'bg-blue-500' : 'bg-green-500'
-              } text-white rounded hover:bg-${isEditing ? 'blue-600' : 'green-600'}`}
-            >
-              {isEditing ? 'Update' : 'Edit Profile'}
-            </button>
-          )}
-
+              <button className="mt-4 mx-auto px-4 py-2 bg-blue-500 text-white rounded cursor-not-allowed">
+                Updating...
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={isEditing ? handleUpdate : () => setIsEditing(true)}
+                className={`mt-4 mx-auto px-4 py-2 ${
+                  isEditing ? 'bg-blue-500' : 'bg-green-500'
+                } text-white rounded hover:bg-${
+                  isEditing ? 'blue-600' : 'green-600'
+                }`}
+              >
+                {isEditing ? 'Update' : 'Edit Profile'}
+              </button>
+            )}
           </div>
         </div>
       </div>

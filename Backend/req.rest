@@ -134,7 +134,7 @@ Content-Type: application/json
 
 #### patient appoinment list
 //inperson
-GET http://localhost:3000/patient/appointment/inperson/2
+GET http://localhost:3000/patient/appointment/inperson/17
 #####
 GET http://localhost:3000/patient/appointment/online/2
 //zoom

@@ -15,7 +15,7 @@ function Appointments() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/patient/appointment/inperson/2`)
+      .get(`http://localhost:3000/patient/appointment/inperson/${userid}`)
       .then((response) => {
         setAppointments(response.data); // Set the fetched appointments to the state
       })
@@ -87,7 +87,10 @@ function Appointments() {
                     Speciality: {appointment.speciality}
                   </p>
                   <p className="text-sm text-gray-500">
-                    Fee: {appointment.new_patient_fee}
+                    Fee: {appointment.total_price}
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    Date: {appointment.date}
                   </p>
                 </div>
               </li>

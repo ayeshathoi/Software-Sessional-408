@@ -93,7 +93,7 @@ const update_profile = async (req, res) => {
         const district = req.body.district;
         const mobile = req.body.mobile;
 
-        const updateProfile = await user.update_profile(street,thana,city, district,pid,mobile,pid);
+        const updateProfile = await user.update_profile(street,thana,city, district,pid,mobile);
         res.status(http_status.OK).json(updateProfile);
     } catch (error) {
         res.status(http_status.BAD_REQUEST).json({ error: 'An error occurred while fetching user details.' });

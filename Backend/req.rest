@@ -386,6 +386,26 @@ Content-Type: application/json
 ]
 }
 ####
+# POST http://localhost:3000/doctor/addPrescription
+# Content-Type: multipart/form-data
+
+# pid=123
+# doctor_id=456
+# prescription_pdf=@./prescription.pdf
+
+
+
+#####
+POST  http://localhost:3000/doctor/update-profile/27
+Content-Type: application/json
+
+{
+    "speciality": "Cardiologist",
+    "designation": "Senior Consultant",
+    "qualification": "MD,phD",
+    "contactNumber": "01711223344"
+}
+#####
 POST http://localhost:3000/comment/add/2
 Content-Type: application/json
 

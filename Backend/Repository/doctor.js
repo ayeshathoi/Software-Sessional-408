@@ -99,11 +99,55 @@ const ADD_SCHEDULE = async (doctor_id,timeline) => {
 
 // prescription details
 
+// const addPrescription = `INSERT INTO prescription (doctor_id, patient_id, prescription_date, prescription_pdf)
+//   VALUES ($1, $2, $3, $4)
+// `;
+// const addPrescriptionDetails = async (doctor_id, pid, prescription_date, prescription_pdf) => {
+//     try {
+//       const client = await getConnection.connect();
+//       const result = await client.query(addPrescription, [doctor_id, pid, prescription_date, prescription_pdf]);
+//       client.release();
+//       return result;
+//     } catch (error) {
+//       console.error('Error inserting prescription details:', error.message);
+//       throw error;
+//     }
+//   };
+  
 
 
 //EDIT Profile
+const updated_user = "UPDATE users SET " + constant.TABLE_USER_MOBILE_NO + " = $1 " + 
+                    "WHERE " + constant.TABLE_USER_ID + " = $2";
+const updatedDoctor = `
+                    UPDATE doctor 
+                    SET speciality = $1, designation = $2, qualification = $3
+                    WHERE doctor_id = $4
+                `;
+
+const updateDoctorProfile = async (doctor_id, speciality,designation,qualification,contactNumber) => {
+    try {
+	    const client = await getConnection.connect();
+
+        console.log(contactNumber+" "+doctor_id+" "+speciality+" "+designation+" "+qualification);
+	    
+        const result2 = await client.query(updated_user, [contactNumber, doctor_id]);
+        const result = await client.query(updatedDoctor, [speciality,designation,qualification,doctor_id]);       
+        
+        client.release();
+        return updatedDoctor.rowsAffected === 1;
+    } catch (error) {
+        console.error('Error fetching data:', error.message);
+        throw error;
+    }
+};
+
+
+
 
 module.exports = {
     patientListDetails_doctor,
+    //addPrescriptionDetails,
+    updateDoctorProfile,
     ADD_SCHEDULE
 }

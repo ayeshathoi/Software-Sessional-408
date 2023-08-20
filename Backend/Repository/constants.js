@@ -127,4 +127,12 @@ module.exports = {
     TABLE_CHAT_MESSAGE_SENDER_ID : `sender_id`,
     TABLE_CHAT_MESSAGE_MESSAGE : `message`,
     TABLE_CHAT_MESSAGE_TIMESTAMP : `timestamp`,
+    //Prescription
+    TABLE_PRESCRIPTION : `prescription`,
+    TABLE_PRESCRIPTION_ID : `prescription_id`,
+    TABLE_PRESCRIPTION_PDF : 'prescription_pdf',
+    TABLE_PRESCRIPTION_DATE : 'prescription_date',
+    TABLE_PRESCRIPTION_DOCTOR_ID : 'doctor_id',
+    TABLE_PRESCRIPTION_PATIENT_ID : 'pid',
+
 }

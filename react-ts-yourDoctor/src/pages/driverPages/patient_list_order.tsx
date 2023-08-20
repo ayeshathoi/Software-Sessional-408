@@ -3,17 +3,16 @@ import { SetStateAction, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
-interface Checkup {
+interface Ambulance {
   time: string;
   date: string;
-  testname: string;
-  price: number;
   uname: string;
+  mobile_no: string;
 }
 
-function Tests() {
+function Order() {
   const [selectedSection, setSelectedSection] = useState('upcoming');
-  const [tests, setTests] = useState<Checkup[]>([]);
+  const [ambulances, setAmbulances] = useState<Ambulance[]>([]);
 
   const handleSectionChange = (section: SetStateAction<string>) => {
     setSelectedSection(section);
@@ -22,28 +21,28 @@ function Tests() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/patient/checkup/${userid}`)
+      .get(`http://localhost:3000/driver/order/${userid}`)
       .then((response) => {
-        setTests(response.data);
-        console.log(response.data);
+        setAmbulances(response.data);
+        // console.log(response.data);
       })
       .catch((error) => {
-        console.error('Error fetching Tests:', error);
+        console.error('Error fetching Order:', error);
       });
   }, [userid]);
 
   const currentDate = new Date().toISOString();
 
-  const upcomingTests = tests.filter(
+  const upcomingAmbulances = ambulances.filter(
     (ambulance) => ambulance.date > currentDate
   );
 
-  const previousAmbulances = tests.filter(
+  const previousAmbulances = ambulances.filter(
     (ambulance) => ambulance.date <= currentDate
   );
 
   const AmbulancesToShow =
-    selectedSection === 'upcoming' ? upcomingTests : previousAmbulances;
+    selectedSection === 'upcoming' ? upcomingAmbulances : previousAmbulances;
 
   return (
     <div className="flex items-center justify-center">
@@ -74,23 +73,26 @@ function Tests() {
         </div>
         <div className="bg-white p-4 rounded-lg shadow-md">
           <h2 className="text-lg font-semibold mb-3">
-            {selectedSection === 'upcoming' ? 'Upcoming' : 'Previous'} Tests
+            {selectedSection === 'upcoming' ? 'Upcoming' : 'Previous'} Order
           </h2>
           <ul className="space-y-4">
-            {AmbulancesToShow.map((test, index) => (
+            {AmbulancesToShow.map((ambulance, index) => (
               <li key={index} className="flex justify-between items-center">
                 <div>
-                  <p className="text-lg font-semibold">Name: {test.uname}</p>
-                  <p className="text-gray-600">TEST NAME: {test.testname}</p>
+                  <p className="text-lg font-semibold">
+                    Name: {ambulance.uname}
+                  </p>
+                  <p className="text-gray-600">
+                    mobile : {ambulance.mobile_no}
+                  </p>
                   <hr />
                 </div>
                 <div className="text-right">
                   <p className="text-sm text-gray-500">
-                    {test.date.split('T')[0]}
+                    {ambulance.date.split('T')[0]}
                   </p>
-                  <p className="text-sm text-gray-500">Fee: {test.price}</p>
                   <p className="text-sm text-gray-500">
-                    Time: {test.time.split('T')[0]}
+                    Time: {ambulance.time}
                   </p>
                 </div>
               </li>
@@ -101,4 +103,4 @@ function Tests() {
     </div>
   );
 }
-export default Tests;
+export default Order;

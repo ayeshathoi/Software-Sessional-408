@@ -2,9 +2,6 @@ const express = require('express');
 const app = express();
 const user = require('../Repository/review_complaint')
 const http_status = require('./HTTPStatus')
-const bodyParser = require('body-parser');
-
-app.use(bodyParser.json());
 
 const INSERT_RatingAndComplaint = async (req, res) => {
   const rating = req.body.rating;

@@ -5,13 +5,16 @@ const http_status = require('./HTTPStatus')
 const DoctorBooking = async (req, res) => {
     try {
         const uid = req.params.uid;
-        const type = "Appointment";
+        //const type = "Appointment";
         const {price,time,date,payment_method,payment_status,patient_mobile,doctor_id,hospital_name} = req.body
+        console.log("online",hospital_name)
         if(hospital_name == undefined){
+        const type="Online"
         const result = await user.appointmentBooking(type, price,time,date,payment_method,payment_status,patient_mobile,uid,doctor_id,null); 
         res.status(http_status.OK).json({ result });
         }
        else {
+        const type = "Appointment";
             const result = await user.appointmentBooking(type, price,time,date,payment_method,payment_status,patient_mobile,uid,doctor_id,hospital_name); 
             res.status(http_status.OK).json({ result });
         }

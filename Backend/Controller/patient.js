@@ -2,11 +2,11 @@ const user = require('../Repository/patient')
 const http_status = require('./HTTPStatus')
 
 
-const inperson_Appointments = async (req, res) => {
+const all_Appointments = async (req, res) => {
     try {
         const pid = req.params.id;
-        const appointmentDetails = await user.InpersonAppointments(pid);
-        res.status(http_status.OK).json(appointmentDetails);
+        const appointmentDetails = await user.allAppointments(pid);
+        res.send(appointmentDetails);
     } catch (error) {
         res.status(http_status.BAD_REQUEST).json({ error: 'An error occurred while fetching user details.' });
     }
@@ -30,7 +30,7 @@ const ambulanceDetails = async (req, res) => {
     try {
         const pid = req.params.id;
         const ambulanceDetails = await user.ambulanceDetails(pid);
-        res.status(http_status.OK).json(ambulanceDetails);
+        res.send(ambulanceDetails);
     } catch (error) {
         res.status(http_status.BAD_REQUEST).json({ error: 'An error occurred while fetching user details.' });
     }
@@ -52,6 +52,7 @@ const checkUpDetails = async (req, res) => {
 const doctor_speciality_search = async (req, res) => {
     try {
         const speciality = req.body.speciality;
+        //console.log("before sending s[pecia",speciality)
         const doctorDetails = await user.doctorSpecialitySearch(speciality);
         res.status(http_status.OK).json(doctorDetails);
     } catch (error) {
@@ -100,15 +101,38 @@ const update_profile = async (req, res) => {
     }
 }
 
+const doctor_all_search = async (req, res) => {
+    try {
+        //const speciality = req.body.speciality;
+        //console.log("before sending s[pecia",speciality)
+        const doctorDetails = await user.doctorAllSearch();
+        res.status(http_status.OK).json(doctorDetails);
+    } catch (error) {
+        res.status(http_status.BAD_REQUEST).json({ error: 'An error occurred while fetching user details.' });
+    }
+}
+const test_all_search = async (req, res) => {
+    try {
+        //const speciality = req.body.speciality;
+        //console.log("before sending s[pecia",speciality)
+        const testDetails = await user.testAllSearch();
+        res.status(http_status.OK).json(testDetails);
+    } catch (error) {
+        res.status(http_status.BAD_REQUEST).json({ error: 'An error occurred while fetching user details.' });
+    }
+}
+
 
 
 module.exports = {
-    inperson_Appointments,
+    all_Appointments,
     zoom_Appointments,
     ambulanceDetails,
     checkUpDetails,
     doctor_speciality_search,
     doctor_name_search,
     choose_test,
-    update_profile
+    update_profile,
+    doctor_all_search,
+    test_all_search
 };

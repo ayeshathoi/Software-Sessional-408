@@ -6,12 +6,11 @@ import axios from 'axios';
 interface Checkup {
   time: string;
   date: string;
-  testname: string;
-  price: number;
   uname: string;
+  mobile_no: string;
 }
 
-function Tests() {
+function PatientArray() {
   const [selectedSection, setSelectedSection] = useState('upcoming');
   const [tests, setTests] = useState<Checkup[]>([]);
 
@@ -22,13 +21,13 @@ function Tests() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/patient/checkup/${userid}`)
+      .get(`http://localhost:3000/nurse/${userid}/checkup`)
       .then((response) => {
         setTests(response.data);
         console.log(response.data);
       })
       .catch((error) => {
-        console.error('Error fetching Tests:', error);
+        console.error('Error fetching Patient_list:', error);
       });
   }, [userid]);
 
@@ -74,21 +73,21 @@ function Tests() {
         </div>
         <div className="bg-white p-4 rounded-lg shadow-md">
           <h2 className="text-lg font-semibold mb-3">
-            {selectedSection === 'upcoming' ? 'Upcoming' : 'Previous'} Tests
+            {selectedSection === 'upcoming' ? 'Upcoming' : 'Previous'}{' '}
+            Checkup Duty
           </h2>
           <ul className="space-y-4">
             {AmbulancesToShow.map((test, index) => (
               <li key={index} className="flex justify-between items-center">
                 <div>
                   <p className="text-lg font-semibold">Name: {test.uname}</p>
-                  <p className="text-gray-600">TEST NAME: {test.testname}</p>
+                  <p className="text-gray-600">mobile no. : {test.mobile_no}</p>
                   <hr />
                 </div>
                 <div className="text-right">
                   <p className="text-sm text-gray-500">
                     {test.date.split('T')[0]}
                   </p>
-                  <p className="text-sm text-gray-500">Fee: {test.price}</p>
                   <p className="text-sm text-gray-500">
                     Time: {test.time.split('T')[0]}
                   </p>
@@ -101,4 +100,4 @@ function Tests() {
     </div>
   );
 }
-export default Tests;
+export default PatientArray;

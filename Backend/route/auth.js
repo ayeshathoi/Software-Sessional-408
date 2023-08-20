@@ -51,7 +51,7 @@ router.post('/login', async (req, res) => {
     userRes = await createhos.getUserDetailsByEmail(req,res);
     if (result.length ==0 && userRes.length == 0){
         console.log('Email not found');
-        errors.push(error.email_not_found);
+        errors.push("error.email_not_found");
     }
    
     else {
@@ -59,7 +59,6 @@ router.post('/login', async (req, res) => {
         if (result.length !== 0) 
         {
             {
-                console.log(result)
                 const validPass = await bcrypt.compare(req.body.password, result[0].pass);
                 if (validPass) {
                     const token = jwt.sign({ hospital_id: result[0].hospital_id}, secretKey, { expiresIn: '1h' });
@@ -67,9 +66,11 @@ router.post('/login', async (req, res) => {
                         maxAge: 90000000, 
                         httpOnly: true
                     }
+                    console.log(errors);
                     res.cookie('auth-token', token, options);
                     if(errors.length == 0){
                         const hospital_id=result[0].hospital_id;
+                        console.log(hospital_id);
                         res.send({ uid : hospital_id,type : "hospital", backendCookie : token});
                 
                     }

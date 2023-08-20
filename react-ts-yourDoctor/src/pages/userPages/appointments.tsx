@@ -3,21 +3,31 @@ import { SetStateAction, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
+interface Appointment {
+  uname: string;
+  email: string;
+  time: string;
+  date: string;
+  designation: string;
+  hospital_name: string;
+  speciality: string;
+  total_price: number;
+}
+
 function Appointments() {
   const [selectedSection, setSelectedSection] = useState('upcoming');
-  const [appointments, setAppointments] = useState([]);
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
 
   const handleSectionChange = (section: SetStateAction<string>) => {
     setSelectedSection(section);
   };
-
   const { userid } = useParams();
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/patient/appointment/inperson/2`)
+      .get(`http://localhost:3000/patient/appointment/${userid}`)
       .then((response) => {
-        setAppointments(response.data); // Set the fetched appointments to the state
+        setAppointments(response.data);
       })
       .catch((error) => {
         console.error('Error fetching appointments:', error);
@@ -87,7 +97,13 @@ function Appointments() {
                     Speciality: {appointment.speciality}
                   </p>
                   <p className="text-sm text-gray-500">
-                    Fee: {appointment.new_patient_fee}
+                    Fee: {appointment.total_price}
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    Date: {appointment.date.split('T')[0]}
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    Time: {appointment.time.split('T')[0]}
                   </p>
                 </div>
               </li>

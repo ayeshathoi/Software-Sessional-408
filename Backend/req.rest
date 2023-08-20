@@ -129,20 +129,20 @@ POST http://localhost:3000/patient/name/1
 Content-Type: application/json
 
 {
-    "name": "JohnDoe"
+    "uname": "Ayesha Athoi"
 }
 
 #### patient appoinment list
 //inperson
-GET http://localhost:3000/patient/appointment/inperson/2
+GET http://localhost:3000/patient/appointment/2
 #####
 GET http://localhost:3000/patient/appointment/online/2
 //zoom
 ###
 ### patient ambulance list
-GET http://localhost:3000/patient/ambulance/4
+GET http://localhost:3000/patient/ambulance/2
 ### patient checkup list
-GET http://localhost:3000/patient/checkup/4
+GET http://localhost:3000/patient/checkup/2
 ################
 POST http://localhost:3000/patient/hospital/testnames
 Content-Type: application/json
@@ -150,6 +150,10 @@ Content-Type: application/json
 {
     "name" : "DMC"
 }
+###
+GET http://localhost:3000/patient/doctorall
+###
+GET http://localhost:3000/patient/testall
 
 
 ####### patient edit profile
@@ -310,18 +314,18 @@ GET http://localhost:3000/auth/hospital_id
 
 
 #####
-POST http://localhost:3000/booking/2/appointment
+POST http://localhost:3000/booking/32/appointment
 Content-Type: application/json
 
 {
-    "price" : 500,
+    "price" : 400,
     "time" : "10:00 AM",
-    "date" : "2021-02-02",
+    "date" : "2023-12-02",
     "payment_method" : "Bkash",
     "payment_status" : "Paid",
     "patient_mobile" : "01700000000",
-    "doctor_id" : 12,
-    "hospital_name" : "DMC"
+    "doctor_id" : 27,
+    "hospital_name" : null
 }
 
 ###
@@ -421,3 +425,59 @@ Content-Type: application/json
 {
     "booking_id" : 1
 }
+
+
+####
+POST http://localhost:3000/search/ambulance
+Content-Type: application/json
+
+{
+    "thana": "Moghbazar"
+}
+###
+GET http://localhost:3000/patient/ambulanceall
+
+####
+GET http://localhost:3000/nurse/30
+###
+GET http://localhost:3000/driver/29
+####
+GET http://localhost:3000/nurse/6/checkup
+
+####
+POST http://localhost:3000/patient/updateProfile/2
+Content-Type: application/json
+
+{
+    "street":"391",
+    "thana":"Moghbazar",
+    "city":"Dhaka",
+    "district":"Barishal",
+    "mobile":"01700000000"
+}
+
+
+###
+PUT http://localhost:3000/nurse/editProfile/6
+Content-Type: application/json
+
+{
+    "designation":"Senior Nurse",
+    "hospital":"CMC",
+    "mobile":"01700000000"
+  
+}
+
+###
+PUT http://localhost:3000/driver/editProfile/7
+Content-Type: application/json
+
+{
+    "hospital":"CMC",
+    "mobile":"01700000000"
+  
+}
+
+
+####
+GET http://localhost:3000/driver/order/9

@@ -1,5 +1,7 @@
+/* eslint-disable import/extensions */
 import { Link } from 'react-router-dom';
 // eslint-disable-next-line import/extensions
+import { Box, Button, Toolbar } from '@mui/material';
 import Header from '@/pages/navbar/header.tsx';
 
 function HeaderUser() {
@@ -7,29 +9,38 @@ function HeaderUser() {
     <div>
       <Header />
       <p>&</p>
-
-      <div className="pt-20 flex justify-between items-center fixed w-full bg-green-100">
-        <Link
-          to="ProfileOptions"
-          className="mx-4 text-magenta-900 font-bold text-lg mr-4 hover:underline"
+      <div className="mt-14 bg-green-100">
+        <Toolbar
+          disableGutters
+          className="flex items-center justify-between ml-24"
         >
-          Book a new Appointment++
-        </Link>
-        <Link
-          to="ProfileOptions"
-          className="text-magenta-900 font-bold text-lg mr-4 hover:underline"
-        >
-          New HealthCheck Service++
-        </Link>
-        <Link
-          to="ProfileOptions"
-          className="text-magenta-900 font-bold text-lg mr-4 hover:underline"
-        >
-          New Ambulance Service++
-        </Link>
-        <p className="text-magenta-900 font-bold text-lg mr-4 hover:underline">
-          UserName
-        </p>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Link
+              to="DoctorSearch"
+              className="mx-4 text-magenta-900 font-bold text-lg mr-4 hover:underline"
+            >
+              <Button variant="contained" color="inherit">
+                Book New Appointment
+              </Button>
+            </Link>
+            <Link
+              to="BookCheckup"
+              className="text-magenta-900 font-bold text-lg mr-4 hover:underline"
+            >
+              <Button variant="contained" color="inherit">
+                New HealthCheck Service
+              </Button>
+            </Link>
+            <Link
+              to="AmbulanceSearch"
+              className="text-magenta-900 font-bold text-lg mr-4 hover:underline"
+            >
+              <Button variant="contained" color="inherit">
+                New Ambulance Service
+              </Button>
+            </Link>
+          </Box>
+        </Toolbar>
       </div>
     </div>
   );

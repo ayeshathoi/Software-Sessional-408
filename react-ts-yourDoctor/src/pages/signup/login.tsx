@@ -35,14 +35,13 @@ function LogIn() {
       await axios
         .post('http://localhost:3000/auth/login', formData)
         .then((res) => {
-          console.log('here is the form', res.data);
           cookies.set('token', res.data.backendCookie, {
             path: '/',
             maxAge: COOKIE_AGE,
           });
 
           // const { res.data.type } = res.data; // Replace with actual key
-          console.log('here is the type', res.data.type);
+          console.log(res.data);
           let userProfileUrl = '';
           if (res.data.type === 'doctor') {
             const userId = res.data.uid;

@@ -15,7 +15,7 @@ function Appointments() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/patient/appointment/inperson/${userid}`)
+      .get(`http://localhost:3000/patient/appointment/${userid}`)
       .then((response) => {
         setAppointments(response.data); // Set the fetched appointments to the state
       })
@@ -90,7 +90,7 @@ function Appointments() {
                     Fee: {appointment.total_price}
                   </p>
                   <p className="text-sm text-gray-500">
-                    Date: {appointment.date}
+                    Date: {appointment.date.split('T')[0]}
                   </p>
                 </div>
               </li>

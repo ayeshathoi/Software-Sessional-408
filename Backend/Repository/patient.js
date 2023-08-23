@@ -172,7 +172,30 @@ const checkUpHospitalDetails = async (hospital) => {
         
 //yourDoctor.com/AmbulanceSearch/:Thana
 
-
+const getPatientProfile = async (pid) => {
+    try {
+        const client = await getConnection.connect();
+        const profileQuery = `
+            SELECT
+                u.uname AS name,
+                p.street AS street,
+                p.thana AS thana,
+                p.city AS city,
+                p.district AS district,
+                u.mobile_no AS mobile_no
+            FROM patient p
+            JOIN users u ON p.pid = u.uid
+            
+            WHERE u.uid = $1
+        `;
+        const result = await client.query(profileQuery, [pid]);
+        client.release();
+        return result.rows[0];
+    } catch (error) {
+        console.error('Error fetching patient profile:', error.message);
+        throw error;
+    }
+};
 
 
 
@@ -189,11 +212,11 @@ const updateProfile =   "UPDATE " + constant.TABLE_PATIENT + " SET " +constant.T
 
 
 //confused about document Update
-const update_profile = async (street,thana,city, district,pid,mobile) => {
+const update_profile = async (street,thana,city, district,pid,mobile_no) => {
     try {
         const client = await getConnection.connect();
-        console.log(mobile + " " + pid + " " + street + " " + thana + " " + city + " " + district)
-        const result2 = await client.query(update_user, [mobile, pid]);
+        console.log(mobile_no + " " + pid + " " + street + " " + thana + " " + city + " " + district)
+        const result2 = await client.query(update_user, [mobile_no, pid]);
         const result = await client.query(updateProfile, [street,thana,city,district,pid]);
         client.release();
         return result.rowsAffected === 1;
@@ -246,6 +269,7 @@ module.exports = {
     doctorSpecialitySearch,
     doctorNameSearch,
     checkUpHospitalDetails,
+    getPatientProfile,
     update_profile,
     doctorAllSearch,
     testAllSearch

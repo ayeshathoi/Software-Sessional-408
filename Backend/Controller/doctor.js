@@ -84,10 +84,26 @@ const getProfile = async (req, res) => {
     }
 };
 
+
+
+const getDoctorDetails = async (req, res) => {
+    const doctor_id = req.params.id;
+    
+    try {
+        const result = await user.getDoctorDetails(doctor_id);
+        res.send(result);
+    } catch (error) {
+        console.error('Error getting doctor details:', error.message);
+        res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while getting doctor details.' });
+    }
+};
+
+
 module.exports = {
     getPatient_List,
     getProfile,
     updateDoctorProfile,
     //addPrescription,
-    addSchedule
+    addSchedule,
+    getDoctorDetails
 }

@@ -14,7 +14,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import Header from '../navbar/header';
+import Header from '../navbar/loginHeader';
 import Footer from '../navbar/footer';
 
 interface Checkup {

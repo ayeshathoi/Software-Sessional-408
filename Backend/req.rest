@@ -1,7 +1,8 @@
 # User Details
 GET http://localhost:3000/user/frontend/5
+###
 
-
+GET http://localhost:3000/doctor/details/14
 ###
 ### patient list
 POST http://localhost:3000/doctor/patientlist/14

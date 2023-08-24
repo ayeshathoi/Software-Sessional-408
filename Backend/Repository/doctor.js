@@ -166,10 +166,44 @@ const getDoctorProfile = async (doctor_id) => {
 };
 
 
+
+
+
+const doctorDetails = "SELECT * FROM doctor WHERE doctor_id = $1";
+const doctor_user = "SELECT * FROM users WHERE uid = $1";
+const doctor_hospitals = "SELECT hospital_name FROM hospital h JOIN doctor_hospital dh ON h.hospital_id = dh.hospital_id WHERE dh.doctor_id = $1";
+
+const getDoctorDetails = async (doctor_id) => {
+    try {
+        const client = await getConnection.connect();
+        const result = await client.query(doctorDetails, [doctor_id]);
+        const result1 = await client.query(doctor_user, [doctor_id]);
+        for (var key in result1.rows[0]) {
+            result.rows[0][key] = result1.rows[0][key];
+        }
+        var hospital = "hospital";
+        const result2 = await client.query(doctor_hospitals, [doctor_id]);
+        for(var i = 0;i<result2.rows.length;i++)
+        {
+            var name = hospital +" " + i;
+            result.rows[0][name] = result2.rows[i].hospital_name;
+        }
+
+        client.release();
+        return result.rows[0];
+    }
+    catch (error) {
+        console.error('Error fetching data:', error.message);
+        throw error;
+    }
+}
+
+
 module.exports = {
     patientListDetails_doctor,
-    //addPrescriptionDetails,
+    //addPrescriptionDetails,   
     getDoctorProfile,
     updateDoctorProfile,
-    ADD_SCHEDULE
+    ADD_SCHEDULE,
+    getDoctorDetails
 }

@@ -45,10 +45,10 @@ export function App() {
         <Route path="/doctorHome/:userid" element={<DoctorHome />} />
         <Route path="/nurseHome/:userid" element={<NurseHome />} />
         <Route path="/driverHome/:userid" element={<DriverHome />} />
-        <Route
+        {/* <Route
           path="/doctorHome/:userid/PatientPrescription/"
           element={<PatientPrescription />}
-        />
+        /> */}
         <Route
           path="/userHome/:userid/PatientProfileUpdate/"
           element={<PatientProfileUpdate />}

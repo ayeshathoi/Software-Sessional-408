@@ -1,6 +1,5 @@
 import { SetStateAction, useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import axios from 'axios';
+import { Link, useParams } from 'react-router-dom';import axios from 'axios';
 import HeaderCommon from '../navbar/headerCommon';
 import Footer from '../navbar/footer';
 import Nurse from '@/assets/nurse.jpg';

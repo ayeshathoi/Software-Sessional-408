@@ -4,7 +4,7 @@ GET http://localhost:3000/user/frontend/5
 
 ###
 ### patient list
-POST http://localhost:3000/doctor/patientlist/12
+POST http://localhost:3000/doctor/patientlist/14
 Content-Type: application/json
 
 {

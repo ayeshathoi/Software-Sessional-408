@@ -2,7 +2,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
-import { format } from 'date-fns';
 import { useLocation } from 'react-router-dom';
 import {
   Button,
@@ -91,8 +90,7 @@ function BookDoctor() {
     } catch (err) {
       console.log(err);
     }
-    navigate(`/userHome/${userid}/`);
-    
+    navigate(`/userHome/${userId}/`);
   };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDateChange = (date: any) => {

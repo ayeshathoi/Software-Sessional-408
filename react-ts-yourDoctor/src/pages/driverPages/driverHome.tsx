@@ -9,7 +9,7 @@ import Header from '../navbar/header_nd';
 import Footer from '../navbar/footer';
 import User from '@/assets/user.webp';
 import AmbulanceImage from '@/assets/ambulance.jpg';
-//import Order from './patient_list_order';
+import Order from './patient_list_order';
 
 function DriverHome() {
   const [user, setUser] = useState({
@@ -107,9 +107,8 @@ function DriverHome() {
                 alt="ambulance"
                 className="w-48 h-48 rounded-full mx-auto mb-4"
               />
-              {/* <h2 className="text-xl font-semibold mb-2">Ambulance</h2>
-              <Order /> */}
-              {/* Add content related to appointments */}
+              <Order />
+
             </div>
           )}
         </Box>

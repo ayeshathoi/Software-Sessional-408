@@ -23,7 +23,7 @@ function Order() {
     axios
       .get(`http://localhost:3000/driver/order/${userid}`)
       .then((response) => {
-        setAmbulances(response.data);
+        setAmbulances(response.data.result);
         // console.log(response.data);
       })
       .catch((error) => {

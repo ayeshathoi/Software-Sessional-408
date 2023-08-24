@@ -1,5 +1,6 @@
-import { SetStateAction, useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';import axios from 'axios';
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
 import HeaderCommon from '../navbar/headerCommon';
 import Footer from '../navbar/footer';
 import Nurse from '@/assets/nurse.jpg';
@@ -119,7 +120,10 @@ function NurseProfileUpdate() {
               />
             </form>
             {isLoading ? (
-              <button className="mt-4 mx-auto px-4 py-2 bg-blue-500 text-white rounded cursor-not-allowed">
+              <button
+                type="button"
+                className="mt-4 mx-auto px-4 py-2 bg-blue-500 text-white rounded cursor-not-allowed"
+              >
                 Updating...
               </button>
             ) : (

@@ -1,15 +1,14 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { SetStateAction, useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
 import HeaderDoctor from '../navbar/headerdoctor';
 import Footer from '../navbar/footer';
-import axios from 'axios';
 import Doctor from '@/assets/doctor.jpg';
-
 
 function DoctorProfileUpdate() {
   const { userid } = useParams();
-  
+
   const [isEditing, setIsEditing] = useState(false);
   const [prevForm, setPrevForm] = useState({
     name: '',
@@ -43,16 +42,15 @@ function DoctorProfileUpdate() {
           speciality: response.data.speciality,
           designation: response.data.designation,
           qualification: response.data.qualification,
-          mobile_no: response.data.mobile_no, 
+          mobile_no: response.data.mobile_no,
         });
-
       })
       .catch((error) => {
         console.error('Error fetching doctor profile:', error);
       });
   }, [userid]);
 
-  console.log("dehfbk",prevForm);
+  console.log('dehfbk', prevForm);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
@@ -60,9 +58,12 @@ function DoctorProfileUpdate() {
   const handleUpdate = async () => {
     try {
       // Send the formData to the server for update
-      console.log("here is the formdata",formData,{userid})
-      const response = await axios.post(`http://localhost:3000/doctor/update-profile/${userid}`, formData); 
-      console.log('Updated Data:', response.data); 
+      console.log('here is the formdata', formData, { userid });
+      const response = await axios.post(
+        `http://localhost:3000/doctor/update-profile/${userid}`,
+        formData
+      );
+      console.log('Updated Data:', response.data);
       setIsEditing(false);
     } catch (error) {
       console.error('Error updating profile:', error);
@@ -148,7 +149,7 @@ function DoctorProfileUpdate() {
                   </div>
                 </div>
               </div>
-              
+
               {/* Contact no. */}
               <div className="mb-4">
                 <div className="flex">

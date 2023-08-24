@@ -125,13 +125,13 @@ const updatedDoctor = `
                     WHERE doctor_id = $4
                 `;
 
-const updateDoctorProfile = async (doctor_id, speciality,designation,qualification,contactNumber) => {
+const updateDoctorProfile = async (doctor_id, speciality,designation,qualification,mobile_no) => {
     try {
 	    const client = await getConnection.connect();
 
-        console.log(contactNumber+" "+doctor_id+" "+speciality+" "+designation+" "+qualification);
+        console.log(mobile_no+" "+doctor_id+" "+speciality+" "+designation+" "+qualification);
 	    
-        const result2 = await client.query(updated_user, [contactNumber, doctor_id]);
+        const result2 = await client.query(updated_user, [mobile_no, doctor_id]);
         const result = await client.query(updatedDoctor, [speciality,designation,qualification,doctor_id]);       
         
         client.release();
@@ -142,12 +142,34 @@ const updateDoctorProfile = async (doctor_id, speciality,designation,qualificati
     }
 };
 
-
+const getDoctorProfile = async (doctor_id) => {
+    try {
+        const client = await getConnection.connect();
+        const profileQuery = `
+            SELECT
+                d.speciality,
+                d.qualification,
+                d.designation,
+                u.${constant.TABLE_USER_USERNAME} AS name,
+                u.${constant.TABLE_USER_MOBILE_NO} AS mobile_no
+            FROM doctor d
+            JOIN users u ON d.${constant.TABLE_DOCTOR_ID} = u.${constant.TABLE_USER_ID}
+            WHERE d.${constant.TABLE_DOCTOR_ID} = $1
+        `;
+        const result = await client.query(profileQuery, [doctor_id]);
+        client.release();
+        return result.rows[0];
+    } catch (error) {
+        console.error('Error fetching doctor profile:', error.message);
+        throw error;
+    }
+};
 
 
 module.exports = {
     patientListDetails_doctor,
     //addPrescriptionDetails,
+    getDoctorProfile,
     updateDoctorProfile,
     ADD_SCHEDULE
 }

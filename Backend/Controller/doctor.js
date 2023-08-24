@@ -60,10 +60,10 @@ const updateDoctorProfile = async (req, res) => {
         const speciality=req.body.speciality;
         const designation=req.body.designation;
         const qualification=req.body.qualification;
-        const contactNumber=req.body.contactNumber;
+        const mobile_no=req.body.mobile_no;
 
     
-        const updated = await user.updateDoctorProfile(doctor_id, speciality, designation, qualification, contactNumber);
+        const updated = await user.updateDoctorProfile(doctor_id, speciality, designation, qualification, mobile_no);
 
         res.status(http_status.OK).json(updated);
     } catch (error) {
@@ -72,10 +72,21 @@ const updateDoctorProfile = async (req, res) => {
     }
 };
 
+const getProfile = async (req, res) => {
+    const doctor_id = req.params.id;
 
+    try {
+        const profile = await user.getDoctorProfile(doctor_id);
+        res.send(profile);
+    } catch (error) {
+        console.error('Error getting doctor profile:', error.message);
+        res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while getting doctor profile.' });
+    }
+};
 
 module.exports = {
     getPatient_List,
+    getProfile,
     updateDoctorProfile,
     //addPrescription,
     addSchedule

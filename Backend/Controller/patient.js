@@ -84,6 +84,17 @@ const choose_test = async (req, res) => {
     }
 }
 
+const getProfile = async (req, res) => {
+    const pid = req.params.id;
+
+    try {
+        const profile = await user.getPatientProfile(pid);
+        res.send(profile);
+    } catch (error) {
+        console.error('Error getting patient profile:', error.message);
+        res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while getting patient profile.' });
+    }
+};
 
 const update_profile = async (req, res) => {
     try {
@@ -92,9 +103,9 @@ const update_profile = async (req, res) => {
         const thana = req.body.thana;
         const city = req.body.city;
         const district = req.body.district;
-        const mobile = req.body.mobile;
+        const mobile_no = req.body.mobile_no;
 
-        const updateProfile = await user.update_profile(street,thana,city, district,pid,mobile);
+        const updateProfile = await user.update_profile(street,thana,city, district,pid,mobile_no);
         res.status(http_status.OK).json(updateProfile);
     } catch (error) {
         res.status(http_status.BAD_REQUEST).json({ error: 'An error occurred while fetching user details.' });
@@ -132,6 +143,7 @@ module.exports = {
     doctor_speciality_search,
     doctor_name_search,
     choose_test,
+    getProfile,
     update_profile,
     doctor_all_search,
     test_all_search

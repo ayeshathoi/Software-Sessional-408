@@ -12,19 +12,30 @@ const getPatient_List = async (req, res) => {
         res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while getting available doctor.' });
     }
 }
+const getProfile = async (req, res) => {
+    const driver_id = req.params.id;
+
+    try {
+        const profile = await user.getDriverProfile(driver_id);
+        res.send(profile);
+    } catch (error) {
+        console.error('Error getting driver profile:', error.message);
+        res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while getting driver profile.' });
+    }
+};
 
 const update_profile = async (req, res) => {
     const driver_id = req.params.id;
     const hospital = req.body.hospital;
-    const mobile = req.body.mobile;
+    const mobile_no = req.body.mobile_no;
     
     try
     {
-        const result = await user.update_profile(hospital, driver_id,mobile);
+        const result = await user.update_profile(hospital, driver_id,mobile_no);
         res.status(http_status.OK).json({ result });
     } catch (error) {
         console.error('Error :', error.message);
-        res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while getting available doctor.' });
+        res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while getting available driver.' });
     }
 }
 
@@ -42,6 +53,7 @@ const oneDriverdetail = async (req, res) => {
 
 module.exports = {
     getPatient_List,
+    getProfile,
     update_profile,
     oneDriverdetail
 }

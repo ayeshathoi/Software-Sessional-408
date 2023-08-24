@@ -4,6 +4,7 @@ const userController = require('../Controller/driver');
 
 
 router.get('/order/:id', userController.getPatient_List);
+router.get('/profile/:id', userController.getProfile);
 router.put('/editProfile/:id', userController.update_profile)
 router.get('/:id', userController.oneDriverdetail);
 

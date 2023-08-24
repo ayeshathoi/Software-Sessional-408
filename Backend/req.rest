@@ -1,10 +1,11 @@
 # User Details
 GET http://localhost:3000/user/frontend/5
+###
 
-
+GET http://localhost:3000/doctor/details/14
 ###
 ### patient list
-POST http://localhost:3000/doctor/patientlist/12
+POST http://localhost:3000/doctor/patientlist/14
 Content-Type: application/json
 
 {
@@ -93,16 +94,29 @@ GET http://localhost:3000/hospital/complaint/2
 
 ### driver -  patient list
 GET http://localhost:3000/driver/7
+
+
+### driver-getProfile
+GET http://localhost:3000/driver/profile/7
+
+
 ### driver - edit profileambulance
 PUT http://localhost:3000/driver/editProfile/7
 Content-Type: application/json
 
 {
     "hospital": "DMC",
-    "mobile": "01700000000"
+    "mobile_no": "0176654789"
 }
 #### nurse patient list
 GET http://localhost:3000/nurse/6
+
+###
+
+### nurse - getProfile
+GET http://localhost:3000/nurse/profile/6
+
+###
 
 
 #### nurse - edit profile
@@ -112,7 +126,7 @@ Content-Type: application/json
 {
     "designation": "Senior Nurse",
     "hospital": "DMC",
-    "mobile": "01700000000"
+    "mobile_no": "01700000000"
 }
 
 
@@ -129,20 +143,20 @@ POST http://localhost:3000/patient/name/1
 Content-Type: application/json
 
 {
-    "uname": "Ayesha Athoi"
+    "name": "JohnDoe"
 }
 
 #### patient appoinment list
 //inperson
-GET http://localhost:3000/patient/appointment/2
+GET http://localhost:3000/patient/appointment/inperson/2
 #####
 GET http://localhost:3000/patient/appointment/online/2
 //zoom
 ###
 ### patient ambulance list
-GET http://localhost:3000/patient/ambulance/2
+GET http://localhost:3000/patient/ambulance/4
 ### patient checkup list
-GET http://localhost:3000/patient/checkup/2
+GET http://localhost:3000/patient/checkup/4
 ################
 POST http://localhost:3000/patient/hospital/testnames
 Content-Type: application/json
@@ -150,15 +164,17 @@ Content-Type: application/json
 {
     "name" : "DMC"
 }
-###
-GET http://localhost:3000/patient/doctorall
-###
-GET http://localhost:3000/patient/testall
 
+#######
+
+### patient getProfile
+GET http://localhost:3000/patient/profile/2
+
+#####
 
 ####### patient edit profile
 
-POST http://localhost:3000/patient/4
+POST http://localhost:3000/patient/2
 Content-Type: application/json
 
 {
@@ -166,7 +182,7 @@ Content-Type: application/json
     "thana" : "Palashi",
     "city" : "Dhaka",
     "district" : "Rajhshahi",
-    "mobile" : "0153230000"
+    "mobile_no" : "0153230000"
 }
 
 
@@ -314,18 +330,18 @@ GET http://localhost:3000/auth/hospital_id
 
 
 #####
-POST http://localhost:3000/booking/32/appointment
+POST http://localhost:3000/booking/2/appointment
 Content-Type: application/json
 
 {
-    "price" : 400,
+    "price" : 500,
     "time" : "10:00 AM",
-    "date" : "2023-12-02",
+    "date" : "2021-02-02",
     "payment_method" : "Bkash",
     "payment_status" : "Paid",
     "patient_mobile" : "01700000000",
-    "doctor_id" : 27,
-    "hospital_name" : null
+    "doctor_id" : 12,
+    "hospital_name" : "DMC"
 }
 
 ###
@@ -400,14 +416,16 @@ Content-Type: application/json
 
 
 #####
-POST  http://localhost:3000/doctor/update-profile/27
+GET http://localhost:3000/doctor/profile/14
+#####
+POST  http://localhost:3000/doctor/update-profile/36
 Content-Type: application/json
 
 {
-    "speciality": "Cardiologist",
+    "speciality": "Medicine Specialist",
     "designation": "Senior Consultant",
     "qualification": "MD,phD",
-    "contactNumber": "01711223344"
+    "mobile_no": "01711223344"
 }
 #####
 POST http://localhost:3000/comment/add/2
@@ -425,59 +443,3 @@ Content-Type: application/json
 {
     "booking_id" : 1
 }
-
-
-####
-POST http://localhost:3000/search/ambulance
-Content-Type: application/json
-
-{
-    "thana": "Moghbazar"
-}
-###
-GET http://localhost:3000/patient/ambulanceall
-
-####
-GET http://localhost:3000/nurse/30
-###
-GET http://localhost:3000/driver/29
-####
-GET http://localhost:3000/nurse/6/checkup
-
-####
-POST http://localhost:3000/patient/updateProfile/2
-Content-Type: application/json
-
-{
-    "street":"391",
-    "thana":"Moghbazar",
-    "city":"Dhaka",
-    "district":"Barishal",
-    "mobile":"01700000000"
-}
-
-
-###
-PUT http://localhost:3000/nurse/editProfile/6
-Content-Type: application/json
-
-{
-    "designation":"Senior Nurse",
-    "hospital":"CMC",
-    "mobile":"01700000000"
-  
-}
-
-###
-PUT http://localhost:3000/driver/editProfile/7
-Content-Type: application/json
-
-{
-    "hospital":"CMC",
-    "mobile":"01700000000"
-  
-}
-
-
-####
-GET http://localhost:3000/driver/order/9

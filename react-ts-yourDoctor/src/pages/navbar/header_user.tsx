@@ -24,7 +24,7 @@ function HeaderUser() {
               </Button>
             </Link>
             <Link
-              to="BookCheckup"
+              to="CheckupSearch"
               className="text-magenta-900 font-bold text-lg mr-4 hover:underline"
             >
               <Button variant="contained" color="inherit">

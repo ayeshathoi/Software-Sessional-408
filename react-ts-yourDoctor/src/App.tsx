@@ -21,8 +21,9 @@ import HospitalHome from './pages/hospitalPages/hospitalHome';
 import DoctorSearch from './pages/search/doctorSearch';
 import AmbulanceSearch from './pages/search/AmbulanceSearch';
 import BookDoctor from './pages/Booking/BookDoctor';
-// import BookCheckup from './pages/Booking/BookCheckup';
+import BookCheckup from './pages/Booking/BookCheckup';
 import BookAmbulance from './pages/Booking/BookAmbulance';
+import CheckupSearch from './pages/search/checkupSearch';
 
 export function App() {
   return (
@@ -44,10 +45,10 @@ export function App() {
         <Route path="/doctorHome/:userid" element={<DoctorHome />} />
         <Route path="/nurseHome/:userid" element={<NurseHome />} />
         <Route path="/driverHome/:userid" element={<DriverHome />} />
-        <Route
+        {/* <Route
           path="/doctorHome/:userid/PatientPrescription/"
           element={<PatientPrescription />}
-        />
+        /> */}
         <Route
           path="/userHome/:userid/PatientProfileUpdate/"
           element={<PatientProfileUpdate />}
@@ -70,16 +71,17 @@ export function App() {
           path="/userHome/:userid/DoctorSearch/"
           element={<DoctorSearch />}
         />
-        {/* <Route
-          path="/userHome/:userid/BookCheckup/"
-          element={<BookCheckup />}
-        /> */}
+        <Route
+          path="/userHome/:userid/CheckupSearch/"
+          element={<CheckupSearch />}
+        />
         <Route
           path="/userHome/:userid/AmbulanceSearch/"
           element={<AmbulanceSearch />}
         />
         <Route path="/BookDoctor/" element={<BookDoctor />} />
         <Route path="/BookAmbulance/" element={<BookAmbulance />} />
+        <Route path="/BookCheckup/" element={<BookCheckup />} />
       </Routes>
     </BrowserRouter>
   );

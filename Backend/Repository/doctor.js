@@ -125,13 +125,13 @@ const updatedDoctor = `
                     WHERE doctor_id = $4
                 `;
 
-const updateDoctorProfile = async (doctor_id, speciality,designation,qualification,contactNumber) => {
+const updateDoctorProfile = async (doctor_id, speciality,designation,qualification,mobile_no) => {
     try {
 	    const client = await getConnection.connect();
 
-        console.log(contactNumber+" "+doctor_id+" "+speciality+" "+designation+" "+qualification);
+        console.log(mobile_no+" "+doctor_id+" "+speciality+" "+designation+" "+qualification);
 	    
-        const result2 = await client.query(updated_user, [contactNumber, doctor_id]);
+        const result2 = await client.query(updated_user, [mobile_no, doctor_id]);
         const result = await client.query(updatedDoctor, [speciality,designation,qualification,doctor_id]);       
         
         client.release();
@@ -142,12 +142,68 @@ const updateDoctorProfile = async (doctor_id, speciality,designation,qualificati
     }
 };
 
+const getDoctorProfile = async (doctor_id) => {
+    try {
+        const client = await getConnection.connect();
+        const profileQuery = `
+            SELECT
+                d.speciality,
+                d.qualification,
+                d.designation,
+                u.${constant.TABLE_USER_USERNAME} AS name,
+                u.${constant.TABLE_USER_MOBILE_NO} AS mobile_no
+            FROM doctor d
+            JOIN users u ON d.${constant.TABLE_DOCTOR_ID} = u.${constant.TABLE_USER_ID}
+            WHERE d.${constant.TABLE_DOCTOR_ID} = $1
+        `;
+        const result = await client.query(profileQuery, [doctor_id]);
+        client.release();
+        return result.rows[0];
+    } catch (error) {
+        console.error('Error fetching doctor profile:', error.message);
+        throw error;
+    }
+};
 
+
+
+
+
+const doctorDetails = "SELECT * FROM doctor WHERE doctor_id = $1";
+const doctor_user = "SELECT * FROM users WHERE uid = $1";
+const doctor_hospitals = "SELECT hospital_name FROM hospital h JOIN doctor_hospital dh ON h.hospital_id = dh.hospital_id WHERE dh.doctor_id = $1";
+
+const getDoctorDetails = async (doctor_id) => {
+    try {
+        const client = await getConnection.connect();
+        const result = await client.query(doctorDetails, [doctor_id]);
+        const result1 = await client.query(doctor_user, [doctor_id]);
+        for (var key in result1.rows[0]) {
+            result.rows[0][key] = result1.rows[0][key];
+        }
+        var hospital = "hospital";
+        const result2 = await client.query(doctor_hospitals, [doctor_id]);
+        for(var i = 0;i<result2.rows.length;i++)
+        {
+            var name = hospital +" " + i;
+            result.rows[0][name] = result2.rows[i].hospital_name;
+        }
+
+        client.release();
+        return result.rows[0];
+    }
+    catch (error) {
+        console.error('Error fetching data:', error.message);
+        throw error;
+    }
+}
 
 
 module.exports = {
     patientListDetails_doctor,
-    //addPrescriptionDetails,
+    //addPrescriptionDetails,   
+    getDoctorProfile,
     updateDoctorProfile,
-    ADD_SCHEDULE
+    ADD_SCHEDULE,
+    getDoctorDetails
 }

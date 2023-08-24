@@ -1,21 +1,40 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable import/extensions */
 import { Link } from 'react-router-dom';
-import Logo from '@/assets/Logo.png';
+// eslint-disable-next-line import/extensions
+import { Box, Button, Toolbar } from '@mui/material';
+import Header from '@/pages/navbar/loginHeader.tsx';
 
-function HeaderDoctor() {
+function HeaderUser() {
   return (
-    <nav>
-      <div className="flex items-center justify-between fixed top-0 z-30 w-full py-2 bg-green-300">
-        <div className="flex items-center w-5/6 mx-auto">
-          <div>
-            <Link to="/">
-              <img alt="logo" src={Logo} className="h-10" />
+    <div>
+      <Header />
+      <p>&</p>
+      <div className="mt-14 bg-green-100">
+        <Toolbar
+          disableGutters
+          className="flex items-center justify-between ml-24"
+        >
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Link
+              to="DoctorSearch"
+              className="mx-4 text-magenta-900 font-bold text-lg mr-4 hover:underline"
+            >
+              <Button variant="contained" color="inherit">
+                Add your weekly schedule
+              </Button>
             </Link>
-          </div>
-        </div>
+            <Link
+              to="CheckupSearch"
+              className="text-magenta-900 font-bold text-lg mr-4 hover:underline"
+            >
+              <Button variant="contained" color="inherit">
+                Edit your schedule
+              </Button>
+            </Link>
+          </Box>
+        </Toolbar>
       </div>
-    </nav>
+    </div>
   );
 }
-
-export default HeaderDoctor;
+export default HeaderUser;

@@ -33,6 +33,28 @@ const patientListDetails_nurse = async (nid) => {
         throw error;
     }
 }
+const getNurseProfile = async (nurse_id) => {
+    try {
+        const client = await getConnection.connect();
+        const profileQuery = `
+            SELECT
+                u.uname AS name,
+                n.designation AS designation,
+                h.hospital_name AS hospital,
+                u.mobile_no AS mobile_no
+            FROM nurse n
+            JOIN users u ON n.nurse_id = u.uid
+            JOIN hospital h ON n.hospital_id = h.hospital_id
+            WHERE u.uid = $1
+        `;
+        const result = await client.query(profileQuery, [nurse_id]);
+        client.release();
+        return result.rows[0];
+    } catch (error) {
+        console.error('Error fetching nurse profile:', error.message);
+        throw error;
+    }
+};
 
 
 const update_user = "UPDATE users SET " + constant.TABLE_USER_MOBILE_NO + " = $1 " + 
@@ -46,18 +68,25 @@ const updateProfile = "UPDATE nurse SET " + constant.TABLE_NURSE_DESIGNATION + "
 
 
 //confused about document Update
-const update_profile = async (designation, hospital, nid,mobile) => {
+const update_profile = async (designation, hospital, nid,mobile_no) => {
     try {
         const client = await getConnection.connect();
-        const hid = await user.findhid(hospital);
-        const hid2 = hid[0].hospital_id.toString();
+
         
-        const result2 = await client.query(update_user, [mobile, nid]);
-        const result = await client.query(updateProfile, [designation, hid2, nid]);
+        const hidResult = await user.findhid(hospital);
+        if (hidResult.length === 0) {
+            
+            console.error('Hospital ID not found for:', hospital);
+            client.release();
+            return false;
+        }
+
+        const hid2 = hidResult[0].hospital_id.toString();
+        const result2 = await client.query(update_user, [mobile_no, nid]);
+        const result = await client.query(updateProfile, [designation,hid2, nid]);
         client.release();
         return result.rowsAffected === 1;
-    }
-    catch (error) {
+    } catch (error) {
         console.error('Error fetching data:', error.message);
         throw error;
     }
@@ -83,6 +112,7 @@ const nurse = async (nid) => {
 
 module.exports = {
     patientListDetails_nurse,
+    getNurseProfile,
     update_profile,
     nurse
 }

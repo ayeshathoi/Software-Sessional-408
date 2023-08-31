@@ -2,7 +2,7 @@ const getConnection = require('../Config/database');
 const constant = require("./constants")
 const user = require("./user")
 
-const Available_Doctor = "SELECT u.uname, u."+ constant.TABLE_USER_MOBILE_NO + ", d.speciality ,u.email " +
+const Available_Doctor = "SELECT u.email,u,user_type, u.uname, u."+ constant.TABLE_USER_MOBILE_NO + ", d.speciality ,u.email " +
                         "FROM doctor_hospital dh " +
                         "JOIN doctor d ON dh.doctor_id = d.doctor_id " +
                         "JOIN users u ON dh.doctor_id = u.uid " +
@@ -23,7 +23,7 @@ const availableDoctor = async (hid) => {
 }
 
 
-const AVAILABE_NURSE =  "SELECT u.uname, u."+ constant.TABLE_USER_MOBILE_NO + ", n.designation,u.email " +
+const AVAILABE_NURSE =  "SELECT u.email,u,user_type,u.uname, u."+ constant.TABLE_USER_MOBILE_NO + ", n.designation,u.email " +
                         "FROM nurse n " +
                         "JOIN users u ON n.nurse_id = u.uid " +
                         "WHERE n.hospital_id = $1 AND n.employee_status = 'Available'" 
@@ -42,7 +42,7 @@ const available_nurse = async (hid) => {
     }
 }
 
-const AVAILABE_Driver = "SELECT u.uname, u."+ constant.TABLE_USER_MOBILE_NO + ",u.email " +
+const AVAILABE_Driver = "SELECT u.email,u.user_type,u.uname, u."+ constant.TABLE_USER_MOBILE_NO + ",u.email, d.ambulance_type " +
                         "FROM driver d " +
                         "JOIN users u ON d.driver_id = u.uid " +
                         "WHERE d.hospital_id = $1 AND d.employee_status = 'Available'" 
@@ -234,6 +234,45 @@ const pending_test = async (booking_id) => {
     }
 }
 
+const Pending_Doctor = "SELECT u.uid, u.user_type, u.uname, u."+ constant.TABLE_USER_MOBILE_NO + ", d.speciality ,u.email " +
+                        "FROM doctor_hospital dh " +
+                        "JOIN doctor d ON dh.doctor_id = d.doctor_id " +
+                        "JOIN users u ON dh.doctor_id = u.uid " +
+                        "WHERE dh.hospital_id = $1 AND d.employee_status = 'pending'" 
+
+
+const pendingDoctor = async (hid) => {
+    try {
+        const client = await getConnection.connect();
+        console.log(hid);
+        const result = await client.query(Pending_Doctor, [hid]);
+        client.release();
+        return result.rows;
+    }
+    catch (error) {
+        console.error('Error fetching data:', error.message);
+        throw error;
+    }
+}
+
+const Pending_Nurse = "SELECT u.uid, u.user_type, u.uname, u."+ constant.TABLE_USER_MOBILE_NO + ",n.designation, u.email " +
+                        "FROM nurse n "+
+                        "JOIN users u ON n.nurse_id = u.uid " +
+                        "WHERE n.hospital_id = $1 AND n.employee_status = 'pending'" 
+
+const pendingNurse = async (hid) => {
+    try {
+        const client = await getConnection.connect();
+        console.log(hid);
+        const result = await client.query(Pending_Nurse, [hid]);
+        client.release();
+        return result.rows;
+    }
+    catch (error) {
+        console.error('Error fetching data:', error.message);
+        throw error;
+    }
+}
 
 
 
@@ -249,5 +288,7 @@ module.exports = {
     show_complaint,
     booking_total,
     show_patient_request_checkup,
-    pending_test
+    pending_test,
+    pendingDoctor,
+    pendingNurse
 }

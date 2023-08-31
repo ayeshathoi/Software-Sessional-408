@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   Button,
   Typography,
@@ -20,6 +20,8 @@ import {
   TimePicker,
 } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { format } from 'date-fns';
 import Header from '../navbar/header';
 import Footer from '../navbar/footer';
 
@@ -30,6 +32,7 @@ function BookDoctor() {
     location.state;
 
   // const { userid } = userId;
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState<{
     patient_mobile: string;

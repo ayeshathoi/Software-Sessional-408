@@ -21,6 +21,12 @@ GET http://localhost:3000/hospital/driver/1
 ####
 
 GET http://localhost:3000/hospital/booking/1
+###
+GET http://localhost:3000/hospital/pending/doctor/5
+
+###
+GET http://localhost:3000/hospital/pending/nurse/5
+
 ####
 POST http://localhost:3000/hospital/booking/complaint/1
 Content-Type: application/json
@@ -34,7 +40,7 @@ POST  http://localhost:3000/hospital/update/employee/1
 Content-Type: application/json
 
 {
-    "email": "rahma123@gmail.com"
+    "email": "hasan@gmail.com"
 }
 #### nurse
 POST  http://localhost:3000/hospital/update/employee/1

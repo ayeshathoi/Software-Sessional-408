@@ -14,5 +14,7 @@ router.get('/booking/:hid', userController.all_booking);
 router.post('/booking/complaint/:hid', userController.show_complaint);
 router.get('/pending/patient/:hid', userController.show_pending_checkup);
 router.post('/pending/test/:hid', userController.show_pending_test);
+router.get('/pending/doctor/:hid', userController.getpending_Doctor);
+router.get('/pending/nurse/:hid', userController.getpending_Nurse);
 
 module.exports = router;

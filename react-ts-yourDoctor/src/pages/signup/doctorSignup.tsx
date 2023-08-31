@@ -27,7 +27,7 @@ interface FormData {
   hospital_name: string[]; // Define hospital_name as a string array
   newHospital: string;
   speciality: string;
-  zoomLink: string;
+  zoom_link: string;
   pdfDocument: File | null;
   qualification: string;
   old_patient_fee: number;
@@ -46,7 +46,7 @@ function DoctorSignup() {
     hospital_name: [],
     newHospital: '',
     speciality: '',
-    zoomLink: '',
+    zoom_link: '',
     pdfDocument: null,
     qualification: '',
     old_patient_fee: 0,
@@ -260,8 +260,8 @@ function DoctorSignup() {
             />
             <TextField
               label="Zoom Meeting Link"
-              name="zoomLink"
-              value={formData.zoomLink}
+              name="zoom_link"
+              value={formData.zoom_link}
               onChange={handleChange}
               variant="outlined"
               className="w-full"

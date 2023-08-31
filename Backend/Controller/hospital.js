@@ -110,6 +110,7 @@ const assign_nurse = async (req, res) => {
 const update_employee = async (req, res) => {
     const hospital_id = req.params.hid;
     const email = req.body.email;
+    console.log("eemmmmaaaaaill",email, hospital_id);
     try
     {
         const result = await user.update_employee_hospital(email, hospital_id);
@@ -145,6 +146,28 @@ const show_pending_test = async (req, res) => {
     }
 } 
 
+const getpending_Doctor = async (req, res) => {
+    const hospital_id = req.params.hid;
+    try {
+        const result = await user.pendingDoctor(hospital_id);
+        res.status(http_status.OK).json({ result });
+    } catch (error) {
+        console.error('Error getting available doctor:', error.message);
+        res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while getting available doctor.' });
+    }
+}
+
+const getpending_Nurse = async (req, res) => {
+    const hospital_id = req.params.hid;
+    try {
+        const result = await user.pendingNurse(hospital_id);
+        console.log("result",result);
+        res.status(http_status.OK).json({ result });
+    } catch (error) {
+        console.error('Error getting available doctor:', error.message);
+        res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while getting available doctor.' });
+    }
+}
 
 
 
@@ -165,6 +188,8 @@ module.exports = {
     update_employee,
     all_booking,
     show_pending_checkup,
-    show_pending_test
+    show_pending_test,
+    getpending_Doctor,
+    getpending_Nurse
 }
 

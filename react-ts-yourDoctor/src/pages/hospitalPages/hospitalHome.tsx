@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 // page for hospital home and verify employee
+=======
+>>>>>>> 92788a64f4cc88b26add0abd679b86a965440343
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
@@ -160,9 +163,16 @@ function HospitalHome() {
           </div>
         )}
         {value === 1 && (
+<<<<<<< HEAD
           <div className="mt-24 ml-20">
             <AvailableEmployee />
             {/* Add content related to ambulance */}
+=======
+          <div className="mt-24">
+            <h2 className="text-xl font-semibold mb-2">Ambulance Order</h2>
+            {/* Add content related to ambulance */}
+            Ambulances
+>>>>>>> 92788a64f4cc88b26add0abd679b86a965440343
           </div>
         )}
         {value === 2 && (

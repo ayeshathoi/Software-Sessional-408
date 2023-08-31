@@ -26,6 +26,8 @@ GET http://localhost:3000/hospital/pending/doctor/5
 
 ###
 GET http://localhost:3000/hospital/pending/nurse/5
+###
+GET http://localhost:3000/hospital/pending/driver/1
 
 ####
 POST http://localhost:3000/hospital/booking/complaint/1

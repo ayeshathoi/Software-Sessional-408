@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
@@ -27,13 +28,17 @@ function HospitalHome() {
     const fetchNurses = axios.get(
       `http://localhost:3000/hospital/pending/nurse/${userid}`
     );
+    const fetchDriver = axios.get(
+      `http://localhost:3000/hospital/pending/driver/${userid}`
+    );
 
     // Use Promise.all to wait for both requests to complete
-    Promise.all([fetchDoctors, fetchNurses])
+    Promise.all([fetchDoctors, fetchNurses, fetchDriver])
       .then((responses) => {
         const doctors = responses[0].data.result;
         const nurses = responses[1].data.result;
-        const combinedEmployees = [...doctors, ...nurses];
+        const drivers = responses[2].data.result;
+        const combinedEmployees = [...doctors, ...nurses, ...drivers];
         setEmployees(combinedEmployees);
         console.log('here is the incoming data', combinedEmployees);
       })
@@ -125,7 +130,9 @@ function HospitalHome() {
                               <Typography variant="subtitle1">
                                 {employee.speciality
                                   ? `${employee.uname} - ${employee.speciality}`
-                                  : `${employee.uname} - ${employee.designation}`}
+                                  : employee.designation
+                                  ? `${employee.uname} - ${employee.designation}`
+                                  : `${employee.uname} - ${employee.ambulance_type}`}
                               </Typography>
 
                               <Typography variant="body2" color="textSecondary">

@@ -1,11 +1,14 @@
+/* eslint-disable react/no-array-index-key */
+/* eslint-disable no-restricted-syntax */
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 
+import { Button, Toolbar } from '@mui/material';
 import DoctorImage from '@/assets/doctor.jpg';
 import patient from '@/assets/appointment.jpg';
 import HeaderDoctor from '../navbar/headerdoctor';
@@ -30,11 +33,15 @@ function DoctorHome() {
 
   const [value, setValue] = useState<number>(0);
   const { userid } = useParams();
-  const handleChange = (_event: React.ChangeEvent<{}>, newValue: number) => {
+  const handleChange = (
+    _event: React.ChangeEvent<object>,
+    newValue: number
+  ) => {
     setValue(newValue);
   };
 
   const [hospitals, setHospitals] = useState<string[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -57,10 +64,31 @@ function DoctorHome() {
       });
   }, [userid]);
 
+  const navigateToAddSchedule = () => {
+    const hospitalsParam = encodeURIComponent(JSON.stringify(hospitals));
+    navigate(`/AddSchedule/${userid}?hospitals=${hospitalsParam}`);
+  };
+
   return (
     <>
       <div>
         <HeaderDoctor />
+      </div>
+      <div className="mt-16 bg-green-100">
+        <Toolbar
+          disableGutters
+          className="flex items-center justify-between ml-24"
+        >
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Button
+              variant="contained"
+              color="inherit"
+              onClick={navigateToAddSchedule}
+            >
+              Add Schedule
+            </Button>
+          </Box>
+        </Toolbar>
       </div>
 
       <div className="flex mt-40 ml-24">
@@ -101,22 +129,22 @@ function DoctorHome() {
           </Paper>
         </div>
 
-      <Box flexGrow={3} className="p-8">
-        {value === 0 && (
-          <div>
-            <img
-              src={patient}
-              alt="Checkup"
-              className="w-48 h-48 rounded-full mx-auto mb-4"
-            />
-            <h2 className="text-xl font-semibold text-center mb-4">
-              Patient List
-            </h2>
-            <PatientArray />
-            {/* Add content related to appointments */}
-          </div>
-        )}
-      </Box>
+        <Box flexGrow={3} className="p-8">
+          {value === 0 && (
+            <div>
+              <img
+                src={patient}
+                alt="Checkup"
+                className="w-48 h-48 rounded-full mx-auto mb-4"
+              />
+              <h2 className="text-xl font-semibold text-center mb-4">
+                Patient List
+              </h2>
+              <PatientArray />
+              {/* Add content related to appointments */}
+            </div>
+          )}
+        </Box>
       </div>
 
       <div className="mt-16">

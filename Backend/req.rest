@@ -193,6 +193,9 @@ Content-Type: application/json
     "mobile_no" : "0153230000"
 }
 
+###
+GET http://localhost:3000/patient/doctorall
+
 
 ########## rating and complaint dite parbo
 POST http://localhost:3000/review/2
@@ -392,7 +395,7 @@ Content-Type: application/json
 
 
 ############
-POST http://localhost:3000/doctor/addschedule/14
+POST http://localhost:3000/doctor/addschedule/27
 Content-Type: application/json
 
 {
@@ -408,7 +411,8 @@ Content-Type: application/json
         "weekday": "TUESDAY",
         "slot": 20,
         "start_time": "09:00:00",
-        "end_time": "13:00:00"
+        "end_time": "13:00:00",
+        "hospital_name": "cmh"
     }
     
 ]

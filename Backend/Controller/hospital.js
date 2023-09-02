@@ -168,17 +168,7 @@ const getpending_Nurse = async (req, res) => {
         res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while getting available doctor.' });
     }
 }
-const getpending_Driver = async (req, res) => {
-    const hospital_id = req.params.hid;
-    try {
-        const result = await user.pendingDriver(hospital_id);
-        console.log("result",result);
-        res.status(http_status.OK).json({ result });
-    } catch (error) {
-        console.error('Error getting available doctor:', error.message);
-        res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while getting available doctor.' });
-    }
-}
+
 
 
 
@@ -200,7 +190,6 @@ module.exports = {
     show_pending_checkup,
     show_pending_test,
     getpending_Doctor,
-    getpending_Nurse,
-    getpending_Driver
+    getpending_Nurse
 }
 

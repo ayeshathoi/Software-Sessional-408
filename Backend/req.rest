@@ -26,8 +26,6 @@ GET http://localhost:3000/hospital/pending/doctor/5
 
 ###
 GET http://localhost:3000/hospital/pending/nurse/5
-###
-GET http://localhost:3000/hospital/pending/driver/1
 
 ####
 GET http://localhost:3000/review/1
@@ -89,7 +87,7 @@ POST http://localhost:3000/hospital/addtest/1
 Content-Type: application/json
 
 {
-    "testname" : "X-Ray",
+    "testname" : "CBC-Ray",
     "price":500
 }
 #### show complaint
@@ -187,9 +185,6 @@ Content-Type: application/json
     "district" : "Rajhshahi",
     "mobile_no" : "0153230000"
 }
-
-###
-GET http://localhost:3000/patient/doctorall
 
 
 ########## rating and complaint dite parbo
@@ -390,7 +385,7 @@ Content-Type: application/json
 
 
 ############
-POST http://localhost:3000/doctor/addschedule/27
+POST http://localhost:3000/doctor/addschedule/14
 Content-Type: application/json
 
 {
@@ -406,8 +401,7 @@ Content-Type: application/json
         "weekday": "TUESDAY",
         "slot": 20,
         "start_time": "09:00:00",
-        "end_time": "13:00:00",
-        "hospital_name": "cmh"
+        "end_time": "13:00:00"
     }
     
 ]
@@ -450,3 +444,9 @@ Content-Type: application/json
 {
     "booking_id" : 1
 }
+
+
+
+####
+GET http://localhost:3000/doctor/timeline/36
+###

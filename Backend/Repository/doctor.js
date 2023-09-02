@@ -1,3 +1,4 @@
+const { parse } = require('url');
 const getConnection = require('../Config/database');
 const constant = require("./constants")
 const user = require("./user")
@@ -198,6 +199,57 @@ const getDoctorDetails = async (doctor_id) => {
     }
 }
 
+const timelineDetails = "SELECT * FROM timeline WHERE doctor_id = $1 ORDER BY weekday ASC";
+
+const doctor_hospital = "SELECT hospital_id FROM doctor_hospital WHERE doctor_id = $1";
+
+const getTimelineDetails = async (doctor_id) => {
+    try {
+        const client = await getConnection.connect();
+        //const hospital_id = await client.query(doctor_hospital, [doctor_id]);
+        const result = await client.query(timelineDetails, [doctor_id]);
+       
+        for(var i = 0;i<result.rows.length;i++)
+        {
+            const timeforeachslot = (parseInt(result.rows[i].end_time )- parseInt(result.rows[i].start_time))*60/parseInt(result.rows[i].slot);
+            result.rows[i].timeforeachslot = timeforeachslot;
+            var slot = parseInt(result.rows[i].slot);
+            var start = result.rows[i].start_time.split(":")[0];
+            var serial = [];
+
+            for(var j = 0;j<slot;j++)
+            {
+                var hr  = parseInt((parseInt(timeforeachslot)*j/60) + parseInt(start));
+                
+                if(hr/10 < 1)
+                {
+                    hr = "0" + hr;
+                }
+
+                var min = parseInt(timeforeachslot)*j%60;
+                if(min == 0)
+                {
+                    min = "00";
+                }
+                var time = hr + ":" + min + ":00";
+                serial.push({serial: j+1, time: time});
+
+            }
+            result.rows[i].serial = serial;
+        }
+
+
+       
+
+        client.release();
+        return result.rows;
+    }
+    catch (error) {
+        console.error('Error fetching data:', error.message);
+        throw error;
+    }
+}
+
 
 module.exports = {
     patientListDetails_doctor,
@@ -205,5 +257,6 @@ module.exports = {
     getDoctorProfile,
     updateDoctorProfile,
     ADD_SCHEDULE,
-    getDoctorDetails
+    getDoctorDetails,
+    getTimelineDetails
 }

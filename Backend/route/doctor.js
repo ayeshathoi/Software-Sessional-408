@@ -10,6 +10,7 @@ router.post('/patientlist/:id', doctorController.getPatient_List);
 router.post('/update-profile/:doctor_id', doctorController.updateDoctorProfile);
 router.post('/addschedule/:id', doctorController.addSchedule);
 router.get('/profile/:id', doctorController.getProfile);
+router.get('/timeline/:id', doctorController.getTimeline);
 //router.post('/addPrescription', upload.single('prescription_pdf'), doctorController.addPrescription);
 
 module.exports = router;

@@ -61,13 +61,14 @@ const available_driver = async (hid) => {
 }
 
 
-const ADD_TEST = "INSERT INTO test (testname,price, hospital_id) VALUES ($1, $2, $3)"
-
+const ADD_TEST = "INSERT INTO test (testid,testname,price, hospital_id) VALUES ($1, $2, $3,$4)"
+const last_test_id = "SELECT testid FROM test ORDER BY testid DESC LIMIT 1"
 
 const addtest = async (testname, price, hospital_id) => {
     try {
         const client = await getConnection.connect();
-        const result = await client.query(ADD_TEST, [testname, price, hospital_id]);
+        const id = await client.query(last_test_id);
+        const result = await client.query(ADD_TEST, [id.rows[0].testid + 1,testname, price, hospital_id]);
         client.release();
         return result.rows;
     }
@@ -279,24 +280,6 @@ const pendingNurse = async (hid) => {
         throw error;
     }
 }
-const Pending_Driver = "SELECT u.uid, u.user_type, u.uname, u."+ constant.TABLE_USER_MOBILE_NO + ",d.ambulance_type, u.email " +
-                        "FROM driver d "+
-                        "JOIN users u ON d.driver_id = u.uid " +
-                        "WHERE d.hospital_id = $1 AND d.employee_status = 'pending'" 
-
-const pendingDriver = async (hid) => {
-    try {
-        const client = await getConnection.connect();
-        console.log(hid);
-        const result = await client.query(Pending_Driver, [hid]);
-        client.release();
-        return result.rows;
-    }
-    catch (error) {
-        console.error('Error fetching data:', error.message);
-        throw error;
-    }
-}
 
 
 
@@ -314,6 +297,5 @@ module.exports = {
     show_patient_request_checkup,
     pending_test,
     pendingDoctor,
-    pendingNurse,
-    pendingDriver
+    pendingNurse
 }

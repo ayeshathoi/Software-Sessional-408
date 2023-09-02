@@ -78,6 +78,22 @@ const addtest = async (testname, price, hospital_id) => {
     }
 }
 
+const show_test = "SELECT * FROM test WHERE hospital_id = $1"
+
+const showtest = async (hospital_id) => {
+    try {
+        const client = await getConnection.connect();
+        const result = await client.query(show_test, [hospital_id]);
+        client.release();
+        return result.rows;
+    }
+    catch (error) {
+        console.error('Error fetching data:', error.message);
+        throw error;
+    }
+}
+
+
 
 const update_Price = "UPDATE test SET price = $1 WHERE testname = $2 AND hospital_id = $3"
 
@@ -283,6 +299,53 @@ const pendingNurse = async (hid) => {
 
 
 
+//doctor er doctor_hospital table e pending_status rakhte hobe prolly
+//
+//const find_id = "SELECT uid,user_type FROM users WHERE " + constant.TABLE_USER_EMAIL + "= $1"
+const fetchDoctorIdsQuery_pending = "SELECT doctor_id FROM doctor_hospital WHERE hospital_id = $1 AND doctor_id = $2";
+const update_doctor_employee_pending = "UPDATE doctor SET employee_status = 'deleted' "+
+                                "WHERE doctor_id = $1"
+const update_nurse_employee_pending = "UPDATE nurse SET employee_status = 'deleted' WHERE nurse_id = $1 AND hospital_id = $2"
+const update_driver_employee_pending = "UPDATE driver SET employee_status = 'deleted' WHERE driver_id = $1 AND hospital_id = $2"
+
+const remove_employee_hospital = async (email, hospital_id) => {
+    const client = await getConnection.connect();
+    try {
+        const found_id = await client.query(find_id, [email]);
+        console.log(email);
+        console.log(found_id.rows[0]);
+        const id = found_id.rows[0].uid;
+        const employee_type = found_id.rows[0].user_type;
+        if(employee_type == "doctor"){
+            const doctor_find = await client.query(fetchDoctorIdsQuery_pending, [hospital_id,id]);
+            if (doctor_find.rows.length > 0){
+                const doctor_id_in_hospital = doctor_find.rows[0].doctor_id;
+                const result = await client.query(update_doctor_employee_pending, [doctor_id_in_hospital]);
+                client.release();
+                return result.rows;
+            }
+        }
+        else if(employee_type == "nurse"){
+            const result = await client.query(update_nurse_employee_pending, [id, hospital_id]);
+            client.release();
+            return result.rows;
+        }
+        else if(employee_type == "driver"){
+            const result = await client.query(update_driver_employee_pending, [id, hospital_id]);
+            client.release();
+            return result.rows;
+        }
+        client.release();
+        return ;
+    }
+    catch (error) {
+        console.error('Error fetching data:', error.message);
+        throw error;
+    }
+}
+
+
+
 
 module.exports = {
     availableDoctor,
@@ -297,5 +360,7 @@ module.exports = {
     show_patient_request_checkup,
     pending_test,
     pendingDoctor,
-    pendingNurse
+    pendingNurse,
+    showtest,
+    remove_employee_hospital
 }

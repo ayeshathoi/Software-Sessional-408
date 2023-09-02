@@ -17,6 +17,7 @@ import Footer from '../navbar/footer';
 import AvailableEmployee from './employee';
 import PatientRequests from './requests';
 import ReviewsPatient from './ReviewList';
+import PatientTests from './AllTest';
 import AddTest from './Add_Test';
 
 function HospitalHome() {
@@ -32,12 +33,12 @@ function HospitalHome() {
     const fetchNurses = axios.get(
       `http://localhost:3000/hospital/pending/nurse/${userid}`
     );
-
     // Use Promise.all to wait for both requests to complete
     Promise.all([fetchDoctors, fetchNurses])
       .then((responses) => {
         const doctors = responses[0].data.result;
         const nurses = responses[1].data.result;
+        console.log('here is the incoming data', nurses);
         const combinedEmployees = [...doctors, ...nurses];
         setEmployees(combinedEmployees);
         console.log('here is the incoming data', combinedEmployees);
@@ -76,7 +77,7 @@ function HospitalHome() {
           >
             Hospital Dashboard
           </Typography>
-          <List className="bg-green-100" style={{ height: '100vh' }}>
+          <List className="bg-green-100 " style={{ height: '200vh' }}>
             <ListItem button onClick={() => setValue(0)}>
               <ListItemText primary="Verify Employee" />
             </ListItem>
@@ -90,6 +91,9 @@ function HospitalHome() {
               <ListItemText primary="Service Reviews" />
             </ListItem>
             <ListItem button onClick={() => setValue(4)}>
+              <ListItemText primary="Test List" />
+            </ListItem>
+            <ListItem button onClick={() => setValue(5)}>
               <ListItemText primary="Add Test" />
             </ListItem>
           </List>
@@ -103,7 +107,7 @@ function HospitalHome() {
         </div>
         {/* Tab content */}
         {value === 0 && (
-          <div className="mt-24">
+          <div className="mt-40 ml-40 mr-20">
             <Container>
               <Grid container spacing={3}>
                 <Grid item xs={12} md={8}>
@@ -183,6 +187,11 @@ function HospitalHome() {
           </div>
         )}
         {value === 4 && (
+          <div className="mt-24">
+            <PatientTests />
+          </div>
+        )}
+        {value === 5 && (
           <div className="mt-24">
             <AddTest />
           </div>

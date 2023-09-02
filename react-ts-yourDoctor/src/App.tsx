@@ -24,7 +24,6 @@ import BookDoctor from './pages/Booking/BookDoctor';
 import BookCheckup from './pages/Booking/BookCheckup';
 import BookAmbulance from './pages/Booking/BookAmbulance';
 import CheckupSearch from './pages/search/checkupSearch';
-import AddSchedule from './pages/doctorPages/addschedule';
 import AvailableEmployee from './pages/hospitalPages/employee';
 
 export function App() {
@@ -88,7 +87,6 @@ export function App() {
         <Route path="/BookDoctor/" element={<BookDoctor />} />
         <Route path="/BookAmbulance/" element={<BookAmbulance />} />
         <Route path="/BookCheckup/" element={<BookCheckup />} />
-        <Route path="/AddSchedule/:userid" element={<AddSchedule />} />
       </Routes>
     </BrowserRouter>
   );

@@ -33,13 +33,13 @@ function ReviewsPatient() {
   }, [userid]);
 
   return (
-    <div className="mt-24">
+    <div className="mt-40 ml-40 mr-20">
       <Container>
         <Grid container spacing={3}>
-          <Grid item xs={12} md={8}>
+          <Grid item xs={12} md={20}>
             {/* Adjust the grid item width based on your layout */}
-            <Paper elevation={3} className="p-1">
-              <table className="min-w-full divide-y divide-gray-200">
+            <Paper elevation={3} className="p-4">
+              <table className="min-w-full divide-y divide-gray- 500">
                 <thead>
                   <tr>
                     <th className="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
@@ -61,11 +61,11 @@ function ReviewsPatient() {
                       Rating
                     </th>
                     <th className="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                      Complaint
+                      Review
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-white divide-y divide-gray-300">
                   {reviews.map((request: Reviews) => (
                     <tr key={request.booking_id}>
                       <td className="px-6 py-4 whitespace-no-wrap">
@@ -73,7 +73,7 @@ function ReviewsPatient() {
                           {request.patient_name}
                         </Typography>
                       </td>
-                      <td>
+                      <td className="px-6 py-4 whitespace-no-wrap">
                         <Typography variant="body2" color="textSecondary">
                           {request.type}
                         </Typography>

@@ -38,6 +38,22 @@ const getAvailable_Driver = async (req, res) => {
 }
 
 
+const remove_employee = async (req, res) => {
+    const hospital_id = req.params.hid;
+    const email = req.body.email;
+    try {
+        const result = await user.remove_employee_hospital(email, hospital_id);
+        res.status(http_status.OK).json({ result });
+    } catch (error) {
+        console.error('Error getting available doctor:', error.message);
+        res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while getting available doctor.' });
+    }
+}
+
+
+
+
+
 const addTEST = async (req, res) => {
     const testname = req.body.testname;
     const price = req.body.price;
@@ -171,6 +187,20 @@ const getpending_Nurse = async (req, res) => {
 
 
 
+const show_all_test = async (req, res) => {
+    const hospital_id = req.params.hid;
+    try {
+        const result = await user.showtest(hospital_id);
+        res.send(result);
+    } catch (error) {
+        console.error('Error getting request list:', error.message);
+        res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while getting request list.' });
+    }
+}
+
+
+
+
 
 
 
@@ -190,6 +220,8 @@ module.exports = {
     show_pending_checkup,
     show_pending_test,
     getpending_Doctor,
-    getpending_Nurse
+    getpending_Nurse,
+    show_all_test,
+    remove_employee
 }
 

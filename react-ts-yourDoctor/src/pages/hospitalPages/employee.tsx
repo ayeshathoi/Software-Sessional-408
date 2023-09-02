@@ -1,12 +1,21 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { Grid, Card, CardContent, Typography, Box } from '@mui/material';
+import { useNavigate, useParams } from 'react-router-dom';
+import {
+  Grid,
+  Button,
+  Card,
+  CardContent,
+  Typography,
+  Box,
+} from '@mui/material';
 import axios from 'axios';
 
 function AvailableEmployee() {
   const { userid } = useParams();
-  const [employees, setEmployees] = useState([]);
-
+  const [doctor, setDoctor] = useState([]);
+  const [nurse, setNurse] = useState([]);
+  const [driver, setDriver] = useState([]);
+  const navigate = useNavigate();
   useEffect(() => {
     // Fetch both doctor and nurse data from your APIs here
     const fetchDoctors = axios.get(
@@ -22,51 +31,162 @@ function AvailableEmployee() {
     // Use Promise.all to wait for all requests to complete
     Promise.all([fetchDoctors, fetchNurses, fetchDrivers])
       .then((responses) => {
-        const doctors = responses[0].data.result;
-        const nurses = responses[1].data.result;
-        const drivers = responses[2].data.result;
-        const combinedEmployees = [...doctors, ...nurses, ...drivers];
-        setEmployees(combinedEmployees);
-        console.log('here is the incoming data', combinedEmployees);
+        setDoctor(responses[0].data.result);
+        setNurse(responses[1].data.result);
+        setDriver(responses[2].data.result);
       })
       .catch((error) => {
         console.error('Error fetching employee data:', error);
       });
   }, [userid]);
 
+  const handleUpdateStatus = async (employeeEmail: string) => {
+    const data = { email: employeeEmail };
+    try {
+      console.log('here is the email', data, userid);
+      await axios
+        .post(`http://localhost:3000/hospital/remove/${userid}`, data)
+        .then((res) => {
+          console.log('here is the form', res.data);
+        });
+    } catch (err) {
+      console.log(err);
+    }
+    navigate(`/hospitalHome/${userid}`);
+  };
+
+  // want to sort the employees by their user_type
   return (
     <div className="mt-40 ml-40 mr-20">
-      <h2 className="text-center text-4xl font-bold mb-10">
-        Available Employees
+      <h2 className="text-2xl font-bold mb-10">
+        Available Doctor
         <hr />
       </h2>
 
       <div className="flex flex-col justify-center items-center">
         <Grid container spacing={3}>
-          {employees.map((employee, index) => (
+          {doctor.map((doctors, index) => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
               <Card sx={{ height: '100%' }}>
                 <Box sx={{ height: '100%' }}>
                   <CardContent>
-                    <Typography variant="subtitle1">
-                      {employee.user_type === 'doctor'
-                        ? `${employee.uname} - ${employee.speciality}`
-                        : employee.user_type === 'nurse'
-                        ? `${employee.uname} - ${employee.designation}`
-                        : `${employee.uname} - ${employee.ambulance_type} Ambulance `}
-                    </Typography>
-                    {/* {employee.speciality
-                        ? `${employee.uname} - ${employee.speciality}`
-                        : `${employee.uname} - ${employee.designation}`} */}
+                    <Typography variant="subtitle1">{doctors.uname}</Typography>
 
                     <Typography variant="body2" color="textSecondary">
-                      Mobile: {employee.mobile_no}
+                      Mobile: {doctors.mobile_no}
                     </Typography>
                     <Typography variant="body2" color="textSecondary">
-                      Email: {employee.email}
+                      Email: {doctors.email}
                     </Typography>
                     <Typography variant="body2" color="textSecondary">
-                      User Type: {employee.user_type}
+                      Specialization : {doctors.speciality}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      mt={5}
+                      ml={10}
+                    >
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => handleUpdateStatus(doctors.email)}
+                      >
+                        Remove
+                      </Button>
+                    </Typography>
+                  </CardContent>
+                </Box>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </div>
+
+      <h2 className="text-2xl font-bold mb-10 mt-10">
+        Available Nurse
+        <hr />
+      </h2>
+
+      <div className="flex flex-col justify-center items-center">
+        <Grid container spacing={3}>
+          {nurse.map((nurse, index) => (
+            <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+              <Card sx={{ height: '100%' }}>
+                <Box sx={{ height: '100%' }}>
+                  <CardContent>
+                    <Typography variant="subtitle1">{nurse.uname}</Typography>
+
+                    <Typography variant="body2" color="textSecondary">
+                      Mobile: {nurse.mobile_no}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      Email: {nurse.email}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      Designation : {nurse.designation}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      mt={5}
+                      mb={2}
+                      mr={6}
+                      ml={10}
+                    >
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => handleUpdateStatus(nurse.email)}
+                      >
+                        Remove
+                      </Button>
+                    </Typography>
+                  </CardContent>
+                </Box>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </div>
+      <h2 className="text-2xl font-bold mb-10 mt-10">
+        Available Driver
+        <hr />
+      </h2>
+
+      <div className="flex flex-col justify-center items-center">
+        <Grid container spacing={3}>
+          {driver.map((driver, index) => (
+            <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+              <Card sx={{ height: '100%' }}>
+                <Box sx={{ height: '100%' }}>
+                  <CardContent>
+                    <Typography variant="subtitle1">{driver.uname}</Typography>
+
+                    <Typography variant="body2" color="textSecondary">
+                      Mobile: {driver.mobile_no}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      Email: {driver.email}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      Ambulance Type : {driver.ambulance_type}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      mt={5}
+                      mb={2}
+                      mr={6}
+                      ml={10}
+                    >
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => handleUpdateStatus(driver.email)}
+                      >
+                        Remove
+                      </Button>
                     </Typography>
                   </CardContent>
                 </Box>

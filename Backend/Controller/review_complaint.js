@@ -18,6 +18,18 @@ const INSERT_RatingAndComplaint = async (req, res) => {
   }
 };
 
+const show_complaint = async (req, res) => {
+  const hospital_id = req.params.hospital_id;
+  try {
+    const result = await user.show_complaints(hospital_id);
+    res.send(result)
+  } catch (error) {
+    console.error('Error fetching data:', error.message);
+    res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while fetching data.' });
+  }
+};
+
 module.exports = {
   INSERT_RatingAndComplaint,
+  show_complaint
 };

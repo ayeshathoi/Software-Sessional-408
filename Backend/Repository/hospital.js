@@ -159,13 +159,19 @@ const assign_nurse_to_test = async (nurse_email, booking_id) => {
 
 //--------------------------------------------//
 
-const all_booking = "SELECT b.booking_id FROM booking b " +
-"WHERE b.hospital_id = $1"
-
+const all_booking = "SELECT * FROM booking b " +
+"WHERE b.hospital_id = $1 and b.booking_status = $2 "
+const patient_name_search = "SELECT u.uname FROM users u Where u.uid = $1"
 const booking_total = async (hospital_id) => {
     try {
         const client = await getConnection.connect();
-        const result = await client.query(all_booking, [hospital_id]);
+        const result = await client.query(all_booking, [hospital_id,"pending"]);
+        //console.log(result.rows);
+        for (let i = 0; i < result.rows.length; i++) {
+            const patient_name = await client.query(patient_name_search, [result.rows[i].patient_id]);
+            //console.log(patient_name.rows[0].uname);
+            result.rows[i].patient_name = patient_name.rows[0].uname;
+        }
         client.release();
         return result.rows;
     }

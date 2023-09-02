@@ -1,7 +1,4 @@
-<<<<<<< HEAD
 // page for hospital home and verify employee
-=======
->>>>>>> 92788a64f4cc88b26add0abd679b86a965440343
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
@@ -18,6 +15,8 @@ import axios from 'axios';
 import HeaderDoctor from '../navbar/headerdoctor';
 import Footer from '../navbar/footer';
 import AvailableEmployee from './employee';
+import PatientRequests from './requests';
+import ReviewsPatient from './ReviewList';
 
 function HospitalHome() {
   const { userid } = useParams();
@@ -87,7 +86,13 @@ function HospitalHome() {
               <ListItemText primary="Requests" />
             </ListItem>
             <ListItem button onClick={() => setValue(3)}>
-              <ListItemText primary="Complaints" />
+              <ListItemText primary="Service Reviews" />
+            </ListItem>
+            <ListItem button onClick={() => setValue(4)}>
+              <ListItemText primary="Add Test" />
+            </ListItem>
+            <ListItem button onClick={() => setValue(5)}>
+              <ListItemText primary="Add Ambulance" />
             </ListItem>
           </List>
         </Paper>
@@ -163,29 +168,20 @@ function HospitalHome() {
           </div>
         )}
         {value === 1 && (
-<<<<<<< HEAD
           <div className="mt-24 ml-20">
             <AvailableEmployee />
             {/* Add content related to ambulance */}
-=======
-          <div className="mt-24">
-            <h2 className="text-xl font-semibold mb-2">Ambulance Order</h2>
-            {/* Add content related to ambulance */}
-            Ambulances
->>>>>>> 92788a64f4cc88b26add0abd679b86a965440343
           </div>
         )}
         {value === 2 && (
           <div className="mt-24">
-            <h2 className="text-xl font-semibold mb-2">Health Check</h2>
-            Tests
+            <PatientRequests />
             {/* Add content related to health check */}
           </div>
         )}
         {value === 3 && (
           <div className="mt-24">
-            <h2 className="text-xl font-semibold mb-2">Complaints</h2>
-            {/* Add content related to complaints */}
+            <ReviewsPatient />
           </div>
         )}
         <div>

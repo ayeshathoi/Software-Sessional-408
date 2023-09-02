@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Grid, Card, CardContent, Typography, Box } from '@mui/material';
 import axios from 'axios';
-import HeaderDoctor from '../navbar/headerdoctor';
-import Footer from '../navbar/footer';
 
 function AvailableEmployee() {
   const { userid } = useParams();

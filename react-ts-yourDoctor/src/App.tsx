@@ -25,6 +25,7 @@ import BookCheckup from './pages/Booking/BookCheckup';
 import BookAmbulance from './pages/Booking/BookAmbulance';
 import CheckupSearch from './pages/search/checkupSearch';
 import AddSchedule from './pages/doctorPages/addschedule';
+import AvailableEmployee from './pages/hospitalPages/employee';
 
 export function App() {
   return (
@@ -65,6 +66,10 @@ export function App() {
 
         <Route path="/userHome/:userid" element={<UserHome />} />
         <Route path="/hospitalHome/:userid" element={<HospitalHome />} />
+        <Route
+          path="/hospitalHome/:userid/AvailableEmployee/"
+          element={<AvailableEmployee />}
+        />
 
         {/* <Route path="/doctorSearch/:userid" element={<DoctorSearch />} />
         <Route path="/AmbulanceSearch/:userid" element={<AmbulanceSearch />} /> */}

@@ -1,4 +1,4 @@
-/* eslint-disable no-nested-ternary */
+// page for hospital home and verify employee
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
@@ -14,6 +14,10 @@ import {
 import axios from 'axios';
 import HeaderDoctor from '../navbar/headerdoctor';
 import Footer from '../navbar/footer';
+import AvailableEmployee from './employee';
+import PatientRequests from './requests';
+import ReviewsPatient from './ReviewList';
+import AddTest from './Add_Test';
 
 function HospitalHome() {
   const { userid } = useParams();
@@ -28,17 +32,13 @@ function HospitalHome() {
     const fetchNurses = axios.get(
       `http://localhost:3000/hospital/pending/nurse/${userid}`
     );
-    const fetchDriver = axios.get(
-      `http://localhost:3000/hospital/pending/driver/${userid}`
-    );
 
     // Use Promise.all to wait for both requests to complete
-    Promise.all([fetchDoctors, fetchNurses, fetchDriver])
+    Promise.all([fetchDoctors, fetchNurses])
       .then((responses) => {
         const doctors = responses[0].data.result;
         const nurses = responses[1].data.result;
-        const drivers = responses[2].data.result;
-        const combinedEmployees = [...doctors, ...nurses, ...drivers];
+        const combinedEmployees = [...doctors, ...nurses];
         setEmployees(combinedEmployees);
         console.log('here is the incoming data', combinedEmployees);
       })
@@ -87,7 +87,10 @@ function HospitalHome() {
               <ListItemText primary="Requests" />
             </ListItem>
             <ListItem button onClick={() => setValue(3)}>
-              <ListItemText primary="Complaints" />
+              <ListItemText primary="Service Reviews" />
+            </ListItem>
+            <ListItem button onClick={() => setValue(4)}>
+              <ListItemText primary="Add Test" />
             </ListItem>
           </List>
         </Paper>
@@ -130,9 +133,7 @@ function HospitalHome() {
                               <Typography variant="subtitle1">
                                 {employee.speciality
                                   ? `${employee.uname} - ${employee.speciality}`
-                                  : employee.designation
-                                  ? `${employee.uname} - ${employee.designation}`
-                                  : `${employee.uname} - ${employee.ambulance_type}`}
+                                  : `${employee.uname} - ${employee.designation}`}
                               </Typography>
 
                               <Typography variant="body2" color="textSecondary">
@@ -165,25 +166,28 @@ function HospitalHome() {
           </div>
         )}
         {value === 1 && (
-          <div className="mt-24">
-            <h2 className="text-xl font-semibold mb-2">Ambulance Order</h2>
+          <div className="mt-24 ml-20">
+            <AvailableEmployee />
             {/* Add content related to ambulance */}
-            Ambulances
           </div>
         )}
         {value === 2 && (
           <div className="mt-24">
-            <h2 className="text-xl font-semibold mb-2">Health Check</h2>
-            Tests
+            <PatientRequests />
             {/* Add content related to health check */}
           </div>
         )}
         {value === 3 && (
           <div className="mt-24">
-            <h2 className="text-xl font-semibold mb-2">Complaints</h2>
-            {/* Add content related to complaints */}
+            <ReviewsPatient />
           </div>
         )}
+        {value === 4 && (
+          <div className="mt-24">
+            <AddTest />
+          </div>
+        )}
+
         <div>
           {' '}
           <Footer />

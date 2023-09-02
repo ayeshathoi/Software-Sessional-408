@@ -16,5 +16,6 @@ router.get('/pending/patient/:hid', userController.show_pending_checkup);
 router.post('/pending/test/:hid', userController.show_pending_test);
 router.get('/pending/doctor/:hid', userController.getpending_Doctor);
 router.get('/pending/nurse/:hid', userController.getpending_Nurse);
+router.get('/pending/driver/:hid', userController.getpending_Driver);
 
 module.exports = router;

@@ -279,6 +279,24 @@ const pendingNurse = async (hid) => {
         throw error;
     }
 }
+const Pending_Driver = "SELECT u.uid, u.user_type, u.uname, u."+ constant.TABLE_USER_MOBILE_NO + ",d.ambulance_type, u.email " +
+                        "FROM driver d "+
+                        "JOIN users u ON d.driver_id = u.uid " +
+                        "WHERE d.hospital_id = $1 AND d.employee_status = 'pending'" 
+
+const pendingDriver = async (hid) => {
+    try {
+        const client = await getConnection.connect();
+        console.log(hid);
+        const result = await client.query(Pending_Driver, [hid]);
+        client.release();
+        return result.rows;
+    }
+    catch (error) {
+        console.error('Error fetching data:', error.message);
+        throw error;
+    }
+}
 
 
 
@@ -296,5 +314,6 @@ module.exports = {
     show_patient_request_checkup,
     pending_test,
     pendingDoctor,
-    pendingNurse
+    pendingNurse,
+    pendingDriver
 }

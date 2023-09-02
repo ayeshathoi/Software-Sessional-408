@@ -17,6 +17,7 @@ import Footer from '../navbar/footer';
 import AvailableEmployee from './employee';
 import PatientRequests from './requests';
 import ReviewsPatient from './ReviewList';
+import AddTest from './Add_Test';
 
 function HospitalHome() {
   const { userid } = useParams();
@@ -90,9 +91,6 @@ function HospitalHome() {
             </ListItem>
             <ListItem button onClick={() => setValue(4)}>
               <ListItemText primary="Add Test" />
-            </ListItem>
-            <ListItem button onClick={() => setValue(5)}>
-              <ListItemText primary="Add Ambulance" />
             </ListItem>
           </List>
         </Paper>
@@ -184,6 +182,12 @@ function HospitalHome() {
             <ReviewsPatient />
           </div>
         )}
+        {value === 4 && (
+          <div className="mt-24">
+            <AddTest />
+          </div>
+        )}
+
         <div>
           {' '}
           <Footer />

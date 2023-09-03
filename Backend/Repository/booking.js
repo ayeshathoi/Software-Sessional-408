@@ -1,6 +1,7 @@
 const getConnection = require('../Config/database');
 const constant = require("./constants")
 const user = require("./user")
+const doctor = require("./doctor")
 
 const appointment = "INSERT INTO " + constant.TABLE_BOOKING + " ("
                 + constant.TABLE_BOOKING_TYPE + ", "
@@ -31,18 +32,31 @@ const onlineAppointments = "INSERT INTO " + constant.TABLE_BOOKING + " ("
                 + constant.TABLE_BOOKING_DOCTOR_ID + ") "
                 + "VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)";
 
-const appointmentBooking = async (type,price,time,date,payment_method,payment_status,patient_mobile,patient_id,doctor_id,hospital_name) => {
+const appointmentBooking = async (type,day,price,time,date,payment_method,payment_status,patient_mobile,patient_id,doctor_id,hospital_name) => {
     
     try {
-        const serial = "-1"; //not known yet
+        var serial = "-1"; //not known yet
         const stat = "approved";
         const client = await getConnection.connect();
-        console.log("hhhh",hospital_name);
+
+        const timeline_serial = await doctor.getTimelineDetails(doctor_id);
+        for (let index = 0; index < timeline_serial.length; index++) {
+            if(timeline_serial[index].hospital_name == hospital_name && timeline_serial[index].weekday.toLowerCase() == day.toLowerCase())
+            {
+                for (let i = 0; i < timeline_serial[index].serial.length; i++) {
+                    if(timeline_serial[index].serial[i].time == time)
+                    {
+                        serial = timeline_serial[index].serial[i].serial;
+                        break;
+                    }
+                    
+                }
+            }
+        }
+
         if(hospital_name !=null){
             const hid = await user.findhid(hospital_name);
             const hid2 = hid[0].hospital_id;
-            console.log(hid2);
-
             const result = await client.query(appointment, [type,price,time,date,payment_method,payment_status,patient_mobile,
                 stat,serial,patient_id,doctor_id,hid2]);
             client.release();
@@ -54,7 +68,6 @@ const appointmentBooking = async (type,price,time,date,payment_method,payment_st
                 stat,serial,patient_id,doctor_id]);
             client.release();
             return result.rows;
-
         }
     }
     catch (error) {
@@ -132,7 +145,6 @@ const bookingCheckup = async (type,price,time,date,payment_method,payment_status
         const bid2 = bid.rows[0].booking_id;
         
         for (var i = 0; i < test_id.length; i++) {
-            console.log(test_id[i]);
             const result = await client.query(insert_booking_test, [bid2,test_id[i]]);
         }
         

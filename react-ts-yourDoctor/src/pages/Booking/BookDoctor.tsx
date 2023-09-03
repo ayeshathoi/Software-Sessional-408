@@ -1,9 +1,11 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { useState, ChangeEvent, FormEvent } from 'react';
+import { useState, ChangeEvent, FormEvent, useEffect } from 'react';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
+  Autocomplete,
+  MenuItem,
   Button,
   Typography,
   TextField,
@@ -13,6 +15,7 @@ import {
   Radio,
   Paper,
   Grid,
+  Select,
 } from '@mui/material';
 import {
   DatePicker,
@@ -37,22 +40,58 @@ function BookDoctor() {
   const [formData, setFormData] = useState<{
     patient_mobile: string;
     date: string;
-    time: string;
+    selectedTime: string;
     payment_method: string;
     price: number;
     payment_status: string;
     doctor_id: unknown;
+    weekday: string;
     hospital_name: string | null; // Explicitly define the type as string or null
   }>({
     patient_mobile: '',
     date: '',
-    time: '',
+    selectedTime: '',
     payment_method: '',
     price: parseInt(newPatientFee, 10),
     payment_status: '',
     doctor_id: doctorId,
+    weekday: '',
     hospital_name: ' ', // Initialize hospital_name as an empty string
   });
+
+  const [timetable, setTimetable] = useState([]);
+
+  const [selectedWeekday, setSelectedWeekday] = useState(null);
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3000/doctor/timeline/${doctorId}`)
+      .then((res) => {
+        setTimetable(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [doctorId]);
+
+  const filteredTimetable = timetable.filter((item) => {
+    if (selectedWeekday === null) return true;
+    return (
+      item.weekday.toLowerCase() === selectedWeekday.toLowerCase() &&
+      item.hospital_name === hospitalName
+    );
+  });
+  const availableWeek = [];
+  const filteredSerialArray = [];
+  for (let i = 0; i < filteredTimetable.length; i++) {
+    for (let j = 0; j < filteredTimetable[i].serial.length; j++) {
+      filteredSerialArray.push(filteredTimetable[i].serial[j]);
+    }
+  }
+
+  for (let i = 0; i < timetable.length; i++) {
+    if (timetable[i].hospital_name === hospitalName)
+      availableWeek.push(timetable[i].weekday);
+  }
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -72,36 +111,61 @@ function BookDoctor() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      // console.log('here is the form', formData);
-      const formattedTime = format(new Date(formData.time), 'HH:mm:ss');
+      // Format time to "hh:mm A" (e.g., "10:00 AM")
+      // const formattedTime = format(new Date(formData.time), 'hh:mm a');
+
+      // Format date to "yyyy-MM-dd" (e.g., "2021-02-02")
       const formattedDate = format(new Date(formData.date), 'yyyy-MM-dd');
-      const hospitalNameToSend =
-        formData.hospital_name === 'Online' ? null : formData.hospital_name;
+      // Create the data object with the formatted values
       const dataToSend = {
-        ...formData,
+        price: formData.price,
+        time: formData.selectedTime,
         date: formattedDate,
-        time: formattedTime,
-        hospital_name: hospitalNameToSend,
+        payment_method: formData.payment_method,
+        payment_status: formData.payment_status,
+        patient_mobile: formData.patient_mobile,
+        doctor_id: formData.doctor_id,
+        hospital_name: formData.hospital_name,
+        weekday: selectedWeekday,
       };
-      console.log('here is the form', dataToSend);
-      console.log('userrrridd', userId);
+
+      console.log("hello", dataToSend);
+
       await axios
         .post(`http://localhost:3000/booking/${userId}/appointment`, dataToSend)
         .then((res) => {
-          console.log('here is the form', res.data);
         });
     } catch (err) {
       console.log(err);
     }
     navigate(`/userHome/${userId}/`);
   };
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleDateChange = (date: any) => {
-    setFormData((prevData) => ({ ...prevData, date }));
-  };
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleTimeChange = (time: any) => {
     setFormData((prevData) => ({ ...prevData, time }));
+  };
+
+  // ... previous code ...
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleDateChange = (date: any) => {
+    setFormData((prevData) => ({ ...prevData, date }));
+    const selectedDate = new Date(date);
+    const weekdays = [
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+    ];
+    const weekdayIndex = selectedDate.getDay();
+    const weekdayName = weekdays[weekdayIndex];
+    setSelectedWeekday(weekdayName);
+    formData.weekday = weekdayName;
+    console.log('hello', formData.weekday);
   };
 
   return (
@@ -135,6 +199,19 @@ function BookDoctor() {
                   />
                 </div>
                 <div className="mb-8">
+                  {availableWeek.length > 0 && (
+                    <Typography
+                      variant="subtitle1"
+                      className="text-sm font-bold text-green-500"
+                    >
+                      Available Days:{' '}
+                      {availableWeek.map((item) => (
+                        <label key={item}>{item}</label>
+                      ))}
+                    </Typography>
+                  )}
+                </div>
+                <div className="mb-8">
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       label="Date"
@@ -143,14 +220,34 @@ function BookDoctor() {
                     />
                   </LocalizationProvider>
                 </div>
+                <div>
+                  {selectedWeekday && (
+                    <p className="text-sm text-gray-300">
+                      Selected Weekday: {selectedWeekday}
+                    </p>
+                  )}
+                </div>
+
                 <div className="mb-8">
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <TimePicker
-                      label="Time"
-                      value={formData.time}
-                      onChange={handleTimeChange}
-                    />
-                  </LocalizationProvider>
+                  <label className="text-sm text-gray-300">Select Time</label>
+                  <Select
+                    name="selectedTime"
+                    value={formData.selectedTime}
+                    onChange={(e) =>
+                      setFormData((prevData) => ({
+                        ...prevData,
+                        selectedTime: e.target.value as string,
+                      }))
+                    }
+                    className="w-full rounded-md rounded-lg"
+                  >
+                    <MenuItem value="">Select a time</MenuItem>
+                    {filteredSerialArray.map((item) => (
+                      <MenuItem key={item.serial} value={item.time}>
+                        {item.time} , Serial : {item.serial}
+                      </MenuItem>
+                    ))}
+                  </Select>
                 </div>
                 <label className="text-sm text-gray-300">Meeting type</label>
                 <div className="mb-8">

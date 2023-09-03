@@ -67,10 +67,7 @@ function Appointments() {
           </button>
         </div>
         <div className="bg-white p-4 rounded-lg shadow-md">
-          <h2 className="text-lg font-semibold mb-3">
-            {selectedSection === 'upcoming' ? 'Upcoming' : 'Previous'}{' '}
-            Appointments
-          </h2>
+
           <ul className="space-y-4">
             {appointmentsToShow.map((appointment, index) => (
               <li key={index} className="flex justify-between items-center">
@@ -80,6 +77,9 @@ function Appointments() {
                   </p>
                   <p className="text-gray-600">
                     Designation: {appointment.designation}
+                  </p>
+                  <p className="text-gray-600">
+                    serial : {appointment.appointment_serial}
                   </p>
                 </div>
                 <div className="text-right">
@@ -92,6 +92,10 @@ function Appointments() {
                   <p className="text-sm text-gray-500">
                     Date: {appointment.date.split('T')[0]}
                   </p>
+                  <p className="text-sm text-gray-500">
+                    Time: {appointment.time}
+                  </p>
+                  
                 </div>
               </li>
             ))}

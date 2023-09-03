@@ -11,7 +11,6 @@ const Available_Doctor = "SELECT u.email,u,user_type, u.uname, u."+ constant.TAB
 const availableDoctor = async (hid) => {
     try {
         const client = await getConnection.connect();
-        console.log(hid);
         const result = await client.query(Available_Doctor, [hid]);
         client.release();
         return result.rows;
@@ -226,7 +225,6 @@ const show_patient_request = "SELECT u.uname, b.date, b.booking_status, b.type "
 const show_patient_request_checkup = async (hospital_id) => {
     try {
         const client = await getConnection.connect();
-        console.log(hospital_id);
         const result = await client.query(show_patient_request, [hospital_id]);
         client.release();
         return result.rows;
@@ -267,7 +265,6 @@ const Pending_Doctor = "SELECT u.uid, u.user_type, u.uname, u."+ constant.TABLE_
 const pendingDoctor = async (hid) => {
     try {
         const client = await getConnection.connect();
-        console.log(hid);
         const result = await client.query(Pending_Doctor, [hid]);
         client.release();
         return result.rows;
@@ -286,7 +283,6 @@ const Pending_Nurse = "SELECT u.uid, u.user_type, u.uname, u."+ constant.TABLE_U
 const pendingNurse = async (hid) => {
     try {
         const client = await getConnection.connect();
-        console.log(hid);
         const result = await client.query(Pending_Nurse, [hid]);
         client.release();
         return result.rows;
@@ -312,8 +308,6 @@ const remove_employee_hospital = async (email, hospital_id) => {
     const client = await getConnection.connect();
     try {
         const found_id = await client.query(find_id, [email]);
-        console.log(email);
-        console.log(found_id.rows[0]);
         const id = found_id.rows[0].uid;
         const employee_type = found_id.rows[0].user_type;
         if(employee_type == "doctor"){

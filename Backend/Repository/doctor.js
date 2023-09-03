@@ -129,8 +129,6 @@ const updatedDoctor = `
 const updateDoctorProfile = async (doctor_id, speciality,designation,qualification,mobile_no) => {
     try {
 	    const client = await getConnection.connect();
-
-        console.log(mobile_no+" "+doctor_id+" "+speciality+" "+designation+" "+qualification);
 	    
         const result2 = await client.query(updated_user, [mobile_no, doctor_id]);
         const result = await client.query(updatedDoctor, [speciality,designation,qualification,doctor_id]);       
@@ -200,8 +198,8 @@ const getDoctorDetails = async (doctor_id) => {
 }
 
 const timelineDetails = "SELECT * FROM timeline WHERE doctor_id = $1 ORDER BY weekday ASC";
-
-const doctor_hospital = "SELECT hospital_id FROM doctor_hospital WHERE doctor_id = $1";
+const hospital_name = "SELECT * FROM hospital where hospital_id = $1";
+// const doctor_hospital = "SELECT hospital_id FROM doctor_hospital WHERE doctor_id = $1";
 
 const getTimelineDetails = async (doctor_id) => {
     try {
@@ -213,6 +211,8 @@ const getTimelineDetails = async (doctor_id) => {
         {
             const timeforeachslot = (parseInt(result.rows[i].end_time )- parseInt(result.rows[i].start_time))*60/parseInt(result.rows[i].slot);
             result.rows[i].timeforeachslot = timeforeachslot;
+            const hospital= await client.query(hospital_name, [result.rows[i].hospital_id]);
+            result.rows[i].hospital_name = hospital.rows[0].hospital_name;
             var slot = parseInt(result.rows[i].slot);
             var start = result.rows[i].start_time.split(":")[0];
             var serial = [];

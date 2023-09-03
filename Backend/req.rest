@@ -450,3 +450,7 @@ Content-Type: application/json
 ####
 GET http://localhost:3000/doctor/timeline/36
 ###
+
+
+GET http://localhost:3000/hospital/test/1
+###

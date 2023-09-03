@@ -45,6 +45,7 @@ function DoctorHome() {
       .then((res) => {
         console.log(res.data);
         setUser(res.data);
+      
       })
       .catch((error) => {
         console.error('userprofile not found', error);

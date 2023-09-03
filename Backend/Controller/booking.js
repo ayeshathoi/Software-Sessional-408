@@ -6,16 +6,15 @@ const DoctorBooking = async (req, res) => {
     try {
         const uid = req.params.uid;
         //const type = "Appointment";
-        const {price,time,date,payment_method,payment_status,patient_mobile,doctor_id,hospital_name} = req.body
-        console.log("online",hospital_name)
+        const {price,time,date,payment_method,payment_status,patient_mobile,doctor_id,hospital_name,weekday} = req.body
         if(hospital_name == undefined){
         const type="Online"
-        const result = await user.appointmentBooking(type, price,time,date,payment_method,payment_status,patient_mobile,uid,doctor_id,null); 
+        const result = await user.appointmentBooking(type,weekday,price,time,date,payment_method,payment_status,patient_mobile,uid,doctor_id,null); 
         res.status(http_status.OK).json({ result });
         }
        else {
         const type = "Appointment";
-            const result = await user.appointmentBooking(type, price,time,date,payment_method,payment_status,patient_mobile,uid,doctor_id,hospital_name); 
+            const result = await user.appointmentBooking(type,weekday,price,time,date,payment_method,payment_status,patient_mobile,uid,doctor_id,hospital_name); 
             res.status(http_status.OK).json({ result });
         }
 

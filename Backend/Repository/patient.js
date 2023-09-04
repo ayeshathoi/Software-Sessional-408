@@ -22,7 +22,7 @@ const onlineAppointments = async (pid) => {
     }
 };
 
-const all = "SELECT u.uname, b.time, b.date,d.designation, b.appointment_serial, b.time,h.hospital_name, d.speciality, b.total_price "+
+const all = "SELECT u.uname,b.booking_id, b.time, b.date,d.designation, b.appointment_serial, b.time,h.hospital_name, d.speciality, b.total_price "+
                             "FROM booking b " +
                             "JOIN doctor d ON b.doctor_id = d.doctor_id " +
                             "JOIN hospital h ON b.hospital_id = h.hospital_id " +

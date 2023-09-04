@@ -150,8 +150,8 @@ function DoctorSearch() {
                     <CardMedia
                       component="img"
                       alt="Doctor"
-                      height="200"
-                      image="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg"
+                      height="100"
+                      image="https://cdn.vectorstock.com/i/1000x1000/27/71/female-doctor-vector-38002771.webp"
                     />
                     <CardContent>
                       <Typography variant="h6">{doctor.uname}</Typography>

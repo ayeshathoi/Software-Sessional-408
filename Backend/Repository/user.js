@@ -173,7 +173,6 @@ const create_nurse = async (username,email,pass,mobile,dob,gender,designation,do
       const nid = await findpid(email);
       const nid2 = nid[0].uid.toString();
       const stat = "pending";
-      console.log(gender)
       const hid = await findhid(hospital_name);
       const hid2 = hid[0].hospital_id.toString();
       const result = await client.query(CREATE_NURSE, [nid2,designation,stat,document,doc_content,hid2]);
@@ -210,7 +209,6 @@ const create_driver = async (username,email,pass,mobile,dob,gender,type,fare,
       const drid2 = drid[0].uid.toString();
       const stat = "pending";
       result = "";
-      console.log(type);
       if(hospital_name != null){
       const hid = await findhid(hospital_name);
       const hid2 = hid[0].hospital_id.toString();
@@ -239,7 +237,6 @@ const UserDetailBYID = "SELECT * FROM users where uid = $1"
 
 const GET_USER_DETAIL = async (uid) => {
     try {
-        console.log(uid);
         const client = await getConnection.connect();
         const result = await client.query(UserDetailBYID, [uid]);
         client.release();

@@ -16,7 +16,7 @@ function Home() {
         <Navbar />
         <p>&</p>
       </div>
-      <div className="pt-20 flex justify-end bg-indigo-100" />
+      <div className="pt-20 flex justify-end bg-green-100" />
       <div className="grid grid-cols-3 gap-4 mt-14 mx-auto max-w-6xl">
         <div className="flex flex-col items-center">
           <img src={Search} alt="Search" className="h-40 w-full object-cover" />

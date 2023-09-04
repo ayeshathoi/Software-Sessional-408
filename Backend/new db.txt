@@ -1,3 +1,4 @@
+// next time add profile_picture in users table
 CREATE TABLE users (
   uid SERIAL PRIMARY KEY,
   uname TEXT NOT NULL,

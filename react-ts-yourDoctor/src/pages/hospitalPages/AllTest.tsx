@@ -1,90 +1,109 @@
 // page for hospital home and verify employee
-import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { Grid, Paper, Typography, Button, Container } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { Grid, Paper, Button, Typography, Container } from '@mui/material';
 import axios from 'axios';
-import AssignNurse from './Assign_Nurse';
 
-interface Requests {
-  booking_id: number;
-  payment_status: string;
-  total_price: number;
-  patient_name: string;
-  patient_mobile: string;
-  date: string;
-  time: string;
+interface Tests {
+  testid: number;
+  testname: string;
+  price: number;
+  hospital_id: number;
 }
 
-function PatientRequests() {
+function PatientTests() {
   const { userid } = useParams();
-  const [resquest, setRequests] = useState([]);
+  const [alltests, setTests] = useState([]);
+  const navigate = useNavigate();
+
   useEffect(() => {
-    // Make the HTTP GET request to the backend API
+    // Make the HTTP GET tests to the backend API
     axios
-      .get(`http://localhost:3000/hospital/booking/${userid}`)
+      .get(`http://localhost:3000/hospital/test/${userid}`)
       // api call
       .then((response) => {
-        setRequests(response.data.result); // Set the fetched data to the state
+        setTests(response.data); // Set the fetched data to the state
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
       });
   }, [userid]);
 
+  const deleteTest = async (testid: number) => {
+    try {
+
+      const data = {
+        test_id: testid
+      }
+      await axios
+        .post(`http://localhost:3000/hospital/test/delete/${userid}/${testid}`,data)
+        .then((res) => {
+          alert('Test Deleted Successfully');
+          navigate(`/hospitalHome/${userid}`);
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
-    <div className="mt-40 ml-40 mr-20 mb-20">
+    <div className="mt-40 ml-40 mr-20">
       <Container>
         <Grid container spacing={3}>
           <Grid item xs={12} md={8}>
             {/* Adjust the grid item width based on your layout */}
             <Paper elevation={3} className="p-4">
               <Typography variant="h6" gutterBottom>
-                Check Up Requests
+                Tests Lists
               </Typography>
               <table className="min-w-full divide-y divide-gray-200">
                 <thead>
                   <tr>
                     <th className="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                      Patient Name
+                      Test Name
                     </th>
                     <th className="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                      Date
+                      Test Price
+                    </th>
+
+                    <th className="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                      Edit Test Price
                     </th>
                     <th className="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                      Time
-                    </th>
-                    <th className="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                      Assigning Nurse
+                      Delete Test
                     </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {resquest.map((request: Requests) => (
-                    <tr key={request.booking_id}>
+                  {alltests.map((tests: Tests) => (
+                    <tr key={tests.testid}>
                       <td className="px-6 py-4 whitespace-no-wrap">
                         <Typography variant="subtitle1">
-                          {request.patient_name}
+                          {tests.testname}
                         </Typography>
-
+                      </td>
+                      <td className="px-6 py-4 whitespace-no-wrap">
                         <Typography variant="body2" color="textSecondary">
-                          Mobile: {request.patient_mobile}
+                          {tests.price}
                         </Typography>
-                      </td>
-                      <td className="px-6 py-4 whitespace-no-wrap">
-                        {request.date.split('T')[0]}
-                      </td>
-                      <td className="px-6 py-4 whitespace-no-wrap">
-                        {request.time}
                       </td>
                       <td className="px-6 py-4 whitespace-no-wrap">
                         <Link
-                          to={`/hospitalHome/${userid}/${request.booking_id}`}
+                          to={`/hospitalHome/${userid}/EditTest/${tests.testid}`}
                         >
                           <Button variant="contained" color="primary">
-                            Assign Nurse
+                            Edit Price
                           </Button>
                         </Link>
+                      </td>
+                      <td className="px-6 py-4 whitespace-no-wrap">
+                        <Button
+                          variant="contained"
+                          color="error"
+                          onClick={() => confirm('Are you sure?') && deleteTest(tests.testid)}
+                        >
+                          Delete
+                        </Button>
                       </td>
                     </tr>
                   ))}
@@ -98,4 +117,4 @@ function PatientRequests() {
   );
 }
 
-export default PatientRequests;
+export default PatientTests;

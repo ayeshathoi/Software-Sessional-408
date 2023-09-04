@@ -22,7 +22,7 @@ const onlineAppointments = async (pid) => {
     }
 };
 
-const all = "SELECT u.uname, b.time, b.date,d.designation, h.hospital_name, d.speciality, b.total_price "+
+const all = "SELECT u.uname,b.booking_id, b.time, b.date,d.designation, b.appointment_serial, b.time,h.hospital_name, d.speciality, b.total_price "+
                             "FROM booking b " +
                             "JOIN doctor d ON b.doctor_id = d.doctor_id " +
                             "JOIN hospital h ON b.hospital_id = h.hospital_id " +
@@ -120,9 +120,7 @@ const DoctorSearchBySpeciality = "SELECT u.uname,u.mobile_no,u.email, d.designat
 const doctorSpecialitySearch = async (speciality) => {
     try {
         const client = await getConnection.connect();
-        console.log(speciality)
         const result = await client.query(DoctorSearchBySpeciality, [speciality]);
-        console.log("Here ",result.rows)
         client.release();
         return result.rows;
     }
@@ -158,7 +156,6 @@ const CheckUP_Hospital = "SELECT t.testname,t.price, h.hospital_name from test t
                          "where h.hospital_name = $1"
 const checkUpHospitalDetails = async (hospital) => {
     try {
-        console.log("HELLOOOOO");
         const client = await getConnection.connect();
         const result = await client.query(CheckUP_Hospital, [hospital]);
         client.release();
@@ -215,7 +212,6 @@ const updateProfile =   "UPDATE " + constant.TABLE_PATIENT + " SET " +constant.T
 const update_profile = async (street,thana,city, district,pid,mobile_no) => {
     try {
         const client = await getConnection.connect();
-        console.log(mobile_no + " " + pid + " " + street + " " + thana + " " + city + " " + district)
         const result2 = await client.query(update_user, [mobile_no, pid]);
         const result = await client.query(updateProfile, [street,thana,city,district,pid]);
         client.release();
@@ -237,7 +233,6 @@ const doctorAllSearch = async () => {
     try {
         const client = await getConnection.connect();
         const result = await client.query(DoctorList);
-        console.log("Here ",result.rows)
         client.release();
         return result.rows;
     }
@@ -252,7 +247,6 @@ const testAllSearch = async () => {
     try {
         const client = await getConnection.connect();
         const result = await client.query(TestList);
-        console.log("Here ",result.rows)
         client.release();
         return result.rows;
     }

@@ -97,7 +97,6 @@ function UserHome() {
                 alt="Appointments"
                 className="w-48 h-48 rounded-full mx-auto mb-4"
               />
-              <h2 className="text-xl font-semibold mb-2">Appointments</h2>
               <Appointments />
               {/* Add content related to appointments */}
             </div>

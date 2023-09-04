@@ -5,18 +5,22 @@ const http_status = require('./HTTPStatus')
 const DoctorBooking = async (req, res) => {
     try {
         const uid = req.params.uid;
-        //const type = "Appointment";
-        const {price,time,date,payment_method,payment_status,patient_mobile,doctor_id,hospital_name} = req.body
-        console.log("online",hospital_name)
+        const {price,time,date,payment_method,payment_status,patient_mobile,doctor_id,hospital_name,weekday} = req.body
         if(hospital_name == undefined){
         const type="Online"
-        const result = await user.appointmentBooking(type, price,time,date,payment_method,payment_status,patient_mobile,uid,doctor_id,null); 
+        const result = await user.appointmentBooking(type,weekday,price,time,date,payment_method,payment_status,patient_mobile,uid,doctor_id,hospital_name); 
         res.status(http_status.OK).json({ result });
         }
        else {
         const type = "Appointment";
-            const result = await user.appointmentBooking(type, price,time,date,payment_method,payment_status,patient_mobile,uid,doctor_id,hospital_name); 
-            res.status(http_status.OK).json({ result });
+            const result = await user.appointmentBooking(type,weekday,price,time,date,payment_method,payment_status,patient_mobile,uid,doctor_id,hospital_name); 
+            if(result == "This serial is already booked.")
+            {
+                console.log("This serial is already booked.");
+                res.send("This serial is already booked.");
+            }
+            else
+                res.status(http_status.OK).json({ result });
         }
 
     } catch (error) {
@@ -74,6 +78,11 @@ const AmbulanceBooking = async (req, res) => {
     }
 }
 
+// const check_booking = async (type,req,res) =>
+// {
+//     try {
+//         if(type == "this")
+//         res.send("ok");
 
 
 module.exports = {

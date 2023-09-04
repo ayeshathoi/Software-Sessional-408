@@ -1,9 +1,6 @@
 const user = require('../Repository/doctor')
 const http_status = require('./HTTPStatus')
 
-//const fs = require('fs'); // Import the fs module to work with files
-
-
 const getPatient_List = async (req, res) => {
     const doctor_id = req.params.id;
     const hospital_name = req.body.hospital_name;
@@ -84,10 +81,40 @@ const getProfile = async (req, res) => {
     }
 };
 
+
+
+const getDoctorDetails = async (req, res) => {
+    const doctor_id = req.params.id;
+    
+    try {
+        const result = await user.getDoctorDetails(doctor_id);
+        res.send(result);
+    } catch (error) {
+        console.error('Error getting doctor details:', error.message);
+        res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while getting doctor details.' });
+    }
+};
+
+
+const getTimeline = async (req, res) => {
+    const doctor_id = req.params.id;
+    try {
+        const result = await user.getTimelineDetails(doctor_id);
+        res.send(result);
+    } catch (error) {
+        console.error('Error getting doctor details:', error.message);
+        res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while getting timeline details.' });
+    }
+};
+
+
+
 module.exports = {
     getPatient_List,
     getProfile,
     updateDoctorProfile,
     //addPrescription,
-    addSchedule
+    addSchedule,
+    getDoctorDetails,
+    getTimeline
 }

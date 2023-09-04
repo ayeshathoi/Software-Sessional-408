@@ -1,3 +1,4 @@
+const { parse } = require('url');
 const getConnection = require('../Config/database');
 const constant = require("./constants")
 const user = require("./user")
@@ -128,8 +129,6 @@ const updatedDoctor = `
 const updateDoctorProfile = async (doctor_id, speciality,designation,qualification,mobile_no) => {
     try {
 	    const client = await getConnection.connect();
-
-        console.log(mobile_no+" "+doctor_id+" "+speciality+" "+designation+" "+qualification);
 	    
         const result2 = await client.query(updated_user, [mobile_no, doctor_id]);
         const result = await client.query(updatedDoctor, [speciality,designation,qualification,doctor_id]);       
@@ -166,10 +165,98 @@ const getDoctorProfile = async (doctor_id) => {
 };
 
 
+
+
+
+const doctorDetails = "SELECT * FROM doctor WHERE doctor_id = $1";
+const doctor_user = "SELECT * FROM users WHERE uid = $1";
+const doctor_hospitals = "SELECT hospital_name FROM hospital h JOIN doctor_hospital dh ON h.hospital_id = dh.hospital_id WHERE dh.doctor_id = $1";
+
+const getDoctorDetails = async (doctor_id) => {
+    try {
+        const client = await getConnection.connect();
+        const result = await client.query(doctorDetails, [doctor_id]);
+        const result1 = await client.query(doctor_user, [doctor_id]);
+        for (var key in result1.rows[0]) {
+            result.rows[0][key] = result1.rows[0][key];
+        }
+        var hospital = "hospital";
+        const result2 = await client.query(doctor_hospitals, [doctor_id]);
+        for(var i = 0;i<result2.rows.length;i++)
+        {
+            var name = hospital +" " + i;
+            result.rows[0][name] = result2.rows[i].hospital_name;
+        }
+
+        client.release();
+        return result.rows[0];
+    }
+    catch (error) {
+        console.error('Error fetching data:', error.message);
+        throw error;
+    }
+}
+
+const timelineDetails = "SELECT * FROM timeline WHERE doctor_id = $1 ORDER BY weekday ASC";
+const hospital_name = "SELECT * FROM hospital where hospital_id = $1";
+// const doctor_hospital = "SELECT hospital_id FROM doctor_hospital WHERE doctor_id = $1";
+
+const getTimelineDetails = async (doctor_id) => {
+    try {
+        const client = await getConnection.connect();
+        //const hospital_id = await client.query(doctor_hospital, [doctor_id]);
+        const result = await client.query(timelineDetails, [doctor_id]);
+       
+        for(var i = 0;i<result.rows.length;i++)
+        {
+            const timeforeachslot = (parseInt(result.rows[i].end_time )- parseInt(result.rows[i].start_time))*60/parseInt(result.rows[i].slot);
+            result.rows[i].timeforeachslot = timeforeachslot;
+            const hospital= await client.query(hospital_name, [result.rows[i].hospital_id]);
+            result.rows[i].hospital_name = hospital.rows[0].hospital_name;
+            var slot = parseInt(result.rows[i].slot);
+            var start = result.rows[i].start_time.split(":")[0];
+            var serial = [];
+
+            for(var j = 0;j<slot;j++)
+            {
+                var hr  = parseInt((parseInt(timeforeachslot)*j/60) + parseInt(start));
+                
+                if(hr/10 < 1)
+                {
+                    hr = "0" + hr;
+                }
+
+                var min = parseInt(timeforeachslot)*j%60;
+                if(min == 0)
+                {
+                    min = "00";
+                }
+                var time = hr + ":" + min + ":00";
+                serial.push({serial: j+1, time: time});
+
+            }
+            result.rows[i].serial = serial;
+        }
+
+
+       
+
+        client.release();
+        return result.rows;
+    }
+    catch (error) {
+        console.error('Error fetching data:', error.message);
+        throw error;
+    }
+}
+
+
 module.exports = {
     patientListDetails_doctor,
-    //addPrescriptionDetails,
+    //addPrescriptionDetails,   
     getDoctorProfile,
     updateDoctorProfile,
-    ADD_SCHEDULE
+    ADD_SCHEDULE,
+    getDoctorDetails,
+    getTimelineDetails
 }

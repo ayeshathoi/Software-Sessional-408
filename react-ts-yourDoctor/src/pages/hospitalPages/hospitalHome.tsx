@@ -1,104 +1,205 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+// page for hospital home and verify employee
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import {
+  Grid,
+  Paper,
+  Typography,
+  Button,
+  Container,
+  List,
+  ListItem,
+  ListItemText,
+} from '@mui/material';
+import axios from 'axios';
 import HeaderDoctor from '../navbar/headerdoctor';
 import Footer from '../navbar/footer';
+import AvailableEmployee from './employee';
+import PatientRequests from './requests';
+import ReviewsPatient from './ReviewList';
+import PatientTests from './AllTest';
+import AddTest from './Add_Test';
+
 
 function HospitalHome() {
-  const [selectedSection, setSelectedSection] = useState('upcoming');
-  const [isActive, setIsActive] = useState(true);
-  const [driverName, setDriverName] = useState('');
-  const [contact, setContact] = useState('');
-  const [tripData, setTripData] = useState<
-    Array<{
-      name: string;
-      contact: string;
-      address: string;
-      date: string;
-    }>
-  >([]);
-  useEffect(() => {
-    // Fetch driver's name and data from the database here
-    // For now, let's simulate fetching the data after a delay
-    setTimeout(() => {
-      setDriverName('XYZ'); // Simulated fetched name
-    }, 1000);
-    setTimeout(() => {
-      setContact('233-556-7886'); // Simulated fetched contact
-    }, 1000);
-    setTimeout(() => {
-      const fetchedtripData = [
-        {
-          name: 'Aksa',
-          contact: '122-45-23344',
-          address: '91/7 Kalabagan',
-          date: '2023-08-01',
-        },
-        {
-          name: 'Sara',
-          contact: '122-45-23344',
-          address: '91/7 Kalabagan',
-          date: '2023-08-02',
-        },
-        {
-          name: 'NNl',
-          contact: '122-45-23344',
-          address: '91/7 Kalabagan',
-          date: '2023-08-21',
-        },
-        {
-          name: 'Jara',
-          contact: '122-45-23344',
-          address: '91/7 Kalabagan',
-          date: '2023-08-30',
-        },
-        // more trip data...
-      ];
-      setTripData(fetchedtripData);
-    }, 1500);
-  }, []);
+  const { userid } = useParams();
+  const [employees, setEmployees] = useState([]); // Combine both doctors and nurses into a single array
+  const [value, setValue] = useState<number>(0);
 
-  const currentDate = new Date().toISOString().split('T')[0];
+  useEffect(() => {
+    // Fetch both doctor and nurse data from your APIs here
+    const fetchDoctors = axios.get(
+      `http://localhost:3000/hospital/pending/doctor/${userid}`
+    );
+    const fetchNurses = axios.get(
+      `http://localhost:3000/hospital/pending/nurse/${userid}`
+    );
+    // Use Promise.all to wait for both requests to complete
+    Promise.all([fetchDoctors, fetchNurses])
+      .then((responses) => {
+        const doctors = responses[0].data.result;
+        const nurses = responses[1].data.result;
+        console.log('here is the incoming data', nurses);
+        const combinedEmployees = [...doctors, ...nurses];
+        setEmployees(combinedEmployees);
+        console.log('here is the incoming data', combinedEmployees);
+      })
+      .catch((error) => {
+        console.error('Error fetching employee data:', error);
+      });
+  }, [userid]);
+
+  const handleUpdateStatus = async (employeeEmail: string) => {
+    const data = { email: employeeEmail };
+    try {
+      console.log('here is the email', data, userid);
+      await axios
+        .post(`http://localhost:3000/hospital/update/employee/${userid}`, data)
+        .then((res) => {
+          console.log('here is the form', res.data);
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
-    <div className="flex">
-      {/* Side Navigation Bar */}
-      <div className="bg-gray-800 text-white w-1/5 h-screen">
-        <div className="p-4">
-          <h2 className="text-xl font-semibold mb-4">Hospital Dashboard</h2>
-          <ul className="space-y-2">
-            <li>
-              <Link
-                to="/driver/employee"
-                className="block hover:bg-gray-600 px-2 py-1 rounded"
-              >
-                Employee
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/driver/requests"
-                className="block hover:bg-gray-600 px-2 py-1 rounded"
-              >
-                Requests
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/driver/verify-employee"
-                className="block hover:bg-gray-600 px-2 py-1 rounded"
-              >
-                Verify Employee
-              </Link>
-            </li>
-          </ul>
-        </div>
+    <div style={{ display: 'flex' }}>
+      {/* Left Sidebar */}
+      <div
+        className="w-1/6 border-r border-white"
+        style={{ backgroundColor: '#fff' }}
+      >
+        <Paper elevation={0}>
+          <Typography
+            variant="h6"
+            gutterBottom
+            className="bg-green-200 p-4 h-18"
+          >
+            Hospital Dashboard
+          </Typography>
+          <List className="bg-green-100 " style={{ height: '200vh' }}>
+            <ListItem button onClick={() => setValue(0)}>
+              <ListItemText primary="Verify Employee" />
+            </ListItem>
+            <ListItem button onClick={() => setValue(1)}>
+              <ListItemText primary="Available Employee" />
+            </ListItem>
+            <ListItem button onClick={() => setValue(2)}>
+              <ListItemText primary="Requests" />
+            </ListItem>
+            <ListItem button onClick={() => setValue(3)}>
+              <ListItemText primary="Service Reviews" />
+            </ListItem>
+            <ListItem button onClick={() => setValue(4)}>
+              <ListItemText primary="Test List" />
+            </ListItem>
+            <ListItem button onClick={() => setValue(5)}>
+              <ListItemText primary="Add Test" />
+            </ListItem>
+          </List>
+        </Paper>
       </div>
 
-      {/* Main Content */}
-      <div className="w-4/5 p-4">
-        <HeaderDoctor />
-        {/* Add your content here */}
-        <div className="mt-16">
+      {/* Right Content */}
+      <div style={{ flexGrow: 1 }}>
+        <div>
+          <HeaderDoctor />
+        </div>
+        {/* Tab content */}
+        {value === 0 && (
+          <div className="mt-40 ml-40 mr-20">
+            <Container>
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={8}>
+                  {/* Adjust the grid item width based on your layout */}
+                  <Paper elevation={3} className="p-4">
+                    <Typography variant="h6" gutterBottom>
+                      Employee List
+                    </Typography>
+                    <table className="min-w-full divide-y divide-gray-200">
+                      <thead>
+                        <tr>
+                          <th className="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                            Employee Name
+                          </th>
+                          <th className="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                            Employee Type
+                          </th>
+                          <th className="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                            Status
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-gray-200">
+                        {employees.map((employee) => (
+                          <tr key={employee.uid}>
+                            <td className="px-6 py-4 whitespace-no-wrap">
+                              <Typography variant="subtitle1">
+                                {employee.speciality
+                                  ? `${employee.uname} - ${employee.speciality}`
+                                  : `${employee.uname} - ${employee.designation}`}
+                              </Typography>
+
+                              <Typography variant="body2" color="textSecondary">
+                                Mobile: {employee.mobile_no} | Email:{' '}
+                                {employee.email}
+                              </Typography>
+                            </td>
+                            <td className="px-6 py-4 whitespace-no-wrap">
+                              {employee.user_type}
+                            </td>
+                            <td className="px-6 py-4 whitespace-no-wrap">
+                              <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={() =>
+                                  handleUpdateStatus(employee.email)
+                                }
+                              >
+                                Pending
+                              </Button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </Paper>
+                </Grid>
+              </Grid>
+            </Container>
+          </div>
+        )}
+        {value === 1 && (
+          <div className="mt-24 ml-20">
+            <AvailableEmployee />
+            {/* Add content related to ambulance */}
+          </div>
+        )}
+        {value === 2 && (
+          <div className="mt-24">
+            <PatientRequests />
+          </div>
+        )}
+        {value === 3 && (
+          <div className="mt-24">
+            <ReviewsPatient />
+          </div>
+        )}
+        {value === 4 && (
+          <div className="mt-24">
+            <PatientTests />
+          </div>
+        )}
+        {value === 5 && (
+          <div className="mt-24">
+            <AddTest />
+          </div>
+        )}
+
+
+        <div>
+          {' '}
           <Footer />
         </div>
       </div>

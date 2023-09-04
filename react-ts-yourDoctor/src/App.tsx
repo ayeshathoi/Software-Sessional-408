@@ -24,6 +24,10 @@ import BookDoctor from './pages/Booking/BookDoctor';
 import BookCheckup from './pages/Booking/BookCheckup';
 import BookAmbulance from './pages/Booking/BookAmbulance';
 import CheckupSearch from './pages/search/checkupSearch';
+import AvailableEmployee from './pages/hospitalPages/employee';
+import Chatbox from './pages/chatbox';
+import AssignNurse from './pages/hospitalPages/Assign_Nurse';
+import EditTest from './pages/hospitalPages/Edit_test';
 
 export function App() {
   return (
@@ -45,10 +49,10 @@ export function App() {
         <Route path="/doctorHome/:userid" element={<DoctorHome />} />
         <Route path="/nurseHome/:userid" element={<NurseHome />} />
         <Route path="/driverHome/:userid" element={<DriverHome />} />
-        <Route
+        {/* <Route
           path="/doctorHome/:userid/PatientPrescription/"
           element={<PatientPrescription />}
-        />
+        /> */}
         <Route
           path="/userHome/:userid/PatientProfileUpdate/"
           element={<PatientProfileUpdate />}
@@ -64,6 +68,15 @@ export function App() {
 
         <Route path="/userHome/:userid" element={<UserHome />} />
         <Route path="/hospitalHome/:userid" element={<HospitalHome />} />
+        <Route
+          path="/hospitalHome/:userid/AvailableEmployee/"
+          element={<AvailableEmployee />}
+        />
+        <Route
+          path="/hospitalHome/:userid/:bookingID"
+          element={<AssignNurse />}
+        />
+        <Route path="/hospitalHome/:userid/EditTest/:testID" element={<EditTest />} />
 
         {/* <Route path="/doctorSearch/:userid" element={<DoctorSearch />} />
         <Route path="/AmbulanceSearch/:userid" element={<AmbulanceSearch />} /> */}
@@ -82,6 +95,7 @@ export function App() {
         <Route path="/BookDoctor/" element={<BookDoctor />} />
         <Route path="/BookAmbulance/" element={<BookAmbulance />} />
         <Route path="/BookCheckup/" element={<BookCheckup />} />
+        <Route path="/chatbox/" element={<Chatbox />} />
       </Routes>
     </BrowserRouter>
   );

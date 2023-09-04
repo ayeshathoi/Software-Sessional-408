@@ -95,6 +95,9 @@ function Appointments() {
                   <p className="text-sm text-gray-500">
                     Time: {appointment.time}
                   </p>
+                  <p className="text-sm text-gray-500">
+                   Hospital : {appointment.hospital_name}
+                  </p>
                   
                 </div>
               </li>

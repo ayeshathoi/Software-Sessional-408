@@ -20,6 +20,7 @@ import ReviewsPatient from './ReviewList';
 import PatientTests from './AllTest';
 import AddTest from './Add_Test';
 
+
 function HospitalHome() {
   const { userid } = useParams();
   const [employees, setEmployees] = useState([]); // Combine both doctors and nurses into a single array
@@ -178,7 +179,6 @@ function HospitalHome() {
         {value === 2 && (
           <div className="mt-24">
             <PatientRequests />
-            {/* Add content related to health check */}
           </div>
         )}
         {value === 3 && (
@@ -196,6 +196,7 @@ function HospitalHome() {
             <AddTest />
           </div>
         )}
+
 
         <div>
           {' '}

@@ -25,6 +25,8 @@ import BookCheckup from './pages/Booking/BookCheckup';
 import BookAmbulance from './pages/Booking/BookAmbulance';
 import CheckupSearch from './pages/search/checkupSearch';
 import AvailableEmployee from './pages/hospitalPages/employee';
+import Chatbox from './pages/chatbox';
+import AssignNurse from './pages/hospitalPages/Assign_Nurse';
 
 export function App() {
   return (
@@ -69,6 +71,7 @@ export function App() {
           path="/hospitalHome/:userid/AvailableEmployee/"
           element={<AvailableEmployee />}
         />
+        <Route path="/hospitalHome/:userid/:bookingID" element={<AssignNurse />} />
 
         {/* <Route path="/doctorSearch/:userid" element={<DoctorSearch />} />
         <Route path="/AmbulanceSearch/:userid" element={<AmbulanceSearch />} /> */}
@@ -87,6 +90,7 @@ export function App() {
         <Route path="/BookDoctor/" element={<BookDoctor />} />
         <Route path="/BookAmbulance/" element={<BookAmbulance />} />
         <Route path="/BookCheckup/" element={<BookCheckup />} />
+        <Route path="/chatbox/" element={<Chatbox />} />
       </Routes>
     </BrowserRouter>
   );

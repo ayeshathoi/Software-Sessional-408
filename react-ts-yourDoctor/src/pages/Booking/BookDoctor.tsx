@@ -74,7 +74,7 @@ function BookDoctor() {
   }, [doctorId]);
 
   const filteredTimetable = timetable.filter((item) => {
-    if (selectedWeekday === null) return true;
+    if (selectedWeekday === null) return false;
     return (
       item.weekday.toLowerCase() === selectedWeekday.toLowerCase() &&
       item.hospital_name === hospitalName
@@ -129,16 +129,23 @@ function BookDoctor() {
         weekday: selectedWeekday,
       };
 
-      console.log("hello", dataToSend);
-
+      console.log("frontend Request", dataToSend);
+      var status = true;
       await axios
         .post(`http://localhost:3000/booking/${userId}/appointment`, dataToSend)
         .then((res) => {
+          console.log("Backend Response", res);
+          if (res.data == 'This serial is already booked.') {
+            alert('Slot is already booked. try another slot');
+            status = false;
+            console.log("status",status);
+
+          }
         });
     } catch (err) {
       console.log(err);
     }
-    navigate(`/userHome/${userId}/`);
+    if (status == true) navigate(`/userHome/${userId}/`);
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -249,7 +256,7 @@ function BookDoctor() {
                     ))}
                   </Select>
                 </div>
-                <label className="text-sm text-gray-300">Meeting type</label>
+                <label className="text-sm text-gray-300">Hospital Name</label>
                 <div className="mb-8">
                   <RadioGroup
                     row
@@ -257,11 +264,6 @@ function BookDoctor() {
                     value={formData.hospital_name}
                     onChange={handleChange}
                   >
-                    <FormControlLabel
-                      value="Online"
-                      control={<Radio />}
-                      label="Online"
-                    />
                     <FormControlLabel
                       value={hospitalName}
                       control={<Radio />}

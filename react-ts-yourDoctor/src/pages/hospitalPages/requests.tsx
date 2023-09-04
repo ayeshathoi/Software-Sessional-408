@@ -1,8 +1,9 @@
 // page for hospital home and verify employee
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { Grid, Paper, Typography, Button, Container } from '@mui/material';
 import axios from 'axios';
+import AssignNurse from './Assign_Nurse';
 
 interface Requests {
   booking_id: number;
@@ -30,6 +31,7 @@ function PatientRequests() {
       });
   }, [userid]);
 
+
   return (
     <div className="mt-40 ml-40 mr-20 mb-20">
       <Container>
@@ -47,7 +49,7 @@ function PatientRequests() {
                       Patient Name
                     </th>
                     <th className="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                      Date 
+                      Date
                     </th>
                     <th className="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                       Time
@@ -76,13 +78,13 @@ function PatientRequests() {
                         {request.time}
                       </td>
                       <td className="px-6 py-4 whitespace-no-wrap">
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          onClick={() => handleUpdateStatus(request.time)}
+                        <Link
+                          to={`/hospitalHome/${userid}/${request.booking_id}`}
                         >
-                          Pending
-                        </Button>
+                          <Button variant="contained" color="primary">
+                            Assign Nurse
+                          </Button>
+                        </Link>
                       </td>
                     </tr>
                   ))}

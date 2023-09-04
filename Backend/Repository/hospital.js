@@ -153,17 +153,28 @@ const update_employee_hospital = async (email, hospital_id) => {
 //------------------------------------------------------------------------
 
 //------------------assign nurse to test------------------//
-const findtest_id = "SELECT testid FROM test WHERE testname = $1 AND hospital_id = $2"
-const assign_nurse = "INSERT INTO nurse_test (test_id, nurse_id) VALUES ($1, $2)"
 const update_appointment_status = "UPDATE booking SET booking_status = 'approved' , nurse_id =$1 WHERE booking_id = $2"
-
-//used email to search the nurse
+const booking_find = "SELECT * FROM booking WHERE booking_id = $1"
+const check_nurse = "Select * from booking where nurse_id = $1 AND time = $2 AND date = $3"
 const assign_nurse_to_test = async (nurse_email, booking_id) => {
     try {
         const client = await getConnection.connect();
         const nurse = await client.query(find_id,[nurse_email]);
         const nurse_id = nurse.rows[0].uid;
+        const booking = await client.query(booking_find,[booking_id]);
+        const time = booking.rows[0].time;
+        const date = booking.rows[0].date;
+        const check = await client.query(check_nurse,[nurse_id,time,date]);
+        if(check.rows.length > 0){
+            return "Nurse is booked in this slot";
+        }
+
+
+        //check 3 hr age piche kina onno booking er sathe
+        
+
         const result2 = await client.query(update_appointment_status, [nurse_id,booking_id]);
+        return "nurse is successfully assigned";
         client.release();
         
     }
@@ -339,6 +350,42 @@ const remove_employee_hospital = async (email, hospital_id) => {
 }
 
 
+const oneBooking = "SELECT * FROM booking b " +
+"WHERE b.hospital_id = $1 AND b.booking_id = $2 AND b.nurse_id IS NULL"
+const booking_tests = "SELECT * FROM booking_tests WHERE booking_id = $1";
+const testsDetails = "SELECT * FROM test WHERE testid = $1";
+const booking_one = async (hospital_id, booking_id) => {
+    try {
+        const client = await getConnection.connect();
+        const result = await client.query(oneBooking, [hospital_id,booking_id]);
+        const tests = await client.query(booking_tests, [booking_id]);
+        
+        for (let i = 0; i < tests.rows.length; i++) {
+            const test = await client.query(testsDetails, [tests.rows[i].test_id]);
+            tests.rows[i].testname = test.rows[0].testname;
+            tests.rows[i].price = test.rows[0].price;
+            //console.log(tests.rows[i]);
+        }
+
+        result.rows[0].tests = tests.rows;
+
+       
+
+        for (let i = 0; i < result.rows.length; i++) {
+            const patient_name = await client.query(patient_name_search, [result.rows[i].patient_id]);
+            
+            result.rows[i].patient_name = patient_name.rows[0].uname;
+        }
+        client.release();
+        return result.rows;
+    }
+    catch (error) {
+        console.error('Error fetching data:', error.message);
+        throw error;
+    }
+}
+
+
 
 
 module.exports = {
@@ -356,5 +403,6 @@ module.exports = {
     pendingDoctor,
     pendingNurse,
     showtest,
-    remove_employee_hospital
+    remove_employee_hospital,
+    booking_one
 }

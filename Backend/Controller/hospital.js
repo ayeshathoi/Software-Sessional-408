@@ -106,6 +106,19 @@ const all_booking = async (req, res) => {
     }
 }
 
+//const one booking
+const one_booking = async (req, res) => {
+    const hospital_id = req.params.hid;
+    const booking_id = req.params.bookId;
+    try {
+        const result = await user.booking_one(hospital_id,booking_id);
+        res.status(http_status.OK).json({ result });
+    } catch (error) {
+        console.error('Error getting complaint:', error.message);
+        res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while getting complaint.' });
+    }
+}
+
 
 
 
@@ -115,7 +128,12 @@ const assign_nurse = async (req, res) => {
     const booking_id = req.body.booking_id;
     try {
         const result = await user.assign_nurse_to_test(nurse_email, booking_id);
-        res.status(http_status.OK).json({ result });
+        if(result == "Nurse is booked in this slot")
+        {
+            res.send("Nurse is booked in this slot");
+        }
+        else
+            res.send("nurse is successfully assigned");
     } catch (error) {
         console.error('Error assigning nurse:', error.message);
         res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while assigning nurse.' });
@@ -126,7 +144,6 @@ const assign_nurse = async (req, res) => {
 const update_employee = async (req, res) => {
     const hospital_id = req.params.hid;
     const email = req.body.email;
-    console.log("eemmmmaaaaaill",email, hospital_id);
     try
     {
         const result = await user.update_employee_hospital(email, hospital_id);
@@ -222,6 +239,7 @@ module.exports = {
     getpending_Doctor,
     getpending_Nurse,
     show_all_test,
-    remove_employee
+    remove_employee,
+    one_booking
 }
 

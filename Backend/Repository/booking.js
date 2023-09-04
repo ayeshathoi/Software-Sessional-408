@@ -32,6 +32,10 @@ const onlineAppointments = "INSERT INTO " + constant.TABLE_BOOKING + " ("
                 + constant.TABLE_BOOKING_DOCTOR_ID + ") "
                 + "VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)";
 
+
+const check_serial = "select * from booking where doctor_id = $1 and date = $2 and time = $3 and hospital_id = $4";
+const hospital_id = "select * hospital_id from hospital where hospital_name = $1"
+
 const appointmentBooking = async (type,day,price,time,date,payment_method,payment_status,patient_mobile,patient_id,doctor_id,hospital_name) => {
     
     try {
@@ -53,6 +57,16 @@ const appointmentBooking = async (type,day,price,time,date,payment_method,paymen
                 }
             }
         }
+
+        var res_string = "This serial is already booked.";
+
+        const hospital_id = await user.findhid(hospital_name);
+        const result2 = await client.query(check_serial, [doctor_id,date,time,hospital_id[0].hospital_id]);
+        if(result2.rows.length > 0)
+        {
+                return res_string;
+        }
+
 
         if(hospital_name !=null){
             const hid = await user.findhid(hospital_name);

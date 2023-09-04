@@ -90,113 +90,6 @@ Content-Type: application/json
     "testname" : "CBC-Ray",
     "price":500
 }
-#### show complaint
-GET http://localhost:3000/hospital/complaint/2
-
-### driver -  patient list
-GET http://localhost:3000/driver/7
-
-
-### driver-getProfile
-GET http://localhost:3000/driver/profile/7
-
-
-### driver - edit profileambulance
-PUT http://localhost:3000/driver/editProfile/7
-Content-Type: application/json
-
-{
-    "hospital": "DMC",
-    "mobile_no": "0176654789"
-}
-#### nurse patient list
-GET http://localhost:3000/nurse/6
-
-###
-
-### nurse - getProfile
-GET http://localhost:3000/nurse/profile/6
-
-###
-
-
-#### nurse - edit profile
-PUT http://localhost:3000/nurse/editProfile/6
-Content-Type: application/json
-
-{
-    "designation": "Senior Nurse",
-    "hospital": "DMC",
-    "mobile_no": "01700000000"
-}
-
-
-
-#### doctor speciality search
-POST http://localhost:3000/patient/speciality/1
-Content-Type: application/json
-
-{
-    "speciality": "Heart Specialist"
-}
-#### doctor name search
-POST http://localhost:3000/patient/name/1
-Content-Type: application/json
-
-{
-    "name": "JohnDoe"
-}
-
-#### patient appoinment list
-//inperson
-GET http://localhost:3000/patient/appointment/inperson/2
-#####
-GET http://localhost:3000/patient/appointment/online/2
-//zoom
-###
-### patient ambulance list
-GET http://localhost:3000/patient/ambulance/4
-### patient checkup list
-GET http://localhost:3000/patient/checkup/4
-################
-POST http://localhost:3000/patient/hospital/testnames
-Content-Type: application/json
-
-{
-    "name" : "DMC"
-}
-
-#######
-
-### patient getProfile
-GET http://localhost:3000/patient/profile/2
-
-#####
-
-####### patient edit profile
-
-POST http://localhost:3000/patient/2
-Content-Type: application/json
-
-{
-    "street" : "C-3/2",
-    "thana" : "Palashi",
-    "city" : "Dhaka",
-    "district" : "Rajhshahi",
-    "mobile_no" : "0153230000"
-}
-
-
-########## rating and complaint dite parbo
-POST http://localhost:3000/review/2
-Content-Type: application/json
-
-{
-    "rating" : 5,
-    "complaint_text" : "NICE"
-}
-
-
 
 
 #####
@@ -445,6 +338,9 @@ Content-Type: application/json
     "booking_id" : 1
 }
 
+###
+GET http://localhost:3000/hospital/onebooking/1/16
+###
 
 
 ####
@@ -453,4 +349,8 @@ GET http://localhost:3000/doctor/timeline/36
 
 
 GET http://localhost:3000/hospital/test/1
+###
+
+
+GET http://localhost:3000/patient/appointment/17
 ###

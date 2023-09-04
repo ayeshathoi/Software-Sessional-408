@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, FormEvent, useEffect } from 'react';
+import { useState, ChangeEvent, FormEvent, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import Box from '@mui/material/Box';
@@ -17,24 +17,30 @@ function Chatbox() {
     message: '',
     booking_id: bookingId,
   });
+  const sender_id = userId;
 
-  const [comments, setComments] = useState([]); // State to store previous comments
-
-  // const navigate = useNavigate();
+  const [comments, setComments] = useState([]);
+  const chatContainerRef = useRef<HTMLDivElement | null>(null);
+  const scrollToBottom = () => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
+    }
+  };
 
   useEffect(() => {
-    // Fetch previous comments for booking ID 2
     axios
       .post(`http://localhost:3000/comment/get/${userId}`, {
         booking_id: bookingId,
       })
       .then((res) => {
-        setComments(res.data.result); // Store comments in state
+        setComments(res.data.result);
+        scrollToBottom(); // Scroll to the bottom when comments load
       })
       .catch((err) => {
         console.log(err);
       });
-  }, [userId, bookingId]); // Empty dependency array to fetch comments when the component mounts
+  }, [userId, bookingId]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -44,19 +50,19 @@ function Chatbox() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      // Add a new comment for booking ID 2
-      await axios
-        .post(`http://localhost:3000/comment/add/${userId}`, formData)
-        .then((res) => {
-          console.log('Comment added successfully:', res.data);
-
-          // Clear the comment input field
-        });
+      await axios.post(`http://localhost:3000/comment/add/${userId}`, formData);
+      setFormData({ ...formData, message: '' }); // Clear the input field after sending
     } catch (err) {
       console.log(err);
     }
   };
-  console.log('Serial No: ', serialNumber);
+
+  // Scroll to the bottom of the chat container
+
+  useEffect(() => {
+    scrollToBottom(); // Scroll to the bottom when new messages arrive
+  }, [comments]);
+  console.log('userId', userId);
 
   return (
     <>
@@ -70,35 +76,59 @@ function Chatbox() {
         <hr className="line-below-text my-4 border-t-2 border-red-300" />
       </div>
 
-      <div className="flex px-20 pt-10">
-        <div className="w-full rounded-md rounded-lg bg-gray-200 px-3 py-2 ">
-          <div className="mb-8 mt-4">
-            <p className="text-sm font-bold text-indigo-500">Comments:</p>
-            <ul>
-              {comments.map((comment, index) => (
-                <li key={index}>{comment.message}</li>
-              ))}
-            </ul>
+      <div
+        className="flex px-20 pt-10"
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'flex-start',
+          height: '60vh',
+          overflowY: 'scroll',
+        }}
+        ref={chatContainerRef}
+      >
+        {comments.map((comment, index) => (
+          <div
+            key={index}
+            className={`mb-4 ${
+              comment.sender_id === userId ? 'text-right' : 'text-left'
+            }`}
+          >
+            <span
+              style={{
+                backgroundColor:
+                  comment.sender_id === userId ? '#007bff' : '#f0f0f0',
+                color: comment.sender_id === userId ? '#fff' : '#333',
+                borderRadius: '5px',
+                padding: '5px 10px',
+                display: 'inline-block',
+                maxWidth: '70%',
+              }}
+            >
+              {comment.message} (Sender ID: {comment.sender_id})
+            </span>
           </div>
-          <form onSubmit={handleSubmit}>
-            <div className="mb-8 mt-4">
-              <TextField
-                type="text"
-                id="message"
-                name="message"
-                placeholder="Add a new comment"
-                value={formData.message}
-                onChange={handleChange}
-                required
-                className="w-full rounded-md rounded-lg"
-              />
-            </div>
-            <button type="submit" className="btn btn-primary">
-              Add Comment
-            </button>
-          </form>
-        </div>
+        ))}
       </div>
+
+      <form
+        onSubmit={handleSubmit}
+        style={{ display: 'flex', marginTop: '10px' }}
+      >
+        <TextField
+          type="text"
+          id="message"
+          name="message"
+          placeholder="Type a message"
+          value={formData.message}
+          onChange={handleChange}
+          required
+          className="w-full rounded-md rounded-lg"
+        />
+        <button type="submit" className="btn btn-primary">
+          Send
+        </button>
+      </form>
 
       <div className="mt-16">
         <Footer />

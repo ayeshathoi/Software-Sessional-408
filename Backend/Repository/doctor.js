@@ -5,14 +5,13 @@ const user = require("./user")
 
 
 const patientList = "SELECT u." + constant.TABLE_USER_USERNAME + " , b." + constant.TABLE_BOOKING_PATIENT_MOBILE + ", b." +constant.TABLE_BOOKING_TOTAL_PRICE
-                    + " , b." + constant.TABLE_BOOKING_TIME + " ,b." + constant.TABLE_BOOKING_DATE + ", h.hospital_name " +
+                    + " , b." + constant.TABLE_BOOKING_TIME + " ,b." + constant.TABLE_BOOKING_DATE + ", h.hospital_name " + ", b.booking_id " + ", b.appointment_serial " +
                     "FROM booking b " +
                     "JOIN doctor d ON b.doctor_id = d.doctor_id " +
                     "JOIN doctor_hospital dh ON dh.doctor_id = dh.doctor_id " +
                     "JOIN hospital h ON h.hospital_id = dh.hospital_id " +
                     "JOIN users u ON b.patient_id = u.uid " +
                     "WHERE b.doctor_id = $1 AND h.hospital_name = $2"
-
 
 const patientListDetails_doctor = async (did , hospital_name) => {
     try {

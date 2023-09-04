@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const doctorController = require('../Controller/doctor');
-// const multer = require('multer'); // Import multer for handling file uploads
-// const upload = multer(); // Create a multer instance
+
 
 
 router.get('/details/:id', doctorController.getDoctorDetails);
@@ -11,6 +10,7 @@ router.post('/update-profile/:doctor_id', doctorController.updateDoctorProfile);
 router.post('/addschedule/:id', doctorController.addSchedule);
 router.get('/profile/:id', doctorController.getProfile);
 router.get('/timeline/:id', doctorController.getTimeline);
-//router.post('/addPrescription', upload.single('prescription_pdf'), doctorController.addPrescription);
+router.post('/addPrescription/:booking_id', doctorController.addPrescription);
+
 
 module.exports = router;

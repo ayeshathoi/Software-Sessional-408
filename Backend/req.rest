@@ -300,13 +300,16 @@ Content-Type: application/json
 ]
 }
 ####
-# POST http://localhost:3000/doctor/addPrescription
-# Content-Type: multipart/form-data
 
-# pid=123
-# doctor_id=456
-# prescription_pdf=@./prescription.pdf
+POST http://localhost:3000/doctor/addPrescription/2
+Content-Type: application/json
 
+{
+    "disease": "Some disease",
+    "tests": "Some tests",
+    "suggestions": "Some suggestions",
+    "medicine": "Some medicine"
+}
 
 
 #####

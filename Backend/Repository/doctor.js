@@ -96,25 +96,27 @@ const ADD_SCHEDULE = async (doctor_id,timeline) => {
     }
 } 
 
+// Add a prescription query
+
+const addPrescriptionQuery = `
+    INSERT INTO prescription (booking_id, disease, tests, suggestions, medicine)
+    VALUES ($1, $2, $3, $4, $5)
+    RETURNING prescription_id
+`;
 
 
-// prescription details
+const addPrescriptionDetails = async (booking_id, disease, tests, suggestions, medicine) => {
+    try {
+        const client = await getConnection.connect();
+        const result = await client.query(addPrescriptionQuery, [booking_id, disease, tests, suggestions, medicine]);
+        client.release();
+        return result.rows[0].prescription_id;
+    } catch (error) {
+        console.error('Error inserting prescription details:', error.message);
+        throw error;
+    }
+};
 
-// const addPrescription = `INSERT INTO prescription (doctor_id, patient_id, prescription_date, prescription_pdf)
-//   VALUES ($1, $2, $3, $4)
-// `;
-// const addPrescriptionDetails = async (doctor_id, pid, prescription_date, prescription_pdf) => {
-//     try {
-//       const client = await getConnection.connect();
-//       const result = await client.query(addPrescription, [doctor_id, pid, prescription_date, prescription_pdf]);
-//       client.release();
-//       return result;
-//     } catch (error) {
-//       console.error('Error inserting prescription details:', error.message);
-//       throw error;
-//     }
-//   };
-  
 
 
 //EDIT Profile
@@ -253,7 +255,7 @@ const getTimelineDetails = async (doctor_id) => {
 
 module.exports = {
     patientListDetails_doctor,
-    //addPrescriptionDetails,   
+    addPrescriptionDetails,
     getDoctorProfile,
     updateDoctorProfile,
     ADD_SCHEDULE,

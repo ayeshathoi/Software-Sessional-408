@@ -28,26 +28,6 @@ const addSchedule = async (req, res) => {
     
 };
 
-// const addPrescription = async (req, res) => {
-//     const { pid, doctor_id } = req.body;
-
-//     try {
-//         if (!req.file) {
-//             return res.status(http_status.BAD_REQUEST).json({ error: 'Prescription PDF file is required.' });
-//         }
-
-//         const prescription_pdf = fs.readFileSync(req.file.path);
-
-//         const result = await user.addPrescription(pid, doctor_id, prescription_pdf);
-
-//         fs.unlinkSync(req.file.path);
-
-//         res.send(result);
-//     } catch (error) {
-//         console.error('Error adding prescription:', error.message);
-//         res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while adding prescription.' });
-//     }
-// };
 
 
 // Controller function to update a doctor's profile
@@ -107,13 +87,25 @@ const getTimeline = async (req, res) => {
     }
 };
 
+const addPrescription = async (req, res) => {
+    const { booking_id } = req.params; // Extract booking_id from URL params
+    const { disease, tests, suggestions, medicine } = req.body;
+
+    try {
+        const prescriptionId = await user.addPrescriptionDetails(booking_id, disease, tests, suggestions, medicine);
+        res.status(http_status.CREATED).json({ prescription_id: prescriptionId });
+    } catch (error) {
+        console.error('Error adding prescription:', error.message);
+        res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while adding the prescription.' });
+    }
+};
 
 
 module.exports = {
     getPatient_List,
     getProfile,
     updateDoctorProfile,
-    //addPrescription,
+    addPrescription,
     addSchedule,
     getDoctorDetails,
     getTimeline

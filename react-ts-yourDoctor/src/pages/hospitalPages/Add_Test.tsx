@@ -22,8 +22,9 @@ function AddTest() {
       await axios
         .post(`http://localhost:3000/hospital/addtest/${userid}`, formData)
         .then((res) => {
-          console.log(res.data);
+          alert('Test Added Successfully');
           navigate(`/hospitalHome/${userid}`);
+          // navigate korte homepage er ekta generic page e pathaite hobe
         });
     } catch (err) {
       console.log(err);

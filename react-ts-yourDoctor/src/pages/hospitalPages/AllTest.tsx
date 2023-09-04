@@ -1,6 +1,6 @@
 // page for hospital home and verify employee
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Grid, Paper, Button, Typography, Container } from '@mui/material';
 import axios from 'axios';
 
@@ -14,6 +14,8 @@ interface Tests {
 function PatientTests() {
   const { userid } = useParams();
   const [alltests, setTests] = useState([]);
+  const navigate = useNavigate();
+
   useEffect(() => {
     // Make the HTTP GET tests to the backend API
     axios
@@ -27,14 +29,17 @@ function PatientTests() {
       });
   }, [userid]);
 
-  const handleUpdateStatus = async (testid: number) => {
-    const data = { testid };
+  const deleteTest = async (testid: number) => {
     try {
-      console.log('here is the email', data, userid);
+
+      const data = {
+        test_id: testid
+      }
       await axios
-        .post(`http://localhost:3000/hospital/update/test/${userid}`, data)
+        .post(`http://localhost:3000/hospital/test/delete/${userid}/${testid}`,data)
         .then((res) => {
-          console.log('here is the form', res.data);
+          alert('Test Deleted Successfully');
+          navigate(`/hospitalHome/${userid}`);
         });
     } catch (err) {
       console.log(err);
@@ -62,7 +67,10 @@ function PatientTests() {
                     </th>
 
                     <th className="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                      Want to Edit?
+                      Edit Test Price
+                    </th>
+                    <th className="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                      Delete Test
                     </th>
                   </tr>
                 </thead>
@@ -80,12 +88,21 @@ function PatientTests() {
                         </Typography>
                       </td>
                       <td className="px-6 py-4 whitespace-no-wrap">
+                        <Link
+                          to={`/hospitalHome/${userid}/EditTest/${tests.testid}`}
+                        >
+                          <Button variant="contained" color="primary">
+                            Edit Price
+                          </Button>
+                        </Link>
+                      </td>
+                      <td className="px-6 py-4 whitespace-no-wrap">
                         <Button
                           variant="contained"
-                          color="primary"
-                          onClick={() => handleUpdateStatus(tests.testid)}
+                          color="error"
+                          onClick={() => confirm('Are you sure?') && deleteTest(tests.testid)}
                         >
-                          Edit Test Price /  Delete option
+                          Delete
                         </Button>
                       </td>
                     </tr>

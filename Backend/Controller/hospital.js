@@ -58,7 +58,7 @@ const addTEST = async (req, res) => {
     const testname = req.body.testname;
     const price = req.body.price;
     const hospital_id = req.params.hid;
-    console.log(testname, price, hospital_id);
+    // console.log(testname, price, hospital_id);
     try {
         const result = await user.addtest(testname, price, hospital_id);
         res.status(http_status.OK).json({add : "added test"});
@@ -79,6 +79,19 @@ const update_price = async (req, res) => {
     } catch (error) {
         console.error('Error updating price:', error.message);
         res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while updating price.' });
+    }
+}
+
+
+const deleteTESTQuery = async (req, res) => {
+    const test_id = req.body.test_id;
+    const hospital_id = req.params.hid;
+    try {
+        const result = await user.deleteTEST(test_id, hospital_id);
+        res.status(http_status.OK).json({delete : "deleted test"});
+    } catch (error) {
+        console.error('Error deleting test:', error.message);
+        res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while deleting test.' });
     }
 }
 
@@ -215,6 +228,19 @@ const show_all_test = async (req, res) => {
     }
 }
 
+const show_one_test = async (req, res) => {
+    const hospital_id = req.params.hid;
+    const test_id = req.params.tid;
+  
+    try {
+        const result = await user.onetest(test_id);
+        res.send(result);
+    } catch (error) {
+        console.error('Error getting request list:', error.message);
+        res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while getting request list.' });
+    }
+}
+
 
 
 
@@ -240,6 +266,8 @@ module.exports = {
     getpending_Nurse,
     show_all_test,
     remove_employee,
-    one_booking
+    one_booking,
+    show_one_test,
+    deleteTESTQuery
 }
 

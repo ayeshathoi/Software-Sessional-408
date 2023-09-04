@@ -27,6 +27,7 @@ import CheckupSearch from './pages/search/checkupSearch';
 import AvailableEmployee from './pages/hospitalPages/employee';
 import Chatbox from './pages/chatbox';
 import AssignNurse from './pages/hospitalPages/Assign_Nurse';
+import EditTest from './pages/hospitalPages/Edit_test';
 
 export function App() {
   return (
@@ -71,7 +72,11 @@ export function App() {
           path="/hospitalHome/:userid/AvailableEmployee/"
           element={<AvailableEmployee />}
         />
-        <Route path="/hospitalHome/:userid/:bookingID" element={<AssignNurse />} />
+        <Route
+          path="/hospitalHome/:userid/:bookingID"
+          element={<AssignNurse />}
+        />
+        <Route path="/hospitalHome/:userid/EditTest/:testID" element={<EditTest />} />
 
         {/* <Route path="/doctorSearch/:userid" element={<DoctorSearch />} />
         <Route path="/AmbulanceSearch/:userid" element={<AmbulanceSearch />} /> */}

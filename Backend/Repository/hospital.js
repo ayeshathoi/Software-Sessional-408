@@ -109,6 +109,23 @@ const updateTESTPrice = async (testname, price, hospital_id) => {
     }
 }
 
+const delete_test = "DELETE FROM test WHERE testid = $1 AND hospital_id = $2"
+
+const deleteTEST = async (testid, hospital_id) => {
+    try {
+        const client = await getConnection.connect();
+        const result = await client.query(delete_test, [testid, hospital_id]);
+        client.release();
+        return result.rows;
+    }
+    catch (error) {
+        console.error('Error deleting data:', error.message);
+        throw error;
+    }
+}
+
+
+
 // update employee status of doctor/nurse/driver
 const find_id = "SELECT uid,user_type FROM users WHERE " + constant.TABLE_USER_EMAIL + "= $1"
 const fetchDoctorIdsQuery = "SELECT doctor_id FROM doctor_hospital WHERE hospital_id = $1 AND doctor_id = $2";
@@ -171,7 +188,7 @@ const assign_nurse_to_test = async (nurse_email, booking_id) => {
 
 
         //check 3 hr age piche kina onno booking er sathe
-        
+
 
         const result2 = await client.query(update_appointment_status, [nurse_id,booking_id]);
         return "nurse is successfully assigned";
@@ -386,6 +403,20 @@ const booking_one = async (hospital_id, booking_id) => {
 }
 
 
+const onetest = async (test_id) => {
+    try {
+        const client = await getConnection.connect();
+        const result = await client.query(testsDetails, [test_id]);
+        client.release();
+        return result.rows;
+    }
+    catch (error) {
+        console.error('Error fetching data:', error.message);
+        throw error;
+    }
+}
+
+
 
 
 module.exports = {
@@ -404,5 +435,7 @@ module.exports = {
     pendingNurse,
     showtest,
     remove_employee_hospital,
-    booking_one
+    booking_one,
+    onetest,
+    deleteTEST
 }

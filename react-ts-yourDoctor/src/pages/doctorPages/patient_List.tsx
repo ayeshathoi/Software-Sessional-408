@@ -1,7 +1,8 @@
 /* eslint-disable react/no-array-index-key */
 import { SetStateAction, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams,useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { Button } from '@mui/material';
 
 interface PatientDetails {
   time: string;
@@ -9,9 +10,15 @@ interface PatientDetails {
   uname: string;
   patient_mobile: string;
   total_price: number;
+  appointment_serial: number;
+  hospital_name: string;
+  booking_id: number;
+}
+interface PatientArrayProps {
+  selectedHospital: string | null;
 }
 
-function PatientArray() {
+function PatientArray({ selectedHospital }: PatientArrayProps) {
   const [selectedSection, setSelectedSection] = useState('upcoming');
   const [patients, setpatients] = useState<PatientDetails[]>([]);
 
@@ -19,20 +26,24 @@ function PatientArray() {
     setSelectedSection(section);
   };
   const { userid } = useParams();
+  const navigate = useNavigate();
+  console.log('newhospital ', selectedHospital);
 
   useEffect(() => {
-    const hospitalName = 'DMC'; // Replace with the actual hospital name
-    const requestBody = { hospital_name: hospitalName };
+    if (selectedHospital) {
+      // const hospitalName = 'DMC'; // Replace with the actual hospital name
+      const requestBody = { hospital_name: selectedHospital };
 
-    axios
-      .post(`http://localhost:3000/doctor/patientlist/${userid}`, requestBody)
-      .then((response) => {
-        setpatients(response.data);
-      })
-      .catch((error) => {
-        console.error('Error posting checkup:', error);
-      });
-  }, [userid]);
+      axios
+        .post(`http://localhost:3000/doctor/patientlist/${userid}`, requestBody)
+        .then((response) => {
+          setpatients(response.data);
+        })
+        .catch((error) => {
+          console.error('Error posting checkup:', error);
+        });
+    }
+  }, [userid, selectedHospital]);
 
   const currentDate = new Date().toISOString();
 
@@ -86,6 +97,12 @@ function PatientArray() {
                   <p className="text-gray-600">
                     mobile no. : {patient.patient_mobile}
                   </p>
+                  <p className="text-gray-600">
+                    Serial:{patient.appointment_serial}
+                  </p>
+                  <p className="text-gray-600">
+                    Hospital:{patient.hospital_name}
+                  </p>
                   <hr />
                 </div>
                 <div className="text-right">
@@ -98,6 +115,22 @@ function PatientArray() {
                   <p className="text-sm text-gray-500">
                     Total Price: {patient.total_price}
                   </p>
+                  <Button
+                    variant="contained"
+                    color="inherit"
+                    onClick={() =>
+                      navigate('/Chatbox', {
+                        state: {
+                          receiverName: patient.uname,
+                          bookingId: patient.booking_id,
+                          userId: userid,
+                          serialNumber: patient.appointment_serial,
+                        },
+                      })
+                    }
+                  >
+                    Chat
+                  </Button>
                 </div>
               </li>
             ))}
@@ -108,3 +141,4 @@ function PatientArray() {
   );
 }
 export default PatientArray;
+

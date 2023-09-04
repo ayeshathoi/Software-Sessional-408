@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
@@ -30,11 +31,9 @@ function DoctorHome() {
 
   const [value, setValue] = useState<number>(0);
   const { userid } = useParams();
-  const handleChange = (_event: React.ChangeEvent<{}>, newValue: number) => {
-    setValue(newValue);
-  };
 
   const [hospitals, setHospitals] = useState<string[]>([]);
+  const [selectedHospital, setSelectedHospital] = useState<string | null>(null);
 
   useEffect(() => {
     axios
@@ -56,6 +55,16 @@ function DoctorHome() {
         console.error('userprofile not found', error);
       });
   }, [userid]);
+  const handleChange = (
+    _event: React.ChangeEvent<object>,
+    newValue: number
+  ) => {
+    const selectedhospital = hospitals[newValue];
+    setSelectedHospital(selectedhospital);
+    setValue(newValue);
+
+    console.log(selectedHospital);
+  };
 
   return (
     <>
@@ -101,22 +110,50 @@ function DoctorHome() {
           </Paper>
         </div>
 
-      <Box flexGrow={3} className="p-8">
-        {value === 0 && (
-          <div>
-            <img
-              src={patient}
-              alt="Checkup"
-              className="w-48 h-48 rounded-full mx-auto mb-4"
-            />
-            <h2 className="text-xl font-semibold text-center mb-4">
-              Patient List
-            </h2>
-            <PatientArray />
-            {/* Add content related to appointments */}
-          </div>
-        )}
-      </Box>
+        <Box flexGrow={3} className="p-8">
+          {value === 0 && (
+            <div>
+              <img
+                src={patient}
+                alt="Checkup"
+                className="w-48 h-48 rounded-full mx-auto mb-4"
+              />
+              <h2 className="text-xl font-semibold text-center mb-4">
+                Patient List
+              </h2>
+              <PatientArray selectedHospital={hospitals[value]} />
+              {/* Add content related to appointments */}
+            </div>
+          )}
+          {value === 1 && (
+            <div>
+              <img
+                src={patient}
+                alt="Checkup"
+                className="w-48 h-48 rounded-full mx-auto mb-4"
+              />
+              <h2 className="text-xl font-semibold text-center mb-4">
+                Patient List
+              </h2>
+              <PatientArray selectedHospital={hospitals[value]} />
+              {/* Add content related to appointments */}
+            </div>
+          )}
+          {value === 2 && (
+            <div>
+              <img
+                src={patient}
+                alt="Checkup"
+                className="w-48 h-48 rounded-full mx-auto mb-4"
+              />
+              <h2 className="text-xl font-semibold text-center mb-4">
+                Patient List
+              </h2>
+              <PatientArray selectedHospital={hospitals[value]} />
+              {/* Add content related to appointments */}
+            </div>
+          )}
+        </Box>
       </div>
 
       <div className="mt-16">
@@ -127,3 +164,4 @@ function DoctorHome() {
 }
 
 export default DoctorHome;
+

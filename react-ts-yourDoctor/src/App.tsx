@@ -13,7 +13,7 @@ import DriverProfileUpdate from './pages/updateProfile/driverUpdateProfile';
 import DoctorProfileUpdate from './pages/updateProfile/doctorUpdateProfile';
 import PatientProfileUpdate from './pages/updateProfile/patientUpdateProfile';
 import DoctorHome from './pages/doctorPages/doctorHome';
-import PatientPrescription from './pages/doctorPages/prescriptionSubmission';
+import Prescription from './pages/doctorPages/prescriptionSubmission';
 import NurseHome from './pages/nursePages/nurseHome';
 import DriverHome from './pages/driverPages/driverHome';
 import UserHome from './pages/userPages/userHome';
@@ -28,6 +28,7 @@ import AvailableEmployee from './pages/hospitalPages/employee';
 import Chatbox from './pages/chatbox';
 import AssignNurse from './pages/hospitalPages/Assign_Nurse';
 import EditTest from './pages/hospitalPages/Edit_test';
+
 
 export function App() {
   return (
@@ -49,10 +50,10 @@ export function App() {
         <Route path="/doctorHome/:userid" element={<DoctorHome />} />
         <Route path="/nurseHome/:userid" element={<NurseHome />} />
         <Route path="/driverHome/:userid" element={<DriverHome />} />
-        {/* <Route
-          path="/doctorHome/:userid/PatientPrescription/"
-          element={<PatientPrescription />}
-        /> */}
+        {<Route
+          path="/doctorHome/:userid/prescriptionSubmission/"
+          element={<Prescription />}
+        /> }
         <Route
           path="/userHome/:userid/PatientProfileUpdate/"
           element={<PatientProfileUpdate />}
@@ -96,6 +97,7 @@ export function App() {
         <Route path="/BookAmbulance/" element={<BookAmbulance />} />
         <Route path="/BookCheckup/" element={<BookCheckup />} />
         <Route path="/chatbox/" element={<Chatbox />} />
+        <Route path="/Prescription/" element={<Prescription />} />
       </Routes>
     </BrowserRouter>
   );

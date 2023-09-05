@@ -25,9 +25,9 @@ import BookCheckup from './pages/Booking/BookCheckup';
 import BookAmbulance from './pages/Booking/BookAmbulance';
 import CheckupSearch from './pages/search/checkupSearch';
 import AvailableEmployee from './pages/hospitalPages/employee';
-import Chatbox from './pages/chatbox';
 import AssignNurse from './pages/hospitalPages/Assign_Nurse';
 import EditTest from './pages/hospitalPages/Edit_test';
+import Chatbox from './pages/chatBox/chatBox';
 
 export function App() {
   return (

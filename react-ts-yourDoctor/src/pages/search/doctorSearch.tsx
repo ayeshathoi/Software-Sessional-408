@@ -35,8 +35,8 @@ function DoctorSearch() {
   const navigate = useNavigate();
   const [count, setCount] = useState<number>(0);
   const [sortBy, setSortBy] = useState<string>(''); // State to store sorting option
-  const [selectedQualification, setSelectedQualification] = useState<string>('');
-
+  const [selectedQualification, setSelectedQualification] =
+    useState<string>('');
 
   useEffect(() => {
     // Make the HTTP GET request to the backend API
@@ -84,11 +84,12 @@ function DoctorSearch() {
     return uniqueSpecialtiesArray;
   };
 
-  const filteredDoctors = user.filter((doctor) =>
-  doctor.speciality.toLowerCase().includes(searchTerm.toLowerCase()) &&
-  (selectedQualification === '' || doctor.qualification === selectedQualification)
-);
-
+  const filteredDoctors = user.filter(
+    (doctor) =>
+      doctor.speciality.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      (selectedQualification === '' ||
+        doctor.qualification === selectedQualification)
+  );
 
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSortBy(e.target.value);
@@ -141,24 +142,24 @@ function DoctorSearch() {
             </div>
             <div className="side-nav-item">
               <label className="flex items-center text-sm">
-              <input
-                type="checkbox"
-                className="form-checkbox h-5 w-5 text-gray-600 mr-2"
-                onChange={(e) => setSelectedQualification(e.target.value)}
+                <input
+                  type="checkbox"
+                  className="form-checkbox h-5 w-5 text-gray-600 mr-2"
+                  onChange={(e) => setSelectedQualification(e.target.value)}
                 />
                 Qualification
                 <select
-                name="qualification"
-                id="qualification"
-                className="ml-2 px-2 py-1 bg-white border border-gray-300 rounded-md"
-                value={selectedQualification} // Add this line
-                onChange={(e) => setSelectedQualification(e.target.value)} // Add this line
+                  name="qualification"
+                  id="qualification"
+                  className="ml-2 px-2 py-1 bg-white border border-gray-300 rounded-md"
+                  value={selectedQualification} // Add this line
+                  onChange={(e) => setSelectedQualification(e.target.value)} // Add this line
                 >
-                <option value="">Select</option>
-                <option value="MBBS">MBBS</option>
-                <option value="MS">MS</option>
-                <option value="MCH">MCH</option>
-                <option value="DM">DM</option>
+                  <option value="">Select</option>
+                  <option value="MBBS">MBBS</option>
+                  <option value="MS">MS</option>
+                  <option value="MCH">MCH</option>
+                  <option value="DM">DM</option>
                 </select>
               </label>
               <label className="flex items-center text-sm mt-4">

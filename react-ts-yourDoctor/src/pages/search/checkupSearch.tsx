@@ -1,6 +1,4 @@
-/* eslint-disable react/no-array-index-key */
-/* eslint-disable jsx-a11y/label-has-associated-control */
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {
@@ -34,15 +32,15 @@ function CheckupSearch() {
   const [selectedSearchCriteria, setSelectedSearchCriteria] = useState<
     'hospital' | 'test'
   >('test');
+  const [sortingOrder, setSortingOrder] = useState<'PriceLowToHigh' | 'PriceHighToLow'>('PriceLowToHigh'); // Default sorting order
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     // Make the HTTP GET request to the backend API
     axios
       .get(`http://localhost:3000/patient/testall`)
-      // api call
       .then((response) => {
-        setuserData(response.data); // Set the fetched data to the state
+        setuserData(response.data);
         console.log(response.data.length);
         setCount(response.data.length);
       })
@@ -78,11 +76,13 @@ function CheckupSearch() {
 
     return uniqueTestsArray;
   };
+
   const filteredtests = user.filter((test) =>
     selectedSearchCriteria === 'test'
       ? test.testname.toLowerCase().includes(searchTerm.toLowerCase())
       : test.hospital_name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
   const handleTestSelection = (testname: string, hospitalName: string) => {
     if (selectedTests.includes(testname)) {
       setSelectedTests(
@@ -97,6 +97,7 @@ function CheckupSearch() {
       }
     }
   };
+
   const calculateCombinedPrice = () => {
     return selectedTests.reduce((totalPrice, testName) => {
       const selectedTest = user.find((test) => test.testname === testName);
@@ -123,6 +124,18 @@ function CheckupSearch() {
     }
   };
 
+  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSortingOrder(e.target.value as 'PriceLowToHigh' | 'PriceHighToLow');
+  };
+
+  const sortedTests = [...filteredtests];
+
+  if (sortingOrder === 'PriceLowToHigh') {
+    sortedTests.sort((a, b) => a.price - b.price);
+  } else if (sortingOrder === 'PriceHighToLow') {
+    sortedTests.sort((a, b) => b.price - a.price);
+  }
+
   return (
     <>
       <div>
@@ -144,7 +157,6 @@ function CheckupSearch() {
           getOptionLabel={(option) => option}
           renderInput={(params) => (
             <TextField
-              // eslint-disable-next-line react/jsx-props-no-spreading
               {...params}
               label="Type the Test name"
               variant="outlined"
@@ -156,17 +168,22 @@ function CheckupSearch() {
         <hr className="line-below-text my-4 border-t-2 border-gray-300" />
 
         <div className="flex justify-end items-center">
-          <div className="text-gray-400 p-2">Sort By </div>
-          <select name="sort" id="sort">
-            <option value="Price Low to High">Visit Low to High</option>
-            <option value="Price High to Low">Visit High to Low</option>
+          <div className="text-gray-400 p-2">Sort By Price</div>
+          <select
+            name="sort"
+            id="sort"
+            value={sortingOrder}
+            onChange={handleSortChange}
+          >
+            <option value="PriceLowToHigh">Price Low to High</option>
+            <option value="PriceHighToLow">Price High to Low</option>
           </select>
         </div>
 
         <div className="flex">
           <div className="flex ml-4">
             <Grid container spacing={3}>
-              {filteredtests.map((test, index) => (
+              {sortedTests.map((test, index) => (
                 <Grid item xs={4} key={index}>
                   <CardMedia
                     component="img"
@@ -184,9 +201,8 @@ function CheckupSearch() {
                     <CardContent>
                       <Typography variant="h6">{test.testname}</Typography>
                       <Typography variant="body2">
-                        testname: {test.hospital_name}
+                        Hospital: {test.hospital_name}
                       </Typography>
-
                       <Typography variant="body2">Fee: {test.price}</Typography>
                     </CardContent>
                   </Card>

@@ -10,7 +10,6 @@ const secretKey = "secretKey";
 
 
 router.post('/register/hospital', async (req, res) => {
-    //hash the password
     const hashedPassword = await bcrypt.hash(req.body.password, await bcrypt.genSalt(10));
     let result;
     result = await createhos.create_hospital(req,res,hashedPassword);
@@ -71,6 +70,7 @@ router.post('/login', async (req, res) => {
                     if(errors.length == 0){
                         const hospital_id=result[0].hospital_id;
                         console.log(hospital_id);
+                     
                         res.send({ uid : hospital_id,type : "hospital", backendCookie : token});
                 
                     }
@@ -91,6 +91,7 @@ router.post('/login', async (req, res) => {
             if(errors.length == 0){
                 const user=userRes[0].user_type;
                 const uid=userRes[0].uid;
+                
                 //change it to nurses,doctors,drivers, patient or add type to user table to store usertype
                 res.send({uid : uid, type : user, backendCookie : token});    
                 }

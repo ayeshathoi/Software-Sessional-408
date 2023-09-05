@@ -1,6 +1,4 @@
-/* eslint-disable react/no-array-index-key */
-/* eslint-disable jsx-a11y/label-has-associated-control */
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {
@@ -35,14 +33,14 @@ function AmbulanceSearch() {
   const { userid } = useParams();
   const navigate = useNavigate();
   const [count, setCount] = useState<number>(0);
+  const [sortBy, setSortBy] = useState<'PriceLowToHigh' | 'PriceHighToLow'>('PriceLowToHigh'); // Default sorting order
 
   useEffect(() => {
     // Make the HTTP GET request to the backend API
     axios
       .get(`http://localhost:3000/patient/ambulanceall`)
-      // api call
       .then((response) => {
-        setuserData(response.data); // Set the fetched data to the state
+        setuserData(response.data);
         setCount(response.data.length);
       })
       .catch((error) => {
@@ -55,24 +53,34 @@ function AmbulanceSearch() {
   };
 
   const getThana = () => {
-    // Create a Set to store unique specialties
     const thanaset = new Set();
 
-    // Iterate through user data and add specialties to the Set
     user.forEach((driver) => {
       if (!thanaset.has(driver.thana)) {
         thanaset.add(driver.thana);
       }
     });
 
-    // Convert the Set back to an array
     const thanasetArray = Array.from(thanaset);
 
     return thanasetArray;
   };
-  const filteredDriver = user.filter((Driver) =>
+
+  const sortedDriver = [...user];
+
+  if (sortBy === 'PriceLowToHigh') {
+    sortedDriver.sort((a, b) => a.ambulance_fare - b.ambulance_fare);
+  } else if (sortBy === 'PriceHighToLow') {
+    sortedDriver.sort((a, b) => b.ambulance_fare - a.ambulance_fare);
+  }
+
+  const filteredDriver = sortedDriver.filter((Driver) =>
     Driver.thana.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSortBy(e.target.value as 'PriceLowToHigh' | 'PriceHighToLow');
+  };
 
   return (
     <>
@@ -82,11 +90,10 @@ function AmbulanceSearch() {
 
       <div className="text-above-line my-10 text-left p-20 ">
         <Autocomplete
-          options={getThana()} // Get unique specialties from user data
+          options={getThana()}
           getOptionLabel={(option) => option}
           renderInput={(params) => (
             <TextField
-              // eslint-disable-next-line react/jsx-props-no-spreading
               {...params}
               label="Search by Thana"
               variant="outlined"
@@ -98,10 +105,16 @@ function AmbulanceSearch() {
         <hr className="line-below-text my-4 border-t-2 border-gray-300" />
 
         <div className="flex justify-end items-center">
-          <div className="text-gray-400 p-2">Sort By </div>
-          <select name="sort" id="sort">
-            <option value="Price Low to High">Fare Low to High</option>
-            <option value="Price High to Low">Fare High to Low</option>
+          <div className="text-gray-400 p-2">Sort By Price</div>
+          <select
+            name="sort"
+            id="sort"
+            value={sortBy}
+            onChange={handleSortChange}
+          >
+            <option value="">Select</option>
+            <option value="PriceLowToHigh">Price Low to High</option>
+            <option value="PriceHighToLow">Price High to Low</option>
           </select>
         </div>
 

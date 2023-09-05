@@ -22,7 +22,7 @@ const onlineAppointments = async (pid) => {
     }
 };
 
-const all = "SELECT u.uname,b.booking_id, b.time, b.date,d.designation, b.appointment_serial, b.time,h.hospital_name, d.speciality, b.total_price "+
+const all = "SELECT u.uname, b.time, b.date,d.designation, b.appointment_serial, b.time,h.hospital_name, d.speciality, b.total_price "+
                             "FROM booking b " +
                             "JOIN doctor d ON b.doctor_id = d.doctor_id " +
                             "JOIN hospital h ON b.hospital_id = h.hospital_id " +
@@ -111,7 +111,7 @@ const ambulanceDetails = async (pid) => {
 //Doctor Search BY name
 //Doctor Search By Speciality
 
-const DoctorSearchBySpeciality = "SELECT u.uname,u.mobile_no,u.email, d.designation, d.speciality,d.new_patient_fee,t.meeting_type " + 
+const DoctorSearchBySpeciality = "SELECT u.uname,u.mobile_no,u.email,d.qualification, d.designation, d.speciality,d.new_patient_fee,t.meeting_type " + 
                            "FROM doctor d " +
                            "JOIN users u ON d.doctor_id = u.uid " +
                            "JOIN timeline t ON d.doctor_id = t.doctor_id " +
@@ -223,7 +223,7 @@ const update_profile = async (street,thana,city, district,pid,mobile_no) => {
     }
 }
 
-const DoctorList= "SELECT u.uname,u.mobile_no,u.email, d.designation, d.speciality,d.new_patient_fee, d.doctor_id, h.hospital_name " + 
+const DoctorList= "SELECT d.qualification, u.uname,u.mobile_no,u.email, d.designation, d.speciality,d.new_patient_fee, d.doctor_id, h.hospital_name " + 
                   "FROM doctor d " +
                   "JOIN users u ON d.doctor_id = u.uid "+
                   "JOIN doctor_hospital dh ON d.doctor_id = dh.doctor_id " +

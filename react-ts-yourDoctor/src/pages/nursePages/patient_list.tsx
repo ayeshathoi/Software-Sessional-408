@@ -1,7 +1,8 @@
 /* eslint-disable react/no-array-index-key */
 import { SetStateAction, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams,useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { Button } from '@mui/material';
 
 interface Checkup {
   time: string;
@@ -13,6 +14,7 @@ interface Checkup {
 function PatientArray() {
   const [selectedSection, setSelectedSection] = useState('upcoming');
   const [tests, setTests] = useState<Checkup[]>([]);
+  const navigate = useNavigate();
 
   const handleSectionChange = (section: SetStateAction<string>) => {
     setSelectedSection(section);
@@ -91,6 +93,21 @@ function PatientArray() {
                   <p className="text-sm text-gray-500">
                     Time: {test.time.split('T')[0]}
                   </p>
+                  <Button
+                    variant="contained"
+                    color="inherit"
+                    onClick={() =>
+                      navigate('/Chatbox', {
+                        state: {
+                          receiverName: test.uname,
+                          bookingId: test.booking_id,
+                          userId: userid,
+                        },
+                      })
+                    }
+                  >
+                    Chat
+                  </Button>
                 </div>
               </li>
             ))}

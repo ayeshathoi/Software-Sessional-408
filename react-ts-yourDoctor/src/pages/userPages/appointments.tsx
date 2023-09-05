@@ -1,28 +1,12 @@
 /* eslint-disable react/no-array-index-key */
 import { SetStateAction, useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams,useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Button } from '@mui/material';
 
-interface Appointment {
-  uname: string;
-  mobile_no: string;
-  email: string;
-  speciality: string;
-  designation: string;
-  new_patient_fee: number;
-  hospital_name: string;
-  doctor_id: number;
-  appointment_serial: number;
-  total_price: number;
-  date: string;
-  time: string;
-  booking_id: number;
-}
-
 function Appointments() {
   const [selectedSection, setSelectedSection] = useState('upcoming');
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [appointments, setAppointments] = useState([]);
 
   const handleSectionChange = (section: SetStateAction<string>) => {
     setSelectedSection(section);
@@ -92,9 +76,6 @@ function Appointments() {
                   <p className="text-lg font-semibold">
                     Name: {appointment.uname}
                   </p>
-                  <p className="text-lg">
-                    Hospial: {appointment.hospital_name}
-                  </p>
                   <p className="text-gray-600">
                     Designation: {appointment.designation}
                   </p>
@@ -115,11 +96,14 @@ function Appointments() {
                   <p className="text-sm text-gray-500">
                     Time: {appointment.time}
                   </p>
+                  <p className="text-sm text-gray-500">
+                    Hospital : {appointment.hospital_name}
+                  </p>
                   <Button
                     variant="contained"
                     color="inherit"
                     onClick={() =>
-                      navigate('/Chatbox', {
+                      navigate('/chatbox', {
                         state: {
                           receiverName: appointment.uname,
                           bookingId: appointment.booking_id,
@@ -141,4 +125,3 @@ function Appointments() {
   );
 }
 export default Appointments;
-

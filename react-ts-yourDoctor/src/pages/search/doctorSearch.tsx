@@ -1,6 +1,6 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {
@@ -20,6 +20,7 @@ interface Doctor {
   uname: string;
   mobile_no: string;
   email: string;
+  qualification: string;
   speciality: string;
   designation: string;
   new_patient_fee: number;
@@ -33,21 +34,34 @@ function DoctorSearch() {
   const { userid } = useParams();
   const navigate = useNavigate();
   const [count, setCount] = useState<number>(0);
+  const [sortBy, setSortBy] = useState<string>(''); // State to store sorting option
+  const [selectedQualification, setSelectedQualification] =
+    useState<string>('');
 
   useEffect(() => {
     // Make the HTTP GET request to the backend API
     axios
       .get(`http://localhost:3000/patient/doctorall`)
-      // api call
       .then((response) => {
         setuserData(response.data); // Set the fetched data to the state
-        console.log(response.data.length);
         setCount(response.data.length);
+        console.log(response.data);
+
+        // Sort the data based on the selected sorting option
+        if (sortBy === 'Price Low to High') {
+          const sortedData = [...response.data];
+          sortedData.sort((a, b) => a.new_patient_fee - b.new_patient_fee);
+          setuserData(sortedData);
+        } else if (sortBy === 'Price High to Low') {
+          const sortedData = [...response.data];
+          sortedData.sort((a, b) => b.new_patient_fee - a.new_patient_fee);
+          setuserData(sortedData);
+        }
       })
       .catch((error) => {
         console.error('Error fetching user profile:', error);
       });
-  }, [userid]);
+  }, [userid, sortBy]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
@@ -69,9 +83,17 @@ function DoctorSearch() {
 
     return uniqueSpecialtiesArray;
   };
-  const filteredDoctors = user.filter((doctor) =>
-    doctor.speciality.toLowerCase().includes(searchTerm.toLowerCase())
+
+  const filteredDoctors = user.filter(
+    (doctor) =>
+      doctor.speciality.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      (selectedQualification === '' ||
+        doctor.qualification === selectedQualification)
   );
+
+  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSortBy(e.target.value);
+  };
 
   return (
     <>
@@ -85,7 +107,6 @@ function DoctorSearch() {
           getOptionLabel={(option) => option}
           renderInput={(params) => (
             <TextField
-              // eslint-disable-next-line react/jsx-props-no-spreading
               {...params}
               label="Type the Speciality"
               variant="outlined"
@@ -98,7 +119,13 @@ function DoctorSearch() {
 
         <div className="flex justify-end items-center">
           <div className="text-gray-400 p-2">Sort By </div>
-          <select name="sort" id="sort">
+          <select
+            name="sort"
+            id="sort"
+            value={sortBy}
+            onChange={handleSortChange}
+          >
+            <option value="">Select</option>
             <option value="Price Low to High">Visit Low to High</option>
             <option value="Price High to Low">Visit High to Low</option>
           </select>
@@ -118,15 +145,18 @@ function DoctorSearch() {
                 <input
                   type="checkbox"
                   className="form-checkbox h-5 w-5 text-gray-600 mr-2"
+                  onChange={(e) => setSelectedQualification(e.target.value)}
                 />
                 Qualification
                 <select
                   name="qualification"
                   id="qualification"
                   className="ml-2 px-2 py-1 bg-white border border-gray-300 rounded-md"
+                  value={selectedQualification} // Add this line
+                  onChange={(e) => setSelectedQualification(e.target.value)} // Add this line
                 >
+                  <option value="">Select</option>
                   <option value="MBBS">MBBS</option>
-                  <option value="MD">MD</option>
                   <option value="MS">MS</option>
                   <option value="MCH">MCH</option>
                   <option value="DM">DM</option>
@@ -157,6 +187,9 @@ function DoctorSearch() {
                       <Typography variant="h6">{doctor.uname}</Typography>
                       <Typography variant="body2">
                         Speciality: {doctor.speciality}
+                      </Typography>
+                      <Typography variant="body2">
+                        Qualification: {doctor.qualification}
                       </Typography>
                       <Typography variant="body2">
                         Designation: {doctor.designation}

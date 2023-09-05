@@ -49,7 +49,7 @@ const allAppointments = async (pid) => {
 
 
 
-const CheckUP = "SELECT a.time,a.date, t.testname, t.price,u.uname FROM booking a " +
+const CheckUP = "SELECT a.booking_id,a.time,a.date, t.testname, t.price,u.uname FROM booking a " +
                 "JOIN nurse_test nt ON a.nurse_id = nt.nurse_id " +
                 "JOIN users u ON nt.nurse_id = u.uid "+
                 "JOIN test t ON t.testID = nt.test_id " + 

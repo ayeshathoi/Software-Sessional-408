@@ -49,12 +49,25 @@ const allAppointments = async (pid) => {
 
 
 
-const CheckUP = "SELECT a.booking_id,a.time,a.date, t.testname, t.price,u.uname FROM booking a " +
-                "JOIN nurse_test nt ON a.nurse_id = nt.nurse_id " +
-                "JOIN users u ON nt.nurse_id = u.uid "+
-                "JOIN test t ON t.testID = nt.test_id " + 
-                "JOIN patient p ON a.patient_id = p.pid "+
-                "WHERE a.patient_id = $1 AND a.type = 'Checkup'";
+// const CheckUP = "SELECT a.booking_id,a.time,a.date, t.testname, t.price, u.uname, a.nurse_id FROM booking a " +
+//                 "JOIN booking_tests bt ON a.booking_id = bt.booking_id " +
+//                 "JOIN test t ON t.testid = bt.test_id " + 
+//                 "JOIN patient p ON a.patient_id = p.pid "+
+//                 "JOIN users u ON p.pid = u.uid "+
+//                 "WHERE a.patient_id = $1 AND a.type = 'Checkup' AND a.nurse_id IS NOT NULL";
+// const nurseName = "SELECT u.uname FROM nurse n " +
+//                     "JOIN users u ON n.nurse_id = u.uid " +
+//                     "WHERE n.nurse_id = $1";
+const CheckUP = `
+  SELECT a.booking_id, a.time, a.date, t.testname, t.price, u.uname AS patient_name, a.nurse_id, 
+         (SELECT u2.uname FROM nurse n2 JOIN users u2 ON n2.nurse_id = u2.uid WHERE n2.nurse_id = a.nurse_id) AS nurse_name
+  FROM booking a
+  JOIN booking_tests bt ON a.booking_id = bt.booking_id
+  JOIN test t ON t.testid = bt.test_id
+  JOIN patient p ON a.patient_id = p.pid
+  JOIN users u ON p.pid = u.uid
+  WHERE a.patient_id = $1 AND a.type = 'Checkup' AND a.nurse_id IS NOT NULL
+`;
 
 const checkUpDetails = async (pid) => {
     try {
@@ -82,6 +95,7 @@ const ambulanceDetails = async (pid) => {
     try {
         const client = await getConnection.connect();
         const result = await client.query(Ambulance, [pid]);
+        
         for (let i = 0; i < result.rows.length; i++) 
         {
             const hospital_id = result.rows[i].hospital_id;
@@ -91,11 +105,13 @@ const ambulanceDetails = async (pid) => {
 
         else {
         const hospital_name = await client.query(hospitalname,[hospital_id]);
-        result.rows[i].hospital = hospital_name.rows[i].hospital_name;
-        result.rows[i].street = hospital_name.rows[i].street;
-        result.rows[i].city = hospital_name.rows[i].city;
-        result.rows[i].thana = hospital_name.rows[i].thana;
-        result.rows[i].district = hospital_name.rows[i].district;
+        if (hospital_name.rows[i]) { // Check if hospital_name.rows[i] exists
+            result.rows[i].hospital = hospital_name.rows[i].hospital_name;
+            result.rows[i].street = hospital_name.rows[i].street;
+            result.rows[i].city = hospital_name.rows[i].city;
+            result.rows[i].thana = hospital_name.rows[i].thana;
+            result.rows[i].district = hospital_name.rows[i].district;
+        }
         }
     }
 

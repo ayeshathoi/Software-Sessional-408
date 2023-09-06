@@ -1,8 +1,11 @@
+/* eslint-disable import/extensions */
 /* eslint-disable react/no-array-index-key */
 import { SetStateAction, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
 import { Button } from '@mui/material';
+import { addNotification } from '@/store/notificationsSlice';
 
 interface Checkup {
   time: string;
@@ -11,6 +14,7 @@ interface Checkup {
   price: number;
   uname: string;
   booking_id: number;
+  nurse_name: string;
 }
 
 function Tests() {
@@ -22,19 +26,30 @@ function Tests() {
     setSelectedSection(section);
   };
   const { userid } = useParams();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     axios
       .get(`http://localhost:3000/patient/checkup/${userid}`)
       .then((response) => {
-        console.log('response.data', response.data);
+        // console.log('response.data', response.data);
+        const currentTest = response.data.length;
+        const previousTest = tests.length;
+
+        // console.log(response.data);
+        if (currentTest > previousTest && previousTest > 0) {
+          console.log('Previous Test:', previousTest);
+          console.log('Current Test:', currentTest);
+
+          dispatch(addNotification({ message: 'New Test added!' }));
+        }
         setTests(response.data);
-        console.log(response.data);
+        // console.log(response.data);
       })
       .catch((error) => {
         console.error('Error fetching Tests:', error);
       });
-  }, [userid]);
+  }, [userid, tests, dispatch]);
 
   const currentDate = new Date().toISOString();
 
@@ -102,7 +117,7 @@ function Tests() {
                     onClick={() =>
                       navigate('/Chatbox', {
                         state: {
-                          receiverName: test.uname,
+                          receiverName: test.nurse_name,
                           bookingId: test.booking_id,
                           userId: userid,
                         },

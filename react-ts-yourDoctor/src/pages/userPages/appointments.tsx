@@ -1,12 +1,26 @@
+/* eslint-disable import/extensions */
 /* eslint-disable react/no-array-index-key */
 import { SetStateAction, useEffect, useState } from 'react';
-import { useParams,useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
 import { Button } from '@mui/material';
+import { addNotification } from '@/store/notificationsSlice';
 
+interface Appointment {
+  time: string;
+  date: string;
+  uname: string;
+  appointment_serial: number;
+  designation: string;
+  speciality: string;
+  total_price: number;
+  hospital_name: string;
+  booking_id: number;
+}
 function Appointments() {
   const [selectedSection, setSelectedSection] = useState('upcoming');
-  const [appointments, setAppointments] = useState([]);
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
 
   const handleSectionChange = (section: SetStateAction<string>) => {
     setSelectedSection(section);
@@ -14,17 +28,31 @@ function Appointments() {
 
   const { userid } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     axios
       .get(`http://localhost:3000/patient/appointment/${userid}`)
       .then((response) => {
+        const currentAppointment = response.data.length;
+        const previousAppointment = appointments.length;
+
+        // console.log(response.data);
+        if (
+          currentAppointment > previousAppointment &&
+          previousAppointment > 0
+        ) {
+          console.log('Previous Appointment:', previousAppointment);
+          console.log('Current Appointment:', currentAppointment);
+
+          dispatch(addNotification({ message: 'New Appointment added!' }));
+        }
         setAppointments(response.data); // Set the fetched appointments to the state
       })
       .catch((error) => {
         console.error('Error fetching appointments:', error);
       });
-  }, [userid]);
+  }, [userid, appointments, dispatch]);
 
   const currentDate = new Date().toISOString();
 

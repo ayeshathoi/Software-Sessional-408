@@ -1,7 +1,11 @@
+/* eslint-disable import/extensions */
 /* eslint-disable react/no-array-index-key */
 import { SetStateAction, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { addNotification } from '@/store/notificationsSlice';
+// import { RootState } from '@/store/store';
 
 interface Ambulance {
   time: string;
@@ -20,23 +24,35 @@ interface Ambulance {
 function Ambulances() {
   const [selectedSection, setSelectedSection] = useState('upcoming');
   const [ambulances, setAmbulances] = useState<Ambulance[]>([]);
-
   const handleSectionChange = (section: SetStateAction<string>) => {
     setSelectedSection(section);
   };
+
+  const dispatch = useDispatch();
+  // const notifications = useSelector((state: RootState) => state.notifications);
+
   const { userid } = useParams();
 
   useEffect(() => {
     axios
       .get(`http://localhost:3000/patient/ambulance/${userid}`)
       .then((response) => {
-        setAmbulances(response.data);
+        const currentAmbulances = response.data.length;
+        const previousAmbulances = ambulances.length;
+
         // console.log(response.data);
+        if (currentAmbulances > previousAmbulances && previousAmbulances > 0) {
+          console.log('Previous Ambulances:', previousAmbulances);
+          console.log('Current Ambulances:', currentAmbulances);
+
+          dispatch(addNotification({ message: 'New ambulance added!' }));
+        }
+        setAmbulances(response.data);
       })
       .catch((error) => {
         console.error('Error fetching Ambulances:', error);
       });
-  }, [userid]);
+  }, [userid, ambulances, dispatch]);
 
   const currentDate = new Date().toISOString();
 

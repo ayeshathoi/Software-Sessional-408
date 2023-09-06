@@ -20,7 +20,7 @@ GET http://localhost:3000/hospital/nurse/1
 GET http://localhost:3000/hospital/driver/1
 ####
 
-GET http://localhost:3000/hospital/booking/1
+GET http://localhost:3000/hospital/booking/5
 ###
 GET http://localhost:3000/hospital/pending/doctor/5
 
@@ -370,10 +370,13 @@ GET http://localhost:3000/hospital/test/1
 GET http://localhost:3000/patient/appointment/17
 ###
 
-GET http://localhost:3000/patient/checkup/2
+GET http://localhost:3000/patient/checkup/17
 
 ###
 GET http://localhost:3000/patient/doctorall
 
 ###
 POST http://localhost:3000/doctor/deleteSCHEDULE/25
+
+###
+GET http://localhost:3000/patient/ambulance/17

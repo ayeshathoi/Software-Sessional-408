@@ -1,10 +1,20 @@
+/* eslint-disable import/extensions */
 import { Link, useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import {
+  JSXElementConstructor,
+  Key,
+  ReactElement,
+  ReactNode,
+  ReactPortal,
+  useEffect,
+  useState,
+} from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 import Header from '../navbar/header_user';
 import Footer from '../navbar/footer';
 import User from '@/assets/user.webp';
@@ -14,6 +24,7 @@ import HealthCheckImage from '@/assets/healthcheckhome.jpg';
 import Ambulances from './ambulance';
 import Appointments from './appointments';
 import Tests from './tests';
+import { selectNotifications } from '@/store/notificationsSlice';
 
 function UserHome() {
   const [user, setUser] = useState({
@@ -23,6 +34,9 @@ function UserHome() {
 
   const [value, setValue] = useState<number>(0);
   const { userid } = useParams();
+
+  const notifications = useSelector(selectNotifications);
+
   useEffect(() => {
     axios
       .get(`http://localhost:3000/user/frontend/${userid}`)
@@ -51,6 +65,28 @@ function UserHome() {
     <>
       <div>
         <Header />
+      </div>
+      <div>
+        {notifications.map(
+          (
+            notification: {
+              message:
+                | string
+                | number
+                | boolean
+                | ReactElement<unknown, string | JSXElementConstructor<any>>
+                | Iterable<ReactNode>
+                | ReactPortal
+                | null
+                | undefined;
+            },
+            index: Key | null | undefined
+          ) => (
+            <div key={index} className="notification">
+              {notification.message}
+            </div>
+          )
+        )}
       </div>
       <div className="flex mt-40 ml-24">
         <div className="w-1/4 p-4 bg-green-100 border-r border-gray-300">

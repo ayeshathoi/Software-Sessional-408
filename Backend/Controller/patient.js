@@ -29,6 +29,7 @@ const zoom_Appointments = async (req, res) => {
 const ambulanceDetails = async (req, res) => {
     try {
         const pid = req.params.id;
+        console.log("guygyguy",pid);
         const ambulanceDetails = await user.ambulanceDetails(pid);
         res.send(ambulanceDetails);
     } catch (error) {
@@ -40,7 +41,7 @@ const checkUpDetails = async (req, res) => {
     try {
         const pid = req.params.id;
         const checkUpDetails = await user.checkUpDetails(pid);
-        console.log(checkUpDetails);
+        // console.log(checkUpDetails);
         res.send(checkUpDetails);
     } catch (error) {
         res.status(http_status.BAD_REQUEST).json({ error: 'An error occurred while fetching user details.' });

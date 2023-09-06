@@ -1,8 +1,9 @@
 /* eslint-disable react/no-array-index-key */
 import { SetStateAction, useEffect, useState } from 'react';
-import { useParams,useNavigate } from 'react-router-dom';
+import { useParams,useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { Button } from '@mui/material';
+
 
 interface PatientDetails {
   time: string;
@@ -115,22 +116,53 @@ function PatientArray({ selectedHospital }: PatientArrayProps) {
                   <p className="text-sm text-gray-500">
                     Total Price: {patient.total_price}
                   </p>
-                  <Button
-                    variant="contained"
-                    color="inherit"
-                    onClick={() =>
-                      navigate('/Chatbox', {
-                        state: {
-                          receiverName: patient.uname,
-                          bookingId: patient.booking_id,
-                          userId: userid,
-                          serialNumber: patient.appointment_serial,
-                        },
-                      })
-                    }
-                  >
-                    Chat
-                  </Button>
+                  {/* <div>
+                    <Link
+                      to="/prescription"
+                      state={{
+                        receiverName: patient.uname,
+                        bookingId: patient.booking_id,
+                        userId: userid,
+                        serialNumber: patient.appointment_serial,
+                      }}
+                      style={{ color: 'blue' }}
+                    >
+                      Prescription
+                    </Link>
+                  </div> */}
+                  <div>
+                  <p
+                  className='text-blue-500, hover:text-blue-800' 
+                  onClick={() =>
+                        navigate('/Prescription', {
+                          state: {
+                            bookingId: patient.booking_id,
+                          },
+                        })
+                      }
+                      
+                    >
+                      Prescription
+                    </p>
+                  </div>
+                  <div>
+                    <Button
+                      variant="contained"
+                      color="inherit"
+                      onClick={() =>
+                        navigate('/Chatbox', {
+                          state: {
+                            receiverName: patient.uname,
+                            bookingId: patient.booking_id,
+                            userId: userid,
+                            serialNumber: patient.appointment_serial,
+                          },
+                        })
+                      }
+                    >
+                      Chat
+                    </Button>
+                  </div>
                 </div>
               </li>
             ))}

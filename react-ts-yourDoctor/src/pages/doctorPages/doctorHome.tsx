@@ -7,6 +7,7 @@ import Tab from '@mui/material/Tab';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 
+import { Toolbar, Button } from '@mui/material';
 import DoctorImage from '@/assets/doctor.jpg';
 import patient from '@/assets/appointment.jpg';
 import HeaderDoctor from '../navbar/headerdoctor';
@@ -70,6 +71,35 @@ function DoctorHome() {
     <>
       <div>
         <HeaderDoctor />
+        <div className="mt-16 bg-green-100">
+          <Toolbar
+            disableGutters
+            className="flex items-center justify-between ml-24"
+          >
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Link
+                to={`/AddSchedule/${userid}?hospitals=${JSON.stringify(
+                  hospitals
+                )}`}
+                className="ml-2"
+              >
+                <Button variant="contained" color="inherit">
+                  Add Schedule
+                </Button>
+              </Link>
+              <Link
+                to={`/EditHospiatlList/${userid}?hospitals=${JSON.stringify(
+                  hospitals
+                )}`}
+                className="ml-2"
+              >
+                <Button variant="contained" color="inherit">
+                  Edit Schedule
+                </Button>
+              </Link>
+            </Box>
+          </Toolbar>
+        </div>
       </div>
 
       <div className="flex mt-40 ml-24">
@@ -164,4 +194,3 @@ function DoctorHome() {
 }
 
 export default DoctorHome;
-

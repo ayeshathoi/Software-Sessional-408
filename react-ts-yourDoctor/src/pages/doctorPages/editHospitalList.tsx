@@ -56,7 +56,7 @@ function EditHospiatlList() {
       await axios
         .post(`http://localhost:3000/doctor/deleteSCHEDULE/${timeline_id}`)
         .then(() => {
-          alert('Test Deleted Successfully');
+          alert('Schedule Deleted Successfully');
           navigate(`/doctorHome/${userid}`);
         });
     } catch (err) {

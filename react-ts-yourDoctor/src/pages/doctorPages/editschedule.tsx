@@ -1,10 +1,41 @@
+/* eslint-disable react/no-array-index-key */
 import { useState, ChangeEvent, FormEvent, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { TextField, Button, Typography, Paper } from '@mui/material';
+import {
+  TextField,
+  Button,
+  Typography,
+  Paper,
+  Select,
+  MenuItem,
+} from '@mui/material';
 import { color } from 'framer-motion';
 import HeaderDoctor from '../navbar/headerdoctor';
 import Footer from '../navbar/footer';
+
+const generateTimeOptions = () => {
+  const options = [];
+  // eslint-disable-next-line no-plusplus
+  for (let hour = 0; hour < 24; hour++) {
+    for (let minute = 0; minute < 60; minute += 15) {
+      const hh = hour.toString().padStart(2, '0');
+      const mm = minute.toString().padStart(2, '0');
+      options.push(`${hh}:${mm}:00`);
+    }
+  }
+  return options;
+};
+
+const weekdays = [
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+  'Sunday',
+];
 
 interface FormData {
   weekday: string;
@@ -85,7 +116,7 @@ function EditSchedule() {
           >
             {/* Form fields for updating timeline data */}
             <div className="flex justify-between mt-4">
-              <TextField
+              {/* <TextField
                 label="Weekday"
                 name="weekday"
                 type="text"
@@ -96,7 +127,24 @@ function EditSchedule() {
                 variant="outlined"
                 required
                 fullWidth
-              />
+              /> */}
+              <Select
+                label="Weekday"
+                name="weekday"
+                value={formData.weekday}
+                onChange={(e) =>
+                  setFormData({ ...formData, weekday: e.target.value })
+                }
+                variant="outlined"
+                required
+                fullWidth
+              >
+                {weekdays.map((day, dayIndex) => (
+                  <MenuItem key={dayIndex} value={day}>
+                    {day}
+                  </MenuItem>
+                ))}
+              </Select>
             </div>
             <div className="flex justify-between mt-4">
               <TextField
@@ -116,7 +164,7 @@ function EditSchedule() {
               />
             </div>
             <div className="flex justify-between mt-4">
-              <TextField
+              {/* <TextField
                 label="Start Time"
                 name="start_time"
                 value={formData.start_time}
@@ -126,10 +174,27 @@ function EditSchedule() {
                 variant="outlined"
                 required
                 fullWidth
-              />
+              /> */}
+              <Select
+                label="Start Time"
+                name="start_time"
+                value={formData.start_time}
+                onChange={(e) =>
+                  setFormData({ ...formData, start_time: e.target.value })
+                }
+                variant="outlined"
+                required
+                fullWidth
+              >
+                {generateTimeOptions().map((timeOption, timeIndex) => (
+                  <MenuItem key={timeIndex} value={timeOption}>
+                    {timeOption}
+                  </MenuItem>
+                ))}
+              </Select>
             </div>
             <div className="flex justify-between mt-4">
-              <TextField
+              <Select
                 label="End Time"
                 name="end_time"
                 value={formData.end_time}
@@ -139,7 +204,13 @@ function EditSchedule() {
                 variant="outlined"
                 required
                 fullWidth
-              />
+              >
+                {generateTimeOptions().map((timeOption, timeIndex) => (
+                  <MenuItem key={timeIndex} value={timeOption}>
+                    {timeOption}
+                  </MenuItem>
+                ))}
+              </Select>
             </div>
 
             {/* Submit button */}

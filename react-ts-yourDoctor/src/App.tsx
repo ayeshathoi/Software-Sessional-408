@@ -13,7 +13,7 @@ import DriverProfileUpdate from './pages/updateProfile/driverUpdateProfile';
 import DoctorProfileUpdate from './pages/updateProfile/doctorUpdateProfile';
 import PatientProfileUpdate from './pages/updateProfile/patientUpdateProfile';
 import DoctorHome from './pages/doctorPages/doctorHome';
-import PatientPrescription from './pages/doctorPages/prescriptionSubmission';
+// import PatientPrescription from './pages/doctorPages/prescriptionSubmission';
 import NurseHome from './pages/nursePages/nurseHome';
 import DriverHome from './pages/driverPages/driverHome';
 import UserHome from './pages/userPages/userHome';
@@ -28,6 +28,7 @@ import AvailableEmployee from './pages/hospitalPages/employee';
 import AssignNurse from './pages/hospitalPages/Assign_Nurse';
 import EditTest from './pages/hospitalPages/Edit_test';
 import Chatbox from './pages/chatBox/chatBox';
+import AddSchedule from './pages/doctorPages/addschedule';
 
 export function App() {
   return (
@@ -76,7 +77,10 @@ export function App() {
           path="/hospitalHome/:userid/:bookingID"
           element={<AssignNurse />}
         />
-        <Route path="/hospitalHome/:userid/EditTest/:testID" element={<EditTest />} />
+        <Route
+          path="/hospitalHome/:userid/EditTest/:testID"
+          element={<EditTest />}
+        />
 
         {/* <Route path="/doctorSearch/:userid" element={<DoctorSearch />} />
         <Route path="/AmbulanceSearch/:userid" element={<AmbulanceSearch />} /> */}
@@ -96,6 +100,7 @@ export function App() {
         <Route path="/BookAmbulance/" element={<BookAmbulance />} />
         <Route path="/BookCheckup/" element={<BookCheckup />} />
         <Route path="/chatbox/" element={<Chatbox />} />
+        <Route path="/AddSchedule/:userid" element={<AddSchedule />} />
       </Routes>
     </BrowserRouter>
   );

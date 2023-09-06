@@ -129,17 +129,16 @@ function BookDoctor() {
         weekday: selectedWeekday,
       };
 
-      console.log("frontend Request", dataToSend);
+      console.log('frontend Request', dataToSend);
       var status = true;
       await axios
         .post(`http://localhost:3000/booking/${userId}/appointment`, dataToSend)
         .then((res) => {
-          console.log("Backend Response", res);
-          if (res.data == 'This serial is already booked.') {
+          console.log('Backend Response', res);
+          if (res.data === 'This serial is already booked.') {
             alert('Slot is already booked. try another slot');
             status = false;
-            console.log("status",status);
-
+            console.log('status', status);
           }
         });
     } catch (err) {

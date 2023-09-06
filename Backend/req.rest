@@ -357,3 +357,8 @@ GET http://localhost:3000/hospital/test/1
 
 GET http://localhost:3000/patient/appointment/17
 ###
+
+GET http://localhost:3000/patient/checkup/2
+
+###
+GET http://localhost:3000/patient/doctorall

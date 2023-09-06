@@ -1,3 +1,6 @@
+/* eslint-disable block-scoped-var */
+/* eslint-disable no-var */
+/* eslint-disable vars-on-top */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, ChangeEvent, FormEvent, useEffect } from 'react';
@@ -144,7 +147,7 @@ function BookDoctor() {
     } catch (err) {
       console.log(err);
     }
-    if (status == true) navigate(`/userHome/${userId}/`);
+    if (status === true) navigate(`/userHome/${userId}/`);
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

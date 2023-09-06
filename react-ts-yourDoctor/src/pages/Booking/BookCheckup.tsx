@@ -3,7 +3,7 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
 import { format } from 'date-fns';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   Button,
   Typography,
@@ -52,6 +52,8 @@ function BookCheckup() {
     test_names: selectedTests,
   });
 
+  const navigate = useNavigate();
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     // Update payment_status based on payment_Method
@@ -90,6 +92,7 @@ function BookCheckup() {
     } catch (err) {
       console.log(err);
     }
+    navigate(`/userHome/${userId}/`);
   };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDateChange = (date: any) => {

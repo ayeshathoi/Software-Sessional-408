@@ -32,29 +32,64 @@ function Ambulances() {
   // const notifications = useSelector((state: RootState) => state.notifications);
 
   const { userid } = useParams();
+  const [, setPreviousCount2] = useState<number>(0);
+  const currentDate = new Date().toISOString();
 
   useEffect(() => {
     axios
       .get(`http://localhost:3000/patient/ambulance/${userid}`)
       .then((response) => {
-        const currentAmbulances = response.data.length;
-        const previousAmbulances = ambulances.length;
+        const currentAmbulances: Ambulance[] = response.data || [];
 
-        // console.log(response.data);
-        if (currentAmbulances > previousAmbulances && previousAmbulances > 0) {
-          console.log('Previous Ambulances:', previousAmbulances);
-          console.log('Current Ambulances:', currentAmbulances);
+        const storedPreviousCount2: number =
+          JSON.parse(localStorage.getItem('previousCount2')) || 0;
+
+        const previousAmbulanceCount = ambulances.filter(
+          (ambulance) => ambulance.date <= currentDate
+        ).length;
+
+        const previousAmbulances: Ambulance[] =
+          JSON.parse(localStorage.getItem('previousAmbulances')) || [];
+
+        console.log('Previous Ambulances:', previousAmbulances.length);
+        console.log('Stored Previous Count:', storedPreviousCount2);
+        console.log('Previous Ambulances:', previousAmbulances.length);
+
+        if (
+          previousAmbulanceCount > storedPreviousCount2 &&
+          storedPreviousCount2 > 0
+        ) {
+          console.log('Previous Ambulance Count:', previousAmbulanceCount);
+          console.log('Stored Previous Count:', storedPreviousCount2);
+          dispatch(addNotification({ message: 'Add Review for Ambulance' }));
+          alert('Add Review for Ambulance');
+        } else if (
+          currentAmbulances.length > previousAmbulances.length &&
+          previousAmbulances.length > 0
+        ) {
+          console.log('Previous Ambulances:', previousAmbulances.length);
+          console.log('Current Ambulances:', currentAmbulances.length);
 
           dispatch(addNotification({ message: 'New ambulance added!' }));
+          alert('New ambulance added!');
         }
-        setAmbulances(response.data);
+
+        localStorage.setItem(
+          'previousAmbulances',
+          JSON.stringify(currentAmbulances)
+        );
+        setPreviousCount2(previousAmbulanceCount);
+        localStorage.setItem(
+          'previousCount2',
+          JSON.stringify(previousAmbulanceCount)
+        );
+
+        setAmbulances(currentAmbulances);
       })
       .catch((error) => {
         console.error('Error fetching Ambulances:', error);
       });
-  }, [userid, ambulances, dispatch]);
-
-  const currentDate = new Date().toISOString();
+  }, [userid, dispatch, ambulances, currentDate]);
 
   const upcomingAmbulances = ambulances.filter(
     (ambulance) => ambulance.date > currentDate

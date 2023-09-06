@@ -77,19 +77,18 @@ function PatientProfileUpdate() {
       <div className="bg-lightpink py-6">
         <Header />
       </div>
-      <div className="flex">
+      <div className="mt-16 pt-16 py-8 px-4 flex justify-center items-center">
         {/* User's Photo, Name, and Number */}
-        <div className="w-1/4 p-6 bg-white shadow-md">
-          <img src={User} alt="User" className="h-40 w-full object-cover" />
+        <div className="w-1/5 p-6 bg-white shadow-md">
+          <img src={User} alt="User" className="w-32 h-32 rounded-full mx-auto" />
           <h2 className="text-xl font-semibold mb-2">{formData.name}</h2>
-          <p className="text-gray-600">{formData.mobile_no}</p>
         </div>
-        <div className="w-3/4 p-6 bg-lightpink">
+        <div className="w-1/2">
           <div className="w-96 p-6 rounded-lg bg-white shadow-md">
             <h1 className="text-2xl font-bold mb-4">Update User Profile</h1>
             <form>
               {/* Street */}
-              <div className="mb-4">
+              <div className="mb-4 mt-4">
                 <div className="flex">
                   <div className="w-1/2 bg-lightblue p-2 rounded-tl rounded-bl">
                     <label className="font-semibold">Street: </label>

@@ -4,7 +4,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Button } from '@mui/material';
 
-
 interface Checkup {
   time: string;
   date: string;
@@ -105,7 +104,7 @@ function Tests() {
                         state: {
                           receiverName: test.uname,
                           bookingId: test.booking_id,
-                          userId: userid
+                          userId: userid,
                         },
                       })
                     }

@@ -3,11 +3,13 @@ import { useState, ChangeEvent, FormEvent } from 'react';
 import Cookies from 'universal-cookie';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Navbar from '../navbar/header';
+import Navbar from '../navbar/headerdoctor';
 import Footer from '../navbar/footer';
 
 const cookies = new Cookies();
 const COOKIE_AGE = 31536000;
+
+
 
 const checkAuth = () => {
   return !(cookies.get('token') === undefined || cookies.get('token') === null);
@@ -16,6 +18,7 @@ const checkAuth = () => {
 const logout = () => {
   cookies.remove('token', { path: '/' });
 };
+
 
 function LogIn() {
   const navigate = useNavigate();
@@ -39,6 +42,7 @@ function LogIn() {
             path: '/',
             maxAge: COOKIE_AGE,
           });
+          console.log('here is the token', res.data.backendCookie);
 
           // const { res.data.type } = res.data; // Replace with actual key
           console.log(res.data);
@@ -83,7 +87,7 @@ function LogIn() {
             className="bg-white shadow-lg rounded px-12 pt-6 pb-8 mb-4"
             onSubmit={handleSubmit}
           >
-            <div className="text-gray-800 text-2xl flex justify-center border-b-2 py-2 mb-4">
+            <div className="text-gray-800 text-2xl flex justify-center border-b-2 py-2 mb-4 text-green-700">
               Log In
             </div>
             <div className="mb-4">
@@ -118,19 +122,13 @@ function LogIn() {
                 />
               </label>
             </div>
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-center">
               <button
-                className="px-4 py-2 rounded text-white inline-block shadow-lg bg-blue-500 hover:bg-blue-600 focus:bg-blue-700"
+                className="px-4 py-2 rounded text-white inline-block shadow-lg bg-green-500 hover:bg-blue-600 focus:bg-blue-700"
                 type="submit"
               >
                 Log In
               </button>
-              <a
-                className="inline-block align-baseline font-normal text-sm text-blue-500 hover:text-blue-800"
-                href="/passwordreset"
-              >
-                Forgotten your Password?
-              </a>
             </div>
           </form>
           <p className="text-center text-gray-500 text-xs">

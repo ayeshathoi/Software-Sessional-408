@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import HeaderCommon from '../navbar/headerCommon';
+import HeaderCommon from '../navbar/headerdoctor';
 import Footer from '../navbar/footer';
 import Nurse from '@/assets/nurse.jpg';
 
@@ -85,14 +85,11 @@ function NurseProfileUpdate() {
       <div className="bg-lightpink py-6">
         <HeaderCommon />
       </div>
-      <div className="flex">
-        {/* Doctor's Photo, Name, and Specialist */}
+      <div className="mt-16 pt-16 py-8 px-4 flex justify-center items-center">
         <div className="w-1/4 p-6 bg-white shadow-md">
-          <img src={Nurse} alt="Doctor" className="h-40 w-full object-cover" />
-          {/* <h2 className="text-xl font-semibold mb-2">{user.name}</h2>
-          <p className="text-gray-600">{formData.speciality}</p> */}
+          <img src={Nurse} alt="Doctor" className="w-32 h-32 rounded-full mx-auto" />
         </div>
-        <div className="w-3/4 p-6 bg-lightpink">
+        <div className="w-1/2">
           <div className="w-96 p-6 rounded-lg bg-white shadow-md">
             <h1 className="text-2xl font-bold mb-4">Update Nurse Profile</h1>
             <form>
@@ -105,7 +102,7 @@ function NurseProfileUpdate() {
               />
               {/* workplace */}
               <ProfileSection
-                label="Workplace"
+                label="Hospital Name"
                 value={formData.hospital}
                 isEditing={isEditing}
                 onChange={handleChange}

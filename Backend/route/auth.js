@@ -2,7 +2,7 @@ const bcrypt= require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const verify = require('../middleware/auth');
 const error = require('../Controller/HTTPStatus');
-const createhos = require('../Controller/user');
+const userController = require('../Controller/user');
 const errors = [];
 
 const router = require('express-promise-router')();
@@ -12,7 +12,7 @@ const secretKey = "secretKey";
 router.post('/register/hospital', async (req, res) => {
     const hashedPassword = await bcrypt.hash(req.body.password, await bcrypt.genSalt(10));
     let result;
-    result = await createhos.create_hospital(req,res,hashedPassword);
+    result = await userController.create_hospital(req,res,hashedPassword);
     
 });
 
@@ -21,33 +21,33 @@ router.post('/register/hospital', async (req, res) => {
 router.post('/register/patient', async (req, res) => {
     const hashedPassword = await bcrypt.hash(req.body.password, await bcrypt.genSalt(10));
     let result;
-    result = await createhos.create_patient(req,res,hashedPassword);
+    result = await userController.create_patient(req,res,hashedPassword);
     
 });
 
 router.post('/register/nurse', async (req, res) => {
     const hashedPassword = await bcrypt.hash(req.body.password, await bcrypt.genSalt(10));
     let result;
-    result = await createhos.create_nurse(req,res,hashedPassword);
+    result = await userController.create_nurse(req,res,hashedPassword);
 });
 
 
 router.post('/register/doctor', async (req, res) => {
     const hashedPassword = await bcrypt.hash(req.body.password, await bcrypt.genSalt(10));
     let result;
-    result = await createhos.create_doctor(req,res,hashedPassword);
+    result = await userController.create_doctor(req,res,hashedPassword);
 });
 
 router.post('/register/driver', async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(req.body.password, await bcrypt.genSalt(10));
     let result;
-    result = await createhos.create_driver(req,res,hashedPassword);
+    result = await userController.create_driver(req,res,hashedPassword);
 });
 
 router.post('/login', async (req, res) => {
-    result = await createhos.getHospitalDetailsByEmail(req,res);
-    userRes = await createhos.getUserDetailsByEmail(req,res);
+    result = await userController.getHospitalDetailsByEmail(req,res);
+    userRes = await userController.getUserDetailsByEmail(req,res);
     if (result.length ==0 && userRes.length == 0){
         console.log('Email not found');
         errors.push("error.email_not_found");

@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { SetStateAction, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import HeaderCommon from '../navbar/headerCommon';
+import HeaderCommon from '../navbar/headerdoctor';
 import Footer from '../navbar/footer';
 import axios from 'axios';
 import Driver from '@/assets/driver.jpg';

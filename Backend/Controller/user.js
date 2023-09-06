@@ -12,9 +12,10 @@ const create_hospital = async (req, res,hashedPassword) => {
     const thana = req.body.thana;
     const city = req.body.city;
     const district = req.body.district;
+    const reg_id = req.body.reg_id;
 
     try {
-        const new_hospital = user.create_hospital(hospital_name, email, pass, mobile, street, thana, city , district);
+        const new_hospital = user.create_hospital(hospital_name,reg_id, email, pass, mobile, street, thana, city , district);
         res.status(http_status.CREATED).json({ created: true });
     } catch (error) {
         console.error(error);
@@ -52,12 +53,11 @@ const create_nurse = async (req, res,hashedPassword) => {
     const dob = req.body.dob;
     const gender = req.body.gender;
     const designation = req.body.designation;
-    const document = null;
-    const doc_content = null;
     const hospital_name = req.body.hospital_name;
+    const nid = req.body.nid;
     try {
        
-        const new_nurse = await user.create_nurse(username,email,pass,mobile,dob,gender,designation,document,doc_content,hospital_name);
+        const new_nurse = await user.create_nurse(username,nid,email,pass,mobile,dob,gender,designation,hospital_name);
         res.status(http_status.CREATED).json({ created: true });
     } catch (error) {
         console.error(error);
@@ -77,20 +77,17 @@ const create_driver = async (req, res,hashedPassword) => {
     const dob = req.body.dob;
     const gender = req.body.gender;
     const type = req.body.type;
-    const document = null;
-    const document_content = null;
     const hospital_name = req.body.hospital_name;
     const fare = req.body.fare;
     const street = req.body.street;
     const thana = req.body.thana;
     const city = req.body.city;
     const district = req.body.district;
+    const nid = req.body.nid;
 
-
-    console.log(hospital_name);
     try {
         const new_driver = await user.create_driver(username,email,pass,mobile,dob,gender,type,fare,
-            document,document_content,hospital_name,street,thana,city,district);
+            hospital_name,street,thana,city,district,nid);
         res.status(http_status.CREATED).json({ created: true });
     } catch (error) {
         console.error(error);
@@ -103,6 +100,7 @@ const create_driver = async (req, res,hashedPassword) => {
 //error handling hoyto dekhte hobe
 const create_doctor = async (req, res,hashedPassword) => {
     const username = req.body.uname;
+    const nid = req.body.nid
     const email = req.body.email;
     const pass = hashedPassword;
     const mobile = req.body.mobile;
@@ -115,12 +113,10 @@ const create_doctor = async (req, res,hashedPassword) => {
     const old_patient_fee = req.body.old_patient_fee;
     const new_patient_fee = req.body.new_patient_fee;
     const { hospital_name } = req.body; 
-    const document = null;
-    const document_content = null;
     try
     {
-        const new_doctor = await user.create_doctor(username,email,pass,mobile,dob,gender,qualification,designation,speciality,zoom_link,
-            old_patient_fee,new_patient_fee,document,document_content,hospital_name);
+        const new_doctor = await user.create_doctor(username,nid,email,pass,mobile,dob,gender,qualification,designation,speciality,zoom_link,
+            old_patient_fee,new_patient_fee,hospital_name);
         res.status(http_status.CREATED).json({ created: true });
     }
     catch(error)

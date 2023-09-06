@@ -82,7 +82,7 @@ const driverSearchByPatientThana = async (uid) => {
 
 const all = "SELECT * FROM " + constant.TABLE_DRIVER ;
 
-const one = "SELECT * FROM " + constant.TABLE_DRIVER + " WHERE " + constant.TABLE_DRIVER_ID + " = $1"
+const one = "SELECT * FROM driver where driver_id = $1";
 
 const driverAll = async () => {
     try {
@@ -117,8 +117,10 @@ const driverAll = async () => {
 
 const onedriver = async (did) => {
     try {
+        console.log(did);
         const client = await getConnection.connect();
         const result = await client.query(one,[did]);
+        console.log(result.rows[0]);
         const hospital_id = result.rows[0].hospital_id;
         const driver = await client.query(userDetail,[result.rows[0].driver_id]);
         result.rows[0].driver_name = driver.rows[0].uname;

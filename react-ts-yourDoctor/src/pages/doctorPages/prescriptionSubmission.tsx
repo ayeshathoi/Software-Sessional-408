@@ -1,121 +1,152 @@
-import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
-import HeaderDoctor from '../navbar/headerdoctor';
-import Footer from '../navbar/footer';
-import DoctorImage from '@/assets/doctor.jpg';
+import React, { useState } from 'react';
+import { useParams, useLocation } from 'react-router-dom';
+import axios from 'axios';
 
-function PatientPrescription() {
-  const [pdfFile, setPdfFile] = useState<File | null>(null);
-  const [doctorName, setDoctorName] = useState('');
-  const [specialization, setSpecialization] = useState('');
-  const [contact, setContact] = useState('');
-  const [patientName, setPatientName] = useState('');
-  const [patientcontact, setpatientContact] = useState('');
+// Define the CSS styles as JavaScript objects
+const styles = {
+  prescriptionContainer: {
+    maxWidth: '400px',
+    margin: '0 auto',
+    padding: '20px',
+    border: '1px solid #ccc',
+    borderRadius: '5px',
+    backgroundColor: '#f7f7f7',
+  },
+  prescriptionHeader: {
+    textAlign: 'center',
+    fontSize: '24px',
+    fontWeight: 'bold',
+    marginBottom: '20px',
+  },
+  formGroup: {
+    marginBottom: '15px',
+  },
+  label: {
+    display: 'block',
+    fontWeight: 'bold',
+  },
+  input: {
+    width: '100%',
+    padding: '10px',
+    border: '1px solid #ccc',
+    borderRadius: '5px',
+  },
+  submitButton: {
+    backgroundColor: '#007bff',
+    color: '#fff',
+    padding: '10px 20px',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    display: 'block',
+    marginTop: '15px',
+  },
+  submitButtonHover: {
+    backgroundColor: '#0056b3',
+  },
+};
 
-  useEffect(() => {
-    // Fetch doctor's name from the database here
-    // For now, let's simulate fetching the name after a delay
-    setTimeout(() => {
-      setDoctorName('Dr. Afsana'); // Simulated fetched name
-    }, 1000);
-    setTimeout(() => {
-      setSpecialization('Cardiologist'); // Simulated fetched name
-    }, 1000);
-    setTimeout(() => {
-      setContact('987-654-3210'); // Simulated fetched name
-    }, 1000);
-    setTimeout(() => {
-      setPatientName('Aksa'); // Simulated fetched name
-    }, 1000);
-    setTimeout(() => {
-      setpatientContact('123-456-7890'); // Simulated fetched name
-    }, 1000);
-  }, []);
+function Prescription() {
 
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files && e.target.files[0];
-    if (file) {
-      setPdfFile(file);
-    }
+  const [formData, setFormData] = useState({
+    disease: '',
+    tests: '',
+    suggestions: '',
+    medicine: '',
+  });
+  const location = useLocation();
+  const {bookingId}=location.state;
+  console.log('bookingId',bookingId);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      const formData = new FormData();
-      formData.append('pdfFile', pdfFile);
 
-      // Replace the following code with your backend API call using Axios or Fetch
-      const response = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
+    // Send a POST request to the backend to create the prescription
+    axios
+      .post(` http://localhost:3000/doctor/addPrescription/${bookingId}`, {
+        disease: formData.disease,
+        tests: formData.tests,
+        suggestions: formData.suggestions,
+        medicine: formData.medicine,
+      })
+      .then((response) => {
+        // Handle success, e.g., show a success message or redirect
+        console.log('Prescription created:', response.data);
+        // You can add code here to handle success, such as showing a success message or redirecting to another page.
+      })
+      .catch((error) => {
+        // Handle error, e.g., show an error message
+        console.error('Error creating prescription:', error);
+        // You can add code here to handle the error, such as showing an error message to the user.
       });
-
-      // Handle the response from the backend (e.g., show success message, redirect, etc.)
-      if (response.ok) {
-        console.log('File uploaded successfully');
-      } else {
-        console.error('File upload failed');
-        // Handle error response from the backend (e.g., show error message, etc.)
-      }
-    } catch (error) {
-      console.error('Error occurred while uploading file:', error);
-      // Handle any network or other errors that may occur during file upload
-    }
   };
 
   return (
-    <>
-      <div>
-        <HeaderDoctor />
-      </div>
-      <div className="flex items-center justify-center bg-gray-100 h-screen">
-        <div className="w-1/4 ml-8">
-          <div className="bg-white p-4 rounded-lg shadow-md">
-            <h2 className="text-lg font-semibold mb-3">Patient Details</h2>
-            <p className="text-xl font-semibold mb-2">{patientName}</p>
-            <p className="text-gray-600">Contact: {patientcontact}</p>
-          </div>
+    <div style={styles.prescriptionContainer}>
+      <h2 style={styles.prescriptionHeader}>Create Prescription</h2>
+      <form onSubmit={handleSubmit}>
+        <div style={styles.formGroup}>
+          <label style={styles.label} htmlFor="disease">
+            Disease:
+          </label>
+          <input
+            style={styles.input}
+            type="text"
+            id="disease"
+            name="disease"
+            value={formData.disease}
+            onChange={handleChange}
+          />
         </div>
-        <div className="w-1/2 ml-8">
-          <div className="bg-white p-4 rounded-lg shadow-md">
-            <h2 className="text-lg font-semibold mb-3">Prescription</h2>
-            <div className="mb-4">
-              <img
-                src={DoctorImage}
-                alt="Doctor"
-                className="w-20 h-20 rounded-full mb-2"
-              />
-              <p className="text-xl font-semibold mb-2">{doctorName}</p>
-              <p className="text-gray-600">Specialist: {specialization}</p>
-              <p className="text-gray-600">Contact: {contact}</p>
-            </div>
-            <div className="bg-white p-4 rounded-md shadow-md">
-              <h3 className="text-lg font-semibold mb-3">
-                Upload Prescription PDF
-              </h3>
-              <form onSubmit={handleSubmit}>
-                <input
-                  type="file"
-                  accept=".pdf"
-                  onChange={handleFileChange}
-                  className="mb-2"
-                />
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-                >
-                  Submit
-                </button>
-              </form>
-            </div>
-          </div>
+        <div style={styles.formGroup}>
+          <label style={styles.label} htmlFor="tests">
+            Tests:
+          </label>
+          <input
+            style={styles.input}
+            type="text"
+            id="tests"
+            name="tests"
+            value={formData.tests}
+            onChange={handleChange}
+          />
         </div>
-      </div>
-      <div className="mt-16">
-        <Footer />
-      </div>
-    </>
+        <div style={styles.formGroup}>
+          <label style={styles.label} htmlFor="suggestions">
+            Suggestions:
+          </label>
+          <textarea
+            style={styles.input}
+            id="suggestions"
+            name="suggestions"
+            value={formData.suggestions}
+            onChange={handleChange}
+          ></textarea>
+        </div>
+        <div style={styles.formGroup}>
+          <label style={styles.label} htmlFor="medicine">
+            Medicine:
+          </label>
+          <textarea
+            style={styles.input}
+            id="medicine"
+            name="medicine"
+            value={formData.medicine}
+            onChange={handleChange}
+          ></textarea>
+        </div>
+        <button type="submit" style={styles.submitButton}>
+          Create Prescription
+        </button>
+      </form>
+    </div>
   );
+  
 }
 
-export default PatientPrescription;
+export default Prescription;

@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 // page for hospital home and verify employee
 import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
@@ -31,12 +32,14 @@ function PatientTests() {
 
   const deleteTest = async (testid: number) => {
     try {
-
       const data = {
-        test_id: testid
-      }
+        test_id: testid,
+      };
       await axios
-        .post(`http://localhost:3000/hospital/test/delete/${userid}/${testid}`,data)
+        .post(
+          `http://localhost:3000/hospital/test/delete/${userid}/${testid}`,
+          data
+        )
         .then((res) => {
           alert('Test Deleted Successfully');
           navigate(`/hospitalHome/${userid}`);
@@ -100,7 +103,9 @@ function PatientTests() {
                         <Button
                           variant="contained"
                           color="error"
-                          onClick={() => confirm('Are you sure?') && deleteTest(tests.testid)}
+                          onClick={() =>
+                            confirm('Are you sure?') && deleteTest(tests.testid)
+                          }
                         >
                           Delete
                         </Button>

@@ -100,6 +100,38 @@ const addPrescription = async (req, res) => {
     }
 };
 
+const updateSchedule = async (req, res) => {
+    try{
+        const timeline_id = req.params.timeline_id;
+        const weekday=req.body.weekday;
+        const slot=req.body.slot;
+        const start_time=req.body.start_time;
+        const end_time=req.body.end_time;
+        
+        console.log(timeline_id,weekday,slot,start_time,end_time)
+    
+        const updated = await user.editSchedule(weekday, slot, start_time, end_time,timeline_id);
+
+        res.status(http_status.OK).json(updated);
+    } catch (error) {
+        console.error('Error updating doctor profile:', error.message);
+        res.status(http_status.BAD_REQUEST).json({ error: 'An error occurred while updating doctor profile.' });
+    }
+};
+
+const deleteSCHEDULE = async (req, res) => {
+    const timeline_id = req.params.timeline_id;
+    console.log(timeline_id)
+    try {
+        const result = await user.deleteSchedule(timeline_id);
+        res.status(http_status.OK).json({delete : "deleted timeline"});
+    } catch (error) {
+        console.error('Error deleting timeline:', error.message);
+        res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while deleting timeline.' });
+    }
+}
+
+
 
 module.exports = {
     getPatient_List,
@@ -108,5 +140,7 @@ module.exports = {
     addPrescription,
     addSchedule,
     getDoctorDetails,
-    getTimeline
+    getTimeline,
+    updateSchedule,
+    deleteSCHEDULE
 }

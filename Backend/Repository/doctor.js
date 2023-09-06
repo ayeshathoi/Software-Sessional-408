@@ -28,8 +28,23 @@ const patientListDetails_doctor = async (did , hospital_name) => {
 // schedule update
 const update_schedule = "UPDATE " + constant.TABLE_DOCTOR_TIMELINE + " SET " + constant.TABLE_DOCTOR_TIMELINE_WEEKDAY + " = $1 , " +
                         constant.TABLE_DOCTOR_TIMELINE_SLOT + " = $2 , " + constant.TABLE_DOCTOR_TIMELINE_START_TIME + " = $3 , " +
-                        constant.TABLE_DOCTOR_TIMELINE_END_TIME + " = $4 , " + constant.TABLE_DOCTOR_TIMELINE_HOSPITAL_ID + " = $5 " +
-                        "WHERE " + constant.TABLE_DOCTOR_TIMELINE_ID + " = $6"
+                        constant.TABLE_DOCTOR_TIMELINE_END_TIME + " = $4 "  +
+                        "WHERE " + constant.TABLE_DOCTOR_TIMELINE_ID + " = $5"
+
+const editSchedule = async (weekday,slot,start_time,end_time,timeline_id) => {
+    try {
+	    const client = await getConnection.connect();
+	    
+        //const result2 = await client.query(updated_user, [mobile_no, doctor_id]);
+        const result = await client.query(update_schedule, [weekday,slot,start_time,end_time,timeline_id]);       
+        
+        client.release();
+        return update_schedule.rowsAffected === 1;
+    } catch (error) {
+        console.error('Error fetching data:', error.message);
+        throw error;
+    }
+};
 
 const add_schedule = `INSERT INTO ${constant.TABLE_DOCTOR_TIMELINE}
 (
@@ -250,6 +265,22 @@ const getTimelineDetails = async (doctor_id) => {
     }
 }
 
+const delete_Schedule = "DELETE FROM timeline WHERE timeline_id = $1";
+
+const deleteSchedule = async (timeline_id) => {
+    try {
+        const client = await getConnection.connect();
+        const result = await client.query(delete_Schedule, [timeline_id]);
+        client.release();
+        return result.rows;
+    }
+    catch (error) {
+        console.error('Error deleting data:', error.message);
+        throw error;
+    }
+}
+
+
 
 module.exports = {
     patientListDetails_doctor,
@@ -258,5 +289,7 @@ module.exports = {
     updateDoctorProfile,
     ADD_SCHEDULE,
     getDoctorDetails,
-    getTimelineDetails
+    getTimelineDetails,
+    editSchedule,
+    deleteSchedule
 }

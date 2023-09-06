@@ -87,6 +87,16 @@ function DoctorHome() {
                   Add Schedule
                 </Button>
               </Link>
+              <Link
+                to={`/EditHospiatlList/${userid}?hospitals=${JSON.stringify(
+                  hospitals
+                )}`}
+                className="ml-2"
+              >
+                <Button variant="contained" color="inherit">
+                  Edit Schedule
+                </Button>
+              </Link>
             </Box>
           </Toolbar>
         </div>

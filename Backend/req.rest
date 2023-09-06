@@ -324,6 +324,18 @@ Content-Type: application/json
     "qualification": "MD,phD",
     "mobile_no": "01711223344"
 }
+
+#####
+POST http://localhost:3000/doctor/update-Schedule/26
+Content-Type: application/json
+
+{
+    "weekday": "Thursday",
+    "slot": 20,
+    "start_time": "08:00:00",
+    "end_time": "12:00:00"
+}
+
 #####
 POST http://localhost:3000/comment/add/2
 Content-Type: application/json
@@ -347,7 +359,7 @@ GET http://localhost:3000/hospital/onebooking/1/16
 
 
 ####
-GET http://localhost:3000/doctor/timeline/36
+GET http://localhost:3000/doctor/timeline/27
 ###
 
 
@@ -362,3 +374,6 @@ GET http://localhost:3000/patient/checkup/2
 
 ###
 GET http://localhost:3000/patient/doctorall
+
+###
+POST http://localhost:3000/doctor/deleteSCHEDULE/25

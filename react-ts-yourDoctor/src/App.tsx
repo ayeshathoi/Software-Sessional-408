@@ -30,6 +30,8 @@ import AssignNurse from './pages/hospitalPages/Assign_Nurse';
 import EditTest from './pages/hospitalPages/Edit_test';
 import Chatbox from './pages/chatBox/chatBox';
 import AddSchedule from './pages/doctorPages/addschedule';
+import EditHospiatlList from './pages/doctorPages/editHospitalList';
+import EditSchedule from './pages/doctorPages/editschedule';
 
 
 export function App() {
@@ -104,6 +106,8 @@ export function App() {
         <Route path="/chatbox/" element={<Chatbox />} />
         <Route path="/AddSchedule/:userid" element={<AddSchedule />} />
         <Route path="/Prescription/" element={<Prescription />} />
+        <Route path='/EditHospiatlList/:userid' element={<EditHospiatlList />} />
+        <Route path='/hospitalHome/:userid/EditSchedule/:timelineId' element={<EditSchedule />} />
       </Routes>
     </BrowserRouter>
   );

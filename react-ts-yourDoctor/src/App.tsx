@@ -33,7 +33,6 @@ import AddSchedule from './pages/doctorPages/addschedule';
 import EditHospiatlList from './pages/doctorPages/editHospitalList';
 import EditSchedule from './pages/doctorPages/editschedule';
 
-
 export function App() {
   return (
     <BrowserRouter>
@@ -54,10 +53,10 @@ export function App() {
         <Route path="/doctorHome/:userid" element={<DoctorHome />} />
         <Route path="/nurseHome/:userid" element={<NurseHome />} />
         <Route path="/driverHome/:userid" element={<DriverHome />} />
-        {<Route
+        <Route
           path="/doctorHome/:userid/prescriptionSubmission/"
           element={<Prescription />}
-        /> }
+        />
         <Route
           path="/userHome/:userid/PatientProfileUpdate/"
           element={<PatientProfileUpdate />}
@@ -106,8 +105,14 @@ export function App() {
         <Route path="/chatbox/" element={<Chatbox />} />
         <Route path="/AddSchedule/:userid" element={<AddSchedule />} />
         <Route path="/Prescription/" element={<Prescription />} />
-        <Route path='/EditHospiatlList/:userid' element={<EditHospiatlList />} />
-        <Route path='/hospitalHome/:userid/EditSchedule/:timelineId' element={<EditSchedule />} />
+        <Route
+          path="/EditHospiatlList/:userid"
+          element={<EditHospiatlList />}
+        />
+        <Route
+          path="/doctorHome/:userid/EditSchedule/:timelineId"
+          element={<EditSchedule />}
+        />
       </Routes>
     </BrowserRouter>
   );

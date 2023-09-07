@@ -28,7 +28,7 @@ function Tests() {
   const { userid } = useParams();
   const dispatch = useDispatch();
 
-  const [, setPreviousCount3] = useState<number>(0);
+  const [, setUpcomingCount3] = useState<number>(0);
   const currentDate = new Date().toISOString();
 
   useEffect(() => {
@@ -37,35 +37,27 @@ function Tests() {
       .then((response) => {
         const currentTests: Checkup[] = response.data || [];
 
-        const storedPreviousCount3: number =
-          JSON.parse(localStorage.getItem('previousCount3')) || 0;
+        const storedUppcomingCount3: number =
+          JSON.parse(localStorage.getItem('upcomingCount3')) || 0;
 
-        const previousTestsCount = tests.filter(
-          (test) => test.date <= currentDate
+        const upcomingTestsCount = tests.filter(
+          (test) => test.date > currentDate
         ).length;
 
         const previousTests: Checkup[] =
           JSON.parse(localStorage.getItem('previousTests')) || [];
 
-        console.log('Previous Tests:', previousTests.length);
-        console.log('Stored Previous Count:', storedPreviousCount3);
-        console.log('Previous Tests:', previousTests.length);
-
         if (
-          previousTestsCount > storedPreviousCount3 &&
-          storedPreviousCount3 > 0
+          currentTests.length > previousTests.length &&
+          previousTests.length > 0 &&
+          upcomingTestsCount === storedUppcomingCount3
         ) {
-          console.log('Previous Test Count:', previousTestsCount);
-          console.log('Stored Previous Count:', storedPreviousCount3);
           dispatch(addNotification({ message: 'Add Review for Test' }));
           alert('Add Review for Test');
         } else if (
           currentTests.length > previousTests.length &&
           previousTests.length > 0
         ) {
-          console.log('Previous Test:', previousTests.length);
-          console.log('Current Test:', currentTests.length);
-
           dispatch(
             addNotification({
               message: 'New Test added!',
@@ -75,10 +67,10 @@ function Tests() {
         }
 
         localStorage.setItem('previousTests', JSON.stringify(currentTests));
-        setPreviousCount3(previousTestsCount);
+        setUpcomingCount3(upcomingTestsCount);
         localStorage.setItem(
-          'previousCount3',
-          JSON.stringify(previousTestsCount)
+          'upcomingCount3',
+          JSON.stringify(upcomingTestsCount)
         );
 
         setTests(response.data);

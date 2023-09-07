@@ -21,7 +21,7 @@ interface Appointment {
 function Appointments() {
   const [selectedSection, setSelectedSection] = useState('upcoming');
   const [appointments, setAppointments] = useState<Appointment[]>([]);
-  const [, setPreviousCount] = useState<number>(0);
+  const [, setUpcomingCount] = useState<number>(0);
 
   const handleSectionChange = (section: SetStateAction<string>) => {
     setSelectedSection(section);
@@ -38,38 +38,27 @@ function Appointments() {
       .then((response) => {
         const currentAppointments: Appointment[] = response.data || [];
 
-        const storedPreviousCount: number =
-          JSON.parse(localStorage.getItem('previousCount')) || 0;
+        const storedUpcomingCount: number =
+          JSON.parse(localStorage.getItem('upcomingCount')) || 0;
 
-        const previousAppointmentsCount = currentAppointments.filter(
-          (appointment) => appointment.date <= currentDate
+        const upcomingAppointmentsCount = currentAppointments.filter(
+          (appointment) => appointment.date > currentDate
         ).length;
 
         const previousAppointments: Appointment[] =
           JSON.parse(localStorage.getItem('previousAppointments')) || [];
 
-        console.log('Previous Appointments Count:', previousAppointmentsCount);
-        console.log('Stored Previous Count:', storedPreviousCount);
-        console.log('Previous Appointments:', previousAppointments.length);
-
         if (
-          previousAppointmentsCount > storedPreviousCount &&
-          storedPreviousCount > 0
+          currentAppointments.length > previousAppointments.length &&
+          previousAppointments.length > 0 &&
+          upcomingAppointmentsCount === storedUpcomingCount
         ) {
-          console.log(
-            'Previous Appointments Count:',
-            previousAppointmentsCount
-          );
-          console.log('Stored Previous Count:', storedPreviousCount);
           dispatch(addNotification({ message: 'Add Review for Appointment' }));
           alert('Add Review for Appointment');
         } else if (
           currentAppointments.length > previousAppointments.length &&
           previousAppointments.length > 0
         ) {
-          console.log('Previous Appointments:', previousAppointments.length);
-          console.log('Current Appointments:', currentAppointments.length);
-
           dispatch(addNotification({ message: 'New Appointment added!' }));
           alert('New Appointment added!');
         }
@@ -79,10 +68,10 @@ function Appointments() {
           JSON.stringify(currentAppointments)
         );
 
-        setPreviousCount(previousAppointmentsCount);
+        setUpcomingCount(upcomingAppointmentsCount);
         localStorage.setItem(
-          'previousCount',
-          JSON.stringify(previousAppointmentsCount)
+          'upcomingCount',
+          JSON.stringify(upcomingAppointmentsCount)
         );
         setAppointments(response.data);
       })
@@ -178,6 +167,15 @@ function Appointments() {
                   >
                     Chat
                   </Button>
+                  {selectedSection === 'previous' && (
+                    <Button
+                      variant="contained"
+                      color="inherit"
+                      // onClick={() => handleAddReview(index)} // Implement the function to add a review
+                    >
+                      Add Review
+                    </Button>
+                  )}
                 </div>
               </li>
             ))}

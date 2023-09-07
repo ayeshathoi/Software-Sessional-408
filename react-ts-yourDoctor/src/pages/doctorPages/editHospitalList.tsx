@@ -153,7 +153,7 @@ function EditHospiatlList() {
                         </td>
                         <td className="px-6 py-4 whitespace-no-wrap">
                           <Link
-                            to={`/hospitalHome/${userid}/EditSchedule/${timeline.timeline_id}?weekday=${timeline.weekday}&hospital_name=${selectedHospital}`}
+                            to={`/doctorHome/${userid}/EditSchedule/${timeline.timeline_id}?weekday=${timeline.weekday}&hospital_name=${selectedHospital}`}
                           >
                             <Button variant="contained" color="primary">
                               Edit

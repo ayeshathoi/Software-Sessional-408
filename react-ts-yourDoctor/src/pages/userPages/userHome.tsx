@@ -10,6 +10,10 @@ import Box from '@mui/material/Box';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { Button } from '@mui/material';
+import NotificationsActiveTwoToneIcon from '@mui/icons-material/NotificationsActiveTwoTone';
+import NotificationsOffIcon from '@mui/icons-material/NotificationsOff';
+import ClearIcon from '@mui/icons-material/Clear';
+import DeleteForeverTwoToneIcon from '@mui/icons-material/DeleteForeverTwoTone';
 import Header from '../navbar/header_user';
 import Footer from '../navbar/footer';
 import User from '@/assets/user.webp';
@@ -135,10 +139,14 @@ function UserHome() {
       <div className="flex ml-24 mt-4">
         <Button
           onClick={handleToggleNotifications} // Toggle notifications when the button is clicked
-          color="success"
+          color="inherit"
           variant="contained"
         >
-          {showNotifications ? 'Hide Notifications' : 'Show Notifications'}
+          {showNotifications ? (
+            <NotificationsOffIcon /> // Render the icon when showNotifications is true
+          ) : (
+            <NotificationsActiveTwoToneIcon /> // Otherwise, show the text
+          )}
         </Button>
         <div className="ml-4">
           <Paper elevation={1}>
@@ -152,7 +160,7 @@ function UserHome() {
                       onClick={() => handleDeleteNotification(index)}
                       className="ml-4 text-red-500 hover:text-red-700"
                     >
-                      X
+                      <ClearIcon />
                     </button>
                   </div>
                 ))}
@@ -166,7 +174,7 @@ function UserHome() {
             color="error"
             variant="outlined"
           >
-            Clear Notifications
+            <DeleteForeverTwoToneIcon />
           </Button>
         </div>
       </div>

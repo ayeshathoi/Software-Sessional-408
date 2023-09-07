@@ -32,7 +32,7 @@ function Ambulances() {
   // const notifications = useSelector((state: RootState) => state.notifications);
 
   const { userid } = useParams();
-  const [, setPreviousCount2] = useState<number>(0);
+  const [, setUpcomingCount2] = useState<number>(0);
   const currentDate = new Date().toISOString();
 
   useEffect(() => {
@@ -41,35 +41,27 @@ function Ambulances() {
       .then((response) => {
         const currentAmbulances: Ambulance[] = response.data || [];
 
-        const storedPreviousCount2: number =
-          JSON.parse(localStorage.getItem('previousCount2')) || 0;
+        const storedUpcomingCount2: number =
+          JSON.parse(localStorage.getItem('upcomingCount2')) || 0;
 
-        const previousAmbulanceCount = ambulances.filter(
-          (ambulance) => ambulance.date <= currentDate
+        const upcomingAmbulanceCount = ambulances.filter(
+          (ambulance) => ambulance.date > currentDate
         ).length;
 
         const previousAmbulances: Ambulance[] =
           JSON.parse(localStorage.getItem('previousAmbulances')) || [];
 
-        console.log('Previous Ambulances:', previousAmbulances.length);
-        console.log('Stored Previous Count:', storedPreviousCount2);
-        console.log('Previous Ambulances:', previousAmbulances.length);
-
         if (
-          previousAmbulanceCount > storedPreviousCount2 &&
-          storedPreviousCount2 > 0
+          currentAmbulances.length > previousAmbulances.length &&
+          previousAmbulances.length > 0 &&
+          upcomingAmbulanceCount === storedUpcomingCount2
         ) {
-          console.log('Previous Ambulance Count:', previousAmbulanceCount);
-          console.log('Stored Previous Count:', storedPreviousCount2);
           dispatch(addNotification({ message: 'Add Review for Ambulance' }));
           alert('Add Review for Ambulance');
         } else if (
           currentAmbulances.length > previousAmbulances.length &&
           previousAmbulances.length > 0
         ) {
-          console.log('Previous Ambulances:', previousAmbulances.length);
-          console.log('Current Ambulances:', currentAmbulances.length);
-
           dispatch(addNotification({ message: 'New ambulance added!' }));
           alert('New ambulance added!');
         }
@@ -78,10 +70,11 @@ function Ambulances() {
           'previousAmbulances',
           JSON.stringify(currentAmbulances)
         );
-        setPreviousCount2(previousAmbulanceCount);
+
+        setUpcomingCount2(upcomingAmbulanceCount);
         localStorage.setItem(
-          'previousCount2',
-          JSON.stringify(previousAmbulanceCount)
+          'upcomingCount2',
+          JSON.stringify(upcomingAmbulanceCount)
         );
 
         setAmbulances(currentAmbulances);

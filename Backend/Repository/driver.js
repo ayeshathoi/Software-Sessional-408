@@ -23,6 +23,8 @@ const patientListDetails_driver = async (drid) => {
     }
 }
 
+
+
 const getDriverProfile = async (driver_id) => {
     try {
         const client = await getConnection.connect();

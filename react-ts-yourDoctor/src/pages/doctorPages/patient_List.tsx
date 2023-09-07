@@ -1,9 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 import { SetStateAction, useEffect, useState } from 'react';
 import { useParams,useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
 import { Button } from '@mui/material';
-
 
 interface PatientDetails {
   time: string;
@@ -18,6 +16,7 @@ interface PatientDetails {
 interface PatientArrayProps {
   selectedHospital: string | null;
 }
+import { doctor_patient_list } from '@/api/apiCalls';
 
 function PatientArray({ selectedHospital }: PatientArrayProps) {
   const [selectedSection, setSelectedSection] = useState('upcoming');
@@ -26,7 +25,6 @@ function PatientArray({ selectedHospital }: PatientArrayProps) {
   const handleSectionChange = (section: SetStateAction<string>) => {
     setSelectedSection(section);
   };
-  const { userid } = useParams();
   const navigate = useNavigate();
   console.log('newhospital ', selectedHospital);
 
@@ -35,16 +33,19 @@ function PatientArray({ selectedHospital }: PatientArrayProps) {
       // const hospitalName = 'DMC'; // Replace with the actual hospital name
       const requestBody = { hospital_name: selectedHospital };
 
-      axios
-        .post(`http://localhost:3000/doctor/patientlist/${userid}`, requestBody)
-        .then((response) => {
-          setpatients(response.data);
-        })
-        .catch((error) => {
-          console.error('Error posting checkup:', error);
-        });
+      // axios
+      //   .post(`http://localhost:3000/doctor/patientlist`, requestBody)
+      doctor_patient_list(requestBody).then((res) => {
+      if(res){
+        setpatients(res);
+      }
+      else 
+      {
+        console.log("No Patients Found");
+      }
     }
-  }, [userid, selectedHospital]);
+    )}
+  }, [selectedHospital]);
 
   const currentDate = new Date().toISOString();
 
@@ -158,7 +159,6 @@ function PatientArray({ selectedHospital }: PatientArrayProps) {
                           state: {
                             receiverName: patient.uname,
                             bookingId: patient.booking_id,
-                            userId: userid,
                             serialNumber: patient.appointment_serial,
                           },
                         })

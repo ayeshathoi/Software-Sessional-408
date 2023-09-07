@@ -1,8 +1,8 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, ChangeEvent, FormEvent, useEffect } from 'react';
-import axios from 'axios';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useParams,useLocation, useNavigate } from 'react-router-dom';
+import { bookDoctor, getTimeline } from '@/api/apiCalls';
 import {
   Autocomplete,
   MenuItem,
@@ -30,11 +30,10 @@ import Footer from '../navbar/footer';
 
 function BookDoctor() {
   const location = useLocation();
-  // const navigate = useNavigate();
-  const { doctorName, doctorId, newPatientFee, hospitalName, userId } =
+
+  const { doctorName, doctorId, newPatientFee, hospitalName} =
     location.state;
 
-  // const { userid } = userId;
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState<{
@@ -63,14 +62,9 @@ function BookDoctor() {
 
   const [selectedWeekday, setSelectedWeekday] = useState(null);
   useEffect(() => {
-    axios
-      .get(`http://localhost:3000/doctor/timeline/${doctorId}`)
-      .then((res) => {
-        setTimetable(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    getTimeline(doctorId).then((ret) => {
+    setTimetable(ret);
+    });
   }, [doctorId]);
 
   const filteredTimetable = timetable.filter((item) => {
@@ -129,23 +123,29 @@ function BookDoctor() {
         weekday: selectedWeekday,
       };
 
-      console.log("frontend Request", dataToSend);
+      console.log('frontend Request', dataToSend);
       var status = true;
-      await axios
-        .post(`http://localhost:3000/booking/${userId}/appointment`, dataToSend)
-        .then((res) => {
-          console.log("Backend Response", res);
-          if (res.data == 'This serial is already booked.') {
-            alert('Slot is already booked. try another slot');
-            status = false;
-            console.log("status",status);
-
-          }
-        });
+      // await axios
+      //   .post(`http://localhost:3000/booking/appointment`, dataToSend)
+      //   .then((res) => {
+      //     console.log('Backend Response', res);
+      //     if (res.data === 'This serial is already booked.') {
+      //       alert('Slot is already booked. try another slot');
+      //       status = false;
+      //       console.log('status', status);
+      //     }
+      //   });
+      const res = await bookDoctor(dataToSend);
+      console.log('Backend Response', res);
+      if (res === 'This serial is already booked.') {
+        alert('Slot is already booked. try another slot');
+        status = false;
+        console.log('status', status);
+      }
     } catch (err) {
       console.log(err);
     }
-    if (status == true) navigate(`/userHome/${userId}/`);
+    if (status == true) navigate(`/userHome`);
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

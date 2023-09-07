@@ -2,17 +2,28 @@ const express = require('express');
 const router = express.Router();
 const doctorController = require('../Controller/doctor');
 
+router.use(async (req,res,next) => {
+    if(req.user && (req.user.user_type == 'doctor' || req.user.user_type == 'patient')){
+        next();
+    }
+    else{
+        //res.status(error.UNAUTHORIZED).json({ error: 'Unauthorized' });
+        res.send("UNAUTHORIZED");
+    }
+});
 
+router.get('/details', doctorController.getDoctorDetails);
+router.post('/patientlist', doctorController.getPatient_List);
+router.post('/update-profile', doctorController.updateDoctorProfile);
+router.post('/addschedule', doctorController.addSchedule);
+router.get('/profile', doctorController.getProfile);
 
-router.get('/details/:id', doctorController.getDoctorDetails);
-router.post('/patientlist/:id', doctorController.getPatient_List);
-router.post('/update-profile/:doctor_id', doctorController.updateDoctorProfile);
-router.post('/addschedule/:id', doctorController.addSchedule);
-router.get('/profile/:id', doctorController.getProfile);
-router.get('/timeline/:id', doctorController.getTimeline);
+router.get('/timeline/:doctor_id', doctorController.getTimeline);
 router.post('/addPrescription/:booking_id', doctorController.addPrescription);
 router.get('/viewprescription/:booking_id', doctorController.viewPrescriptionDetails);
 router.get('/checkprescription/:booking_id', doctorController.checkPrescription);
+router.post('/update-Schedule/:timeline_id', doctorController.updateSchedule);
+router.post('/deleteSCHEDULE/:timeline_id', doctorController.deleteSCHEDULE);
 
 
 module.exports = router;

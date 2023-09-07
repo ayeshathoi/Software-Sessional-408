@@ -1,17 +1,19 @@
+/* eslint-disable import/extensions */
 /* eslint-disable no-restricted-syntax */
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import axios from 'axios';
+import { Link } from 'react-router-dom';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
-
+import PersonRemoveSharpIcon from '@mui/icons-material/PersonRemoveSharp';
+import { Toolbar, Button } from '@mui/material';
 import DoctorImage from '@/assets/doctor.jpg';
 import patient from '@/assets/appointment.jpg';
 import HeaderDoctor from '../navbar/headerdoctor';
 import Footer from '../navbar/footer';
 import PatientArray from './patient_List';
+import { getDoctorDetails } from '@/api/apiCalls';
 
 function DoctorHome() {
   const [user, setUser] = useState({
@@ -30,31 +32,25 @@ function DoctorHome() {
   });
 
   const [value, setValue] = useState<number>(0);
-  const { userid } = useParams();
 
   const [hospitals, setHospitals] = useState<string[]>([]);
   const [selectedHospital, setSelectedHospital] = useState<string | null>(null);
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:3000/doctor/details/${userid}`)
-      .then((res) => {
-        setUser(res.data);
-
-        const hospitalNames = [];
-        for (const key in res.data) {
-          if (Object.prototype.hasOwnProperty.call(res.data, key)) {
-            if (key.includes('hospital')) {
-              hospitalNames.push(res.data[key]);
-            }
+    getDoctorDetails().then((res) => {
+      setUser(res);
+      console.log(res);
+      const hospitalNames = [];
+      for (const key in res) {
+        if (Object.prototype.hasOwnProperty.call(res, key)) {
+          if (key.includes('hospital')) {
+            hospitalNames.push(res[key]);
           }
         }
-        setHospitals(hospitalNames);
-      })
-      .catch((error) => {
-        console.error('userprofile not found', error);
-      });
-  }, [userid]);
+      }
+      setHospitals(hospitalNames);
+    });
+  });
   const handleChange = (
     _event: React.ChangeEvent<object>,
     newValue: number
@@ -70,6 +66,36 @@ function DoctorHome() {
     <>
       <div>
         <HeaderDoctor />
+        <div className="mt-16 bg-green-100">
+          <Toolbar
+            disableGutters
+            className="flex items-center justify-between ml-24"
+          >
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Link
+                to={`/AddSchedule/?hospitals=${JSON.stringify(hospitals)}`}
+                className="ml-2"
+              >
+                <Button variant="contained" color="inherit">
+                  Add Schedule
+                </Button>
+              </Link>
+              <Link
+                to={`/EditHospiatlList/?hospitals=${JSON.stringify(hospitals)}`}
+                className="ml-2"
+              >
+                <Button variant="contained" color="inherit">
+                  Edit Schedule
+                </Button>
+              </Link>
+            </Box>
+            <div className="mr-24 font-bold">
+              <Button variant="contained" color="inherit">
+                <PersonRemoveSharpIcon />
+              </Button>
+            </div>
+          </Toolbar>
+        </div>
       </div>
 
       <div className="flex mt-40 ml-24">
@@ -164,4 +190,3 @@ function DoctorHome() {
 }
 
 export default DoctorHome;
-

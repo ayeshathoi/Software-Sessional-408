@@ -1,10 +1,12 @@
+/* eslint-disable import/extensions */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, ChangeEvent, FormEvent } from 'react';
 import Cookies from 'universal-cookie';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import Navbar from '../navbar/header';
+
+import Navbar from '../navbar/headerdoctor';
 import Footer from '../navbar/footer';
+import { login } from '@/api/apiCalls';
 
 const cookies = new Cookies();
 const COOKIE_AGE = 31536000;
@@ -32,40 +34,42 @@ function LogIn() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await axios
-        .post('http://localhost:3000/auth/login', formData)
-        .then((res) => {
-          cookies.set('token', res.data.backendCookie, {
-            path: '/',
-            maxAge: COOKIE_AGE,
-          });
+      const ret = await login(formData);
+      if (ret) {
+        let userProfileUrl = '';
+        if (ret === 'doctor') {
+          userProfileUrl = `/doctorHome/`;
+        } else if (ret === 'patient') {
+          userProfileUrl = `/userHome`;
+        } else if (ret === 'driver') {
+          userProfileUrl = `/driverHome`;
+        } else if (ret === 'nurse') {
+          userProfileUrl = `/nurseHome`;
+        } else if (ret === 'hospital') {
+          userProfileUrl = `/hospitalHome`;
+        }
+        navigate(userProfileUrl);
+        alert('Login Successful');
+      }
 
-          // const { res.data.type } = res.data; // Replace with actual key
-          console.log(res.data);
-          let userProfileUrl = '';
-          if (res.data.type === 'doctor') {
-            const userId = res.data.uid;
-            console.log('here is the uid', res.data.uid);
-            userProfileUrl = `/doctorHome/${userId}/`;
-          } else if (res.data.type === 'patient') {
-            const userId = res.data.uid;
-            console.log('here is the uid', res.data.uid);
-            userProfileUrl = `/userHome/${userId}/`;
-          } else if (res.data.type === 'driver') {
-            const userId = res.data.uid;
-            console.log('here is the uid', res.data.uid);
-            userProfileUrl = `/driverHome/${userId}/`;
-          } else if (res.data.type === 'nurse') {
-            const userId = res.data.uid;
-            console.log('here is the uid', res.data.uid);
-            userProfileUrl = `/nurseHome/${userId}/`;
-          } else if (res.data.type === 'hospital') {
-            const userId = res.data.uid;
-            console.log('here is the uid', res.data.uid);
-            userProfileUrl = `/hospitalHome/${userId}/`;
-          }
-          navigate(userProfileUrl);
-        });
+      // await axios
+      //   .post('http://localhost:3000/auth/login', formData)
+      // .then((res) => {
+      //   console.log(res.data);
+      //   let userProfileUrl = '';
+      //   if (res.data === 'doctor') {
+      //     userProfileUrl = `/doctorHome/`;
+      //   } else if (res.data === 'patient') {
+      //     userProfileUrl = `/userHome`;
+      //   } else if (res.data === 'driver') {
+      //     userProfileUrl = `/driverHome`;
+      //   } else if (res.data === 'nurse') {
+      //     userProfileUrl = `/nurseHome`;
+      //   } else if (res.data === 'hospital') {
+      //     userProfileUrl = `/hospitalHome`;
+      //   }
+      //   navigate(userProfileUrl);
+      // });
     } catch (err) {
       console.log(err);
     }
@@ -83,7 +87,7 @@ function LogIn() {
             className="bg-white shadow-lg rounded px-12 pt-6 pb-8 mb-4"
             onSubmit={handleSubmit}
           >
-            <div className="text-gray-800 text-2xl flex justify-center border-b-2 py-2 mb-4">
+            <div className="text-gray-800 text-2xl flex justify-center border-b-2 py-2 mb-4 text-green-700">
               Log In
             </div>
             <div className="mb-4">
@@ -118,19 +122,13 @@ function LogIn() {
                 />
               </label>
             </div>
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-center">
               <button
-                className="px-4 py-2 rounded text-white inline-block shadow-lg bg-blue-500 hover:bg-blue-600 focus:bg-blue-700"
+                className="px-4 py-2 rounded text-white inline-block shadow-lg bg-green-500 hover:bg-blue-600 focus:bg-blue-700"
                 type="submit"
               >
                 Log In
               </button>
-              <a
-                className="inline-block align-baseline font-normal text-sm text-blue-500 hover:text-blue-800"
-                href="/passwordreset"
-              >
-                Forgotten your Password?
-              </a>
             </div>
           </form>
           <p className="text-center text-gray-500 text-xs">

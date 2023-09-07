@@ -1,8 +1,9 @@
+/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import {doctorSearch} from '@/api/apiCalls';
 import {
   Autocomplete,
   Button,
@@ -26,42 +27,48 @@ interface Doctor {
   new_patient_fee: number;
   hospital_name: string;
   doctor_id: number;
+  weekday: string;
 }
 
 function DoctorSearch() {
   const [user, setuserData] = useState<Doctor[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const { userid } = useParams();
   const navigate = useNavigate();
   const [count, setCount] = useState<number>(0);
   const [sortBy, setSortBy] = useState<string>(''); // State to store sorting option
   const [selectedQualification, setSelectedQualification] =
     useState<string>('');
+  const [selectedWeekday, setSelectedWeekday] = useState<string>('');
 
   useEffect(() => {
     // Make the HTTP GET request to the backend API
-    axios
-      .get(`http://localhost:3000/patient/doctorall`)
-      .then((response) => {
-        setuserData(response.data); // Set the fetched data to the state
-        setCount(response.data.length);
-        console.log(response.data);
+    // axios
+    //   .get(`http://localhost:3000/patient/doctorall`)
+    //   .then((response) => {
+    //     setuserData(response.data); // Set the fetched data to the state
+    //     setCount(response.data.length);
+    //     console.log(response.data);
 
+    doctorSearch().then((ret) => {
+    if(ret){
+      setuserData(ret);
+      setCount(ret.length);
         // Sort the data based on the selected sorting option
         if (sortBy === 'Price Low to High') {
-          const sortedData = [...response.data];
+          const sortedData = [...ret];
           sortedData.sort((a, b) => a.new_patient_fee - b.new_patient_fee);
           setuserData(sortedData);
         } else if (sortBy === 'Price High to Low') {
-          const sortedData = [...response.data];
+          const sortedData = [...ret];
           sortedData.sort((a, b) => b.new_patient_fee - a.new_patient_fee);
           setuserData(sortedData);
         }
-      })
-      .catch((error) => {
+      }
+      else{
         console.error('Error fetching user profile:', error);
-      });
-  }, [userid, sortBy]);
+      }
+    });
+  }, [sortBy]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
@@ -88,7 +95,8 @@ function DoctorSearch() {
     (doctor) =>
       doctor.speciality.toLowerCase().includes(searchTerm.toLowerCase()) &&
       (selectedQualification === '' ||
-        doctor.qualification === selectedQualification)
+        doctor.qualification === selectedQualification) &&
+      (selectedWeekday === '' || doctor.weekday === selectedWeekday)
   );
 
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -133,7 +141,7 @@ function DoctorSearch() {
 
         <div className="flex">
           <div
-            className="side-nav bg-green-200 p-4 w-60 rounded-lg border-2 border-gray-300"
+            className="side-nav bg-green-200 p-4 rounded-lg border-2 border-gray-300 w-60"
             style={{ height: 'fit-content' }}
           >
             <div className="side-nav-item">
@@ -160,6 +168,29 @@ function DoctorSearch() {
                   <option value="MS">MS</option>
                   <option value="MCH">MCH</option>
                   <option value="DM">DM</option>
+                </select>
+              </label>
+              <label className="flex items-center text-sm mt-4">
+                <input
+                  type="checkbox"
+                  className="form-checkbox h-5 w-5 text-gray-600 mr-2"
+                  onChange={(e) => setSelectedWeekday(e.target.value)}
+                />
+                WeekDay
+                <select
+                  name="weekday"
+                  id="weekday"
+                  className="ml-2 px-2 py-1 bg-white border border-gray-300 rounded-md"
+                  value={selectedWeekday} // Add this line
+                  onChange={(e) => setSelectedWeekday(e.target.value)} // Add this line
+                >
+                  <option value="">Select</option>
+                  <option value="Sunday">Sunday</option>
+                  <option value="Monday">Monday</option>
+                  <option value="Tuesday">Tuesday</option>
+                  <option value="Wednesday">Wednesday</option>
+                  <option value="Thrusday">Thrusday</option>
+                  <option value="Friday">Friday</option>
                 </select>
               </label>
               <label className="flex items-center text-sm mt-4">
@@ -200,6 +231,9 @@ function DoctorSearch() {
                       <Typography variant="body2">
                         Hospital: {doctor.hospital_name}
                       </Typography>
+                      <Typography variant="body2">
+                        Weekday: {doctor.weekday}
+                      </Typography>
 
                       <Button
                         variant="contained"
@@ -211,7 +245,6 @@ function DoctorSearch() {
                               doctorId: doctor.doctor_id,
                               newPatientFee: doctor.new_patient_fee,
                               hospitalName: doctor.hospital_name,
-                              userId: userid,
                             },
                           })
                         }

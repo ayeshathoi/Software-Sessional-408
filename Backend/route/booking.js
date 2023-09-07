@@ -1,10 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../Controller/booking');
-
-router.post('/:uid/appointment', userController.DoctorBooking);
-router.get('/:uid/appointment', userController.DoctorBooking);
-router.post('/:uid/select/test', userController.selectTEST);
-router.post('/:uid/checkup', userController.CheckupBooking);
-router.post('/:uid/ambulance', userController.AmbulanceBooking);
+router.use(async (req,res,next) => {
+    if(req.user && req.user.user_type == 'patient'){
+        next();
+    }
+    else{
+        //res.status(error.UNAUTHORIZED).json({ error: 'Unauthorized' });
+        res.send("UNAUTHORIZED");
+    }
+});
+router.post('/appointment', userController.DoctorBooking);
+router.post('/select/test', userController.selectTEST);
+router.post('/checkup', userController.CheckupBooking);
+router.post('/ambulance', userController.AmbulanceBooking);
 module.exports = router;

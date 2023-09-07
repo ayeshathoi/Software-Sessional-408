@@ -2,7 +2,8 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Grid, Paper, Button, Typography, Container } from '@mui/material';
-import axios from 'axios';
+
+import {allTest , deleteTest} from '@/api/apiCalls';
 
 interface Tests {
   testid: number;
@@ -12,39 +13,55 @@ interface Tests {
 }
 
 function PatientTests() {
-  const { userid } = useParams();
   const [alltests, setTests] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     // Make the HTTP GET tests to the backend API
-    axios
-      .get(`http://localhost:3000/hospital/test/${userid}`)
-      // api call
-      .then((response) => {
-        setTests(response.data); // Set the fetched data to the state
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-      });
-  }, [userid]);
+    // axios
+    //   .get(`http://localhost:3000/hospital/test`)
+    //   // api call
+    //   .then((response) => {
+    //     setTests(response.data); // Set the fetched data to the state
+    //   })
+      // .catch((error) => {
+      //   console.error('Error fetching data:', error);
+      // });
+      allTest().then((res) => {
+      if(res){
+        setTests(res);
+      }
+      else {
+        console.log('error');
+      }
+    });
+  });
 
   const deleteTest = async (testid: number) => {
     try {
-
-      const data = {
-        test_id: testid
+      const data = {test_id: testid}
+    //   await axios
+    //     .post(`http://localhost:3000/hospital/test/delete/${testid}`,data)
+    //     .then((res) => {
+    //       alert('Test Deleted Successfully');
+    //       navigate(`/hospitalHome`);
+    //     });
+    // } catch (err) {
+    //   console.log(err);
+    // }
+    const res = await deleteTest(data);
+    if(res){
+        alert('Test Deleted Successfully');
+        navigate(`/hospitalHome`);
       }
-      await axios
-        .post(`http://localhost:3000/hospital/test/delete/${userid}/${testid}`,data)
-        .then((res) => {
-          alert('Test Deleted Successfully');
-          navigate(`/hospitalHome/${userid}`);
-        });
-    } catch (err) {
+      else {
+        console.log("Error in deleting test");
+      }
+  }
+  catch (err) {
       console.log(err);
     }
-  };
+};
 
   return (
     <div className="mt-40 ml-40 mr-20">
@@ -89,7 +106,7 @@ function PatientTests() {
                       </td>
                       <td className="px-6 py-4 whitespace-no-wrap">
                         <Link
-                          to={`/hospitalHome/${userid}/EditTest/${tests.testid}`}
+                          to={`/hospitalHome/EditTest/${tests.testid}`}
                         >
                           <Button variant="contained" color="primary">
                             Edit Price

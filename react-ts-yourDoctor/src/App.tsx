@@ -13,6 +13,7 @@ import DriverProfileUpdate from './pages/updateProfile/driverUpdateProfile';
 import DoctorProfileUpdate from './pages/updateProfile/doctorUpdateProfile';
 import PatientProfileUpdate from './pages/updateProfile/patientUpdateProfile';
 import DoctorHome from './pages/doctorPages/doctorHome';
+// import PatientPrescription from './pages/doctorPages/prescriptionSubmission';
 import Prescription from './pages/doctorPages/prescriptionSubmission';
 import ViewPrescription from './pages/doctorPages/viewPrescription';
 import NurseHome from './pages/nursePages/nurseHome';
@@ -30,7 +31,10 @@ import AvailableEmployee from './pages/hospitalPages/employee';
 import AssignNurse from './pages/hospitalPages/Assign_Nurse';
 import EditTest from './pages/hospitalPages/Edit_test';
 import Chatbox from './pages/chatBox/chatBox';
-
+import AddSchedule from './pages/doctorPages/addschedule';
+import EditHospiatlList from './pages/doctorPages/editHospitalList';
+import EditSchedule from './pages/doctorPages/editschedule';
+import AddReview from './pages/userPages/addReview';
 
 export function App() {
   return (
@@ -46,66 +50,65 @@ export function App() {
         <Route path="/HospitalSignup/" element={<HospitalSignup />} />
         <Route path="/LogIn/" element={<LogIn />} />
         <Route
-          path="/doctorHome/:userid/DoctorProfileUpdate/"
+          path="/doctorHome/DoctorProfileUpdate/"
           element={<DoctorProfileUpdate />}
         />
-        <Route path="/doctorHome/:userid" element={<DoctorHome />} />
-        <Route path="/nurseHome/:userid" element={<NurseHome />} />
-        <Route path="/driverHome/:userid" element={<DriverHome />} />
-        {<Route
-          path="/doctorHome/:userid/prescriptionSubmission/"
-          element={<Prescription />}
-        /> }
+        <Route path="/doctorHome" element={<DoctorHome />} />
+        <Route path="/nurseHome" element={<NurseHome />} />
+        <Route path="/driverHome" element={<DriverHome />} />
         <Route
           path="/doctorHome/:userid/viewPrescription/"
           element={<ViewPrescription />}
         />
         <Route
           path="/userHome/:userid/PatientProfileUpdate/"
+          path="/doctorHome/prescriptionSubmission/"
+          element={<Prescription />}
+        />
+        <Route
+          path="/userHome/PatientProfileUpdate/"
           element={<PatientProfileUpdate />}
         />
         <Route
-          path="/nurseHome/:userid/NurseProfileUpdate/"
+          path="/nurseHome/NurseProfileUpdate/"
           element={<NurseProfileUpdate />}
         />
         <Route
-          path="/driverHome/:userid/DriverProfileUpdate/"
+          path="/driverHome/DriverProfileUpdate/"
           element={<DriverProfileUpdate />}
         />
 
-        <Route path="/userHome/:userid" element={<UserHome />} />
-        <Route path="/hospitalHome/:userid" element={<HospitalHome />} />
+        <Route path="/userHome" element={<UserHome />} />
+        <Route path="/hospitalHome" element={<HospitalHome />} />
         <Route
-          path="/hospitalHome/:userid/AvailableEmployee/"
+          path="/hospitalHome/AvailableEmployee/"
           element={<AvailableEmployee />}
         />
-        <Route
-          path="/hospitalHome/:userid/:bookingID"
-          element={<AssignNurse />}
-        />
-        <Route path="/hospitalHome/:userid/EditTest/:testID" element={<EditTest />} />
+        <Route path="/hospitalHome/:bookingID" element={<AssignNurse />} />
+        <Route path="/hospitalHome/EditTest/:testID" element={<EditTest />} />
 
-        {/* <Route path="/doctorSearch/:userid" element={<DoctorSearch />} />
-        <Route path="/AmbulanceSearch/:userid" element={<AmbulanceSearch />} /> */}
+        {/* <Route path="/doctorSearch" element={<DoctorSearch />} />
+        <Route path="/AmbulanceSearch" element={<AmbulanceSearch />} /> */}
+        <Route path="/userHome/DoctorSearch/" element={<DoctorSearch />} />
+        <Route path="/userHome/CheckupSearch/" element={<CheckupSearch />} />
         <Route
-          path="/userHome/:userid/DoctorSearch/"
-          element={<DoctorSearch />}
-        />
-        <Route
-          path="/userHome/:userid/CheckupSearch/"
-          element={<CheckupSearch />}
-        />
-        <Route
-          path="/userHome/:userid/AmbulanceSearch/"
+          path="/userHome/AmbulanceSearch/"
           element={<AmbulanceSearch />}
+        />
+        <Route path="/EditHospiatlList" element={<EditHospiatlList />} />
+        <Route
+          path="/doctorHome/EditSchedule/:timelineId"
+          element={<EditSchedule />}
         />
         <Route path="/BookDoctor/" element={<BookDoctor />} />
         <Route path="/BookAmbulance/" element={<BookAmbulance />} />
         <Route path="/BookCheckup/" element={<BookCheckup />} />
         <Route path="/chatbox/" element={<Chatbox />} />
+        <Route path="/AddSchedule" element={<AddSchedule />} />
         <Route path="/Prescription/" element={<Prescription />} />
         <Route path="/userHome/:userid/viewprescription/" element={<ViewPrescriptionUser />} />
 
+        <Route path="/addReview/" element={<AddReview />} />
       </Routes>
     </BrowserRouter>
   );

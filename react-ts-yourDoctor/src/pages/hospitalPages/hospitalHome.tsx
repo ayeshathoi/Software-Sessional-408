@@ -11,7 +11,7 @@ import {
   ListItem,
   ListItemText,
 } from '@mui/material';
-import axios from 'axios';
+
 import HeaderDoctor from '../navbar/headerdoctor';
 import Footer from '../navbar/footer';
 import AvailableEmployee from './employee';
@@ -19,26 +19,27 @@ import PatientRequests from './requests';
 import ReviewsPatient from './ReviewList';
 import PatientTests from './AllTest';
 import AddTest from './Add_Test';
-
+import { pending_doctor_hospital, pending_driver_hospital,pending_nurse_hospital,update_employee } from '@/api/apiCalls';
 
 function HospitalHome() {
-  const { userid } = useParams();
   const [employees, setEmployees] = useState([]); // Combine both doctors and nurses into a single array
   const [value, setValue] = useState<number>(0);
 
   useEffect(() => {
-    // Fetch both doctor and nurse data from your APIs here
-    const fetchDoctors = axios.get(
-      `http://localhost:3000/hospital/pending/doctor/${userid}`
-    );
-    const fetchNurses = axios.get(
-      `http://localhost:3000/hospital/pending/nurse/${userid}`
-    );
+    // // Fetch both doctor and nurse data from your APIs here
+    // const fetchDoctors = axios.get(
+    //   `http://localhost:3000/hospital/pending/doctor`
+    // );
+    // const fetchNurses = axios.get(
+    //   `http://localhost:3000/hospital/pending/nurse`
+    // );
+    const fetchDoctors = pending_doctor_hospital();
+    const fetchNurses = pending_nurse_hospital();
     // Use Promise.all to wait for both requests to complete
     Promise.all([fetchDoctors, fetchNurses])
       .then((responses) => {
-        const doctors = responses[0].data.result;
-        const nurses = responses[1].data.result;
+        const doctors = responses[0].result;
+        const nurses = responses[1].result;
         console.log('here is the incoming data', nurses);
         const combinedEmployees = [...doctors, ...nurses];
         setEmployees(combinedEmployees);
@@ -47,17 +48,17 @@ function HospitalHome() {
       .catch((error) => {
         console.error('Error fetching employee data:', error);
       });
-  }, [userid]);
+  });
 
   const handleUpdateStatus = async (employeeEmail: string) => {
     const data = { email: employeeEmail };
     try {
-      console.log('here is the email', data, userid);
-      await axios
-        .post(`http://localhost:3000/hospital/update/employee/${userid}`, data)
-        .then((res) => {
-          console.log('here is the form', res.data);
-        });
+      const ret = update_employee(data);
+      // await axios
+      //   .post(`http://localhost:3000/hospital/update/employee`, data)
+      //   .then((res) => {
+      //     console.log('here is the form', res.data);
+      //   });
     } catch (err) {
       console.log(err);
     }

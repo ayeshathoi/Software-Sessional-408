@@ -1,9 +1,9 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, ChangeEvent, FormEvent } from 'react';
-import axios from 'axios';
 import { format } from 'date-fns';
 import { useLocation } from 'react-router-dom';
+import { bookAmbulance } from '@/api/apiCalls';
 import {
   Button,
   Typography,
@@ -23,13 +23,12 @@ import {
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Header from '../navbar/header';
 import Footer from '../navbar/footer';
-
 function BookAmbulance() {
   const location = useLocation();
   // const navigate = useNavigate();
-  const { driverName, driverID, price, hospitalName, userId } = location.state;
+  const { driverName, driverID, price, hospitalName,  } = location.state;
 
-  // const { userid } = userId;
+  // const {  } = ;
   const [formData, setFormData] = useState<{
     patient_mobile: string;
     date: string;
@@ -79,13 +78,13 @@ function BookAmbulance() {
         time: formattedTime,
         hospital_name: hospitalNameToSend,
       };
-      console.log('here is the form', dataToSend);
-      console.log('userrrridd', userId);
-      await axios
-        .post(`http://localhost:3000/booking/${userId}/ambulance`, dataToSend)
-        .then((res) => {
-          console.log('here is the form', res.data);
-        });
+
+      // await axios
+      //   .post(`http://localhost:3000/booking/ambulance`, dataToSend)
+      //   .then((res) => {
+      //     console.log('here is the form', res.data);
+      //   });
+      const res = await bookAmbulance(dataToSend);
     } catch (err) {
       console.log(err);
     }

@@ -1,9 +1,13 @@
+/* eslint-disable import/extensions */
 /* eslint-disable react/no-array-index-key */
 import { SetStateAction, useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import ForumTwoToneIcon from '@mui/icons-material/ForumTwoTone';
+import RateReviewOutlinedIcon from '@mui/icons-material/RateReviewOutlined';
 import { Button } from '@mui/material';
-
+import { useDispatch } from 'react-redux';
+import { patient_checkup } from '@/api/apiCalls';
+import { addNotification } from '@/store/notificationsSlice';
 
 interface Checkup {
   time: string;
@@ -12,6 +16,7 @@ interface Checkup {
   price: number;
   uname: string;
   booking_id: number;
+  nurse_name: string;
 }
 
 function Tests() {
@@ -22,22 +27,60 @@ function Tests() {
   const handleSectionChange = (section: SetStateAction<string>) => {
     setSelectedSection(section);
   };
-  const { userid } = useParams();
+
+  const dispatch = useDispatch();
+
+  const [, setUpcomingCount3] = useState<number>(0);
+  const currentDate = new Date().toISOString();
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:3000/patient/checkup/${userid}`)
-      .then((response) => {
-        console.log('response.data', response.data);
-        setTests(response.data);
-        console.log(response.data);
+    patient_checkup()
+      .then((patient_checkup_list) => {
+        const currentTests: Checkup[] = patient_checkup_list || [];
+
+        const storedUppcomingCount3: number =
+          JSON.parse(localStorage.getItem('upcomingCount3')) || 0;
+
+        const upcomingTestsCount = tests.filter(
+          (test) => test.date > currentDate
+        ).length;
+
+        const previousTests: Checkup[] =
+          JSON.parse(localStorage.getItem('previousTests')) || [];
+
+        if (
+          currentTests.length > previousTests.length &&
+          previousTests.length > 0 &&
+          upcomingTestsCount === storedUppcomingCount3
+        ) {
+          dispatch(addNotification({ message: 'Add Review for Test' }));
+          alert('Add Review for Test');
+        } else if (
+          currentTests.length > previousTests.length &&
+          previousTests.length > 0 &&
+          upcomingTestsCount > storedUppcomingCount3
+        ) {
+          dispatch(
+            addNotification({
+              message: 'New Test added!',
+            })
+          );
+          alert('New Test added!');
+        }
+
+        localStorage.setItem('previousTests', JSON.stringify(currentTests));
+        setUpcomingCount3(upcomingTestsCount);
+        localStorage.setItem(
+          'upcomingCount3',
+          JSON.stringify(upcomingTestsCount)
+        );
+
+        setTests(patient_checkup_list);
       })
       .catch((error) => {
         console.error('Error fetching Tests:', error);
       });
-  }, [userid]);
-
-  const currentDate = new Date().toISOString();
+  }, [tests, dispatch, currentDate]);
 
   const upcomingTests = tests.filter(
     (ambulance) => ambulance.date > currentDate
@@ -85,7 +128,9 @@ function Tests() {
             {AmbulancesToShow.map((test, index) => (
               <li key={index} className="flex justify-between items-center">
                 <div>
-                  <p className="text-lg font-semibold">Name: {test.uname}</p>
+                  <p className="text-lg font-semibold">
+                    Name: {test.nurse_name}
+                  </p>
                   <p className="text-gray-600">TEST NAME: {test.testname}</p>
                   <hr />
                 </div>
@@ -103,15 +148,32 @@ function Tests() {
                     onClick={() =>
                       navigate('/Chatbox', {
                         state: {
-                          receiverName: test.uname,
+                          receiverName: test.nurse_name,
                           bookingId: test.booking_id,
-                          userId: userid
                         },
                       })
                     }
                   >
-                    Chat
+                    <ForumTwoToneIcon />
                   </Button>
+                  {selectedSection === 'previous' && (
+                    <Button
+                      variant="contained"
+                      color="inherit"
+                      className="ml-2"
+                      onClick={() =>
+                        navigate('/addReview', {
+                          state: {
+                            receiverName: test.nurse_name,
+                            bookingId: test.booking_id,
+                            serialNumber: test.price,
+                          },
+                        })
+                      }
+                    >
+                      <RateReviewOutlinedIcon />
+                    </Button>
+                  )}
                 </div>
               </li>
             ))}

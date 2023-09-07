@@ -1,8 +1,8 @@
+/* eslint-disable import/extensions */
 // page for hospital home and verify employee
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { Grid, Paper, Typography, Button, Container } from '@mui/material';
-import axios from 'axios';
+import { Grid, Paper, Typography, Container } from '@mui/material';
+import { allReview_hospital } from '@/api/apiCalls';
 
 interface Reviews {
   booking_id: number;
@@ -17,20 +17,26 @@ interface Reviews {
 }
 
 function ReviewsPatient() {
-  const { userid } = useParams();
   const [reviews, setRevies] = useState([]);
   useEffect(() => {
     // Make the HTTP GET request to the backend API
-    axios
-      .get(`http://localhost:3000/review/${userid}`)
-      // api call
-      .then((response) => {
-        setRevies(response.data); // Set the fetched data to the state
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-      });
-  }, [userid]);
+    // axios
+    //   .get(`http://localhost:3000/review`)
+    //   // api call
+    //   .then((response) => {
+    //     setRevies(response.data); // Set the fetched data to the state
+    //   })
+    //   .catch((error) => {
+    //     console.error('Error fetching data:', error);
+    //   });
+    allReview_hospital().then((ret) => {
+      if (ret) {
+        setRevies(ret);
+      } else {
+        console.log('error');
+      }
+    });
+  });
 
   return (
     <div className="mt-40 ml-40 mr-20">
@@ -95,7 +101,6 @@ function ReviewsPatient() {
                       </td>
                       <hr />
                     </tr>
-                    
                   ))}
                 </tbody>
               </table>

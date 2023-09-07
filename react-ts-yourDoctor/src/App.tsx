@@ -30,8 +30,6 @@ import AssignNurse from './pages/hospitalPages/Assign_Nurse';
 import EditTest from './pages/hospitalPages/Edit_test';
 import Chatbox from './pages/chatBox/chatBox';
 import AddSchedule from './pages/doctorPages/addschedule';
-import EditHospiatlList from './pages/doctorPages/editHospitalList';
-import EditSchedule from './pages/doctorPages/editschedule';
 
 
 export function App() {
@@ -48,66 +46,64 @@ export function App() {
         <Route path="/HospitalSignup/" element={<HospitalSignup />} />
         <Route path="/LogIn/" element={<LogIn />} />
         <Route
-          path="/doctorHome/:userid/DoctorProfileUpdate/"
+          path="/doctorHome/DoctorProfileUpdate/"
           element={<DoctorProfileUpdate />}
         />
-        <Route path="/doctorHome/:userid" element={<DoctorHome />} />
-        <Route path="/nurseHome/:userid" element={<NurseHome />} />
-        <Route path="/driverHome/:userid" element={<DriverHome />} />
+        <Route path="/doctorHome" element={<DoctorHome />} />
+        <Route path="/nurseHome" element={<NurseHome />} />
+        <Route path="/driverHome" element={<DriverHome />} />
         {<Route
-          path="/doctorHome/:userid/prescriptionSubmission/"
+          path="/doctorHome/prescriptionSubmission/"
           element={<Prescription />}
         /> }
         <Route
-          path="/userHome/:userid/PatientProfileUpdate/"
+          path="/userHome/PatientProfileUpdate/"
           element={<PatientProfileUpdate />}
         />
         <Route
-          path="/nurseHome/:userid/NurseProfileUpdate/"
+          path="/nurseHome/NurseProfileUpdate/"
           element={<NurseProfileUpdate />}
         />
         <Route
-          path="/driverHome/:userid/DriverProfileUpdate/"
+          path="/driverHome/DriverProfileUpdate/"
           element={<DriverProfileUpdate />}
         />
 
-        <Route path="/userHome/:userid" element={<UserHome />} />
-        <Route path="/hospitalHome/:userid" element={<HospitalHome />} />
+        <Route path="/userHome" element={<UserHome />} />
+        <Route path="/hospitalHome" element={<HospitalHome />} />
         <Route
-          path="/hospitalHome/:userid/AvailableEmployee/"
+          path="/hospitalHome/AvailableEmployee/"
           element={<AvailableEmployee />}
         />
         <Route
-          path="/hospitalHome/:userid/:bookingID"
+          path="/hospitalHome/:bookingID"
           element={<AssignNurse />}
         />
         <Route
-          path="/hospitalHome/:userid/EditTest/:testID"
+          path="/hospitalHome/EditTest/:testID"
           element={<EditTest />}
         />
 
-        {/* <Route path="/doctorSearch/:userid" element={<DoctorSearch />} />
-        <Route path="/AmbulanceSearch/:userid" element={<AmbulanceSearch />} /> */}
+        {/* <Route path="/doctorSearch" element={<DoctorSearch />} />
+        <Route path="/AmbulanceSearch" element={<AmbulanceSearch />} /> */}
         <Route
-          path="/userHome/:userid/DoctorSearch/"
+          path="/userHome/DoctorSearch/"
           element={<DoctorSearch />}
         />
         <Route
-          path="/userHome/:userid/CheckupSearch/"
+          path="/userHome/CheckupSearch/"
           element={<CheckupSearch />}
         />
         <Route
-          path="/userHome/:userid/AmbulanceSearch/"
+          path="/userHome/AmbulanceSearch/"
           element={<AmbulanceSearch />}
         />
         <Route path="/BookDoctor/" element={<BookDoctor />} />
         <Route path="/BookAmbulance/" element={<BookAmbulance />} />
         <Route path="/BookCheckup/" element={<BookCheckup />} />
         <Route path="/chatbox/" element={<Chatbox />} />
-        <Route path="/AddSchedule/:userid" element={<AddSchedule />} />
+        <Route path="/AddSchedule" element={<AddSchedule />} />
         <Route path="/Prescription/" element={<Prescription />} />
-        <Route path='/EditHospiatlList/:userid' element={<EditHospiatlList />} />
-        <Route path='/hospitalHome/:userid/EditSchedule/:timelineId' element={<EditSchedule />} />
       </Routes>
     </BrowserRouter>
   );

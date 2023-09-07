@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, ChangeEvent, FormEvent } from 'react';
-import axios from 'axios';
+
 import { useNavigate } from 'react-router-dom';
 import {
   Button,
@@ -11,8 +11,9 @@ import {
 } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import Navbar from '../navbar/header';
+import Navbar from '../navbar/headerdoctor';
 import Footer from '../navbar/footer';
+import { reg_patient } from '@/api/apiCalls';
 
 function PatientSignup() {
   const [formData, setFormData] = useState({
@@ -42,12 +43,14 @@ function PatientSignup() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await axios
-        .post('http://localhost:3000/auth/register/patient', formData)
-        .then((res) => {
-          console.log('here is the form', res.data);
-          navigate('/LogIn');
-        });
+      // await axios
+      //   .post('http://localhost:3000/auth/register/patient', formData)
+      //   .then((res) => {
+      //     console.log('here is the form', res.data);
+      //     navigate('/LogIn');
+      //   });
+      const ret = reg_patient(formData);
+      navigate('/LogIn');
     } catch (err) {
       console.log(err);
     }
@@ -61,16 +64,15 @@ function PatientSignup() {
       <div
         className="flex flex-col items-center justify-center mt-36"
         style={{
-          backgroundColor: 'ghostwhite',
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           backgroundPosition: 'center center',
           // opacity: 0.5, // Adjust the opacity as needed (0.0 to 1.0)
         }}
       >
-        <div className="pt-20 flex flex-col items-center justify-center pb-8 px-12 mb-8 border border-gray-300 round-lg bg-pink-50">
+        <div className="pt-20 flex flex-col items-center justify-center pb-8 px-12 mb-8 border border-gray-300 round-lg">
           <h1
-            style={{ fontWeight: 'bold', fontSize: '24px', color: 'royalblue' }}
+            style={{ fontWeight: 'bold', fontSize: '24px', color: 'green' }}
           >
             Patient Signup
           </h1>
@@ -87,17 +89,15 @@ function PatientSignup() {
               required
               className="w-full"
             />
-            <TextField
-              label="Password"
-              name="password"
-              type="password"
-              value={formData.password}
+             <TextField
+              label="Mobile Number"
+              name="mobile"
+              value={formData.mobile}
               onChange={handleChange}
               variant="outlined"
               required
               className="w-full"
             />
-
             <TextField
               label="Email"
               type="email"
@@ -109,14 +109,16 @@ function PatientSignup() {
               className="w-full"
             />
             <TextField
-              label="Mobile Number"
-              name="mobile"
-              value={formData.mobile}
+              label="Password"
+              name="password"
+              type="password"
+              value={formData.password}
               onChange={handleChange}
               variant="outlined"
               required
               className="w-full"
             />
+
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
                 label="Date of Birth"

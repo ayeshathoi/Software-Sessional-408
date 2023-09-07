@@ -1,6 +1,5 @@
 /* eslint-disable react/no-array-index-key */
-import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
-import axios from 'axios';
+import { useState, ChangeEvent, FormEvent, useEffect } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import {
   TextField,
@@ -13,30 +12,8 @@ import {
 } from '@mui/material';
 import Navbar from '../navbar/header';
 import Footer from '../navbar/footer';
+import { addSchedule_Doctor } from '@/api/apiCalls';
 
-// Function to generate an array of time options in HH:mm:ss format
-const generateTimeOptions = () => {
-  const options = [];
-  // eslint-disable-next-line no-plusplus
-  for (let hour = 0; hour < 24; hour++) {
-    for (let minute = 0; minute < 60; minute += 15) {
-      const hh = hour.toString().padStart(2, '0');
-      const mm = minute.toString().padStart(2, '0');
-      options.push(`${hh}:${mm}:00`);
-    }
-  }
-  return options;
-};
-
-const weekdays = [
-  'Monday',
-  'Tuesday',
-  'Wednesday',
-  'Thursday',
-  'Friday',
-  'Saturday',
-  'Sunday',
-];
 
 interface FormData {
   weekday: string;
@@ -65,10 +42,10 @@ function AddSchedule() {
     timeline: [], // Initialize an empty timeline array
   });
 
-  const { userid } = useParams();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const hospitalNames = searchParams.get('hospitals');
+  // const hospitals = hospitalNames ? JSON.parse(hospitalNames) : [];
 
   const [selectedHospital, setSelectedHospital] = useState<string>('');
   const [numberOfDays, setNumberOfDays] = useState<number | string>('');
@@ -96,14 +73,15 @@ function AddSchedule() {
         hospital_name: entry.hospital_name,
       })),
     };
-    console.log(`${userid}`, 'guygryg', requestData);
 
     try {
       // Send a POST request with the updated formData in JSON format
-      await axios.post(
-        `http://localhost:3000/doctor/addschedule/${userid}`,
-        requestData
-      );
+      // await axios.post(
+      //   `http://localhost:3000/doctor/addschedule`,
+      //   requestData
+      // );
+
+      const ret = await addSchedule_Doctor(requestData); // Use the api call from apiCalls.tsx
 
       // Navigate to the desired page on successful submission
       // navigate('/LogIn');
@@ -112,6 +90,32 @@ function AddSchedule() {
     }
   };
 
+  // const handleAddTimeline = () => {
+  //   // Construct the timeline entry based on user input
+  //   const timelineEntry = {
+  //     weekday: formData.weekday,
+  //     slot: formData.slot,
+  //     start_time: formData.start_time,
+  //     end_time: formData.end_time,
+  //     hospital_name: formData.hospital_name,
+  //   };
+
+  //   // Add the timeline entry to the formData
+  //   setFormData((prevFormData) => ({
+  //     ...prevFormData,
+  //     timeline: [...prevFormData.timeline, timelineEntry],
+  //   }));
+
+  //   // Clear the input fields
+  //   setFormData((prevFormData) => ({
+  //     ...prevFormData,
+  //     weekday: '',
+  //     slot: 0,
+  //     start_time: '',
+  //     end_time: '',
+  //     hospital_name: '',
+  //   }));
+  // };
   const handleAddTimeline = () => {
     // Check if the selectedHospital and numberOfDays are valid
     if (!selectedHospital || !numberOfDays) {
@@ -235,21 +239,16 @@ function AddSchedule() {
                     index + 1
                   }`}</Typography>
                   <div className="flex justify-between mt-4">
-                    <Select
+                    <TextField
                       label="Weekday"
                       name={`weekday-${index}`}
+                      type="text"
                       value={entry.weekday}
-                      onChange={(e) => handleTimelineChange(e, index)}
                       variant="outlined"
+                      onChange={(e) => handleTimelineChange(e, index)}
                       required
                       fullWidth
-                    >
-                      {weekdays.map((day, dayIndex) => (
-                        <MenuItem key={dayIndex} value={day}>
-                          {day}
-                        </MenuItem>
-                      ))}
-                    </Select>
+                    />
                   </div>
                   <div className="flex justify-between mt-4">
                     <TextField
@@ -264,38 +263,26 @@ function AddSchedule() {
                     />
                   </div>
                   <div className="flex justify-between mt-4">
-                    <Select
+                    <TextField
                       label="Start Time"
                       name={`start_time-${index}`}
                       value={entry.start_time}
-                      onChange={(e) => handleTimelineChange(e, index)}
                       variant="outlined"
+                      onChange={(e) => handleTimelineChange(e, index)}
                       required
                       fullWidth
-                    >
-                      {generateTimeOptions().map((timeOption, timeIndex) => (
-                        <MenuItem key={timeIndex} value={timeOption}>
-                          {timeOption}
-                        </MenuItem>
-                      ))}
-                    </Select>
+                    />
                   </div>
                   <div className="flex justify-between mt-4">
-                    <Select
+                    <TextField
                       label="End Time"
                       name={`end_time-${index}`}
                       value={entry.end_time}
-                      onChange={(e) => handleTimelineChange(e, index)}
                       variant="outlined"
+                      onChange={(e) => handleTimelineChange(e, index)}
                       required
                       fullWidth
-                    >
-                      {generateTimeOptions().map((timeOption, timeIndex) => (
-                        <MenuItem key={timeIndex} value={timeOption}>
-                          {timeOption}
-                        </MenuItem>
-                      ))}
-                    </Select>
+                    />
                   </div>
                 </Grid>
               ))}

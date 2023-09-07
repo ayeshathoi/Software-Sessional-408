@@ -3,7 +3,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import {doctorSearch} from '@/api/apiCalls';
 import {
   Autocomplete,
   Button,
@@ -33,7 +33,6 @@ interface Doctor {
 function DoctorSearch() {
   const [user, setuserData] = useState<Doctor[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const { userid } = useParams();
   const navigate = useNavigate();
   const [count, setCount] = useState<number>(0);
   const [sortBy, setSortBy] = useState<string>(''); // State to store sorting option
@@ -43,28 +42,33 @@ function DoctorSearch() {
 
   useEffect(() => {
     // Make the HTTP GET request to the backend API
-    axios
-      .get(`http://localhost:3000/patient/doctorall`)
-      .then((response) => {
-        setuserData(response.data); // Set the fetched data to the state
-        setCount(response.data.length);
-        console.log(response.data);
+    // axios
+    //   .get(`http://localhost:3000/patient/doctorall`)
+    //   .then((response) => {
+    //     setuserData(response.data); // Set the fetched data to the state
+    //     setCount(response.data.length);
+    //     console.log(response.data);
 
+    doctorSearch().then((ret) => {
+    if(ret){
+      setuserData(ret);
+      setCount(ret.length);
         // Sort the data based on the selected sorting option
         if (sortBy === 'Price Low to High') {
-          const sortedData = [...response.data];
+          const sortedData = [...ret];
           sortedData.sort((a, b) => a.new_patient_fee - b.new_patient_fee);
           setuserData(sortedData);
         } else if (sortBy === 'Price High to Low') {
-          const sortedData = [...response.data];
+          const sortedData = [...ret];
           sortedData.sort((a, b) => b.new_patient_fee - a.new_patient_fee);
           setuserData(sortedData);
         }
-      })
-      .catch((error) => {
+      }
+      else{
         console.error('Error fetching user profile:', error);
-      });
-  }, [userid, sortBy]);
+      }
+    });
+  }, [sortBy]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
@@ -241,7 +245,6 @@ function DoctorSearch() {
                               doctorId: doctor.doctor_id,
                               newPatientFee: doctor.new_patient_fee,
                               hospitalName: doctor.hospital_name,
-                              userId: userid,
                             },
                           })
                         }

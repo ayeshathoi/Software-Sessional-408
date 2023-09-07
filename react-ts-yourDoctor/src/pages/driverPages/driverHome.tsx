@@ -4,12 +4,14 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
-import axios from 'axios';
+
 import Header from '../navbar/header_nd';
 import Footer from '../navbar/footer';
 import User from '@/assets/user.webp';
 import AmbulanceImage from '@/assets/ambulance.jpg';
 import Order from './patient_list_order';
+import {driverDetails} from '@/api/apiCalls';
+
 
 function DriverHome() {
   const [user, setUser] = useState({
@@ -27,28 +29,30 @@ function DriverHome() {
   });
 
   const [value, setValue] = useState<number>(0);
-  const { userid } = useParams();
   useEffect(() => {
-    axios
-      .get(`http://localhost:3000/driver/${userid}`)
-      .then((res) => {
-        setUser(res.data[0]);
-        user.ambulance_type = res.data[0].ambulance_type;
-        user.ambulance_fare = res.data[0].ambulance_fare;
-        user.street = res.data[0].street;
-        user.thana = res.data[0].thana;
-        user.city = res.data[0].city;
-        user.district = res.data[0].district;
-        user.document = res.data[0].document;
-        user.document_content = res.data[0].document_content;
-        user.driver_name = res.data[0].driver_name;
-        user.driver_phone = res.data[0].driver_phone;
-        user.hospital = res.data[0].hospital;
-      })
-      .catch((error) => {
-        console.error('userprofile not found', error);
-      });
-  }, [user, userid]);
+    // axios
+    //   .get(`http://localhost:3000/driver`)
+    driverDetails().then((res) => {
+    if(res){
+        setUser(res);
+        user.ambulance_type = res.ambulance_type;
+        user.ambulance_fare = res.ambulance_fare;
+        user.street = res.street;
+        user.thana = res.thana;
+        user.city = res.city;
+        user.district = res.district;
+        user.document = res.document;
+        user.document_content = res.document_content;
+        user.driver_name = res.driver_name;
+        user.driver_phone = res.driver_phone;
+        user.hospital = res.hospital;
+      }
+      else {
+        console.log("No Profile Found");
+      }
+  }
+  )}
+  , [user]);
 
   if (!user) {
     return <div>Loading...</div>; // Display a loading message while fetching data

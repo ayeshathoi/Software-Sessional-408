@@ -1,11 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../Controller/driver');
+router.use(async (req,res,next) => {
+    if(req.user && req.user.user_type == 'driver'){
+        next();
+    }
+    else{
+        res.status(error.UNAUTHORIZED).json({ error: 'Unauthorized' });
+    }
+});
 
-
-router.get('/order/:id', userController.getPatient_List);
-router.get('/profile/:id', userController.getProfile);
-router.put('/editProfile/:id', userController.update_profile)
-router.get('/:id', userController.oneDriverdetail);
+router.get('/order', userController.getPatient_List);
+router.get('/profile', userController.getProfile);
+router.put('/editProfile', userController.update_profile)
+router.get('/', userController.oneDriverdetail);
 
 module.exports = router;

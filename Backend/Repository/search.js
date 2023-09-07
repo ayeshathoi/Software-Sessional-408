@@ -82,7 +82,7 @@ const driverSearchByPatientThana = async (uid) => {
 
 const all = "SELECT * FROM " + constant.TABLE_DRIVER ;
 
-const one = "SELECT * FROM " + constant.TABLE_DRIVER + " WHERE " + constant.TABLE_DRIVER_ID + " = $1"
+const one = "SELECT * FROM driver where driver_id = $1";
 
 const driverAll = async () => {
     try {

@@ -1,10 +1,10 @@
 import { useState, ChangeEvent, FormEvent, useEffect, useRef } from 'react';
-import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import { TextField, Button, Typography } from '@mui/material';
 import Header from '../navbar/header';
 import Footer from '../navbar/footer';
+import { getComments_Chatbox,addComment_Chatbox } from '@/api/apiCalls';
 
 interface Comments {
   msg_id: number;
@@ -12,17 +12,19 @@ interface Comments {
   sender_id: number;
   message: string;
   timestamp: string;
+  viewer_id: number;
 }
+
+// user_id anar bebostha korte hobe user api diye select uid from users mere deya jay
 
 function Chatbox() {
   const location = useLocation();
-  const { receiverName, bookingId, userId, serialNumber } = location.state;
+  const { receiverName, bookingId, serialNumber } = location.state;
   if (!serialNumber) {
     console.log("Chat with nurse");
   }
   
   const navigate = useNavigate();
-  const sender = parseInt(userId);
 
   const [formData, setFormData] = useState<{
     message: string;
@@ -43,25 +45,29 @@ function Chatbox() {
   };
 
   useEffect(() => {
-    axios
-      .post(`http://localhost:3000/comment/get/${userId}`, {
-        booking_id: bookingId,
-      })
-      .then((res) => {
-        const sortedComments = res.data.result.sort(
+    // axiosz
+    //   .post(`http://localhost:3000/comment/get`, {
+    //     booking_id: bookingId,
+    //   })
+    getComments_Chatbox(bookingId).then((res) => {
+
+      if (res) {
+        const sortedComments = res.result.sort(
           (a: Comments, b: Comments) =>
             new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
         );
         setComments(sortedComments);
         scrollToBottom();
         navigate('/chatbox', {
-          state: { receiverName, bookingId, userId, serialNumber },
+          state: { receiverName, bookingId,serialNumber },
         });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [userId, bookingId]);
+      }
+      else {
+        console.log("No Comments Found");
+      }
+    });
+
+  }, [bookingId]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -71,7 +77,8 @@ function Chatbox() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await axios.post(`http://localhost:3000/comment/add/${userId}`, formData);
+      // await axios.post(`http://localhost:3000/comment/add`, formData);
+      const res = await addComment_Chatbox(formData);
       setFormData({ ...formData, message: '' }); // Clear the input field after sending
     } catch (err) {
       console.log(err);
@@ -111,13 +118,13 @@ function Chatbox() {
           <div
             key={index}
             className={`mb-4 ${
-              comment.sender_id === sender ? 'text-right' : 'text-left'
+              comment.sender_id === comment.viewer_id? 'text-right' : 'text-left'
             }`}
           >
             <Box
               style={{
                 backgroundColor:
-                  comment.sender_id === sender ? '#89CFF0' : '#008000',
+                  comment.sender_id === comment.viewer_id ? '#89CFF0' : '#008000',
                 borderRadius: '5px',
                 padding: '5px 10px',
                 display: 'inline-block',

@@ -1,10 +1,12 @@
+/* eslint-disable import/extensions */
 /* eslint-disable react/no-array-index-key */
 import { SetStateAction, useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
+import ForumTwoToneIcon from '@mui/icons-material/ForumTwoTone';
+import RateReviewOutlinedIcon from '@mui/icons-material/RateReviewOutlined';
 import { Button } from '@mui/material';
-import { patient_checkup } from '@/api/apiCalls';
 import { useDispatch } from 'react-redux';
+import { patient_checkup } from '@/api/apiCalls';
 import { addNotification } from '@/store/notificationsSlice';
 
 interface Checkup {
@@ -28,64 +30,57 @@ function Tests() {
 
   const dispatch = useDispatch();
 
-  const [, setPreviousCount3] = useState<number>(0);
+  const [, setUpcomingCount3] = useState<number>(0);
   const currentDate = new Date().toISOString();
 
   useEffect(() => {
-    patient_checkup().then((patient_checkup_list) => {
-      const currentTests: Checkup[] = patient_checkup_list || [];
+    patient_checkup()
+      .then((patient_checkup_list) => {
+        const currentTests: Checkup[] = patient_checkup_list || [];
 
-      const storedPreviousCount3: number =
-        JSON.parse(localStorage.getItem('previousCount3')) || 0;
+        const storedUppcomingCount3: number =
+          JSON.parse(localStorage.getItem('upcomingCount3')) || 0;
 
-      const previousTestsCount = tests.filter(
-        (test) => test.date <= currentDate
-      ).length;
+        const upcomingTestsCount = tests.filter(
+          (test) => test.date > currentDate
+        ).length;
 
-      const previousTests: Checkup[] =
-        JSON.parse(localStorage.getItem('previousTests')) || [];
+        const previousTests: Checkup[] =
+          JSON.parse(localStorage.getItem('previousTests')) || [];
 
-      console.log('Previous Tests:', previousTests.length);
-      console.log('Stored Previous Count:', storedPreviousCount3);
-      console.log('Previous Tests:', previousTests.length);
+        if (
+          currentTests.length > previousTests.length &&
+          previousTests.length > 0 &&
+          upcomingTestsCount === storedUppcomingCount3
+        ) {
+          dispatch(addNotification({ message: 'Add Review for Test' }));
+          alert('Add Review for Test');
+        } else if (
+          currentTests.length > previousTests.length &&
+          previousTests.length > 0 &&
+          upcomingTestsCount > storedUppcomingCount3
+        ) {
+          dispatch(
+            addNotification({
+              message: 'New Test added!',
+            })
+          );
+          alert('New Test added!');
+        }
 
-      if (
-        previousTestsCount > storedPreviousCount3 &&
-        storedPreviousCount3 > 0
-      ) {
-        console.log('Previous Test Count:', previousTestsCount);
-        console.log('Stored Previous Count:', storedPreviousCount3);
-        dispatch(addNotification({ message: 'Add Review for Test' }));
-        alert('Add Review for Test');
-      } else if (
-        currentTests.length > previousTests.length &&
-        previousTests.length > 0
-      ) {
-        console.log('Previous Test:', previousTests.length);
-        console.log('Current Test:', currentTests.length);
-
-        dispatch(
-          addNotification({
-            message: 'New Test added!',
-          })
+        localStorage.setItem('previousTests', JSON.stringify(currentTests));
+        setUpcomingCount3(upcomingTestsCount);
+        localStorage.setItem(
+          'upcomingCount3',
+          JSON.stringify(upcomingTestsCount)
         );
-        alert('New Test added!');
-      }
 
-      localStorage.setItem('previousTests', JSON.stringify(currentTests));
-      setPreviousCount3(previousTestsCount);
-      localStorage.setItem(
-        'previousCount3',
-        JSON.stringify(previousTestsCount)
-      );
-
-      setTests(patient_checkup_list);
-    })
-    .catch((error) => {
-      console.error('Error fetching Tests:', error);
-    });
-}, [tests, dispatch, currentDate]);
-
+        setTests(patient_checkup_list);
+      })
+      .catch((error) => {
+        console.error('Error fetching Tests:', error);
+      });
+  }, [tests, dispatch, currentDate]);
 
   const upcomingTests = tests.filter(
     (ambulance) => ambulance.date > currentDate
@@ -133,7 +128,9 @@ function Tests() {
             {AmbulancesToShow.map((test, index) => (
               <li key={index} className="flex justify-between items-center">
                 <div>
-                  <p className="text-lg font-semibold">Name: {test.uname}</p>
+                  <p className="text-lg font-semibold">
+                    Name: {test.nurse_name}
+                  </p>
                   <p className="text-gray-600">TEST NAME: {test.testname}</p>
                   <hr />
                 </div>
@@ -151,14 +148,32 @@ function Tests() {
                     onClick={() =>
                       navigate('/Chatbox', {
                         state: {
-                          receiverName: test.uname,
+                          receiverName: test.nurse_name,
                           bookingId: test.booking_id,
                         },
                       })
                     }
                   >
-                    Chat
+                    <ForumTwoToneIcon />
                   </Button>
+                  {selectedSection === 'previous' && (
+                    <Button
+                      variant="contained"
+                      color="inherit"
+                      className="ml-2"
+                      onClick={() =>
+                        navigate('/addReview', {
+                          state: {
+                            receiverName: test.nurse_name,
+                            bookingId: test.booking_id,
+                            serialNumber: test.price,
+                          },
+                        })
+                      }
+                    >
+                      <RateReviewOutlinedIcon />
+                    </Button>
+                  )}
                 </div>
               </li>
             ))}

@@ -32,6 +32,7 @@ import Chatbox from './pages/chatBox/chatBox';
 import AddSchedule from './pages/doctorPages/addschedule';
 import EditHospiatlList from './pages/doctorPages/editHospitalList';
 import EditSchedule from './pages/doctorPages/editschedule';
+import AddReview from './pages/userPages/addReview';
 
 export function App() {
   return (
@@ -53,10 +54,10 @@ export function App() {
         <Route path="/doctorHome" element={<DoctorHome />} />
         <Route path="/nurseHome" element={<NurseHome />} />
         <Route path="/driverHome" element={<DriverHome />} />
-        {<Route
+        <Route
           path="/doctorHome/prescriptionSubmission/"
           element={<Prescription />}
-        /> }
+        />
         <Route
           path="/userHome/PatientProfileUpdate/"
           element={<PatientProfileUpdate />}
@@ -76,37 +77,29 @@ export function App() {
           path="/hospitalHome/AvailableEmployee/"
           element={<AvailableEmployee />}
         />
-        <Route
-          path="/hospitalHome/:bookingID"
-          element={<AssignNurse />}
-        />
-        <Route
-          path="/hospitalHome/EditTest/:testID"
-          element={<EditTest />}
-        />
+        <Route path="/hospitalHome/:bookingID" element={<AssignNurse />} />
+        <Route path="/hospitalHome/EditTest/:testID" element={<EditTest />} />
 
         {/* <Route path="/doctorSearch" element={<DoctorSearch />} />
         <Route path="/AmbulanceSearch" element={<AmbulanceSearch />} /> */}
-        <Route
-          path="/userHome/DoctorSearch/"
-          element={<DoctorSearch />}
-        />
-        <Route
-          path="/userHome/CheckupSearch/"
-          element={<CheckupSearch />}
-        />
+        <Route path="/userHome/DoctorSearch/" element={<DoctorSearch />} />
+        <Route path="/userHome/CheckupSearch/" element={<CheckupSearch />} />
         <Route
           path="/userHome/AmbulanceSearch/"
           element={<AmbulanceSearch />}
         />
-        <Route path='/EditHospiatlList' element={<EditHospiatlList />} />
-        <Route path='/doctorHome/EditSchedule/:timelineId' element={<EditSchedule />} />
+        <Route path="/EditHospiatlList" element={<EditHospiatlList />} />
+        <Route
+          path="/doctorHome/EditSchedule/:timelineId"
+          element={<EditSchedule />}
+        />
         <Route path="/BookDoctor/" element={<BookDoctor />} />
         <Route path="/BookAmbulance/" element={<BookAmbulance />} />
         <Route path="/BookCheckup/" element={<BookCheckup />} />
         <Route path="/chatbox/" element={<Chatbox />} />
         <Route path="/AddSchedule" element={<AddSchedule />} />
         <Route path="/Prescription/" element={<Prescription />} />
+        <Route path="/addReview/" element={<AddReview />} />
       </Routes>
     </BrowserRouter>
   );

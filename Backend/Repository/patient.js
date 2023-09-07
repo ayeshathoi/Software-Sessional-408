@@ -74,7 +74,7 @@ const checkUpDetails = async (pid) => {
 };
 
 //driver er hospital eishob fixed kra lagbe
-const Ambulance = "SELECT a.time,a.date, u.uname, d.ambulance_type,a.hospital_id,a.total_price " +
+const Ambulance = "SELECT a.time,a.date,a.booking_id, u.uname, d.ambulance_type,a.hospital_id,a.total_price " +
                   "FROM booking a " +
                   "JOIN driver d ON a.driver_id = d.driver_id " +
                   "JOIN users u ON d.driver_id = u.uid " +

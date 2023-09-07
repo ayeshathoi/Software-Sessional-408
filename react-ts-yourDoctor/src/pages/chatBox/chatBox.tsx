@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import { TextField, Button, Typography } from '@mui/material';
 import Header from '../navbar/header';
 import Footer from '../navbar/footer';
-import { getComments_Chatbox,addComment_Chatbox } from '@/api/apiCalls';
+import { getComments_Chatbox, addComment_Chatbox } from '@/api/apiCalls';
 
 interface Comments {
   msg_id: number;
@@ -21,9 +21,9 @@ function Chatbox() {
   const location = useLocation();
   const { receiverName, bookingId, serialNumber } = location.state;
   if (!serialNumber) {
-    console.log("Chat with nurse");
+    console.log('Chat with nurse');
   }
-  
+
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState<{
@@ -50,7 +50,6 @@ function Chatbox() {
     //     booking_id: bookingId,
     //   })
     getComments_Chatbox(bookingId).then((res) => {
-
       if (res) {
         const sortedComments = res.result.sort(
           (a: Comments, b: Comments) =>
@@ -59,14 +58,12 @@ function Chatbox() {
         setComments(sortedComments);
         scrollToBottom();
         navigate('/chatbox', {
-          state: { receiverName, bookingId,serialNumber },
+          state: { receiverName, bookingId, serialNumber },
         });
-      }
-      else {
-        console.log("No Comments Found");
+      } else {
+        console.log('No Comments Found');
       }
     });
-
   }, [bookingId]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -101,10 +98,11 @@ function Chatbox() {
           <Typography className="receiver-name text-white text-2xl">
             Chat with {receiverName}
           </Typography>
-          <Typography className={`mb-4 ${
+          <Typography
+            className={`mb-4 ${
               serialNumber ? 'text-white text-2xl' : 'hidden'
-            }`}>
-
+            }`}
+          >
             Serial number : {serialNumber}
           </Typography>
         </div>
@@ -118,13 +116,17 @@ function Chatbox() {
           <div
             key={index}
             className={`mb-4 ${
-              comment.sender_id === comment.viewer_id? 'text-right' : 'text-left'
+              comment.sender_id === comment.viewer_id
+                ? 'text-right'
+                : 'text-left'
             }`}
           >
             <Box
               style={{
                 backgroundColor:
-                  comment.sender_id === comment.viewer_id ? '#89CFF0' : '#008000',
+                  comment.sender_id === comment.viewer_id
+                    ? '#89CFF0'
+                    : '#008000',
                 borderRadius: '5px',
                 padding: '5px 10px',
                 display: 'inline-block',

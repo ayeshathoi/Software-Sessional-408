@@ -1,8 +1,8 @@
+/* eslint-disable import/extensions */
 // page for hospital home and verify employee
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { Grid, Paper, Typography, Button, Container } from '@mui/material';
-import {allReview_hospital} from '@/api/apiCalls';
+import { Grid, Paper, Typography, Container } from '@mui/material';
+import { allReview_hospital } from '@/api/apiCalls';
 
 interface Reviews {
   booking_id: number;
@@ -30,13 +30,12 @@ function ReviewsPatient() {
     //     console.error('Error fetching data:', error);
     //   });
     allReview_hospital().then((ret) => {
-    if (ret) {
-      setRevies(ret);
-    }
-    else {
-      console.log('error');
-    }
-  });
+      if (ret) {
+        setRevies(ret);
+      } else {
+        console.log('error');
+      }
+    });
   });
 
   return (
@@ -102,7 +101,6 @@ function ReviewsPatient() {
                       </td>
                       <hr />
                     </tr>
-                    
                   ))}
                 </tbody>
               </table>

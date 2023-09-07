@@ -1,7 +1,11 @@
+/* eslint-disable import/extensions */
 /* eslint-disable react/no-array-index-key */
-import { patient_ambulance } from '@/api/apiCalls';
 import { SetStateAction, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import RateReviewOutlinedIcon from '@mui/icons-material/RateReviewOutlined';
+import { Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { patient_ambulance } from '@/api/apiCalls';
 import { addNotification } from '@/store/notificationsSlice';
 
 interface Ambulance {
@@ -16,6 +20,7 @@ interface Ambulance {
   city: string;
   thana: string;
   district: string;
+  booking_id: number;
 }
 
 function Ambulances() {
@@ -27,70 +32,66 @@ function Ambulances() {
     setSelectedSection(section);
   };
 
-
   const dispatch = useDispatch();
   const currentDate = new Date().toISOString();
-
+  const navigate = useNavigate();
 
   useEffect(() => {
-    patient_ambulance().then((patient_ambulance_list) => {
-    if (patient_ambulance_list) {
-        const currentAmbulances: Ambulance[] = patient_ambulance_list || [];
+    patient_ambulance()
+      .then((patient_ambulance_list) => {
+        if (patient_ambulance_list) {
+          const currentAmbulances: Ambulance[] = patient_ambulance_list || [];
 
-        console.log(patient_ambulance_list);
+          // console.log(patient_ambulance_list);
 
-        const storedUpcomingCount2: number =
-          JSON.parse(localStorage.getItem('upcomingCount2')) || 0;
+          const storedUpcomingCount2: number =
+            JSON.parse(localStorage.getItem('upcomingCount2')) || 0;
 
-        const upcomingAmbulanceCount = ambulances.filter(
-          (ambulance) => ambulance.date > currentDate
-        ).length;
+          const upcomingAmbulanceCount = ambulances.filter(
+            (ambulance) => ambulance.date > currentDate
+          ).length;
 
-        const previousAmbulances: Ambulance[] =
-          JSON.parse(localStorage.getItem('previousAmbulances')) || [];
+          const previousAmbulances: Ambulance[] =
+            JSON.parse(localStorage.getItem('previousAmbulances')) || [];
 
-        if (
-          currentAmbulances.length > previousAmbulances.length &&
-          previousAmbulances.length > 0 &&
-          upcomingAmbulanceCount === storedUpcomingCount2
-        ) {
-          dispatch(addNotification({ message: 'Add Review for Ambulance' }));
-          alert('Add Review for Ambulance');
-        } else if (
-          currentAmbulances.length > previousAmbulances.length &&
-          previousAmbulances.length > 0
-        ) {
-          dispatch(addNotification({ message: 'New ambulance added!' }));
-          alert('New ambulance added!');
+          if (
+            currentAmbulances.length > previousAmbulances.length &&
+            previousAmbulances.length > 0 &&
+            upcomingAmbulanceCount === storedUpcomingCount2
+          ) {
+            dispatch(addNotification({ message: 'Add Review for Ambulance' }));
+            alert('Add Review for Ambulance');
+          } else if (
+            currentAmbulances.length > previousAmbulances.length &&
+            previousAmbulances.length > 0 &&
+            upcomingAmbulanceCount > storedUpcomingCount2
+          ) {
+            dispatch(addNotification({ message: 'New ambulance added!' }));
+            alert('New ambulance added!');
+          }
+
+          localStorage.setItem(
+            'previousAmbulances',
+            JSON.stringify(currentAmbulances)
+          );
+
+          setUpcomingCount2(upcomingAmbulanceCount);
+          localStorage.setItem(
+            'upcomingCount2',
+            JSON.stringify(upcomingAmbulanceCount)
+          );
+          setAmbulances(currentAmbulances);
+        } else {
+          dispatch(addNotification({ message: 'No Ambulance Found' }));
+          alert('No Ambulance Found');
         }
-
-        localStorage.setItem(
-          'previousAmbulances',
-          JSON.stringify(currentAmbulances)
-        );
-
-        setUpcomingCount2(upcomingAmbulanceCount);
-        localStorage.setItem(
-          'upcomingCount2',
-          JSON.stringify(upcomingAmbulanceCount)
-        );
-        setAmbulances(currentAmbulances);
-      }
-      else {
+      })
+      .catch((err) => {
+        console.log(err);
         dispatch(addNotification({ message: 'No Ambulance Found' }));
         alert('No Ambulance Found');
-      }
-
-    }
-    ).catch((err) => {
-      console.log(err);
-      dispatch(addNotification({ message: 'No Ambulance Found' }));
-      alert('No Ambulance Found');
-    });
-
+      });
   }, [dispatch, ambulances, currentDate]);
-
-
 
   const upcomingAmbulances = ambulances.filter(
     (ambulance) => ambulance.date > currentDate
@@ -157,6 +158,24 @@ function Ambulances() {
                   <p className="text-sm text-gray-500">
                     Time: {ambulance.time.split('T')[0]}
                   </p>
+                  {selectedSection === 'previous' && (
+                    <Button
+                      variant="contained"
+                      color="inherit"
+                      className="ml-2"
+                      onClick={() =>
+                        navigate('/addReview', {
+                          state: {
+                            receiverName: ambulance.uname,
+                            bookingId: ambulance.booking_id,
+                            serialNumber: ambulance.time.split('T')[0],
+                          },
+                        })
+                      }
+                    >
+                      <RateReviewOutlinedIcon />
+                    </Button>
+                  )}
                 </div>
               </li>
             ))}

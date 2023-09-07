@@ -1,5 +1,6 @@
+/* eslint-disable import/extensions */
 /* eslint-disable react/no-array-index-key */
-import { useState, ChangeEvent, FormEvent, useEffect } from 'react';
+import { useState, FormEvent } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import {
   TextField,
@@ -9,9 +10,10 @@ import {
   Select,
   MenuItem,
 } from '@mui/material';
-import { color } from 'framer-motion';
 import HeaderDoctor from '../navbar/headerdoctor';
 import Footer from '../navbar/footer';
+
+import { updateSchedule_doctor } from '@/api/apiCalls';
 
 const generateTimeOptions = () => {
   const options = [];
@@ -25,8 +27,6 @@ const generateTimeOptions = () => {
   }
   return options;
 };
-
-import { updateSchedule_doctor } from '@/api/apiCalls';
 
 const weekdays = [
   'Monday',
@@ -56,7 +56,6 @@ function EditSchedule() {
   const location = useLocation();
 
   const { timelineId } = useParams();
- 
 
   const queryParams = new URLSearchParams(location.search);
   const weekdayParam = queryParams.get('weekday');
@@ -78,15 +77,14 @@ function EditSchedule() {
     console.log('request data', requestData);
 
     try {
-
-      updateSchedule_doctor(timelineId, requestData).then((res) =>
-      {
-        alert('Schedule Updated Successfully');
-        navigate(`/doctorHome`);
-      })
-      .catch((error) => {
-        console.error('Error updating timeline data:', error);
-      });
+      updateSchedule_doctor(timelineId, requestData)
+        .then(() => {
+          alert('Schedule Updated Successfully');
+          navigate(`/doctorHome`);
+        })
+        .catch((error) => {
+          console.error('Error updating timeline data:', error);
+        });
     } catch (err) {
       console.log(err);
     }

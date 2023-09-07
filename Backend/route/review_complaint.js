@@ -2,7 +2,7 @@ const express = require('express');
 var router = express.Router();
 const userController = require('../Controller/review_complaint');
 router.use(async (req,res,next) => {
-    if(req.user && req.user.user_type == 'patient'){
+    if(req.user && (req.user.user_type == 'patient'||req.user.user_type == 'hospital')){
         next();
     }
     else{
@@ -10,15 +10,5 @@ router.use(async (req,res,next) => {
     }
 });
 router.post('/:booking_id', userController.INSERT_RatingAndComplaint);
-
-router = express.Router();
-router.use(async (req,res,next) => {
-    if(req.user && req.user.user_type == 'hospital'){
-        next();
-    }
-    else{
-        res.status(error.UNAUTHORIZED).json({ error: 'Unauthorized' });
-    }
-});
 router.get('/', userController.show_complaint);
 module.exports = router;

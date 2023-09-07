@@ -1,15 +1,19 @@
-import { Link} from 'react-router-dom';
+/* eslint-disable import/extensions */
+import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import { Button } from '@mui/material';
-import Header from '../navbar/header_user';
-import Footer from '../navbar/footer';
 import { useSelector } from 'react-redux';
+import NotificationsActiveTwoToneIcon from '@mui/icons-material/NotificationsActiveTwoTone';
+import NotificationsOffIcon from '@mui/icons-material/NotificationsOff';
+import ClearIcon from '@mui/icons-material/Clear';
+import DeleteForeverTwoToneIcon from '@mui/icons-material/DeleteForeverTwoTone';
 import User from '@/assets/user.webp';
-
+import Footer from '../navbar/footer';
+import Header from '../navbar/header_user';
 import AppointmentImage from '@/assets/appointment.jpg';
 import AmbulanceImage from '@/assets/ambulance.jpg';
 import HealthCheckImage from '@/assets/healthcheckhome.jpg';
@@ -18,14 +22,10 @@ import Appointments from './appointments';
 import Tests from './tests';
 import { selectNotifications } from '@/store/notificationsSlice';
 import { patient_profile } from '@/api/apiCalls';
+
 type NotificationItem = {
   message: string;
 };
-
-
-
-
-
 
 function UserHome() {
   const [user, setUser] = useState({
@@ -42,13 +42,11 @@ function UserHome() {
         user.uname = patient_profile_list[0].uname;
         user.email = patient_profile_list[0].email;
         user.uid = patient_profile_list[0].uid;
-      }
-      else {
-        console.log("No Profile Found");
+      } else {
+        console.log('No Profile Found');
       }
     });
   }, [user]);
-
 
   const notificationStorageKey = `notifications_${user.uid}`;
 
@@ -113,7 +111,6 @@ function UserHome() {
     setNotificationlist([]);
   };
 
-
   return (
     <>
       <div>
@@ -125,7 +122,11 @@ function UserHome() {
           color="success"
           variant="contained"
         >
-          {showNotifications ? 'Hide Notifications' : 'Show Notifications'}
+          {showNotifications ? (
+            <NotificationsOffIcon /> // Render the icon when showNotifications is true
+          ) : (
+            <NotificationsActiveTwoToneIcon /> // Otherwise, show the text
+          )}
         </Button>
         <div className="ml-4">
           <Paper elevation={1}>
@@ -139,7 +140,7 @@ function UserHome() {
                       onClick={() => handleDeleteNotification(index)}
                       className="ml-4 text-red-500 hover:text-red-700"
                     >
-                      X
+                      <ClearIcon />
                     </button>
                   </div>
                 ))}
@@ -153,7 +154,7 @@ function UserHome() {
             color="error"
             variant="outlined"
           >
-            Clear Notifications
+            <DeleteForeverTwoToneIcon />
           </Button>
         </div>
       </div>

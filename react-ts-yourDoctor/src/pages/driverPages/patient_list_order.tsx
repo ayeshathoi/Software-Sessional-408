@@ -25,13 +25,12 @@ function Order() {
     //     // console.log(response.data);
     //   })
     driver_patient_list().then((res) => {
-    if(res){
+      if (res) {
         setAmbulances(res.result);
+      } else {
+        console.log('error');
       }
-    else {
-      console.log('error');
-    } 
-  });
+    });
   });
 
   const currentDate = new Date().toISOString();

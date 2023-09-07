@@ -1,3 +1,4 @@
+/* eslint-disable import/extensions */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, ChangeEvent, FormEvent } from 'react';
 import Cookies from 'universal-cookie';
@@ -10,7 +11,6 @@ import { login } from '@/api/apiCalls';
 const cookies = new Cookies();
 const COOKIE_AGE = 31536000;
 
-
 const checkAuth = () => {
   return !(cookies.get('token') === undefined || cookies.get('token') === null);
 };
@@ -18,7 +18,6 @@ const checkAuth = () => {
 const logout = () => {
   cookies.remove('token', { path: '/' });
 };
-
 
 function LogIn() {
   const navigate = useNavigate();
@@ -37,40 +36,40 @@ function LogIn() {
     try {
       const ret = await login(formData);
       if (ret) {
-          let userProfileUrl = '';
-          if (ret === 'doctor') {
-            userProfileUrl = `/doctorHome/`;
-          } else if (ret === 'patient') {
-            userProfileUrl = `/userHome`;
-          } else if (ret === 'driver') {
-            userProfileUrl = `/driverHome`;
-          } else if (ret === 'nurse') {
-            userProfileUrl = `/nurseHome`;
-          } else if (ret === 'hospital') {
-            userProfileUrl = `/hospitalHome`;
-          }
-          navigate(userProfileUrl);
+        let userProfileUrl = '';
+        if (ret === 'doctor') {
+          userProfileUrl = `/doctorHome/`;
+        } else if (ret === 'patient') {
+          userProfileUrl = `/userHome`;
+        } else if (ret === 'driver') {
+          userProfileUrl = `/driverHome`;
+        } else if (ret === 'nurse') {
+          userProfileUrl = `/nurseHome`;
+        } else if (ret === 'hospital') {
+          userProfileUrl = `/hospitalHome`;
         }
-
+        navigate(userProfileUrl);
+        alert('Login Successful');
+      }
 
       // await axios
       //   .post('http://localhost:3000/auth/login', formData)
-        // .then((res) => {
-        //   console.log(res.data);
-        //   let userProfileUrl = '';
-        //   if (res.data === 'doctor') {
-        //     userProfileUrl = `/doctorHome/`;
-        //   } else if (res.data === 'patient') {
-        //     userProfileUrl = `/userHome`;
-        //   } else if (res.data === 'driver') {
-        //     userProfileUrl = `/driverHome`;
-        //   } else if (res.data === 'nurse') {
-        //     userProfileUrl = `/nurseHome`;
-        //   } else if (res.data === 'hospital') {
-        //     userProfileUrl = `/hospitalHome`;
-        //   }
-        //   navigate(userProfileUrl);
-        // });
+      // .then((res) => {
+      //   console.log(res.data);
+      //   let userProfileUrl = '';
+      //   if (res.data === 'doctor') {
+      //     userProfileUrl = `/doctorHome/`;
+      //   } else if (res.data === 'patient') {
+      //     userProfileUrl = `/userHome`;
+      //   } else if (res.data === 'driver') {
+      //     userProfileUrl = `/driverHome`;
+      //   } else if (res.data === 'nurse') {
+      //     userProfileUrl = `/nurseHome`;
+      //   } else if (res.data === 'hospital') {
+      //     userProfileUrl = `/hospitalHome`;
+      //   }
+      //   navigate(userProfileUrl);
+      // });
     } catch (err) {
       console.log(err);
     }

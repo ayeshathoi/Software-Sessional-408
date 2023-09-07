@@ -1,7 +1,9 @@
+/* eslint-disable import/extensions */
 /* eslint-disable react/no-array-index-key */
 import { SetStateAction, useEffect, useState } from 'react';
-import { useParams,useNavigate } from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
+import ForumTwoToneIcon from '@mui/icons-material/ForumTwoTone';
+import RateReviewOutlinedIcon from '@mui/icons-material/RateReviewOutlined';
 import { useDispatch } from 'react-redux';
 import { Button } from '@mui/material';
 import { addNotification } from '@/store/notificationsSlice';
@@ -22,7 +24,7 @@ interface Appointment {
 function Appointments() {
   const [selectedSection, setSelectedSection] = useState('upcoming');
   const [appointments, setAppointments] = useState<Appointment[]>([]);
-  const [,setUpcomingCount] = useState<number>(0);
+  const [, setUpcomingCount] = useState<number>(0);
 
   const handleSectionChange = (section: SetStateAction<string>) => {
     setSelectedSection(section);
@@ -31,9 +33,11 @@ function Appointments() {
   const navigate = useNavigate();
   const currentDate = new Date().toISOString();
   const dispatch = useDispatch();
-  useEffect( () => {
-    patient_appointment().then((patient_appointment_list) => {
-      const currentAppointments: Appointment[] = patient_appointment_list || [];
+  useEffect(() => {
+    patient_appointment()
+      .then((patient_appointment_list) => {
+        const currentAppointments: Appointment[] =
+          patient_appointment_list || [];
 
         const storedUpcomingCount: number =
           JSON.parse(localStorage.getItem('upcomingCount')) || 0;
@@ -54,7 +58,8 @@ function Appointments() {
           alert('Add Review for Appointment');
         } else if (
           currentAppointments.length > previousAppointments.length &&
-          previousAppointments.length > 0
+          previousAppointments.length > 0 &&
+          upcomingAppointmentsCount > storedUpcomingCount
         ) {
           dispatch(addNotification({ message: 'New Appointment added!' }));
           alert('New Appointment added!');
@@ -76,8 +81,6 @@ function Appointments() {
         console.error('Error fetching appointments:', error);
       });
   }, [appointments, dispatch, currentDate]);
-
-
 
   const upcomingAppointments = appointments.filter(
     (appointment) => appointment.date > currentDate
@@ -163,8 +166,26 @@ function Appointments() {
                       })
                     }
                   >
-                    Chat
+                    <ForumTwoToneIcon />
                   </Button>
+                  {selectedSection === 'previous' && (
+                    <Button
+                      variant="contained"
+                      color="inherit"
+                      className="ml-2"
+                      onClick={() =>
+                        navigate('/addReview', {
+                          state: {
+                            receiverName: appointment.uname,
+                            bookingId: appointment.booking_id,
+                            serialNumber: appointment.appointment_serial,
+                          },
+                        })
+                      }
+                    >
+                      <RateReviewOutlinedIcon />
+                    </Button>
+                  )}
                 </div>
               </li>
             ))}

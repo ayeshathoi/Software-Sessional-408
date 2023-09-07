@@ -1,6 +1,7 @@
+/* eslint-disable import/extensions */
 /* eslint-disable no-restricted-globals */
 import { useEffect, useState } from 'react';
-import {Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import {
   Grid,
   Paper,
@@ -12,16 +13,22 @@ import {
   FormControl,
   InputLabel,
 } from '@mui/material';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import EditCalendarOutlinedIcon from '@mui/icons-material/EditCalendarOutlined';
 import HeaderDoctor from '../navbar/headerdoctor';
 import Footer from '../navbar/footer';
-import { editHospitalList_doctor,deleteTimeline_doctor, getDoctorDetails } from '@/api/apiCalls';
+import {
+  editHospitalList_doctor,
+  deleteTimeline_doctor,
+  getDoctorDetails,
+} from '@/api/apiCalls';
 
 function EditHospiatlList() {
   const location = useLocation();
   const [hospitalNames, setHospitalNames] = useState([]);
   const [selectedHospital, setSelectedHospital] = useState('');
   const [timelineData, setTimelineData] = useState([]);
-  const [doctor_id, setDoctor_id] = useState(0);
+  const [doctorid, setDoctorid] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,37 +43,36 @@ function EditHospiatlList() {
 
   // Fetch timeline data for the selected hospital
   useEffect(() => {
-    getDoctorDetails().then((res) =>
-    {
-      setDoctor_id(res.uid);
+    getDoctorDetails().then((res) => {
+      setDoctorid(res.uid);
     });
 
     if (selectedHospital) {
-    editHospitalList_doctor(selectedHospital,doctor_id).then((res) =>
-    {
-      console.log(res)
-        setTimelineData(res);
-    })
-    .catch((error) => {
-        console.error('Error fetching timeline data:', error);
-    });
-}}, [selectedHospital]);
+      editHospitalList_doctor(selectedHospital, doctorid)
+        .then((res) => {
+          console.log(res);
+          setTimelineData(res);
+        })
+        .catch((error) => {
+          console.error('Error fetching timeline data:', error);
+        });
+    }
+  }, [doctorid, selectedHospital]);
 
   const deleteTimeline = async (timeline_id: number) => {
     try {
-    deleteTimeline_doctor(timeline_id).then((res) =>
-    {
-        alert('Schedule Deleted Successfully');
-        navigate(`/doctorHome`);
-    })
-    .catch((error) => {
-        console.error('Error deleting timeline data:', error);
-    }
-    );
+      deleteTimeline_doctor(timeline_id)
+        .then((res) => {
+          alert('Schedule Deleted Successfully');
+          navigate(`/doctorHome`);
+        })
+        .catch((error) => {
+          console.error('Error deleting timeline data:', error);
+        });
     } catch (err) {
-        console.log(err);
+      console.log(err);
     }
-    };
+  };
 
   const filteredTimelineData = timelineData.filter(
     (timeline) => timeline.hospital_name === selectedHospital
@@ -160,7 +166,7 @@ function EditHospiatlList() {
                             to={`/doctorHome/EditSchedule/${timeline.timeline_id}?weekday=${timeline.weekday}&hospital_name=${selectedHospital}`}
                           >
                             <Button variant="contained" color="primary">
-                              Edit
+                              <EditCalendarOutlinedIcon />
                             </Button>
                           </Link>
                         </td>
@@ -173,7 +179,7 @@ function EditHospiatlList() {
                               deleteTimeline(timeline.timeline_id)
                             }
                           >
-                            Delete
+                            <DeleteOutlineOutlinedIcon />
                           </Button>
                         </td>
                       </tr>

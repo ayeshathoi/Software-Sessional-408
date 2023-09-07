@@ -9,3 +9,12 @@ Content-Type: application/json
 ###
 
 GET http://localhost:3000/patient/doctorall
+
+###
+POST http://localhost:3000/patient/addreview/7
+Content-Type:  application/json
+
+{
+    "complaint_text": "I am fine now",
+    "rating": 4
+}

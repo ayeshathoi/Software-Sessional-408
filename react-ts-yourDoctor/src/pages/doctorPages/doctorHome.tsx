@@ -1,12 +1,12 @@
+/* eslint-disable import/extensions */
 /* eslint-disable no-restricted-syntax */
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import axios from 'axios';
+import { Link } from 'react-router-dom';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
-
+import PersonRemoveSharpIcon from '@mui/icons-material/PersonRemoveSharp';
 import { Toolbar, Button } from '@mui/material';
 import DoctorImage from '@/assets/doctor.jpg';
 import patient from '@/assets/appointment.jpg';
@@ -37,23 +37,20 @@ function DoctorHome() {
   const [selectedHospital, setSelectedHospital] = useState<string | null>(null);
 
   useEffect(() => {
-    getDoctorDetails().then((res) =>
-    {
+    getDoctorDetails().then((res) => {
       setUser(res);
-      console.log(res)
+      console.log(res);
       const hospitalNames = [];
-          for (const key in res) {
-            if (Object.prototype.hasOwnProperty.call(res, key)) {
-              if (key.includes('hospital')) {
-                hospitalNames.push(res[key]);
-              }
-            }
+      for (const key in res) {
+        if (Object.prototype.hasOwnProperty.call(res, key)) {
+          if (key.includes('hospital')) {
+            hospitalNames.push(res[key]);
           }
-          setHospitals(hospitalNames);
+        }
+      }
+      setHospitals(hospitalNames);
     });
-
-
-  },);
+  });
   const handleChange = (
     _event: React.ChangeEvent<object>,
     newValue: number
@@ -76,9 +73,7 @@ function DoctorHome() {
           >
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Link
-                to={`/AddSchedule/?hospitals=${JSON.stringify(
-                  hospitals
-                )}`}
+                to={`/AddSchedule/?hospitals=${JSON.stringify(hospitals)}`}
                 className="ml-2"
               >
                 <Button variant="contained" color="inherit">
@@ -94,6 +89,11 @@ function DoctorHome() {
                 </Button>
               </Link>
             </Box>
+            <div className="mr-24 font-bold">
+              <Button variant="contained" color="inherit">
+                <PersonRemoveSharpIcon />
+              </Button>
+            </div>
           </Toolbar>
         </div>
       </div>

@@ -2,6 +2,7 @@
 import { Link } from 'react-router-dom';
 // eslint-disable-next-line import/extensions
 import { Box, Button, Toolbar } from '@mui/material';
+import PersonRemoveSharpIcon from '@mui/icons-material/PersonRemoveSharp';
 import Header from '@/pages/navbar/header.tsx';
 
 function HeaderUser() {
@@ -40,6 +41,11 @@ function HeaderUser() {
               </Button>
             </Link>
           </Box>
+          <div className="mr-24 font-bold">
+            <Button variant="contained" color="inherit">
+              <PersonRemoveSharpIcon />
+            </Button>
+          </div>
         </Toolbar>
       </div>
     </div>

@@ -117,10 +117,8 @@ const driverAll = async () => {
 
 const onedriver = async (did) => {
     try {
-        console.log(did);
         const client = await getConnection.connect();
         const result = await client.query(one,[did]);
-        console.log(result.rows[0]);
         const hospital_id = result.rows[0].hospital_id;
         const driver = await client.query(userDetail,[result.rows[0].driver_id]);
         result.rows[0].driver_name = driver.rows[0].uname;

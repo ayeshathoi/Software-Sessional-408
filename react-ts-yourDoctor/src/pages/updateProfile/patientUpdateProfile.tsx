@@ -4,11 +4,9 @@ import axios from 'axios';
 import Header from '../navbar/header';
 import Footer from '../navbar/footer';
 import User from '@/assets/user.webp';
+axios.defaults.withCredentials = true;
 
-
-function PatientProfileUpdate() {
-  const { userid } = useParams();
-  
+function PatientProfileUpdate() {  
   const [isEditing, setIsEditing] = useState(false);
   const [prevForm, setPrevForm] = useState({
     name: '',
@@ -30,7 +28,7 @@ function PatientProfileUpdate() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/patient/profile/${userid}`)
+      .get(`http://localhost:3000/patient/profile`)
       .then((response) => {
         setPrevForm({
           name: response.data.name,
@@ -53,7 +51,7 @@ function PatientProfileUpdate() {
       .catch((error) => {
         console.error('Error fetching patient profile:', error);
       });
-  }, [userid]);
+  });
 
   console.log("dehfbk",prevForm);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,9 +60,7 @@ function PatientProfileUpdate() {
   };
   const handleUpdate = async () => {
     try {
-      
-      console.log("here is the formdata",formData,{userid})
-      const response = await axios.post(`http://localhost:3000/patient/${userid}`, formData); 
+      const response = await axios.post(`http://localhost:3000/patient`, formData); 
       console.log('Updated Data:', response.data); 
       setIsEditing(false);
     } catch (error) {

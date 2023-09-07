@@ -126,11 +126,20 @@ const create_doctor = async (req, res,hashedPassword) => {
     }
 }
 
-
-const getUserDetailsByID = async (uid, res) => {
+const getUserDetailsByIDUtil = async (uid) => {
     try {
         const userDetails = await user.GET_USER_DETAIL(uid);
         return userDetails;
+    } catch (error) {
+        return null;
+    }
+};
+const getUserDetailsByID = async (req, res) => {
+    try {
+        // console.log(req);
+        const userDetails = await user.GET_USER_DETAIL(req.user.uid);
+        
+        res.send(userDetails);
     } catch (error) {
         console.error(error);
         res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while fetching user details.' });
@@ -140,7 +149,7 @@ const getUserDetailsByID = async (uid, res) => {
 
 const getUserDetailsByIDfrontend = async (req, res) => {
     try {
-        const uid = req.params.uid;
+        const uid = req.user.uid;
         const userDetails = await user.GET_USER_DETAIL(uid);
         res.send(userDetails);
     } catch (error) {
@@ -151,26 +160,14 @@ const getUserDetailsByIDfrontend = async (req, res) => {
         
 
 
-const getUserDetailsByEmail = async (req, res) => {
+const getUserDetailsByEmail = async (email) => {
     try {
-        const email = req.body.email;
         const userDetails = await user.GET_USER_DETAILEmail(email);
         return userDetails;
-    } catch (error) {
+    } 
+    catch (error) {
         console.error(error);
-        res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while fetching user details.' });
-    }
-};
-
-
-const getHospitalDetailsByEmail = async (req, res) => {
-    try {
-        const email = req.body.email;
-        const hospitalDetails = await user.GET_HOSPITAL_DETAIL(email);
-        return hospitalDetails;
-    } catch (error) {
-        console.error(error);
-        res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while fetching hospital details.' });
+        return null;
     }
 };
 
@@ -189,12 +186,12 @@ const getHospitalDetailsByID = async (hid, res) => {
 module.exports = {
     getUserDetailsByID,
     getUserDetailsByEmail,
-    getHospitalDetailsByEmail,
     create_hospital,
     getHospitalDetailsByID,
     create_patient,
     create_nurse,
     getUserDetailsByIDfrontend,
     create_driver,
-    create_doctor
+    create_doctor,
+    getUserDetailsByIDUtil
 };

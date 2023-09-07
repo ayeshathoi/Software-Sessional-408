@@ -1,9 +1,9 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, ChangeEvent, FormEvent } from 'react';
-import axios from 'axios';
 import { format } from 'date-fns';
 import { useLocation } from 'react-router-dom';
+import { bookCheckup } from '@/api/apiCalls';
 import {
   Button,
   Typography,
@@ -23,14 +23,11 @@ import {
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Header from '../navbar/header';
 import Footer from '../navbar/footer';
-
 function BookCheckup() {
   const location = useLocation();
   // const navigate = useNavigate();
-  const { selectedTests, combinedPrice, selectedHospital, userId } =
+  const { selectedTests, combinedPrice, selectedHospital} =
     location.state;
-
-  // const { userid } = userId;
 
   const [formData, setFormData] = useState<{
     patient_mobile: string;
@@ -81,12 +78,12 @@ function BookCheckup() {
         test_names: testNamesArray,
       };
       console.log('here is the form', dataToSend);
-      console.log('userrrridd', userId);
-      await axios
-        .post(`http://localhost:3000/booking/${userId}/checkup`, dataToSend)
-        .then((res) => {
-          console.log('here is the form', res.data);
-        });
+      // await axios
+      //   .post(`http://localhost:3000/booking/checkup`, dataToSend)
+      //   .then((res) => {
+      //     console.log('here is the form', res.data);
+      //   });
+      const res = await bookCheckup(dataToSend);
     } catch (err) {
       console.log(err);
     }

@@ -1,10 +1,11 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, ChangeEvent, FormEvent } from 'react';
-import axios from 'axios';
+
 import { Button, TextField } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../navbar/headerdoctor';
 import Footer from '../navbar/footer';
+import { reg_hospital } from '@/api/apiCalls';
 
 function HospitalSignup() {
   const navigate = useNavigate();
@@ -32,12 +33,14 @@ function HospitalSignup() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await axios
-        .post('http://localhost:3000/auth/register/hospital', formData)
-        .then((res) => {
-          console.log('here is the form', res.data);
-          navigate('/LogIn/');
-        });
+      // await axios
+      //   .post('http://localhost:3000/auth/register/hospital', formData)
+      //   .then((res) => {
+      //     console.log('here is the form', res.data);
+      //     navigate('/LogIn/');
+      //   });
+      const ret = reg_hospital(formData);
+      navigate('/LogIn');
     } catch (err) {
       console.log(err);
     }
@@ -85,21 +88,20 @@ function HospitalSignup() {
               className="w-full"
             />
             <TextField
-              label="Password"
-              name="password"
-              type="password"
-              value={formData.password}
+              label="Email"
+              type="email"
+              name="email"
+              value={formData.email}
               onChange={handleChange}
               variant="outlined"
               required
               className="w-full"
             />
-
             <TextField
-              label="Email"
-              type="email"
-              name="email"
-              value={formData.email}
+              label="Password"
+              name="password"
+              type="password"
+              value={formData.password}
               onChange={handleChange}
               variant="outlined"
               required

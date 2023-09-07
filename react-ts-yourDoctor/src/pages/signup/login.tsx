@@ -2,13 +2,13 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import Cookies from 'universal-cookie';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+
 import Navbar from '../navbar/headerdoctor';
 import Footer from '../navbar/footer';
+import { login } from '@/api/apiCalls';
 
 const cookies = new Cookies();
 const COOKIE_AGE = 31536000;
-
 
 
 const checkAuth = () => {
@@ -35,41 +35,42 @@ function LogIn() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await axios
-        .post('http://localhost:3000/auth/login', formData)
-        .then((res) => {
-          cookies.set('token', res.data.backendCookie, {
-            path: '/',
-            maxAge: COOKIE_AGE,
-          });
-          console.log('here is the token', res.data.backendCookie);
-
-          // const { res.data.type } = res.data; // Replace with actual key
-          console.log(res.data);
+      const ret = await login(formData);
+      if (ret) {
           let userProfileUrl = '';
-          if (res.data.type === 'doctor') {
-            const userId = res.data.uid;
-            console.log('here is the uid', res.data.uid);
-            userProfileUrl = `/doctorHome/${userId}/`;
-          } else if (res.data.type === 'patient') {
-            const userId = res.data.uid;
-            console.log('here is the uid', res.data.uid);
-            userProfileUrl = `/userHome/${userId}/`;
-          } else if (res.data.type === 'driver') {
-            const userId = res.data.uid;
-            console.log('here is the uid', res.data.uid);
-            userProfileUrl = `/driverHome/${userId}/`;
-          } else if (res.data.type === 'nurse') {
-            const userId = res.data.uid;
-            console.log('here is the uid', res.data.uid);
-            userProfileUrl = `/nurseHome/${userId}/`;
-          } else if (res.data.type === 'hospital') {
-            const userId = res.data.uid;
-            console.log('here is the uid', res.data.uid);
-            userProfileUrl = `/hospitalHome/${userId}/`;
+          if (ret === 'doctor') {
+            userProfileUrl = `/doctorHome/`;
+          } else if (ret === 'patient') {
+            userProfileUrl = `/userHome`;
+          } else if (ret === 'driver') {
+            userProfileUrl = `/driverHome`;
+          } else if (ret === 'nurse') {
+            userProfileUrl = `/nurseHome`;
+          } else if (ret === 'hospital') {
+            userProfileUrl = `/hospitalHome`;
           }
           navigate(userProfileUrl);
-        });
+        }
+
+
+      // await axios
+      //   .post('http://localhost:3000/auth/login', formData)
+        // .then((res) => {
+        //   console.log(res.data);
+        //   let userProfileUrl = '';
+        //   if (res.data === 'doctor') {
+        //     userProfileUrl = `/doctorHome/`;
+        //   } else if (res.data === 'patient') {
+        //     userProfileUrl = `/userHome`;
+        //   } else if (res.data === 'driver') {
+        //     userProfileUrl = `/driverHome`;
+        //   } else if (res.data === 'nurse') {
+        //     userProfileUrl = `/nurseHome`;
+        //   } else if (res.data === 'hospital') {
+        //     userProfileUrl = `/hospitalHome`;
+        //   }
+        //   navigate(userProfileUrl);
+        // });
     } catch (err) {
       console.log(err);
     }

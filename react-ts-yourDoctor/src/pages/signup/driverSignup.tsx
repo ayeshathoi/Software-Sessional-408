@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 // /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, ChangeEvent, FormEvent } from 'react';
-import axios from 'axios';
+
 import { useNavigate } from 'react-router-dom';
 import {
   TextField,
@@ -15,6 +15,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Navbar from '../navbar/headerdoctor';
 import Footer from '../navbar/footer';
+import { reg_driver } from '@/api/apiCalls';
 
 function DriverSignup() {
   const [formData, setFormData] = useState({
@@ -50,12 +51,14 @@ function DriverSignup() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await axios
-        .post('http://localhost:3000/auth/register/driver', formData)
-        .then((res) => {
-          console.log('here is the form', res.data);
-          navigate('/LogIn'); // signup er por login kora lagbe
-        });
+      // await axios
+      //   .post('http://localhost:3000/auth/register/driver', formData)
+      //   .then((res) => {
+      //     console.log('here is the form', res.data);
+      //     navigate('/LogIn'); // signup er por login kora lagbe
+      //   });
+      const ret = reg_driver(formData);
+      navigate('/LogIn');
     } catch (err) {
       console.log(err);
     }

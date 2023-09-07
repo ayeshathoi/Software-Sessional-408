@@ -1,13 +1,18 @@
 // next time add profile_picture in users table
 CREATE TABLE users (
   uid SERIAL PRIMARY KEY,
-  uname TEXT NOT NULL,
+  uname TEXT,
   user_type TEXT NOT NULL,
   email TEXT NOT NULL UNIQUE,
   pass TEXT NOT NULL,
   mobile_no TEXT NOT NULL,
-  dob DATE NOT NULL,
-  gender TEXT NOT NULL
+  dob DATE,
+  gender TEXT
+);
+CREATE TABLE nurse_test (
+  test_id INTEGER REFERENCES test(testID),
+  nurse_id INTEGER REFERENCES nurse(nurse_id),
+  PRIMARY KEY (nurse_id,test_id)
 );
 
 
@@ -20,12 +25,9 @@ CREATE TABLE patient (
 );
 
 CREATE TABLE hospital (
-  hospital_id SERIAL PRIMARY KEY,
+  hospital_id INTEGER PRIMARY KEY REFERENCES users(uid),
   hospital_name TEXT NOT NULL UNIQUE,
   verification_status TEXT NOT NULL,
-  email TEXT NOT NULL,
-  pass TEXT NOT NULL,
-  mobile TEXT NOT NULL,
   street TEXT NOT NULL,
   thana TEXT NOT NULL,
   city TEXT NOT NULL,
@@ -85,18 +87,12 @@ CREATE TABLE driver (
   district TEXT,
   nid TEXT NOT NULL
 );
-select * from test;
+
 CREATE TABLE test (
   testID SERIAL PRIMARY KEY,
   testname TEXT NOT NULL,
   price DECIMAL NOT NULL,
   hospital_id INTEGER REFERENCES hospital(hospital_id)
-);
-
-CREATE TABLE nurse_test (
-  test_id INTEGER REFERENCES test(testID),
-  nurse_id INTEGER REFERENCES nurse(nurse_id),
-  PRIMARY KEY (nurse_id,test_id)
 );
 
 
@@ -126,16 +122,6 @@ CREATE TABLE review (
     booking_id INTEGER REFERENCES booking(booking_id)
 );
 
-
-CREATE TABLE ambulance (
-  ambulance_id SERIAL PRIMARY KEY,
-  ambulance_type TEXT NOT NULL,
-  abmbulance_fare DECIMAL NOT NULL,
-  hospital_id INTEGER REFERENCES hospital(hospital_id),
-  driver_id INTEGER REFERENCES driver(driver_id)
-);
-
-
 CREATE TABLE Booking_TESTS (
       test_id INTEGER REFERENCES test(testid),
       booking_id INTEGER REFERENCES booking(booking_id),
@@ -151,3 +137,12 @@ CREATE TABLE Chat_message (
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 //prescription table
+CREATE TABLE prescription (
+  prescription_id SERIAL PRIMARY KEY,
+  booking_id INTEGER REFERENCES booking(booking_id),
+  suggestions TEXT,
+  medicine TEXT,
+  tests TEXT,
+  disease TEXT,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

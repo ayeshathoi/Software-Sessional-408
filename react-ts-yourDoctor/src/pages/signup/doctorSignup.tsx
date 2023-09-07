@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 // /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, ChangeEvent, FormEvent } from 'react';
-import axios from 'axios';
+
 import { useNavigate } from 'react-router-dom';
 import {
   TextField,
@@ -15,6 +15,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Navbar from '../navbar/headerdoctor';
 import Footer from '../navbar/footer';
+
+import {reg_doctor} from '@/api/apiCalls';
 
 interface FormData {
   uname: string;
@@ -76,12 +78,14 @@ function DoctorSignup() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await axios
-        .post('http://localhost:3000/auth/register/doctor', formData)
-        .then((res) => {
-          console.log('here is the form', res.data);
-          navigate('/LogIn');
-        });
+      // await axios
+      //   .post('http://localhost:3000/auth/register/doctor', formData)
+      //   .then((res) => {
+      //     console.log('here is the form', res.data);
+      //     navigate('/LogIn');
+      //   });
+      const ret = reg_doctor(formData);
+      navigate('/LogIn');
     } catch (err) {
       console.log(err);
     }

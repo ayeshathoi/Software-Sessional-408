@@ -49,12 +49,16 @@ const allAppointments = async (pid) => {
 
 
 
-const CheckUP = "SELECT a.booking_id,a.time,a.date, t.testname, t.price,u.uname FROM booking a " +
-                "JOIN nurse_test nt ON a.nurse_id = nt.nurse_id " +
-                "JOIN users u ON nt.nurse_id = u.uid "+
-                "JOIN test t ON t.testID = nt.test_id " + 
-                "JOIN patient p ON a.patient_id = p.pid "+
-                "WHERE a.patient_id = $1 AND a.type = 'Checkup'";
+const CheckUP = `
+  SELECT a.booking_id, a.time, a.date, t.testname, t.price, u.uname AS patient_name, a.nurse_id, 
+         (SELECT u2.uname FROM nurse n2 JOIN users u2 ON n2.nurse_id = u2.uid WHERE n2.nurse_id = a.nurse_id) AS nurse_name
+  FROM booking a
+  JOIN booking_tests bt ON a.booking_id = bt.booking_id
+  JOIN test t ON t.testid = bt.test_id
+  JOIN patient p ON a.patient_id = p.pid
+  JOIN users u ON p.pid = u.uid
+  WHERE a.patient_id = $1 AND a.type = 'Checkup' AND a.nurse_id IS NOT NULL
+`;
 
 const checkUpDetails = async (pid) => {
     try {

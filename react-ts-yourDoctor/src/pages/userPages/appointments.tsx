@@ -1,32 +1,83 @@
 /* eslint-disable react/no-array-index-key */
 import { SetStateAction, useEffect, useState } from 'react';
 import { useParams,useNavigate } from 'react-router-dom';
-import axios from 'axios';
+
+import { useDispatch } from 'react-redux';
 import { Button } from '@mui/material';
+import { addNotification } from '@/store/notificationsSlice';
+import { patient_appointment } from '@/api/apiCalls';
+
+interface Appointment {
+  time: string;
+  date: string;
+  uname: string;
+  appointment_serial: number;
+  designation: string;
+  speciality: string;
+  total_price: number;
+  hospital_name: string;
+  booking_id: number;
+}
 
 function Appointments() {
   const [selectedSection, setSelectedSection] = useState('upcoming');
-  const [appointments, setAppointments] = useState([]);
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [,setUpcomingCount] = useState<number>(0);
 
   const handleSectionChange = (section: SetStateAction<string>) => {
     setSelectedSection(section);
   };
 
-  const { userid } = useParams();
   const navigate = useNavigate();
+  const currentDate = new Date().toISOString();
+  const dispatch = useDispatch();
+  useEffect( () => {
+    patient_appointment().then((patient_appointment_list) => {
+      const currentAppointments: Appointment[] = patient_appointment_list || [];
 
-  useEffect(() => {
-    axios
-      .get(`http://localhost:3000/patient/appointment/${userid}`)
-      .then((response) => {
-        setAppointments(response.data); // Set the fetched appointments to the state
+        const storedUpcomingCount: number =
+          JSON.parse(localStorage.getItem('upcomingCount')) || 0;
+
+        const upcomingAppointmentsCount = currentAppointments.filter(
+          (appointment) => appointment.date > currentDate
+        ).length;
+
+        const previousAppointments: Appointment[] =
+          JSON.parse(localStorage.getItem('previousAppointments')) || [];
+
+        if (
+          currentAppointments.length > previousAppointments.length &&
+          previousAppointments.length > 0 &&
+          upcomingAppointmentsCount === storedUpcomingCount
+        ) {
+          dispatch(addNotification({ message: 'Add Review for Appointment' }));
+          alert('Add Review for Appointment');
+        } else if (
+          currentAppointments.length > previousAppointments.length &&
+          previousAppointments.length > 0
+        ) {
+          dispatch(addNotification({ message: 'New Appointment added!' }));
+          alert('New Appointment added!');
+        }
+
+        localStorage.setItem(
+          'previousAppointments',
+          JSON.stringify(currentAppointments)
+        );
+
+        setUpcomingCount(upcomingAppointmentsCount);
+        localStorage.setItem(
+          'upcomingCount',
+          JSON.stringify(upcomingAppointmentsCount)
+        );
+        setAppointments(patient_appointment_list);
       })
       .catch((error) => {
         console.error('Error fetching appointments:', error);
       });
-  }, [userid]);
+  }, [appointments, dispatch, currentDate]);
 
-  const currentDate = new Date().toISOString();
+
 
   const upcomingAppointments = appointments.filter(
     (appointment) => appointment.date > currentDate
@@ -107,7 +158,6 @@ function Appointments() {
                         state: {
                           receiverName: appointment.uname,
                           bookingId: appointment.booking_id,
-                          userId: userid,
                           serialNumber: appointment.appointment_serial,
                         },
                       })

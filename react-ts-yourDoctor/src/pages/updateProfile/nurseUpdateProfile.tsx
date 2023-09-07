@@ -4,7 +4,7 @@ import axios from 'axios';
 import HeaderCommon from '../navbar/headerdoctor';
 import Footer from '../navbar/footer';
 import Nurse from '@/assets/nurse.jpg';
-
+axios.defaults.withCredentials = true;
 interface FormData {
   hospital: string;
   designation: string;

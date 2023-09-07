@@ -1,40 +1,80 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link} from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
-import axios from 'axios';
+import { Button } from '@mui/material';
 import Header from '../navbar/header_user';
 import Footer from '../navbar/footer';
+import { useSelector } from 'react-redux';
 import User from '@/assets/user.webp';
+
 import AppointmentImage from '@/assets/appointment.jpg';
 import AmbulanceImage from '@/assets/ambulance.jpg';
 import HealthCheckImage from '@/assets/healthcheckhome.jpg';
 import Ambulances from './ambulance';
 import Appointments from './appointments';
 import Tests from './tests';
+import { selectNotifications } from '@/store/notificationsSlice';
+import { patient_profile } from '@/api/apiCalls';
+type NotificationItem = {
+  message: string;
+};
+
+
+
+
+
 
 function UserHome() {
   const [user, setUser] = useState({
     uname: '',
     email: '',
+    uid: 0,
   });
 
   const [value, setValue] = useState<number>(0);
-  const { userid } = useParams();
   useEffect(() => {
-    axios
-      .get(`http://localhost:3000/user/frontend/${userid}`)
-      .then((res) => {
-        setUser(res.data[0]);
-        user.uname = res.data[0].uname;
-        user.email = res.data[0].email;
-      })
-      .catch((error) => {
-        console.error('userprofile not found', error);
-      });
-  }, [user, userid]);
+    patient_profile().then((patient_profile_list) => {
+      if (patient_profile_list) {
+        setUser(patient_profile_list[0]);
+        user.uname = patient_profile_list[0].uname;
+        user.email = patient_profile_list[0].email;
+        user.uid = patient_profile_list[0].uid;
+      }
+      else {
+        console.log("No Profile Found");
+      }
+    });
+  }, [user]);
+
+
+  const notificationStorageKey = `notifications_${user.uid}`;
+
+  const notifications = useSelector(
+    selectNotifications
+  ) as unknown as NotificationItem[];
+
+  const initialNotificationList =
+    JSON.parse(localStorage.getItem(notificationStorageKey)) || [];
+
+  const [notificationlist, setNotificationlist] = useState<string[]>(
+    initialNotificationList
+  );
+  const [showNotifications, setShowNotifications] = useState(false);
+
+  const addNotificationToLocalStorage = (notification: string) => {
+    // Check if the notification already exists in the list
+    if (!notificationlist.includes(notification)) {
+      const updatedNotifications = [...notificationlist, notification];
+      localStorage.setItem(
+        notificationStorageKey,
+        JSON.stringify(updatedNotifications)
+      );
+      setNotificationlist(updatedNotifications);
+    }
+  };
 
   if (!user) {
     return <div>Loading...</div>; // Display a loading message while fetching data
@@ -47,10 +87,75 @@ function UserHome() {
     setValue(newValue);
   };
 
+  const handleToggleNotifications = () => {
+    setShowNotifications((prevState) => !prevState); // Toggle the showNotifications state
+  };
+
+  const handleDeleteNotification = (indexToDelete: number) => {
+    const updatedNotifications = [...notificationlist];
+    updatedNotifications.splice(indexToDelete, 1); // Remove the notification at the specified index
+
+    // Update the notificationlist state
+    setNotificationlist(updatedNotifications);
+
+    // Update the local storage to remove the deleted notification
+    localStorage.setItem(
+      notificationStorageKey,
+      JSON.stringify(updatedNotifications)
+    );
+  };
+
+  const handleClearNotifications = () => {
+    // Clear notifications from local storage
+    localStorage.removeItem(notificationStorageKey);
+
+    // Clear the notificationlist state
+    setNotificationlist([]);
+  };
+
+
   return (
     <>
       <div>
         <Header />
+      </div>
+      <div className="flex ml-24 mt-4">
+        <Button
+          onClick={handleToggleNotifications} // Toggle notifications when the button is clicked
+          color="success"
+          variant="contained"
+        >
+          {showNotifications ? 'Hide Notifications' : 'Show Notifications'}
+        </Button>
+        <div className="ml-4">
+          <Paper elevation={1}>
+            {showNotifications && (
+              <div>
+                {notificationlist.map((notification, index) => (
+                  <div key={index} className="notification">
+                    {notification}
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteNotification(index)}
+                      className="ml-4 text-red-500 hover:text-red-700"
+                    >
+                      X
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </Paper>
+        </div>
+        <div className="ml-6">
+          <Button
+            onClick={handleClearNotifications}
+            color="error"
+            variant="outlined"
+          >
+            Clear Notifications
+          </Button>
+        </div>
       </div>
       <div className="flex mt-40 ml-24">
         <div className="w-1/4 p-4 bg-green-100 border-r border-gray-300">

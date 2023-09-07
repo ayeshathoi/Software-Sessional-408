@@ -1,7 +1,8 @@
 /* eslint-disable react/no-array-index-key */
+import { patient_ambulance } from '@/api/apiCalls';
 import { SetStateAction, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { addNotification } from '@/store/notificationsSlice';
 
 interface Ambulance {
   time: string;
@@ -20,25 +21,76 @@ interface Ambulance {
 function Ambulances() {
   const [selectedSection, setSelectedSection] = useState('upcoming');
   const [ambulances, setAmbulances] = useState<Ambulance[]>([]);
+  const [, setUpcomingCount2] = useState(0);
 
   const handleSectionChange = (section: SetStateAction<string>) => {
     setSelectedSection(section);
   };
-  const { userid } = useParams();
+
+
+  const dispatch = useDispatch();
+  const currentDate = new Date().toISOString();
+
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:3000/patient/ambulance/${userid}`)
-      .then((response) => {
-        setAmbulances(response.data);
-        // console.log(response.data);
-      })
-      .catch((error) => {
-        console.error('Error fetching Ambulances:', error);
-      });
-  }, [userid]);
+    patient_ambulance().then((patient_ambulance_list) => {
+    if (patient_ambulance_list) {
+        const currentAmbulances: Ambulance[] = patient_ambulance_list || [];
 
-  const currentDate = new Date().toISOString();
+        console.log(patient_ambulance_list);
+
+        const storedUpcomingCount2: number =
+          JSON.parse(localStorage.getItem('upcomingCount2')) || 0;
+
+        const upcomingAmbulanceCount = ambulances.filter(
+          (ambulance) => ambulance.date > currentDate
+        ).length;
+
+        const previousAmbulances: Ambulance[] =
+          JSON.parse(localStorage.getItem('previousAmbulances')) || [];
+
+        if (
+          currentAmbulances.length > previousAmbulances.length &&
+          previousAmbulances.length > 0 &&
+          upcomingAmbulanceCount === storedUpcomingCount2
+        ) {
+          dispatch(addNotification({ message: 'Add Review for Ambulance' }));
+          alert('Add Review for Ambulance');
+        } else if (
+          currentAmbulances.length > previousAmbulances.length &&
+          previousAmbulances.length > 0
+        ) {
+          dispatch(addNotification({ message: 'New ambulance added!' }));
+          alert('New ambulance added!');
+        }
+
+        localStorage.setItem(
+          'previousAmbulances',
+          JSON.stringify(currentAmbulances)
+        );
+
+        setUpcomingCount2(upcomingAmbulanceCount);
+        localStorage.setItem(
+          'upcomingCount2',
+          JSON.stringify(upcomingAmbulanceCount)
+        );
+        setAmbulances(currentAmbulances);
+      }
+      else {
+        dispatch(addNotification({ message: 'No Ambulance Found' }));
+        alert('No Ambulance Found');
+      }
+
+    }
+    ).catch((err) => {
+      console.log(err);
+      dispatch(addNotification({ message: 'No Ambulance Found' }));
+      alert('No Ambulance Found');
+    });
+
+  }, [dispatch, ambulances, currentDate]);
+
+
 
   const upcomingAmbulances = ambulances.filter(
     (ambulance) => ambulance.date > currentDate

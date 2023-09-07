@@ -1,27 +1,37 @@
 const getConnection = require('../Config/database');
 const constant = require("./constants")
 
+const FIND_PID = "SELECT " + constant.TABLE_USER_ID + " FROM " + constant.TABLE_USER + 
+                " WHERE " + constant.TABLE_USER_EMAIL + " = $1";
 
-// document er kaj ta add krte hobe hospital er jonno
+const create_hospital_users = "INSERT INTO " + constant.TABLE_USER +
+                    "(" + constant.TABLE_USER_TYPE + "," +
+                    constant.TABLE_USER_EMAIL + "," +
+                    constant.TABLE_USER_PASSWORD + "," +
+                    constant.TABLE_USER_MOBILE_NO + ")" +
+                    "VALUES ($1, $2, $3, $4);"
 const CREATE_HOSPITAL = "INSERT INTO " + constant.TABLE_HOSPITAL + 
                         "(" +constant.TABLE_HOSPITAL_NAME + "," +
+                        "hospital_id," +
                         constant.TABLE_HOSPITAL_VERIFICATION + "," +
-                        constant.TABLE_HOSPITAL_EMAIL+ "," +
-                        constant.TABLE_HOSPITAL_PASSWORD+ "," +
-                        constant.TABLE_HOSPITAL_MOBILE_NO+ "," +
                         constant.TABLE_HOSPITAL_STREET+ "," +
                         constant.TABLE_HOSPITAL_THANA+ "," +
                         constant.TABLE_HOSPITAL_CITY+ "," +
                         constant.TABLE_HOSPITAL_DISTRICT +  "," +
                         "reg_id)" +
-                        "VALUES ($1, $2, $3, $4, $5, $6, $7, $8,$9,$10);"
+                        "VALUES ($1, $2, $3, $4, $5, $6, $7, $8);"
 
 
 const create_hospital = async (hospital_name,reg_id, email, pass, mobile, street, thana, city, district) => {
     try {
         const client = await getConnection.connect();
+        const user_type = "hospital";
+        const hospital_user = await client.query(create_hospital_users, [user_type,email,pass,mobile]);
+        const pid = await findpid(email);
+        const pid2 = pid[0].uid.toString();
+
         const verification_status = "pending";
-        const result = await client.query(CREATE_HOSPITAL, [hospital_name,verification_status, email, pass, mobile, street, thana, city, district,reg_id]);
+        const result = await client.query(CREATE_HOSPITAL, [hospital_name,pid2,verification_status,street, thana, city, district,reg_id]);
         client.release();
         return result.rowsAffected === 1;
     } catch (err) {
@@ -39,10 +49,6 @@ const CREATE_USER = "INSERT INTO " + constant.TABLE_USER +
                     constant.TABLE_USER_DOB + "," +
                     constant.TABLE_USER_GENDER + ")" +
                     "VALUES ($1, $2, $3, $4, $5, $6 ,$7);"
-
-
-const FIND_PID = "SELECT " + constant.TABLE_USER_ID + " FROM " + constant.TABLE_USER + 
-                " WHERE " + constant.TABLE_USER_EMAIL + " = $1";
 
 
 const findpid = async (email) => {
@@ -196,13 +202,11 @@ const CREATE_DRIVER = "INSERT INTO " + constant.TABLE_DRIVER +
                     constant.TABLE_DRIVER_HOSPITAL + ")" + 
                     "VALUES ($1, $2, $3, $4, $5, $6, $7, $8,$9,$10);"
 
-//done
 const create_driver = async (username,email,pass,mobile,dob,gender,type,fare,
     hospital_name,street,thana,city,district,nid) => {
   try {
       const client = await getConnection.connect();
-      const user_type = "driver";
-      console.log(hospital_name);
+      const user_type = "driver";nurse_test
       const user = await create_user(username,user_type,email,pass,mobile,dob,gender);
       const drid = await findpid(email);
       const drid2 = drid[0].uid.toString();
@@ -211,7 +215,6 @@ const create_driver = async (username,email,pass,mobile,dob,gender,type,fare,
       if(hospital_name != null){
       const hid = await findhid(hospital_name);
       const hid2 = hid[0].hospital_id.toString();
-      console.log(hid2);
       result = await client.query(CREATE_DRIVER, [drid2,type,fare,stat,street,thana,city,district,nid,hid2]);
       }
       else{
@@ -265,20 +268,20 @@ const GET_USER_DETAILEmail = async (email) => {
 };
 
 //-------------------------------------------------------------------------
-const HospitalDetail = "SELECT * FROM hospital where email = $1"
+// const HospitalDetail = "SELECT * FROM hospital where email = $1"
 
-const GET_HOSPITAL_DETAIL = async (email) => {
-    try {
-        const client = await getConnection.connect();
-        const result = await client.query(HospitalDetail, [email]);
-        client.release();
-        return result.rows;
-    }
-    catch (error) {
-        console.error('Error fetching data:', error.message);
-        throw error;
-    }
-};
+// const GET_HOSPITAL_DETAIL = async (email) => {
+//     try {
+//         const client = await getConnection.connect();
+//         const result = await client.query(HospitalDetail, [email]);
+//         client.release();
+//         return result.rows;
+//     }
+//     catch (error) {
+//         console.error('Error fetching data:', error.message);
+//         throw error;
+//     }
+// };
 
 
 const HospitalDetailbyId = "SELECT * FROM hospital where hospital_id = $1"
@@ -314,6 +317,6 @@ module.exports = {
     create_driver,
     GET_USER_DETAIL,
     GET_USER_DETAILEmail,
-    GET_HOSPITAL_DETAIL,
+    //GET_HOSPITAL_DETAIL,
     GET_HOSPITAL_DETAILID
 }

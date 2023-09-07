@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-globals */
 import { useEffect, useState } from 'react';
-import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
+import {Link, useNavigate, useLocation } from 'react-router-dom';
 import {
   Grid,
   Paper,
@@ -12,16 +12,16 @@ import {
   FormControl,
   InputLabel,
 } from '@mui/material';
-import axios from 'axios';
 import HeaderDoctor from '../navbar/headerdoctor';
 import Footer from '../navbar/footer';
+import { editHospitalList_doctor,deleteTimeline_doctor, getDoctorDetails } from '@/api/apiCalls';
 
 function EditHospiatlList() {
-  const { userid } = useParams();
   const location = useLocation();
   const [hospitalNames, setHospitalNames] = useState([]);
   const [selectedHospital, setSelectedHospital] = useState('');
   const [timelineData, setTimelineData] = useState([]);
+  const [doctor_id, setDoctor_id] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,33 +36,37 @@ function EditHospiatlList() {
 
   // Fetch timeline data for the selected hospital
   useEffect(() => {
+    getDoctorDetails().then((res) =>
+    {
+      setDoctor_id(res.uid);
+    });
+
     if (selectedHospital) {
-      // You may need to update the URL and endpoint here based on your backend API
-      axios
-        .get(
-          `http://localhost:3000/doctor/timeline/${userid}?hospital=${selectedHospital}`
-        )
-        .then((response) => {
-          setTimelineData(response.data);
-        })
-        .catch((error) => {
-          console.error('Error fetching timeline data:', error);
-        });
-    }
-  }, [selectedHospital, userid]);
+    editHospitalList_doctor(selectedHospital,doctor_id).then((res) =>
+    {
+      console.log(res)
+        setTimelineData(res);
+    })
+    .catch((error) => {
+        console.error('Error fetching timeline data:', error);
+    });
+}}, [selectedHospital]);
 
   const deleteTimeline = async (timeline_id: number) => {
     try {
-      await axios
-        .post(`http://localhost:3000/doctor/deleteSCHEDULE/${timeline_id}`)
-        .then(() => {
-          alert('Test Deleted Successfully');
-          navigate(`/doctorHome/${userid}`);
-        });
-    } catch (err) {
-      console.log(err);
+    deleteTimeline_doctor(timeline_id).then((res) =>
+    {
+        alert('Schedule Deleted Successfully');
+        navigate(`/doctorHome`);
+    })
+    .catch((error) => {
+        console.error('Error deleting timeline data:', error);
     }
-  };
+    );
+    } catch (err) {
+        console.log(err);
+    }
+    };
 
   const filteredTimelineData = timelineData.filter(
     (timeline) => timeline.hospital_name === selectedHospital
@@ -153,7 +157,7 @@ function EditHospiatlList() {
                         </td>
                         <td className="px-6 py-4 whitespace-no-wrap">
                           <Link
-                            to={`/hospitalHome/${userid}/EditSchedule/${timeline.timeline_id}?weekday=${timeline.weekday}&hospital_name=${selectedHospital}`}
+                            to={`/doctorHome/EditSchedule/${timeline.timeline_id}?weekday=${timeline.weekday}&hospital_name=${selectedHospital}`}
                           >
                             <Button variant="contained" color="primary">
                               Edit

@@ -5,10 +5,8 @@ import axios from 'axios';
 import HeaderDoctor from '../navbar/headerdoctor';
 import Footer from '../navbar/footer';
 import Doctor from '@/assets/doctor.jpg';
-
+axios.defaults.withCredentials = true;
 function DoctorProfileUpdate() {
-  const { userid } = useParams();
-
   const [isEditing, setIsEditing] = useState(false);
   const [prevForm, setPrevForm] = useState({
     name: '',
@@ -28,7 +26,7 @@ function DoctorProfileUpdate() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/doctor/profile/${userid}`)
+      .get(`http://localhost:3000/doctor/profile`)
       .then((response) => {
         setPrevForm({
           name: response.data.name,
@@ -48,7 +46,7 @@ function DoctorProfileUpdate() {
       .catch((error) => {
         console.error('Error fetching doctor profile:', error);
       });
-  }, [userid]);
+  });
 
   console.log('dehfbk', prevForm);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,9 +56,8 @@ function DoctorProfileUpdate() {
   const handleUpdate = async () => {
     try {
       // Send the formData to the server for update
-      console.log('here is the formdata', formData, { userid });
       const response = await axios.post(
-        `http://localhost:3000/doctor/update-profile/${userid}`,
+        `http://localhost:3000/doctor/update-profile`,
         formData
       );
       console.log('Updated Data:', response.data);

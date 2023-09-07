@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, ChangeEvent, FormEvent } from 'react';
-import axios from 'axios';
+
 import { useNavigate } from 'react-router-dom';
 import {
   Button,
@@ -13,6 +13,7 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Navbar from '../navbar/headerdoctor';
 import Footer from '../navbar/footer';
+import { reg_patient } from '@/api/apiCalls';
 
 function PatientSignup() {
   const [formData, setFormData] = useState({
@@ -42,12 +43,14 @@ function PatientSignup() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await axios
-        .post('http://localhost:3000/auth/register/patient', formData)
-        .then((res) => {
-          console.log('here is the form', res.data);
-          navigate('/LogIn');
-        });
+      // await axios
+      //   .post('http://localhost:3000/auth/register/patient', formData)
+      //   .then((res) => {
+      //     console.log('here is the form', res.data);
+      //     navigate('/LogIn');
+      //   });
+      const ret = reg_patient(formData);
+      navigate('/LogIn');
     } catch (err) {
       console.log(err);
     }
@@ -86,17 +89,15 @@ function PatientSignup() {
               required
               className="w-full"
             />
-            <TextField
-              label="Password"
-              name="password"
-              type="password"
-              value={formData.password}
+             <TextField
+              label="Mobile Number"
+              name="mobile"
+              value={formData.mobile}
               onChange={handleChange}
               variant="outlined"
               required
               className="w-full"
             />
-
             <TextField
               label="Email"
               type="email"
@@ -108,14 +109,16 @@ function PatientSignup() {
               className="w-full"
             />
             <TextField
-              label="Mobile Number"
-              name="mobile"
-              value={formData.mobile}
+              label="Password"
+              name="password"
+              type="password"
+              value={formData.password}
               onChange={handleChange}
               variant="outlined"
               required
               className="w-full"
             />
+
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
                 label="Date of Birth"

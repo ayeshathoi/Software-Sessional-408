@@ -14,9 +14,11 @@ import DoctorProfileUpdate from './pages/updateProfile/doctorUpdateProfile';
 import PatientProfileUpdate from './pages/updateProfile/patientUpdateProfile';
 import DoctorHome from './pages/doctorPages/doctorHome';
 import Prescription from './pages/doctorPages/prescriptionSubmission';
+import ViewPrescription from './pages/doctorPages/viewPrescription';
 import NurseHome from './pages/nursePages/nurseHome';
 import DriverHome from './pages/driverPages/driverHome';
 import UserHome from './pages/userPages/userHome';
+import ViewPrescriptionUser from './pages/userPages/viewPrescription';
 import HospitalHome from './pages/hospitalPages/hospitalHome';
 import DoctorSearch from './pages/search/doctorSearch';
 import AmbulanceSearch from './pages/search/AmbulanceSearch';
@@ -54,6 +56,10 @@ export function App() {
           path="/doctorHome/:userid/prescriptionSubmission/"
           element={<Prescription />}
         /> }
+        <Route
+          path="/doctorHome/:userid/viewPrescription/"
+          element={<ViewPrescription />}
+        />
         <Route
           path="/userHome/:userid/PatientProfileUpdate/"
           element={<PatientProfileUpdate />}
@@ -98,6 +104,8 @@ export function App() {
         <Route path="/BookCheckup/" element={<BookCheckup />} />
         <Route path="/chatbox/" element={<Chatbox />} />
         <Route path="/Prescription/" element={<Prescription />} />
+        <Route path="/userHome/:userid/viewprescription/" element={<ViewPrescriptionUser />} />
+
       </Routes>
     </BrowserRouter>
   );

@@ -116,6 +116,46 @@ const addPrescriptionDetails = async (booking_id, disease, tests, suggestions, m
 };
 
 
+const viewPrescriptionQuery = `
+    SELECT
+        p.booking_id,
+        p.disease,
+        p.tests,
+        p.suggestions,
+        p.medicine,
+        b.appointment_serial,
+        u.uname AS patient_name,
+        u.mobile_no AS patient_mobile,
+        h.hospital_name,
+        u1.uname AS doctor_name,
+        d.speciality,
+        d.designation,
+        d.qualification
+    FROM prescription p
+    JOIN booking b ON p.booking_id = b.booking_id
+    JOIN hospital h ON b.hospital_id = h.hospital_id
+    JOIN doctor d ON b.doctor_id = d.doctor_id
+    JOIN users u ON b.patient_id = u.uid
+    JOiN users u1 ON d.doctor_id = u1.uid
+    WHERE p.booking_id = $1
+`;
+
+const viewPrescription = async (booking_id) => {
+    try {
+        const client = await getConnection.connect();
+        const result = await client.query(viewPrescriptionQuery, [booking_id]);
+        client.release();
+        if(result.rows.length === 0) {
+            return null;
+        }
+        return result.rows[0];
+    } catch (error) {
+        console.error('Error fetching prescription details:', error.message);
+        throw error;
+    }
+};
+
+
 
 //EDIT Profile
 const updated_user = "UPDATE users SET " + constant.TABLE_USER_MOBILE_NO + " = $1 " + 
@@ -254,6 +294,7 @@ const getTimelineDetails = async (doctor_id) => {
 module.exports = {
     patientListDetails_doctor,
     addPrescriptionDetails,
+    viewPrescription,
     getDoctorProfile,
     updateDoctorProfile,
     ADD_SCHEDULE,

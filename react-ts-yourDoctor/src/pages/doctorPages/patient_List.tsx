@@ -116,20 +116,6 @@ function PatientArray({ selectedHospital }: PatientArrayProps) {
                   <p className="text-sm text-gray-500">
                     Total Price: {patient.total_price}
                   </p>
-                  {/* <div>
-                    <Link
-                      to="/prescription"
-                      state={{
-                        receiverName: patient.uname,
-                        bookingId: patient.booking_id,
-                        userId: userid,
-                        serialNumber: patient.appointment_serial,
-                      }}
-                      style={{ color: 'blue' }}
-                    >
-                      Prescription
-                    </Link>
-                  </div> */}
                   <div>
                   <p
                   className='text-blue-500, hover:text-blue-800' 
@@ -142,8 +128,26 @@ function PatientArray({ selectedHospital }: PatientArrayProps) {
                       }
                       
                     >
-                      Prescription
+                      Create prescription
                     </p>
+                  </div>
+                  <div>
+                    <Button
+                      variant="contained"
+                      color="inherit"
+                      onClick={() =>
+                        navigate('./viewPrescription', {
+                          state: {
+                            receiverName: patient.uname,
+                            bookingId: patient.booking_id,
+                            userId: userid,
+                            serialNumber: patient.appointment_serial,
+                          },
+                        })
+                      }
+                    >
+                      View prescription
+                    </Button>
                   </div>
                   <div>
                     <Button

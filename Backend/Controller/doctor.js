@@ -1,5 +1,6 @@
 const user = require('../Repository/doctor')
 const http_status = require('./HTTPStatus')
+const { viewPrescription } = require('../Repository/doctor');
 
 const getPatient_List = async (req, res) => {
     const doctor_id = req.params.id;
@@ -101,11 +102,55 @@ const addPrescription = async (req, res) => {
 };
 
 
+
+
+const viewPrescriptionDetails = async (req, res) => {
+    const { booking_id } = req.params;
+
+    try {
+        const prescriptionDetails = await viewPrescription(booking_id);
+        if(prescriptionDetails==null){
+            res.status(http_status.OK).json({prescriptionDetails:"No prescriptions found"});
+        }
+        else if (!prescriptionDetails) {
+            res.status(http_status.NOT_FOUND).json({ error: 'Prescription not found for the given booking_id.' });
+        } else {
+            res.status(http_status.OK).json(prescriptionDetails);
+        }
+    } catch (error) {
+        console.error('Error viewing prescription details:', error.message);
+        res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while viewing prescription details.' });
+    }
+};
+
+const checkPrescription = async (req, res) => {
+    const { booking_id } = req.params;
+  
+    try {
+      const prescriptionDetails = await viewPrescription(booking_id);
+  
+      if (prescriptionDetails === null) {
+        // If no prescription found, serve the "Create Prescription" form
+        res.status(http_status.OK).json({ prescriptionExists: false });
+      } else {
+        // If prescription details are found, serve a message indicating it already exists
+        res.status(http_status.OK).json({ prescriptionExists: true });
+      }
+    } catch (error) {
+      console.error('Error checking prescription:', error.message);
+      res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while checking prescription.' });
+    }
+  };
+  
+
+
 module.exports = {
     getPatient_List,
     getProfile,
     updateDoctorProfile,
     addPrescription,
+    viewPrescriptionDetails,
+    checkPrescription,
     addSchedule,
     getDoctorDetails,
     getTimeline

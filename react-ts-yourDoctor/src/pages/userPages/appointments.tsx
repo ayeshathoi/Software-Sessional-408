@@ -103,6 +103,22 @@ function Appointments() {
                     variant="contained"
                     color="inherit"
                     onClick={() =>
+                      navigate('./viewprescription', {
+                        state: {
+                          receiverName: appointment.uname,
+                          bookingId: appointment.booking_id,
+                          userId: userid,
+                          serialNumber: appointment.appointment_serial,
+                        },
+                      })
+                    }
+                  >
+                    View Prescription
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="inherit"
+                    onClick={() =>
                       navigate('/chatbox', {
                         state: {
                           receiverName: appointment.uname,

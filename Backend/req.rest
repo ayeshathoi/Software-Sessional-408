@@ -311,7 +311,18 @@ Content-Type: application/json
     "medicine": "Some medicine"
 }
 
+##### 
 
+
+#####view prescription
+GET http://localhost:3000/doctor/viewprescription/10
+
+#####
+
+####check prescription
+GET http://localhost:3000/doctor/checkprescription/15
+
+####
 #####
 GET http://localhost:3000/doctor/profile/14
 #####

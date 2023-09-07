@@ -1,0 +1,38 @@
+/* ViewPrescription.css */
+.view-prescription {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    margin-top: 80px;
+  }
+  
+  .doctor-info,
+  .patient-info {
+    flex: 1;
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-right: 20px;
+  }
+  
+  .doctor-photo img,
+  .patient-photo img {
+    max-width: 100px;
+    height: auto;
+  }
+  
+  .prescription-table {
+    flex: 2;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ccc;
+  }
+  
+  th, td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+  }
+  

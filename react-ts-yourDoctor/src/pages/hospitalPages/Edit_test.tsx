@@ -1,9 +1,11 @@
 import { useEffect, useState, ChangeEvent, FormEvent } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+
 import { TextField, Button } from '@mui/material';
 import HeaderDoctor from '../navbar/headerdoctor';
 import Footer from '../navbar/footer';
+
+import { test_Details,editTestprice } from '@/api/apiCalls';
 
 interface FormData {
   testname: string;
@@ -11,7 +13,6 @@ interface FormData {
 }
 
 function EditTest() {
-  const { userid } = useParams();
   const { testID } = useParams();
   const [formData, setFormData] = useState<FormData>({
     testname: '',
@@ -20,31 +21,50 @@ function EditTest() {
 
   useEffect(() => {
     // Make the HTTP GET tests to the backend API
-    axios
-      .get(`http://localhost:3000/hospital/test/${userid}/${testID}`)
-      // api call
-      .then((response) => {
-        setFormData({
-          testname: response.data[0].testname,
-          price: response.data[0].price,
-        });
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
+    // axios
+    //   .get(`http://localhost:3000/hospital/test/${testID}`)
+    //   // api call
+    //   .then((response) => {
+    //     setFormData({
+    //       testname: response.data[0].testname,
+    //       price: response.data[0].price,
+    //     });
+    //   })
+    //   .catch((error) => {
+    //     console.error('Error fetching data:', error);
+    //   });
+    const ret = test_Details(testID);
+    if (ret) {
+      setFormData({
+        testname: ret[0].testname,
+        price: ret[0].price,
       });
-  }, [userid]);
+    }
+    else {
+      console.log('error');
+    }
+  });
 
   const navigate = useNavigate();
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await axios
-        .post(`http://localhost:3000/hospital/updateprice/${userid}`, formData)
-        .then((res) => {
-          console.log(formData);
-          alert('Test Updated Successfully');
-          navigate(`/hospitalHome/${userid}`);
-        });
+      // await axios
+      //   .post(`http://localhost:3000/hospital/updateprice`, formData)
+      //   .then((res) => {
+      //     console.log(formData);
+      //     alert('Test Updated Successfully');
+      //     navigate(`/hospitalHome`);
+      //   });
+      const res = await editTestprice(formData);
+      if(res){
+        alert('Test Updated Successfully');
+        navigate(`/hospitalHome`);
+      }
+      else
+      {
+        console.log("Error in updating test");
+      }
     } catch (err) {
       console.log(err);
     }

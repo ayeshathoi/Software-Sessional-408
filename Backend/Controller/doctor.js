@@ -2,10 +2,8 @@ const user = require('../Repository/doctor')
 const http_status = require('./HTTPStatus')
 
 const getPatient_List = async (req, res) => {
-    const doctor_id = req.params.id;
+    const doctor_id = req.user.uid;
     const hospital_name = req.body.hospital_name;
-    console.log(req.cookies)
-    
     try {
         const result = await user.patientListDetails_doctor(doctor_id,hospital_name);
         res.send(result);
@@ -16,7 +14,7 @@ const getPatient_List = async (req, res) => {
     };
 
 const addSchedule = async (req, res) => {
-    const doctor_id = req.params.id;
+    const doctor_id = req.user.uid;
     const {timeline} = req.body;
     try {
         const result = await user.ADD_SCHEDULE(doctor_id,timeline);
@@ -29,11 +27,9 @@ const addSchedule = async (req, res) => {
 };
 
 
-
-// Controller function to update a doctor's profile
 const updateDoctorProfile = async (req, res) => {
     try{
-        const doctor_id = req.params.doctor_id;
+        const doctor_id = req.user.uid;
         const speciality=req.body.speciality;
         const designation=req.body.designation;
         const qualification=req.body.qualification;
@@ -50,7 +46,7 @@ const updateDoctorProfile = async (req, res) => {
 };
 
 const getProfile = async (req, res) => {
-    const doctor_id = req.params.id;
+    const doctor_id = req.user.uid;
 
     try {
         const profile = await user.getDoctorProfile(doctor_id);
@@ -64,10 +60,11 @@ const getProfile = async (req, res) => {
 
 
 const getDoctorDetails = async (req, res) => {
-    const doctor_id = req.params.id;
-    
+    const doctor_id = req.user.uid;
     try {
+        console.log('here');
         const result = await user.getDoctorDetails(doctor_id);
+        console.log('Ashse', result);
         res.send(result);
     } catch (error) {
         console.error('Error getting doctor details:', error.message);
@@ -77,7 +74,7 @@ const getDoctorDetails = async (req, res) => {
 
 
 const getTimeline = async (req, res) => {
-    const doctor_id = req.params.id;
+    const doctor_id = req.params.doctor_id;
     try {
         const result = await user.getTimelineDetails(doctor_id);
         res.send(result);
@@ -100,38 +97,6 @@ const addPrescription = async (req, res) => {
     }
 };
 
-const updateSchedule = async (req, res) => {
-    try{
-        const timeline_id = req.params.timeline_id;
-        const weekday=req.body.weekday;
-        const slot=req.body.slot;
-        const start_time=req.body.start_time;
-        const end_time=req.body.end_time;
-        
-        console.log(timeline_id,weekday,slot,start_time,end_time)
-    
-        const updated = await user.editSchedule(weekday, slot, start_time, end_time,timeline_id);
-
-        res.status(http_status.OK).json(updated);
-    } catch (error) {
-        console.error('Error updating doctor profile:', error.message);
-        res.status(http_status.BAD_REQUEST).json({ error: 'An error occurred while updating doctor profile.' });
-    }
-};
-
-const deleteSCHEDULE = async (req, res) => {
-    const timeline_id = req.params.timeline_id;
-    console.log(timeline_id)
-    try {
-        const result = await user.deleteSchedule(timeline_id);
-        res.status(http_status.OK).json({delete : "deleted timeline"});
-    } catch (error) {
-        console.error('Error deleting timeline:', error.message);
-        res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while deleting timeline.' });
-    }
-}
-
-
 
 module.exports = {
     getPatient_List,
@@ -140,7 +105,5 @@ module.exports = {
     addPrescription,
     addSchedule,
     getDoctorDetails,
-    getTimeline,
-    updateSchedule,
-    deleteSCHEDULE
+    getTimeline
 }

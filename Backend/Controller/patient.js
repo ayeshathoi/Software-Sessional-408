@@ -4,7 +4,7 @@ const http_status = require('./HTTPStatus')
 
 const all_Appointments = async (req, res) => {
     try {
-        const pid = req.params.id;
+        const pid = req.user.uid;
         const appointmentDetails = await user.allAppointments(pid);
         res.send(appointmentDetails);
     } catch (error) {
@@ -14,7 +14,7 @@ const all_Appointments = async (req, res) => {
 
 const zoom_Appointments = async (req, res) => {
     try {
-        const pid = req.params.id;
+        const pid = req.user.uid;
         const appointmentDetails = await user.onlineAppointments(pid);
         res.status(http_status.OK).json(appointmentDetails);
     } catch (error) {
@@ -28,8 +28,7 @@ const zoom_Appointments = async (req, res) => {
 
 const ambulanceDetails = async (req, res) => {
     try {
-        const pid = req.params.id;
-        console.log("guygyguy",pid);
+        const pid = req.user.uid;
         const ambulanceDetails = await user.ambulanceDetails(pid);
         res.send(ambulanceDetails);
     } catch (error) {
@@ -39,9 +38,8 @@ const ambulanceDetails = async (req, res) => {
 
 const checkUpDetails = async (req, res) => {
     try {
-        const pid = req.params.id;
+        const pid = req.user.uid;
         const checkUpDetails = await user.checkUpDetails(pid);
-        // console.log(checkUpDetails);
         res.send(checkUpDetails);
     } catch (error) {
         res.status(http_status.BAD_REQUEST).json({ error: 'An error occurred while fetching user details.' });
@@ -53,7 +51,6 @@ const checkUpDetails = async (req, res) => {
 const doctor_speciality_search = async (req, res) => {
     try {
         const speciality = req.body.speciality;
-        //console.log("before sending s[pecia",speciality)
         const doctorDetails = await user.doctorSpecialitySearch(speciality);
         res.status(http_status.OK).json(doctorDetails);
     } catch (error) {
@@ -73,11 +70,8 @@ const doctor_name_search = async (req, res) => {
 }
 
 const choose_test = async (req, res) => {
-    console.log("ASCHIIIIII");
     try {
-       
         const hospital = req.body.name;
-        console.log(hospital)
         const testDetails = await user.checkUpHospitalDetails(hospital);
         res.status(http_status.OK).json(testDetails);
     } catch (error) {
@@ -86,7 +80,7 @@ const choose_test = async (req, res) => {
 }
 
 const getProfile = async (req, res) => {
-    const pid = req.params.id;
+    const pid = req.user.uid;
 
     try {
         const profile = await user.getPatientProfile(pid);
@@ -99,7 +93,8 @@ const getProfile = async (req, res) => {
 
 const update_profile = async (req, res) => {
     try {
-        const pid = req.params.id;
+
+        const pid = req.user.uid;
         const street = req.body.street;
         const thana = req.body.thana;
         const city = req.body.city;
@@ -115,8 +110,6 @@ const update_profile = async (req, res) => {
 
 const doctor_all_search = async (req, res) => {
     try {
-        //const speciality = req.body.speciality;
-        //console.log("before sending s[pecia",speciality)
         const doctorDetails = await user.doctorAllSearch();
         res.status(http_status.OK).json(doctorDetails);
     } catch (error) {
@@ -125,8 +118,6 @@ const doctor_all_search = async (req, res) => {
 }
 const test_all_search = async (req, res) => {
     try {
-        //const speciality = req.body.speciality;
-        //console.log("before sending s[pecia",speciality)
         const testDetails = await user.testAllSearch();
         res.status(http_status.OK).json(testDetails);
     } catch (error) {

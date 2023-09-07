@@ -67,6 +67,11 @@ const addtest = async (testname, price, hospital_id) => {
     try {
         const client = await getConnection.connect();
         const id = await client.query(last_test_id);
+        if (id.rows.length == 0){
+            const result = await client.query(ADD_TEST, [1,testname, price, hospital_id]);
+            client.release();
+            return result.rows;
+        }
         const result = await client.query(ADD_TEST, [id.rows[0].testid + 1,testname, price, hospital_id]);
         client.release();
         return result.rows;
@@ -210,10 +215,8 @@ const booking_total = async (hospital_id) => {
     try {
         const client = await getConnection.connect();
         const result = await client.query(all_booking, [hospital_id,"pending"]);
-        //console.log(result.rows);
         for (let i = 0; i < result.rows.length; i++) {
             const patient_name = await client.query(patient_name_search, [result.rows[i].patient_id]);
-            //console.log(patient_name.rows[0].uname);
             result.rows[i].patient_name = patient_name.rows[0].uname;
         }
         client.release();
@@ -381,7 +384,6 @@ const booking_one = async (hospital_id, booking_id) => {
             const test = await client.query(testsDetails, [tests.rows[i].test_id]);
             tests.rows[i].testname = test.rows[0].testname;
             tests.rows[i].price = test.rows[0].price;
-            //console.log(tests.rows[i]);
         }
 
         result.rows[0].tests = tests.rows;

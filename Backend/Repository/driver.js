@@ -23,6 +23,8 @@ const patientListDetails_driver = async (drid) => {
     }
 }
 
+
+
 const getDriverProfile = async (driver_id) => {
     try {
         const client = await getConnection.connect();
@@ -37,6 +39,7 @@ const getDriverProfile = async (driver_id) => {
             WHERE u.uid = $1
         `;
         const result = await client.query(profileQuery, [driver_id]);
+        console.log(result.rows[0]);
         client.release();
         return result.rows[0];
     } catch (error) {

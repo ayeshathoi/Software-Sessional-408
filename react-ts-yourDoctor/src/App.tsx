@@ -31,7 +31,6 @@ import EditTest from './pages/hospitalPages/Edit_test';
 import Chatbox from './pages/chatBox/chatBox';
 import AddSchedule from './pages/doctorPages/addschedule';
 
-
 export function App() {
   return (
     <BrowserRouter>
@@ -52,10 +51,10 @@ export function App() {
         <Route path="/doctorHome" element={<DoctorHome />} />
         <Route path="/nurseHome" element={<NurseHome />} />
         <Route path="/driverHome" element={<DriverHome />} />
-        {<Route
+        <Route
           path="/doctorHome/prescriptionSubmission/"
           element={<Prescription />}
-        /> }
+        />
         <Route
           path="/userHome/PatientProfileUpdate/"
           element={<PatientProfileUpdate />}
@@ -75,25 +74,13 @@ export function App() {
           path="/hospitalHome/AvailableEmployee/"
           element={<AvailableEmployee />}
         />
-        <Route
-          path="/hospitalHome/:bookingID"
-          element={<AssignNurse />}
-        />
-        <Route
-          path="/hospitalHome/EditTest/:testID"
-          element={<EditTest />}
-        />
+        <Route path="/hospitalHome/:bookingID" element={<AssignNurse />} />
+        <Route path="/hospitalHome/EditTest/:testID" element={<EditTest />} />
 
         {/* <Route path="/doctorSearch" element={<DoctorSearch />} />
         <Route path="/AmbulanceSearch" element={<AmbulanceSearch />} /> */}
-        <Route
-          path="/userHome/DoctorSearch/"
-          element={<DoctorSearch />}
-        />
-        <Route
-          path="/userHome/CheckupSearch/"
-          element={<CheckupSearch />}
-        />
+        <Route path="/userHome/DoctorSearch/" element={<DoctorSearch />} />
+        <Route path="/userHome/CheckupSearch/" element={<CheckupSearch />} />
         <Route
           path="/userHome/AmbulanceSearch/"
           element={<AmbulanceSearch />}

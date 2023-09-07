@@ -238,6 +238,12 @@ export const login = async (formData) => {
   return ret.data;
 };
 
+
+export const logout = async () => {
+  await axios .post('http://localhost:3000/auth/logout');
+}
+
+
 export const patient_ambulance = async () => {
   const ret = await axios.get(`http://localhost:3000/patient/ambulance`);
   console.log(ret.data);

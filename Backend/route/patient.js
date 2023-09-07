@@ -8,7 +8,8 @@ router.use(async (req,res,next) => {
         next();
     }
     else{
-        res.status(error.UNAUTHORIZED).json({ error: 'Unauthorized' });
+        //res.status(error.UNAUTHORIZED).json({ error: 'Unauthorized' });
+        res.send("UNAUTHORIZED");
     }
 });
 router.post('/', patient.update_profile);

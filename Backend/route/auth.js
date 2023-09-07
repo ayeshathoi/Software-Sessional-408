@@ -56,16 +56,24 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
      res.status(error.OK).send(user.user_type);
 });
 
-// router.post('/hospital/logout', verify.hospital_verify ,(req,res)=>{
-//     res.cookie('auth-token', '', { maxAge:1 });
-//     res.redirect('/');
-// });
-
-
-// router.post('/logout', verify.user_verify ,(req,res)=>{
-//     res.cookie('auth-token', '', { maxAge:1 });
-//     res.redirect('/');
-// });
+router.post('/logout' ,async (request, response) => {
+    try{
+        if(request.user == null){
+            response.status(400).send("User not Logged in yet");
+        }else{
+            request.logout((err) => {
+                if(err){
+                    console.log(err);
+                }
+            });
+            response.status(200).send("User logged out");
+        }
+    }catch(err){
+        console.log(err);
+        response.status(400).send("User not Logged in yet");
+    }
+}
+);
 
 
 

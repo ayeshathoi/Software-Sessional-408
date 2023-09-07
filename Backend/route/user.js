@@ -6,7 +6,9 @@ router.use(async (req,res,next) => {
         next();
     }
     else{
-        res.status(error.UNAUTHORIZED).json({ error: 'Unauthorized' });
+        
+        res.send("UNAUTHORIZED");
+        //res.status(error.UNAUTHORIZED).json({ error: 'Unauthorized' });
     }
 });
 router.get('/', userController.getUserDetailsByID);

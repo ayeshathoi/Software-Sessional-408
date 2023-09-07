@@ -67,7 +67,23 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
 //     res.redirect('/');
 // });
 
-
+router.post('/logout', (req,res)=>{
+    try{
+        if(req.user == null){
+            res.status(400).send("User not Logged in yet");
+        }else{
+            req.logout((err) => {
+                if(err){
+                    console.log(err);
+                }
+            });
+            res.status(200).send("User logged out");
+        }
+    }catch(err){
+        console.log(err);
+        res.status(400).send("User not Logged in yet");
+    }
+});
 
 
 

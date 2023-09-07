@@ -34,6 +34,7 @@ const onlineAppointments = "INSERT INTO " + constant.TABLE_BOOKING + " ("
 
 
 const check_serial = "select * from booking where doctor_id = $1 and date = $2 and time = $3 and hospital_id = $4";
+const hospital_id = "select * hospital_id from hospital where hospital_name = $1"
 
 const appointmentBooking = async (type,day,price,time,date,payment_method,payment_status,patient_mobile,patient_id,doctor_id,hospital_name) => {
     

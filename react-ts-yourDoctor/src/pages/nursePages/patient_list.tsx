@@ -1,9 +1,8 @@
 /* eslint-disable react/no-array-index-key */
 import { SetStateAction, useEffect, useState } from 'react';
 import { useParams,useNavigate } from 'react-router-dom';
-
+import axios from 'axios';
 import { Button } from '@mui/material';
-import { nurse_patient_list } from '@/api/apiCalls';
 
 interface Checkup {
   time: string;
@@ -11,8 +10,6 @@ interface Checkup {
   uname: string;
   mobile_no: string;
 }
-
-
 
 function PatientArray() {
   const [selectedSection, setSelectedSection] = useState('upcoming');
@@ -22,26 +19,19 @@ function PatientArray() {
   const handleSectionChange = (section: SetStateAction<string>) => {
     setSelectedSection(section);
   };
+  const { userid } = useParams();
 
   useEffect(() => {
-    // axios
-    //   .get(`http://localhost:3000/nurse/checkup`)
-    //   .then((response) => {
-    //     setTests(response.data);
-    //     console.log(response.data);
-    //   })
-    //   .catch((error) => {
-    //     console.error('Error fetching Patient_list:', error);
-    //   });
-    nurse_patient_list().then((ret) => {
-    if (ret) {
-      setTests(ret);
-    }
-    else {
-      console.log('error');
-    }
-  });
-  });
+    axios
+      .get(`http://localhost:3000/nurse/${userid}/checkup`)
+      .then((response) => {
+        setTests(response.data);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching Patient_list:', error);
+      });
+  }, [userid]);
 
   const currentDate = new Date().toISOString();
 
@@ -111,6 +101,7 @@ function PatientArray() {
                         state: {
                           receiverName: test.uname,
                           bookingId: test.booking_id,
+                          userId: userid,
                         },
                       })
                     }

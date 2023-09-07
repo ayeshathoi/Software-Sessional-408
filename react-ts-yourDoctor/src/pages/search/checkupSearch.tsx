@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import {checkupSearch} from '@/api/apiCalls';
+import axios from 'axios';
 import {
   Autocomplete,
   Button,
@@ -18,7 +18,6 @@ import {
 import Header from '../navbar/loginHeader';
 import Footer from '../navbar/footer';
 
-
 interface Checkup {
   testname: string;
   price: number;
@@ -28,6 +27,7 @@ interface Checkup {
 function CheckupSearch() {
   const [user, setUserData] = useState<Checkup[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const { userid } = useParams();
   const navigate = useNavigate();
   const [count, setCount] = useState<number>(0);
   const [selectedTests, setSelectedTests] = useState<{
@@ -44,26 +44,17 @@ function CheckupSearch() {
 
   useEffect(() => {
     // Make the HTTP GET request to the backend API
-    // axios
-    //   .get(`http://localhost:3000/patient/testall`)
-    //   .then((response) => {
-    //     setUserData(response.data);
-    //     console.log(response.data.length);
-    //     setCount(response.data.length);
-    //   })
-    //   .catch((err) => {
-    //     console.error('Error fetching user profile:', err);
-    //   });
-    checkupSearch().then((ret) => {
-    if (ret) {
-      setUserData(ret);
-      setCount(ret.length);
-    }
-    else {
-      console.log('error');
-    }
-  });
-  });
+    axios
+      .get(`http://localhost:3000/patient/testall`)
+      .then((response) => {
+        setUserData(response.data);
+        console.log(response.data.length);
+        setCount(response.data.length);
+      })
+      .catch((err) => {
+        console.error('Error fetching user profile:', err);
+      });
+  }, [userid]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
@@ -149,7 +140,7 @@ function CheckupSearch() {
           selectedTests: JSON.stringify(selectedTestNames),
           combinedPrice,
           selectedHospital: uniqueHospitalNames[0], // Use the first hospital name
-          userId: 7,
+          userId: userid,
         },
       });
     }

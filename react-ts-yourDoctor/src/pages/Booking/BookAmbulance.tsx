@@ -1,9 +1,10 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, ChangeEvent, FormEvent } from 'react';
+import axios from 'axios';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { format } from 'date-fns';
-import { useLocation } from 'react-router-dom';
-import { bookAmbulance } from '@/api/apiCalls';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   Button,
   Typography,
@@ -23,12 +24,13 @@ import {
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Header from '../navbar/header';
 import Footer from '../navbar/footer';
+
 function BookAmbulance() {
   const location = useLocation();
   // const navigate = useNavigate();
-  const { driverName, driverID, price, hospitalName,  } = location.state;
+  const { driverName, driverID, price, hospitalName, userId } = location.state;
 
-  // const {  } = ;
+  // const { userid } = userId;
   const [formData, setFormData] = useState<{
     patient_mobile: string;
     date: string;
@@ -48,6 +50,8 @@ function BookAmbulance() {
     driver_id: driverID,
     hospital_name: ' ', // Initialize hospital_name as an empty string
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -78,16 +82,17 @@ function BookAmbulance() {
         time: formattedTime,
         hospital_name: hospitalNameToSend,
       };
-
-      // await axios
-      //   .post(`http://localhost:3000/booking/ambulance`, dataToSend)
-      //   .then((res) => {
-      //     console.log('here is the form', res.data);
-      //   });
-      const res = await bookAmbulance(dataToSend);
+      console.log('here is the form', dataToSend);
+      console.log('userrrridd', userId);
+      await axios
+        .post(`http://localhost:3000/booking/${userId}/ambulance`, dataToSend)
+        .then((res) => {
+          console.log('here is the form', res.data);
+        });
     } catch (err) {
       console.log(err);
     }
+    navigate(`/userHome/${userId}/`);
   };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDateChange = (date: any) => {

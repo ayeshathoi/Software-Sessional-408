@@ -1,41 +1,95 @@
+/* eslint-disable import/extensions */
 /* eslint-disable react/no-array-index-key */
 import { SetStateAction, useEffect, useState } from 'react';
-import { useParams,useNavigate } from 'react-router-dom';
-
+import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
 import { Button } from '@mui/material';
-import { patient_appointment } from '@/api/apiCalls';
+import { addNotification } from '@/store/notificationsSlice';
 
-
+interface Appointment {
+  time: string;
+  date: string;
+  uname: string;
+  appointment_serial: number;
+  designation: string;
+  speciality: string;
+  total_price: number;
+  hospital_name: string;
+  booking_id: number;
+}
 function Appointments() {
   const [selectedSection, setSelectedSection] = useState('upcoming');
-  const [appointments, setAppointments] = useState([]);
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [, setPreviousCount] = useState<number>(0);
 
   const handleSectionChange = (section: SetStateAction<string>) => {
     setSelectedSection(section);
   };
 
+  const { userid } = useParams();
   const navigate = useNavigate();
-
-  useEffect( () => {
-    // axios
-    //   .get(`http://localhost:3000/patient/appointment`)
-    //   .then((response) => {
-    //     setAppointments(response.data); // Set the fetched appointments to the state
-    //   })
-    //   .catch((error) => {
-    //     console.error('Error fetching appointments:', error);
-    //   });
-    patient_appointment().then((patient_appointment_list) => {
-      if (patient_appointment_list) {
-        setAppointments(patient_appointment_list);
-      }
-      else {
-        console.log("No Appointments Found");
-      }
-    });
-  }, []);
-
+  const dispatch = useDispatch();
   const currentDate = new Date().toISOString();
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3000/patient/appointment/${userid}`)
+      .then((response) => {
+        const currentAppointments: Appointment[] = response.data || [];
+
+        const storedPreviousCount: number =
+          JSON.parse(localStorage.getItem('previousCount')) || 0;
+
+        const previousAppointmentsCount = currentAppointments.filter(
+          (appointment) => appointment.date <= currentDate
+        ).length;
+
+        const previousAppointments: Appointment[] =
+          JSON.parse(localStorage.getItem('previousAppointments')) || [];
+
+        console.log('Previous Appointments Count:', previousAppointmentsCount);
+        console.log('Stored Previous Count:', storedPreviousCount);
+        console.log('Previous Appointments:', previousAppointments.length);
+
+        if (
+          previousAppointmentsCount > storedPreviousCount &&
+          storedPreviousCount > 0
+        ) {
+          console.log(
+            'Previous Appointments Count:',
+            previousAppointmentsCount
+          );
+          console.log('Stored Previous Count:', storedPreviousCount);
+          dispatch(addNotification({ message: 'Add Review for Appointment' }));
+          alert('Add Review for Appointment');
+        } else if (
+          currentAppointments.length > previousAppointments.length &&
+          previousAppointments.length > 0
+        ) {
+          console.log('Previous Appointments:', previousAppointments.length);
+          console.log('Current Appointments:', currentAppointments.length);
+
+          dispatch(addNotification({ message: 'New Appointment added!' }));
+          alert('New Appointment added!');
+        }
+
+        localStorage.setItem(
+          'previousAppointments',
+          JSON.stringify(currentAppointments)
+        );
+
+        setPreviousCount(previousAppointmentsCount);
+        localStorage.setItem(
+          'previousCount',
+          JSON.stringify(previousAppointmentsCount)
+        );
+        setAppointments(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching appointments:', error);
+      });
+  }, [userid, appointments, dispatch, currentDate]);
 
   const upcomingAppointments = appointments.filter(
     (appointment) => appointment.date > currentDate
@@ -116,6 +170,7 @@ function Appointments() {
                         state: {
                           receiverName: appointment.uname,
                           bookingId: appointment.booking_id,
+                          userId: userid,
                           serialNumber: appointment.appointment_serial,
                         },
                       })

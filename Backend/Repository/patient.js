@@ -49,12 +49,25 @@ const allAppointments = async (pid) => {
 
 
 
-const CheckUP = "SELECT a.booking_id,a.time,a.date, t.testname, t.price,u.uname FROM booking a " +
-                "JOIN patient p ON a.patient_id = p.pid "+
-                "JOIN users u ON a.nurse_id = u.uid "+
-                "JOIN test t ON a.hospital_id = t.hospital_id "+
-                "JOIN booking_tests bt ON a.booking_id = bt.booking_id "+
-                "WHERE a.patient_id = $1 AND a.type = 'Checkup'";
+// const CheckUP = "SELECT a.booking_id,a.time,a.date, t.testname, t.price, u.uname, a.nurse_id FROM booking a " +
+//                 "JOIN booking_tests bt ON a.booking_id = bt.booking_id " +
+//                 "JOIN test t ON t.testid = bt.test_id " + 
+//                 "JOIN patient p ON a.patient_id = p.pid "+
+//                 "JOIN users u ON p.pid = u.uid "+
+//                 "WHERE a.patient_id = $1 AND a.type = 'Checkup' AND a.nurse_id IS NOT NULL";
+// const nurseName = "SELECT u.uname FROM nurse n " +
+//                     "JOIN users u ON n.nurse_id = u.uid " +
+//                     "WHERE n.nurse_id = $1";
+const CheckUP = `
+  SELECT a.booking_id, a.time, a.date, t.testname, t.price, u.uname AS patient_name, a.nurse_id, 
+         (SELECT u2.uname FROM nurse n2 JOIN users u2 ON n2.nurse_id = u2.uid WHERE n2.nurse_id = a.nurse_id) AS nurse_name
+  FROM booking a
+  JOIN booking_tests bt ON a.booking_id = bt.booking_id
+  JOIN test t ON t.testid = bt.test_id
+  JOIN patient p ON a.patient_id = p.pid
+  JOIN users u ON p.pid = u.uid
+  WHERE a.patient_id = $1 AND a.type = 'Checkup' AND a.nurse_id IS NOT NULL
+`;
 
 const checkUpDetails = async (pid) => {
     try {
@@ -82,6 +95,7 @@ const ambulanceDetails = async (pid) => {
     try {
         const client = await getConnection.connect();
         const result = await client.query(Ambulance, [pid]);
+        
         for (let i = 0; i < result.rows.length; i++) 
         {
             const hospital_id = result.rows[i].hospital_id;
@@ -91,11 +105,13 @@ const ambulanceDetails = async (pid) => {
 
         else {
         const hospital_name = await client.query(hospitalname,[hospital_id]);
-        result.rows[i].hospital = hospital_name.rows[i].hospital_name;
-        result.rows[i].street = hospital_name.rows[i].street;
-        result.rows[i].city = hospital_name.rows[i].city;
-        result.rows[i].thana = hospital_name.rows[i].thana;
-        result.rows[i].district = hospital_name.rows[i].district;
+        if (hospital_name.rows[i]) { // Check if hospital_name.rows[i] exists
+            result.rows[i].hospital = hospital_name.rows[i].hospital_name;
+            result.rows[i].street = hospital_name.rows[i].street;
+            result.rows[i].city = hospital_name.rows[i].city;
+            result.rows[i].thana = hospital_name.rows[i].thana;
+            result.rows[i].district = hospital_name.rows[i].district;
+        }
         }
     }
 
@@ -108,13 +124,15 @@ const ambulanceDetails = async (pid) => {
     }
 };
 
+//Doctor Search BY name
+//Doctor Search By Speciality
 
 const DoctorSearchBySpeciality = "SELECT u.uname,u.mobile_no,u.email,d.qualification, d.designation, d.speciality,d.new_patient_fee,t.meeting_type " + 
                            "FROM doctor d " +
                            "JOIN users u ON d.doctor_id = u.uid " +
                            "JOIN timeline t ON d.doctor_id = t.doctor_id " +
                            "WHERE d.speciality = $1 AND d.employee_status = 'Available'";
-
+//patient type
 const doctorSpecialitySearch = async (speciality) => {
     try {
         const client = await getConnection.connect();
@@ -127,13 +145,14 @@ const doctorSpecialitySearch = async (speciality) => {
         throw error;
     }
 };
-
+// yourDoctor.com/DoctorSearch/:NAME
 const DoctorSearchByName =  "SELECT u.uname,u.mobile_no, d.designation, d.speciality,d.new_patient_fee " + 
                             "FROM doctor d " +
                             "JOIN users u ON d.doctor_id = u.uid " +
                             "JOIN timeline t ON d.doctor_id = t.doctor_id " +
                             "WHERE u.uname = $1 AND d.employee_status = 'Available'";
 
+// yourDoctor.com/DoctorSearch/:Speciality
 const doctorNameSearch = async (name) => {
     try {
         const client = await getConnection.connect();
@@ -147,6 +166,7 @@ const doctorNameSearch = async (name) => {
     }
 };
 
+//yourDoctor/HealthCareSearch/:Hospital_ID
 const CheckUP_Hospital = "SELECT t.testname,t.price, h.hospital_name from test t "+
                          "JOIN hospital h ON t.hospital_id = h.hospital_id "+
                          "where h.hospital_name = $1"
@@ -163,6 +183,8 @@ const checkUpHospitalDetails = async (hospital) => {
     }
 };
         
+//yourDoctor.com/AmbulanceSearch/:Thana
+
 const getPatientProfile = async (pid) => {
     try {
         const client = await getConnection.connect();
@@ -201,6 +223,8 @@ const updateProfile =   "UPDATE " + constant.TABLE_PATIENT + " SET " +constant.T
                         "WHERE " + constant.TABLE_PATIENT_ID + " = $5"; 
 
 
+
+//confused about document Update
 const update_profile = async (street,thana,city, district,pid,mobile_no) => {
     try {
         const client = await getConnection.connect();

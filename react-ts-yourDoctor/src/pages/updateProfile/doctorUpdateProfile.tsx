@@ -5,8 +5,10 @@ import axios from 'axios';
 import HeaderDoctor from '../navbar/headerdoctor';
 import Footer from '../navbar/footer';
 import Doctor from '@/assets/doctor.jpg';
-axios.defaults.withCredentials = true;
+
 function DoctorProfileUpdate() {
+  const { userid } = useParams();
+
   const [isEditing, setIsEditing] = useState(false);
   const [prevForm, setPrevForm] = useState({
     name: '',
@@ -26,7 +28,7 @@ function DoctorProfileUpdate() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/doctor/profile`)
+      .get(`http://localhost:3000/doctor/profile/${userid}`)
       .then((response) => {
         setPrevForm({
           name: response.data.name,
@@ -46,7 +48,7 @@ function DoctorProfileUpdate() {
       .catch((error) => {
         console.error('Error fetching doctor profile:', error);
       });
-  });
+  }, [userid]);
 
   console.log('dehfbk', prevForm);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,8 +58,9 @@ function DoctorProfileUpdate() {
   const handleUpdate = async () => {
     try {
       // Send the formData to the server for update
+      console.log('here is the formdata', formData, { userid });
       const response = await axios.post(
-        `http://localhost:3000/doctor/update-profile`,
+        `http://localhost:3000/doctor/update-profile/${userid}`,
         formData
       );
       console.log('Updated Data:', response.data);
@@ -69,24 +72,23 @@ function DoctorProfileUpdate() {
 
   return (
     <>
-      <div >
+      <div className="bg-lightpink py-6">
         <HeaderDoctor />
       </div>
-      <div className="mt-16 pt-16 py-8 px-4 flex justify-center items-center">
-
-      <div className="w-1/5 p-6 bg-white shadow-md">
-          <img src={Doctor} alt="Doctor" className="w-32 h-32 rounded-full mx-auto" />
+      <div className="flex">
+        {/* Doctor's Photo, Name, and Specialist */}
+        <div className="w-1/4 p-6 bg-white shadow-md">
+          <img src={Doctor} alt="Doctor" className="h-40 w-full object-cover" />
           <h2 className="text-xl font-semibold mb-2">{formData.name}</h2>
-          <p className="text-gray-600">{formData.speciality},{formData.designation}</p>
-          <p className="text-gray-600">{formData.qualification}</p>
+          <p className="text-gray-600">{formData.speciality}</p>
         </div>
-        <div className="w-1/2">
+        <div className="w-3/4 p-6 bg-lightpink">
           <div className="w-96 p-6 rounded-lg bg-white shadow-md">
             <h1 className="text-2xl font-bold mb-4">Update Doctor Profile</h1>
             <form>
               {/* Specialist */}
               <div className="mb-4">
-                <div className="flex justify-center items-center">
+                <div className="flex">
                   <div className="w-1/2 bg-lightblue p-2 rounded-tl rounded-bl">
                     <label className="font-semibold">Speciality:</label>
                   </div>
@@ -122,7 +124,6 @@ function DoctorProfileUpdate() {
                       />
                     ) : (
                       <p>{formData.designation}</p>
-
                     )}
                   </div>
                 </div>

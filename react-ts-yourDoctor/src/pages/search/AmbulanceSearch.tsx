@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-
-import {ambulanceSearch} from '@/api/apiCalls';
-
-
+import axios from 'axios';
 import {
   Autocomplete,
   Button,
@@ -33,31 +30,23 @@ interface Driver {
 function AmbulanceSearch() {
   const [user, setuserData] = useState<Driver[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const { userid } = useParams();
   const navigate = useNavigate();
   const [count, setCount] = useState<number>(0);
   const [sortBy, setSortBy] = useState<'PriceLowToHigh' | 'PriceHighToLow'>('PriceLowToHigh'); // Default sorting order
 
   useEffect(() => {
     // Make the HTTP GET request to the backend API
-    // axios
-    //   .get(`http://localhost:3000/patient/ambulanceall`)
-    //   .then((response) => {
-    //     setuserData(response.data);
-    //     setCount(response.data.length);
-    //   })
-    //   .catch((error) => {
-    //     console.error('Error fetching user profile:', error);
-    //   });
-    ambulanceSearch().then((ret) => {
-    if (ret) {
-      setuserData(ret);
-      setCount(ret.length);
-    }
-    else {
-      console.log('error');
-    }
-  });
-  });
+    axios
+      .get(`http://localhost:3000/patient/ambulanceall`)
+      .then((response) => {
+        setuserData(response.data);
+        setCount(response.data.length);
+      })
+      .catch((error) => {
+        console.error('Error fetching user profile:', error);
+      });
+  }, [userid]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
@@ -172,7 +161,7 @@ function AmbulanceSearch() {
                               driverID: driver.driver_id,
                               price: driver.ambulance_fare,
                               hospitalName: driver.hospital,
-                              userId: 7,
+                              userId: userid,
                             },
                           })
                         }

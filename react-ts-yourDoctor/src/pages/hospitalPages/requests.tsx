@@ -2,7 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Grid, Paper, Typography, Button, Container } from '@mui/material';
-import { pending_patient_req } from '@/api/apiCalls';
+import axios from 'axios';
+import AssignNurse from './Assign_Nurse';
 
 interface Requests {
   booking_id: number;
@@ -15,27 +16,20 @@ interface Requests {
 }
 
 function PatientRequests() {
+  const { userid } = useParams();
   const [resquest, setRequests] = useState([]);
   useEffect(() => {
     // Make the HTTP GET request to the backend API
-    // axios
-    //   .get(`http://localhost:3000/hospital/booking`)
-    //   // api call
-    //   .then((response) => {
-    //     setRequests(response.data.result); // Set the fetched data to the state
-    //   })
-    //   .catch((error) => {
-    //     console.error('Error fetching data:', error);
-    //   });
-    pending_patient_req().then((ret) => {
-    if (ret) {
-      setRequests(ret.result);
-    }
-    else {
-      console.log('error');
-    }
-  });
-  });
+    axios
+      .get(`http://localhost:3000/hospital/booking/${userid}`)
+      // api call
+      .then((response) => {
+        setRequests(response.data.result); // Set the fetched data to the state
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  }, [userid]);
 
 
   return (
@@ -85,7 +79,7 @@ function PatientRequests() {
                       </td>
                       <td className="px-6 py-4 whitespace-no-wrap">
                         <Link
-                          to={`/hospitalHome/${request.booking_id}`}
+                          to={`/hospitalHome/${userid}/${request.booking_id}`}
                         >
                           <Button variant="contained" color="primary">
                             Assign Nurse

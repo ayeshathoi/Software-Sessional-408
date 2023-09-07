@@ -1,15 +1,15 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-
+import axios from 'axios';
 import { TextField, Button } from '@mui/material';
+
 interface FormData {
   testname: string;
   price: number;
 }
 
-import { addTest } from '@/api/apiCalls';
-
 function AddTest() {
+  const { userid } = useParams();
   const [formData, setFormData] = useState<FormData>({
     testname: '',
     price: 0,
@@ -19,21 +19,13 @@ function AddTest() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      // await axios
-      //   .post(`http://localhost:3000/hospital/addtest`, formData)
-      //   .then((res) => {
-      //     alert('Test Added Successfully');
-      //     navigate(`/hospitalHome`);
-      //     // navigate korte homepage er ekta generic page e pathaite hobe
-      //   });
-      const res = await addTest(formData);
-      if(res){
-        alert('Test Added Successfully');
-        navigate(`/hospitalHome`);
-      }
-      else {
-        console.log("Error in adding test");
-      }
+      await axios
+        .post(`http://localhost:3000/hospital/addtest/${userid}`, formData)
+        .then((res) => {
+          alert('Test Added Successfully');
+          navigate(`/hospitalHome/${userid}`);
+          // navigate korte homepage er ekta generic page e pathaite hobe
+        });
     } catch (err) {
       console.log(err);
     }

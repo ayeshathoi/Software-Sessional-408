@@ -4,14 +4,12 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
-
+import axios from 'axios';
 import Header from '../navbar/header_nd';
 import Footer from '../navbar/footer';
 import User from '@/assets/user.webp';
 import PatientArray from './patient_list';
 import HealthCheckImage from '@/assets/healthcheckhome.jpg';
-
-import { nurse_profile } from '@/api/apiCalls';
 
 function NurseHome() {
   const [user, setUser] = useState({
@@ -24,31 +22,24 @@ function NurseHome() {
   });
 
   const [value, setValue] = useState<number>(0);
+  const { userid } = useParams();
   useEffect(() => {
-    // axios
-    //   .get(`http://localhost:3000/nurse`)
-    //   .then((res) => {
-    //     setUser(res.data[0]);
-    //     user.uname = res.data[0].uname;
-    //     user.email = res.data[0].email;
-    //     user.user_type = res.data[0].user_type;
-    //     user.designation = res.data[0].designation;
-    //     user.hospital = res.data[0].hospital;
-    //     user.mobile_no = res.data[0].mobile_no;
-    //   })
-    //   .catch((error) => {
-    //     console.error('userprofile not found', error);
-    //   });
-    nurse_profile().then((nurse_profile_list) => {
-    if (nurse_profile_list) {
-      setUser(nurse_profile_list[0]);
-    }
-    else {
-      console.log("No Nurse Found");
-    }
-  });
-
-  }, [user]);
+    axios
+      .get(`http://localhost:3000/nurse/${userid}`)
+      .then((res) => {
+        console.log(res.data);
+        setUser(res.data[0]);
+        user.uname = res.data[0].uname;
+        user.email = res.data[0].email;
+        user.user_type = res.data[0].user_type;
+        user.designation = res.data[0].designation;
+        user.hospital = res.data[0].hospital;
+        user.mobile_no = res.data[0].mobile_no;
+      })
+      .catch((error) => {
+        console.error('userprofile not found', error);
+      });
+  }, [user, userid]);
 
   if (!user) {
     return <div>Loading...</div>; // Display a loading message while fetching data

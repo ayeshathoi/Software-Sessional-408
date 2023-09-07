@@ -1,13 +1,15 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { SetStateAction, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import HeaderCommon from '../navbar/headerdoctor';
+import HeaderCommon from '../navbar/headerCommon';
 import Footer from '../navbar/footer';
 import axios from 'axios';
 import Driver from '@/assets/driver.jpg';
-axios.defaults.withCredentials = true;
 
-function DriverProfileUpdate() {  
+
+function DriverProfileUpdate() {
+  const { userid } = useParams();
+  
   const [isEditing, setIsEditing] = useState(false);
   const [prevForm, setPrevForm] = useState({
     name: '',
@@ -24,7 +26,7 @@ function DriverProfileUpdate() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/driver/profile`)
+      .get(`http://localhost:3000/driver/profile/${userid}`)
       .then((response) => {
         console.log('API Response:', response.data); 
         setPrevForm({
@@ -41,7 +43,7 @@ function DriverProfileUpdate() {
       .catch((error) => {
         console.error('Error fetching driver profile:', error);
       });
-  },);
+  }, [userid]);
   
   console.log("dehfxxkxmk",prevForm);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,7 +55,8 @@ function DriverProfileUpdate() {
   const handleUpdate = async () => {
     try {
       // Send the formData to the server for update
-      const response = await axios.put(` http://localhost:3000/driver/editProfile`, formData); 
+      console.log("here is the formdata",formData,{userid})
+      const response = await axios.put(` http://localhost:3000/driver/editProfile/${userid}`, formData); 
       console.log('Updated Data:', response.data); 
       setIsEditing(false);
     } catch (error) {

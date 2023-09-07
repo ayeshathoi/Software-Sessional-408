@@ -19,7 +19,7 @@ const INSERT_RatingAndComplaint = async (req, res) => {
 };
 
 const show_complaint = async (req, res) => {
-  const hospital_id = req.user.uid;
+  const hospital_id = req.params.hospital_id;
   try {
     const result = await user.show_complaints(hospital_id);
     res.send(result)

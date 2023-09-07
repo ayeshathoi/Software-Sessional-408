@@ -1,9 +1,10 @@
 const user = require('../Repository/booking')
 const http_status = require('./HTTPStatus')
 
+// paid naki paid na eita 
 const DoctorBooking = async (req, res) => {
     try {
-        const uid = req.user.uid;
+        const uid = req.params.uid;
         const {price,time,date,payment_method,payment_status,patient_mobile,doctor_id,hospital_name,weekday} = req.body
         if(hospital_name == undefined){
         const type="Online"
@@ -15,6 +16,7 @@ const DoctorBooking = async (req, res) => {
             const result = await user.appointmentBooking(type,weekday,price,time,date,payment_method,payment_status,patient_mobile,uid,doctor_id,hospital_name); 
             if(result == "This serial is already booked.")
             {
+                console.log("This serial is already booked.");
                 res.send("This serial is already booked.");
             }
             else
@@ -43,7 +45,7 @@ const selectTEST = async (req,res) =>
 
 const CheckupBooking = async (req, res) => {
     try {
-        const uid = req.user.uid;
+        const uid = req.params.uid;
         const type = "Checkup";
         const {price,time,date,payment_method,payment_status,patient_mobile,hospital_name,test_names} = req.body
         const result = await user.bookingCheckup(type,price,time,date,payment_method,payment_status,patient_mobile,uid,hospital_name,test_names); 
@@ -56,7 +58,7 @@ const CheckupBooking = async (req, res) => {
 //Ambulance
 const AmbulanceBooking = async (req, res) => {
     try {
-        const uid = req.user.uid;
+        const uid = req.params.uid;
         const type = "Ambulance";
         const {price,time,date,payment_method,payment_status,patient_mobile,driver_id,hospital_name} = req.body
         if(hospital_name == undefined)
@@ -75,6 +77,12 @@ const AmbulanceBooking = async (req, res) => {
         res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while getting available driver.' });
     }
 }
+
+// const check_booking = async (type,req,res) =>
+// {
+//     try {
+//         if(type == "this")
+//         res.send("ok");
 
 
 module.exports = {

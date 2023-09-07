@@ -1,8 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-
-import { available_doctor_hospital,available_driver_hospital,available_nurse_hospital,remove_employee } from '@/api/apiCalls';
-
 import {
   Grid,
   Button,
@@ -11,44 +8,51 @@ import {
   Typography,
   Box,
 } from '@mui/material';
+import axios from 'axios';
 
 function AvailableEmployee() {
+  const { userid } = useParams();
   const [doctor, setDoctor] = useState([]);
   const [nurse, setNurse] = useState([]);
   const [driver, setDriver] = useState([]);
   const navigate = useNavigate();
   useEffect(() => {
     // Fetch both doctor and nurse data from your APIs here
-    const fetchDoctors = available_doctor_hospital();
-    const fetchNurses = available_nurse_hospital();
-    const fetchDrivers = available_driver_hospital();
+    const fetchDoctors = axios.get(
+      `http://localhost:3000/hospital/doctor/${userid}`
+    );
+    const fetchNurses = axios.get(
+      `http://localhost:3000/hospital/nurse/${userid}`
+    );
+    const fetchDrivers = axios.get(
+      `http://localhost:3000/hospital/driver/${userid}`
+    );
 
     // Use Promise.all to wait for all requests to complete
     Promise.all([fetchDoctors, fetchNurses, fetchDrivers])
       .then((responses) => {
-        setDoctor(responses[0].result);
-        setNurse(responses[1].result);
-        setDriver(responses[2].result);
+        setDoctor(responses[0].data.result);
+        setNurse(responses[1].data.result);
+        setDriver(responses[2].data.result);
       })
       .catch((error) => {
         console.error('Error fetching employee data:', error);
       });
-  });
+  }, [userid]);
 
   const handleUpdateStatus = async (employeeEmail: string) => {
     const data = { email: employeeEmail };
     try {
-      const res = remove_employee(data);
-      // await axios
-      //   .post(`http://localhost:3000/hospital/remove`, data)
-      //   .then((res) => {
-      //     console.log('here is the form', res.data);
-      //   });
-      
+      console.log('here is the email', data, userid);
+      await axios
+        .post(`http://localhost:3000/hospital/remove/${userid}`, data)
+        .then((res) => {
+          console.log('here is the form', res.data);
+        });
     } catch (err) {
       console.log(err);
     }
-    navigate(`/hospitalHome`);
+    navigate(`/hospitalHome/${userid}`);
   };
 
   // want to sort the employees by their user_type

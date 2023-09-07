@@ -13,7 +13,6 @@ import patient from '@/assets/appointment.jpg';
 import HeaderDoctor from '../navbar/headerdoctor';
 import Footer from '../navbar/footer';
 import PatientArray from './patient_List';
-import { getDoctorDetails } from '@/api/apiCalls';
 
 function DoctorHome() {
   const [user, setUser] = useState({
@@ -32,46 +31,31 @@ function DoctorHome() {
   });
 
   const [value, setValue] = useState<number>(0);
+  const { userid } = useParams();
 
   const [hospitals, setHospitals] = useState<string[]>([]);
   const [selectedHospital, setSelectedHospital] = useState<string | null>(null);
 
   useEffect(() => {
-    // axios
-    //   .get(`http://localhost:3000/doctor/details`)
-    //   .then((res) => {
-    //     setUser(res.data);
+    axios
+      .get(`http://localhost:3000/doctor/details/${userid}`)
+      .then((res) => {
+        setUser(res.data);
 
-    //     const hospitalNames = [];
-    //     for (const key in res.data) {
-    //       if (Object.prototype.hasOwnProperty.call(res.data, key)) {
-    //         if (key.includes('hospital')) {
-    //           hospitalNames.push(res.data[key]);
-    //         }
-    //       }
-    //     }
-    //     setHospitals(hospitalNames);
-    //   })
-    //   .catch((error) => {
-    //     console.error('userprofile not found', error);
-    //   });
-    getDoctorDetails().then((res) =>
-    {
-      setUser(res);
-      console.log(res)
-      const hospitalNames = [];
-          for (const key in res) {
-            if (Object.prototype.hasOwnProperty.call(res, key)) {
-              if (key.includes('hospital')) {
-                hospitalNames.push(res[key]);
-              }
+        const hospitalNames = [];
+        for (const key in res.data) {
+          if (Object.prototype.hasOwnProperty.call(res.data, key)) {
+            if (key.includes('hospital')) {
+              hospitalNames.push(res.data[key]);
             }
           }
-          setHospitals(hospitalNames);
-    });
-
-
-  },);
+        }
+        setHospitals(hospitalNames);
+      })
+      .catch((error) => {
+        console.error('userprofile not found', error);
+      });
+  }, [userid]);
   const handleChange = (
     _event: React.ChangeEvent<object>,
     newValue: number
@@ -94,13 +78,23 @@ function DoctorHome() {
           >
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Link
-                to={`/AddSchedule/?hospitals=${JSON.stringify(
+                to={`/AddSchedule/${userid}?hospitals=${JSON.stringify(
                   hospitals
                 )}`}
                 className="ml-2"
               >
                 <Button variant="contained" color="inherit">
                   Add Schedule
+                </Button>
+              </Link>
+              <Link
+                to={`/EditHospiatlList/${userid}?hospitals=${JSON.stringify(
+                  hospitals
+                )}`}
+                className="ml-2"
+              >
+                <Button variant="contained" color="inherit">
+                  Edit Schedule
                 </Button>
               </Link>
             </Box>

@@ -1,8 +1,11 @@
+/* eslint-disable block-scoped-var */
+/* eslint-disable no-var */
+/* eslint-disable vars-on-top */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, ChangeEvent, FormEvent, useEffect } from 'react';
-import { useParams,useLocation, useNavigate } from 'react-router-dom';
-import { bookDoctor, getTimeline } from '@/api/apiCalls';
+import axios from 'axios';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   Autocomplete,
   MenuItem,
@@ -31,10 +34,10 @@ import Footer from '../navbar/footer';
 function BookDoctor() {
   const location = useLocation();
   // const navigate = useNavigate();
-  const {doctor_id} = useParams();
-  const { doctorName, doctorId, newPatientFee, hospitalName} =
+  const { doctorName, doctorId, newPatientFee, hospitalName, userId } =
     location.state;
 
+  // const { userid } = userId;
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState<{
@@ -62,20 +65,16 @@ function BookDoctor() {
   const [timetable, setTimetable] = useState([]);
 
   const [selectedWeekday, setSelectedWeekday] = useState(null);
-  useEffect(async () => {
-    // axios
-    //   .get(`http://localhost:3000/doctor/timeline/${doctorId}`)
-    //   .then((res) => {
-    //     setTimetable(res.data);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-
-    getTimeline(doctor_id).then((ret) => {
-    setTimetable(ret);
-    });
-  }, [doctor_id]);
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3000/doctor/timeline/${doctorId}`)
+      .then((res) => {
+        setTimetable(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [doctorId]);
 
   const filteredTimetable = timetable.filter((item) => {
     if (selectedWeekday === null) return false;
@@ -135,27 +134,20 @@ function BookDoctor() {
 
       console.log('frontend Request', dataToSend);
       var status = true;
-      // await axios
-      //   .post(`http://localhost:3000/booking/appointment`, dataToSend)
-      //   .then((res) => {
-      //     console.log('Backend Response', res);
-      //     if (res.data === 'This serial is already booked.') {
-      //       alert('Slot is already booked. try another slot');
-      //       status = false;
-      //       console.log('status', status);
-      //     }
-      //   });
-      const res = await bookDoctor(dataToSend);
-      console.log('Backend Response', res);
-      if (res === 'This serial is already booked.') {
-        alert('Slot is already booked. try another slot');
-        status = false;
-        console.log('status', status);
-      }
+      await axios
+        .post(`http://localhost:3000/booking/${userId}/appointment`, dataToSend)
+        .then((res) => {
+          console.log('Backend Response', res);
+          if (res.data === 'This serial is already booked.') {
+            alert('Slot is already booked. try another slot');
+            status = false;
+            console.log('status', status);
+          }
+        });
     } catch (err) {
       console.log(err);
     }
-    if (status == true) navigate(`/userHome`);
+    if (status === true) navigate(`/userHome/${userId}/`);
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

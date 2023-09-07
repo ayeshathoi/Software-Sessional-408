@@ -28,8 +28,23 @@ const patientListDetails_doctor = async (did , hospital_name) => {
 // schedule update
 const update_schedule = "UPDATE " + constant.TABLE_DOCTOR_TIMELINE + " SET " + constant.TABLE_DOCTOR_TIMELINE_WEEKDAY + " = $1 , " +
                         constant.TABLE_DOCTOR_TIMELINE_SLOT + " = $2 , " + constant.TABLE_DOCTOR_TIMELINE_START_TIME + " = $3 , " +
-                        constant.TABLE_DOCTOR_TIMELINE_END_TIME + " = $4 , " + constant.TABLE_DOCTOR_TIMELINE_HOSPITAL_ID + " = $5 " +
-                        "WHERE " + constant.TABLE_DOCTOR_TIMELINE_ID + " = $6"
+                        constant.TABLE_DOCTOR_TIMELINE_END_TIME + " = $4 "  +
+                        "WHERE " + constant.TABLE_DOCTOR_TIMELINE_ID + " = $5"
+
+const editSchedule = async (weekday,slot,start_time,end_time,timeline_id) => {
+    try {
+	    const client = await getConnection.connect();
+	    
+        //const result2 = await client.query(updated_user, [mobile_no, doctor_id]);
+        const result = await client.query(update_schedule, [weekday,slot,start_time,end_time,timeline_id]);       
+        
+        client.release();
+        return update_schedule.rowsAffected === 1;
+    } catch (error) {
+        console.error('Error fetching data:', error.message);
+        throw error;
+    }
+};
 
 const add_schedule = `INSERT INTO ${constant.TABLE_DOCTOR_TIMELINE}
 (
@@ -57,6 +72,9 @@ const online_add_schedule = `INSERT INTO ${constant.TABLE_DOCTOR_TIMELINE}
 VALUES ( $1, $2, $3, $4, $5, $6 )
 `;
                     
+// schedule unique hote hobe
+// how to do that? weekday start time end time slot unique hote hobe
+// eki jinish repeat korle hospital nam onujayi likhe deyar ekta page banano lagbe
 const ADD_SCHEDULE = async (doctor_id,timeline) => {
     try {
         const client = await getConnection.connect();
@@ -171,7 +189,6 @@ const doctor_hospitals = "SELECT hospital_name FROM hospital h JOIN doctor_hospi
 
 const getDoctorDetails = async (doctor_id) => {
     try {
-        console.log(doctor_id);
         const client = await getConnection.connect();
         const result = await client.query(doctorDetails, [doctor_id]);
         const result1 = await client.query(doctor_user, [doctor_id]);
@@ -185,7 +202,7 @@ const getDoctorDetails = async (doctor_id) => {
             var name = hospital +" " + i;
             result.rows[0][name] = result2.rows[i].hospital_name;
         }
-        console.log(result);
+
         client.release();
         return result.rows[0];
     }
@@ -248,6 +265,22 @@ const getTimelineDetails = async (doctor_id) => {
     }
 }
 
+const delete_Schedule = "DELETE FROM timeline WHERE timeline_id = $1";
+
+const deleteSchedule = async (timeline_id) => {
+    try {
+        const client = await getConnection.connect();
+        const result = await client.query(delete_Schedule, [timeline_id]);
+        client.release();
+        return result.rows;
+    }
+    catch (error) {
+        console.error('Error deleting data:', error.message);
+        throw error;
+    }
+}
+
+
 
 module.exports = {
     patientListDetails_doctor,
@@ -256,5 +289,7 @@ module.exports = {
     updateDoctorProfile,
     ADD_SCHEDULE,
     getDoctorDetails,
-    getTimelineDetails
+    getTimelineDetails,
+    editSchedule,
+    deleteSchedule
 }

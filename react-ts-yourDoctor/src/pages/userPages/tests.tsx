@@ -1,9 +1,12 @@
+/* eslint-disable import/extensions */
 /* eslint-disable react/no-array-index-key */
 import { SetStateAction, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
 import { Button } from '@mui/material';
-import { patient_checkup } from '@/api/apiCalls';
+import { addNotification } from '@/store/notificationsSlice';
+
 interface Checkup {
   time: string;
   date: string;
@@ -11,6 +14,7 @@ interface Checkup {
   price: number;
   uname: string;
   booking_id: number;
+  nurse_name: string;
 }
 
 function Tests() {
@@ -21,40 +25,76 @@ function Tests() {
   const handleSectionChange = (section: SetStateAction<string>) => {
     setSelectedSection(section);
   };
+  const { userid } = useParams();
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    // axios
-    //   .get(`http://localhost:3000/patient/checkup`)
-    //   .then((response) => {
-    //     console.log('response.data', response.data);
-    //     setTests(response.data);
-    //     console.log(response.data);
-    //   })
-    //   .catch((error) => {
-    //     console.error('Error fetching Tests:', error);
-    //   });
-    patient_checkup().then((patient_checkup_list) => {
-    if (patient_checkup_list) {
-      setTests(patient_checkup_list);
-    }
-    else {
-      console.log("No Tests Found");
-    }
-  });
-  },);
-
+  const [, setPreviousCount3] = useState<number>(0);
   const currentDate = new Date().toISOString();
 
-  const upcomingTests = tests.filter(
-    (ambulance) => ambulance.date > currentDate
-  );
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3000/patient/checkup/${userid}`)
+      .then((response) => {
+        const currentTests: Checkup[] = response.data || [];
 
-  const previousAmbulances = tests.filter(
-    (ambulance) => ambulance.date <= currentDate
-  );
+        const storedPreviousCount3: number =
+          JSON.parse(localStorage.getItem('previousCount3')) || 0;
 
-  const AmbulancesToShow =
-    selectedSection === 'upcoming' ? upcomingTests : previousAmbulances;
+        const previousTestsCount = tests.filter(
+          (test) => test.date <= currentDate
+        ).length;
+
+        const previousTests: Checkup[] =
+          JSON.parse(localStorage.getItem('previousTests')) || [];
+
+        console.log('Previous Tests:', previousTests.length);
+        console.log('Stored Previous Count:', storedPreviousCount3);
+        console.log('Previous Tests:', previousTests.length);
+
+        if (
+          previousTestsCount > storedPreviousCount3 &&
+          storedPreviousCount3 > 0
+        ) {
+          console.log('Previous Test Count:', previousTestsCount);
+          console.log('Stored Previous Count:', storedPreviousCount3);
+          dispatch(addNotification({ message: 'Add Review for Test' }));
+          alert('Add Review for Test');
+        } else if (
+          currentTests.length > previousTests.length &&
+          previousTests.length > 0
+        ) {
+          console.log('Previous Test:', previousTests.length);
+          console.log('Current Test:', currentTests.length);
+
+          dispatch(
+            addNotification({
+              message: 'New Test added!',
+            })
+          );
+          alert('New Test added!');
+        }
+
+        localStorage.setItem('previousTests', JSON.stringify(currentTests));
+        setPreviousCount3(previousTestsCount);
+        localStorage.setItem(
+          'previousCount3',
+          JSON.stringify(previousTestsCount)
+        );
+
+        setTests(response.data);
+        // console.log(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching Tests:', error);
+      });
+  }, [userid, tests, dispatch, currentDate]);
+
+  const upcomingTests = tests.filter((test) => test.date > currentDate);
+
+  const previousTests = tests.filter((test) => test.date <= currentDate);
+
+  const TestsToShow =
+    selectedSection === 'upcoming' ? upcomingTests : previousTests;
 
   return (
     <div className="flex items-center justify-center">
@@ -88,7 +128,7 @@ function Tests() {
             {selectedSection === 'upcoming' ? 'Upcoming' : 'Previous'} Tests
           </h2>
           <ul className="space-y-4">
-            {AmbulancesToShow.map((test, index) => (
+            {TestsToShow.map((test, index) => (
               <li key={index} className="flex justify-between items-center">
                 <div>
                   <p className="text-lg font-semibold">Name: {test.uname}</p>
@@ -109,8 +149,9 @@ function Tests() {
                     onClick={() =>
                       navigate('/Chatbox', {
                         state: {
-                          receiverName: test.uname,
+                          receiverName: test.nurse_name,
                           bookingId: test.booking_id,
+                          userId: userid,
                         },
                       })
                     }

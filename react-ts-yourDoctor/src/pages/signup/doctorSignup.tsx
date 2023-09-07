@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 // /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, ChangeEvent, FormEvent } from 'react';
-
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import {
   TextField,
@@ -13,10 +13,8 @@ import {
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import Navbar from '../navbar/headerdoctor';
+import Navbar from '../navbar/header';
 import Footer from '../navbar/footer';
-
-import {reg_doctor} from '@/api/apiCalls';
 
 interface FormData {
   uname: string;
@@ -34,7 +32,6 @@ interface FormData {
   qualification: string;
   old_patient_fee: number;
   new_patient_fee: number;
-  nid: string;
 }
 
 function DoctorSignup() {
@@ -54,7 +51,6 @@ function DoctorSignup() {
     qualification: '',
     old_patient_fee: 0,
     new_patient_fee: 0,
-    nid: '',
   });
 
   const navigate = useNavigate();
@@ -74,18 +70,23 @@ function DoctorSignup() {
     setFormData((prevData) => ({ ...prevData, dob: date }));
   };
 
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    console.log('pending', e.target);
+    // const file = e.target.files && e.target.files[0];
+    // if (file) {
+    //   setFormData((prevFormData) => ({ ...prevFormData, pdfDocument: file }));
+    // }
+  };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      // await axios
-      //   .post('http://localhost:3000/auth/register/doctor', formData)
-      //   .then((res) => {
-      //     console.log('here is the form', res.data);
-      //     navigate('/LogIn');
-      //   });
-      const ret = reg_doctor(formData);
-      navigate('/LogIn');
+      await axios
+        .post('http://localhost:3000/auth/register/doctor', formData)
+        .then((res) => {
+          console.log('here is the form', res.data);
+          navigate('/LogIn');
+        });
     } catch (err) {
       console.log(err);
     }
@@ -99,15 +100,16 @@ function DoctorSignup() {
       <div
         className="flex flex-col items-center justify-center mt-36"
         style={{
+          backgroundColor: 'ghostwhite',
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           backgroundPosition: 'center center',
           // opacity: 0.5, // Adjust the opacity as needed (0.0 to 1.0)
         }}
       >
-        <div className="pt-20 flex flex-col items-center justify-center pb-8 px-12 mb-8 border border-gray-300 round-lg ">
+        <div className="pt-20 flex flex-col items-center justify-center pb-8 px-12 mb-8 border border-gray-300 round-lg bg-pink-50">
           <h1
-            style={{ fontWeight: 'bold', fontSize: '24px', color: 'green' }}
+            style={{ fontWeight: 'bold', fontSize: '24px', color: 'royalblue' }}
           >
             Doctor Signup
           </h1>
@@ -125,30 +127,21 @@ function DoctorSignup() {
               className="w-full"
             />
             <TextField
-              label="Nid Number"
-              name="nid"
-              value={formData.nid}
+              label="Password"
+              name="password"
+              type="password"
+              value={formData.password}
               onChange={handleChange}
               variant="outlined"
               required
               className="w-full"
             />
-            
+
             <TextField
               label="Email"
               type="email"
               name="email"
               value={formData.email}
-              onChange={handleChange}
-              variant="outlined"
-              required
-              className="w-full"
-            />
-            <TextField
-              label="Password"
-              name="password"
-              type="password"
-              value={formData.password}
               onChange={handleChange}
               variant="outlined"
               required
@@ -201,15 +194,6 @@ function DoctorSignup() {
                 />
               </RadioGroup>
             </div>
-
-            <TextField
-              label="Zoom Meeting Link"
-              name="zoom_link"
-              value={formData.zoom_link}
-              onChange={handleChange}
-              variant="outlined"
-              className="w-full"
-            />
 
             <TextField
               label="Designation"
@@ -274,7 +258,31 @@ function DoctorSignup() {
               required
               className="w-full"
             />
+            <TextField
+              label="Zoom Meeting Link"
+              name="zoom_link"
+              value={formData.zoom_link}
+              onChange={handleChange}
+              variant="outlined"
+              className="w-full"
+            />
 
+            <div className="col-span-2 mb-8">
+              <label
+                htmlFor="pdfDocument"
+                className="text-black px-2.5 text-lg font-semibold py-2 "
+              >
+                PDF Document Submission
+              </label>
+              <input
+                type="file"
+                id="pdfDocument"
+                name="pdfDocument"
+                onChange={handleFileChange}
+                accept=".pdf"
+                className="w-half rounded-md rounded-r-none px-3 py-2"
+              />
+            </div>
 
             <div className="col-span-2 flex justify-center">
               <Button type="submit" variant="contained" color="success">

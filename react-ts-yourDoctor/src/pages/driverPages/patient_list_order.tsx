@@ -1,6 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 import { SetStateAction, useEffect, useState } from 'react';
-import { driver_patient_list } from '@/api/apiCalls';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
 
 interface Ambulance {
   time: string;
@@ -16,30 +17,25 @@ function Order() {
   const handleSectionChange = (section: SetStateAction<string>) => {
     setSelectedSection(section);
   };
+  const { userid } = useParams();
 
   useEffect(() => {
-    // axios
-    //   .get(`http://localhost:3000/driver/order`)
-    //   .then((response) => {
-    //     setAmbulances(response.data.result);
-    //     // console.log(response.data);
-    //   })
-    driver_patient_list().then((res) => {
-    if(res){
-        setAmbulances(res.result);
-      }
-    else {
-      console.log('error');
-    } 
-  });
-  });
+    axios
+      .get(`http://localhost:3000/driver/order/${userid}`)
+      .then((response) => {
+        setAmbulances(response.data.result);
+        // console.log(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching Order:', error);
+      });
+  }, [userid]);
 
   const currentDate = new Date().toISOString();
 
   const upcomingAmbulances = ambulances.filter(
     (ambulance) => ambulance.date > currentDate
   );
-  console.log(upcomingAmbulances);
 
   const previousAmbulances = ambulances.filter(
     (ambulance) => ambulance.date <= currentDate

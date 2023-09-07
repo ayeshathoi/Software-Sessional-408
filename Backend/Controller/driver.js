@@ -3,17 +3,17 @@ const http_status = require('./HTTPStatus')
 const search_ = require('../Repository/search')
 
 const getPatient_List = async (req, res) => {
-    const driver_id = req.user.uid;
+    const driver_id = req.params.id;
     try {
         const result = await user.patientListDetails_driver(driver_id);
         res.status(http_status.OK).json({ result });
     } catch (error) {
         console.error('Error :', error.message);
-        res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while getting patient list.' });
+        res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while getting available doctor.' });
     }
 }
 const getProfile = async (req, res) => {
-    const driver_id = req.user.uid;
+    const driver_id = req.params.id;
 
     try {
         const profile = await user.getDriverProfile(driver_id);
@@ -25,7 +25,7 @@ const getProfile = async (req, res) => {
 };
 
 const update_profile = async (req, res) => {
-    const driver_id = req.user.uid;
+    const driver_id = req.params.id;
     const hospital = req.body.hospital;
     const mobile_no = req.body.mobile_no;
     
@@ -35,13 +35,13 @@ const update_profile = async (req, res) => {
         res.status(http_status.OK).json({ result });
     } catch (error) {
         console.error('Error :', error.message);
-        res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while updating driver.' });
+        res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while getting available driver.' });
     }
 }
 
 
 const oneDriverdetail = async (req, res) => {
-    const id = req.user.uid;
+    const id = req.params.id;
     try {
         const result = await search_.onedriver(id);
         res.send(result);

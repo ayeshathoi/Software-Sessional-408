@@ -11,10 +11,9 @@ import {
   CardContent,
   Box,
 } from '@mui/material';
+import axios from 'axios';
 import HeaderDoctor from '../navbar/headerdoctor';
 import Footer from '../navbar/footer';
-import {booking_to_assign_nurse, assign_nurse, available_nurse_to_assign} from '@/api/apiCalls';
-
 
 interface Requests {
   booking_id: number;
@@ -39,59 +38,42 @@ interface Nurse {
 }
 
 function AssignNurse() {
-  const { bookingID } = useParams();
+  const { userid, bookingID } = useParams();
   const [resquest, setRequests] = useState([]);
   const [test, setTest] = useState<Requests[]>([]); // Initialize the state with an empty array
   const [nurse, setNurse] = useState([]);
   const navigate = useNavigate();
   useEffect(() => {
     // Make the HTTP GET request to the backend API
-    // axios
-    //   .get(`http://localhost:3000/hospital/onebooking/${bookingID}`)
-    //   // api call
-    //   .then((response) => {
-    //     setRequests(response.data.result);
-    //     setTest(response.data.result[0].tests);
-    //     console.log(response.data.result);
-    //   })
-    //   .catch((error) => {
-    //     console.error('Error fetching data:', error);
-    //   })
-    const res = booking_to_assign_nurse(bookingID);
-    if(res){
-      setRequests(res.result);
-      setTest(res.result[0].tests);
-    }
-    else {
-      console.log("Error in fetching data");
-    }
-  }, [bookingID]);
+    axios
+      .get(`http://localhost:3000/hospital/onebooking/${userid}/${bookingID}`)
+      // api call
+      .then((response) => {
+        setRequests(response.data.result);
+        setTest(response.data.result[0].tests);
+        console.log(response.data.result);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  }, [userid, bookingID]);
 
   const handleUpdateStatus = async (emailnurse: string) => {
     const data = { nurse_email: emailnurse, booking_id: bookingID };
     console.log(data);
     try {
-      // await axios
-      //   .post(`http://localhost:3000/hospital/assign/nurse`, data)
-      //   .then((res) => {
-      //       if(res.data === "nurse is successfully assigned"){
-      //           alert("Nurse Assigned Successfully");
-      //           navigate(`/hospitalHome`);
-      //       }
-      //       else if(res.data === "Nurse is booked in this slot"){
-      //           alert("Nurse is booked in this slot to another patient");
+      await axios
+        .post(`http://localhost:3000/hospital/assign/nurse/${userid}`, data)
+        .then((res) => {
+            if(res.data === "nurse is successfully assigned"){
+                alert("Nurse Assigned Successfully");
+                navigate(`/hospitalHome/${userid}`);
+            }
+            else if(res.data === "Nurse is booked in this slot"){
+                alert("Nurse is booked in this slot to another patient");
                 
-      //       }
-      //   });
-      const res = await assign_nurse(data);
-      if(res === "nurse is successfully assigned"){
-        alert("Nurse Assigned Successfully");
-        navigate(`/hospitalHome`);
-      }
-      else if(res === "Nurse is booked in this slot"){
-        alert("Nurse is booked in this slot to another patient");
-      }
-
+            }
+        });
     } catch (err) {
       console.log(err);
     }
@@ -100,23 +82,16 @@ function AssignNurse() {
 
   useEffect(() => {
     // available nurse
-    // axios
-    //   .get(`http://localhost:3000/hospital/nurse`)
-    //   // api call
-    //   .then((response) => {
-    //     setNurse(response.data.result);
-    //   })
-    //   .catch((error) => {
-    //     console.error('Error fetching data:', error);
-    //   });
-    const res = available_nurse_to_assign();
-    if(res){
-      setNurse(res.result);
-    }
-    else {
-      console.log("Error in fetching data");
-    }
-  }, []);
+    axios
+      .get(`http://localhost:3000/hospital/nurse/${userid}`)
+      // api call
+      .then((response) => {
+        setNurse(response.data.result);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  }, [userid]);
 
   return (
     <>

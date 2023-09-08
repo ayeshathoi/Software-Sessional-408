@@ -1,6 +1,7 @@
+/* eslint-disable no-nested-ternary */
+/* eslint-disable import/extensions */
 // page for hospital home and verify employee
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import {
   Grid,
   Paper,
@@ -19,7 +20,12 @@ import PatientRequests from './requests';
 import ReviewsPatient from './ReviewList';
 import PatientTests from './AllTest';
 import AddTest from './Add_Test';
-import { pending_doctor_hospital, pending_driver_hospital,pending_nurse_hospital,update_employee } from '@/api/apiCalls';
+import {
+  pending_doctor_hospital,
+  pending_driver_hospital,
+  pending_nurse_hospital,
+  update_employee,
+} from '@/api/apiCalls';
 
 function HospitalHome() {
   const [employees, setEmployees] = useState([]); // Combine both doctors and nurses into a single array
@@ -35,15 +41,16 @@ function HospitalHome() {
     // );
     const fetchDoctors = pending_doctor_hospital();
     const fetchNurses = pending_nurse_hospital();
+    const fetchDrivers = pending_driver_hospital();
     // Use Promise.all to wait for both requests to complete
-    Promise.all([fetchDoctors, fetchNurses])
+    Promise.all([fetchDoctors, fetchNurses, fetchDrivers])
       .then((responses) => {
         const doctors = responses[0].result;
         const nurses = responses[1].result;
-        console.log('here is the incoming data', nurses);
-        const combinedEmployees = [...doctors, ...nurses];
+        const drivers = responses[2].result;
+
+        const combinedEmployees = [...doctors, ...nurses, ...drivers];
         setEmployees(combinedEmployees);
-        console.log('here is the incoming data', combinedEmployees);
       })
       .catch((error) => {
         console.error('Error fetching employee data:', error);
@@ -139,7 +146,11 @@ function HospitalHome() {
                               <Typography variant="subtitle1">
                                 {employee.speciality
                                   ? `${employee.uname} - ${employee.speciality}`
-                                  : `${employee.uname} - ${employee.designation}`}
+                                  : employee.uname
+                                  ? employee.uname
+                                  : employee.ambulance_type
+                                  ? employee.ambulance_type
+                                  : `${employee.designation}`}
                               </Typography>
 
                               <Typography variant="body2" color="textSecondary">
@@ -197,7 +208,6 @@ function HospitalHome() {
             <AddTest />
           </div>
         )}
-
 
         <div>
           {' '}

@@ -26,4 +26,5 @@ router.post('/updateProfile', patient.update_profile);
 router.get('/doctorall', patient.doctor_all_search);
 router.get('/testall', patient.test_all_search);
 router.get('/ambulanceall', search.alldriver);
+router.get('/viewPrescriptionUser/:booking_id', patient.viewPrescriptionDetailsUser);
 module.exports = router;

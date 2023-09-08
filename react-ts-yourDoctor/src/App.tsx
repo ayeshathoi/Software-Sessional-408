@@ -15,11 +15,9 @@ import PatientProfileUpdate from './pages/updateProfile/patientUpdateProfile';
 import DoctorHome from './pages/doctorPages/doctorHome';
 // import PatientPrescription from './pages/doctorPages/prescriptionSubmission';
 import Prescription from './pages/doctorPages/prescriptionSubmission';
-import ViewPrescription from './pages/doctorPages/viewPrescription';
 import NurseHome from './pages/nursePages/nurseHome';
 import DriverHome from './pages/driverPages/driverHome';
 import UserHome from './pages/userPages/userHome';
-import ViewPrescriptionUser from './pages/userPages/viewPrescription';
 import HospitalHome from './pages/hospitalPages/hospitalHome';
 import DoctorSearch from './pages/search/doctorSearch';
 import AmbulanceSearch from './pages/search/AmbulanceSearch';
@@ -35,6 +33,8 @@ import AddSchedule from './pages/doctorPages/addschedule';
 import EditHospiatlList from './pages/doctorPages/editHospitalList';
 import EditSchedule from './pages/doctorPages/editschedule';
 import AddReview from './pages/userPages/addReview';
+import ViewPrescription from './pages/doctorPages/viewPrescription';
+import ViewPrescriptionUser from './pages/userPages/viewPrescriptionuser';
 
 export function App() {
   return (
@@ -57,11 +57,6 @@ export function App() {
         <Route path="/nurseHome" element={<NurseHome />} />
         <Route path="/driverHome" element={<DriverHome />} />
         <Route
-          path="/doctorHome/:userid/viewPrescription/"
-          element={<ViewPrescription />}
-        />
-        <Route
-          path="/userHome/:userid/PatientProfileUpdate/"
           path="/doctorHome/prescriptionSubmission/"
           element={<Prescription />}
         />
@@ -106,9 +101,12 @@ export function App() {
         <Route path="/chatbox/" element={<Chatbox />} />
         <Route path="/AddSchedule" element={<AddSchedule />} />
         <Route path="/Prescription/" element={<Prescription />} />
-        <Route path="/userHome/:userid/viewprescription/" element={<ViewPrescriptionUser />} />
-
         <Route path="/addReview/" element={<AddReview />} />
+        <Route path="/viewPrescription/" element={<ViewPrescription />} />
+        <Route
+          path="/viewPrescriptionUser"
+          element={<ViewPrescriptionUser />}
+        />
       </Routes>
     </BrowserRouter>
   );

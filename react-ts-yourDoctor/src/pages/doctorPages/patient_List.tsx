@@ -1,7 +1,12 @@
+/* eslint-disable import/extensions */
 /* eslint-disable react/no-array-index-key */
 import { SetStateAction, useEffect, useState } from 'react';
-import { useParams,useNavigate, Link } from 'react-router-dom';
-import { Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { Button, Tooltip } from '@mui/material';
+import PostAddTwoToneIcon from '@mui/icons-material/PostAddTwoTone';
+import ForumTwoToneIcon from '@mui/icons-material/ForumTwoTone';
+import ReceiptLongTwoToneIcon from '@mui/icons-material/ReceiptLongTwoTone';
+import { doctor_patient_list } from '@/api/apiCalls';
 
 interface PatientDetails {
   time: string;
@@ -16,7 +21,6 @@ interface PatientDetails {
 interface PatientArrayProps {
   selectedHospital: string | null;
 }
-import { doctor_patient_list } from '@/api/apiCalls';
 
 function PatientArray({ selectedHospital }: PatientArrayProps) {
   const [selectedSection, setSelectedSection] = useState('upcoming');
@@ -36,15 +40,13 @@ function PatientArray({ selectedHospital }: PatientArrayProps) {
       // axios
       //   .post(`http://localhost:3000/doctor/patientlist`, requestBody)
       doctor_patient_list(requestBody).then((res) => {
-      if(res){
-        setpatients(res);
-      }
-      else 
-      {
-        console.log("No Patients Found");
-      }
+        if (res) {
+          setpatients(res);
+        } else {
+          console.log('No Patients Found');
+        }
+      });
     }
-    )}
   }, [selectedHospital]);
 
   const currentDate = new Date().toISOString();
@@ -117,55 +119,55 @@ function PatientArray({ selectedHospital }: PatientArrayProps) {
                   <p className="text-sm text-gray-500">
                     Total Price: {patient.total_price}
                   </p>
+
                   <div>
-                  <p
-                  className='text-blue-500, hover:text-blue-800' 
-                  onClick={() =>
-                        navigate('/Prescription', {
-                          state: {
-                            bookingId: patient.booking_id,
-                          },
-                        })
-                      }
-                      
-                    >
-                      Create prescription
-                    </p>
-                  </div>
-                  <div>
-                    <Button
-                      variant="contained"
-                      color="inherit"
-                      onClick={() =>
-                        navigate('./viewPrescription', {
-                          state: {
-                            receiverName: patient.uname,
-                            bookingId: patient.booking_id,
-                            userId: userid,
-                            serialNumber: patient.appointment_serial,
-                          },
-                        })
-                      }
-                    >
-                      View prescription
-                    </Button>
-                  </div>
-                  <div>
-                    <Button
-                      variant="contained"
-                      color="inherit"
-                      onClick={() =>
-                        navigate('/Chatbox', {
-                          state: {
-                            receiverName: patient.uname,
-                            bookingId: patient.booking_id,
-                            serialNumber: patient.appointment_serial,
-                          },
-                        })
-                      }
-                    >
-                      Chat
-                    </Button>
+                    <Tooltip title="Create Prescription">
+                      <Button
+                        className="text-blue-500, hover:text-blue-800"
+                        onClick={() =>
+                          navigate('/Prescription', {
+                            state: {
+                              bookingId: patient.booking_id,
+                            },
+                          })
+                        }
+                      >
+                        <PostAddTwoToneIcon />
+                      </Button>
+                    </Tooltip>
+
+                    <Tooltip title="View Prescription">
+                      <Button
+                        className="text-blue-500, hover:text-blue-800"
+                        onClick={() =>
+                          navigate('/viewPrescription', {
+                            state: {
+                              bookingId: patient.booking_id,
+                            },
+                          })
+                        }
+                      >
+                        <ReceiptLongTwoToneIcon />
+                      </Button>
+                    </Tooltip>
+
+                    <Tooltip title="Chat">
+                      <Button
+                        variant="contained"
+                        color="inherit"
+                        onClick={() =>
+                          navigate('/Chatbox', {
+                            state: {
+                              receiverName: patient.uname,
+                              bookingId: patient.booking_id,
+                              serialNumber: patient.appointment_serial,
+                            },
+                          })
+                        }
+                      >
+                        <ForumTwoToneIcon />
+                      </Button>
+                    </Tooltip>
                   </div>
                 </div>
               </li>
@@ -177,4 +179,3 @@ function PatientArray({ selectedHospital }: PatientArrayProps) {
   );
 }
 export default PatientArray;
-

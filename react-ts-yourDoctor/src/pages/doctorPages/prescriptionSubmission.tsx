@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
-import axios from 'axios';
-import HeaderDoctor from '../navbar/headerdoctor';
-import Footer from '../navbar/footer';
+/* eslint-disable import/extensions */
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { viewPrescription, addprescription } from '@/api/apiCalls';
 
+// Define the CSS styles as JavaScript objects
 const styles = {
   prescriptionContainer: {
     maxWidth: '400px',
@@ -54,32 +54,32 @@ function Prescription() {
     suggestions: '',
     medicine: '',
   });
-  const [prescriptionExists, setPrescriptionExists] = useState(false);
   const location = useLocation();
   const { bookingId } = location.state;
   console.log('bookingId', bookingId);
+  const [noPrescriptionFound, setNoPrescriptionFound] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Check if a prescription exists for the given booking
-    axios
-      .get(`http://localhost:3000/doctor/viewprescription/${bookingId}`)
-      .then((response) => {
-        if (response.status === 200) {
-          if (response.data.prescriptionDetails === 'No prescriptions found') {
-            // If 'No prescriptions found', set the state to indicate it
-            setPrescriptionExists(false);
-          } else {
-            // If prescription details are found, set the state to indicate it
-            setPrescriptionExists(true);
-          }
+    // Fetch prescription data when component mounts
+    const fetchData = async () => {
+      try {
+        const data = await viewPrescription(bookingId);
+
+        // const data2 = await data.json();
+        if (data.prescriptionDetails === 'No prescriptions found') {
+          // Set the state to indicate no prescription found
+          setNoPrescriptionFound(true);
+          alert('No prescription found for this booking.');
         } else {
-          // Handle non-200 status codes if needed
-          console.error('Error checking prescription. Status:', response.status);
+          setNoPrescriptionFound(false);
         }
-      })
-      .catch((error) => {
-        console.error('Error checking prescription:', error);
-      });
+      } catch (error) {
+        console.error('Error fetching prescription details:', error);
+      }
+    };
+
+    fetchData();
   }, [bookingId]);
 
   const handleChange = (e) => {
@@ -87,98 +87,87 @@ function Prescription() {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    axios
-      .post(`http://localhost:3000/doctor/addPrescription/${bookingId}`, {
-        disease: formData.disease,
-        tests: formData.tests,
-        suggestions: formData.suggestions,
-        medicine: formData.medicine,
-      })
-      .then((response) => {
-        console.log('Prescription created:', response.data);
-        // After creating the prescription, you can update the state or redirect as needed
-      })
-      .catch((error) => {
-        console.error('Error creating prescription:', error);
-      });
+    const requestData = {
+      disease: formData.disease,
+      tests: formData.tests,
+      suggestions: formData.suggestions,
+    };
+    if (noPrescriptionFound === true) {
+      // Send a POST request to the backend to create the prescription
+      try {
+        const ret = await addprescription(bookingId, requestData); // Use the api call from apiCalls.tsx
+      } catch (err) {
+        console.log(err);
+      }
+      alert('Prescription created successfully.');
+      navigate(`/doctorHome`);
+    } else {
+      alert('Prescription already exists for this booking.');
+    }
   };
 
   return (
-    <div>
-      <HeaderDoctor /> {/* Include the HeaderDoctor component */}
-      <div className="mt-16">
-        <div style={styles.prescriptionContainer}>
-          {prescriptionExists ? (
-            <p>Prescription already created for this booking.</p>
-          ) : (
-            <>
-              <h2 style={styles.prescriptionHeader}>Create Prescription</h2>
-              <form onSubmit={handleSubmit}>
-                <div style={styles.formGroup}>
-                  <label style={styles.label} htmlFor="disease">
-                    Disease:
-                  </label>
-                  <input
-                    style={styles.input}
-                    type="text"
-                    id="disease"
-                    name="disease"
-                    value={formData.disease}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div style={styles.formGroup}>
-                  <label style={styles.label} htmlFor="tests">
-                    Tests:
-                  </label>
-                  <input
-                    style={styles.input}
-                    type="text"
-                    id="tests"
-                    name="tests"
-                    value={formData.tests}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div style={styles.formGroup}>
-                  <label style={styles.label} htmlFor="suggestions">
-                    Suggestions:
-                  </label>
-                  <textarea
-                    style={styles.input}
-                    id="suggestions"
-                    name="suggestions"
-                    value={formData.suggestions}
-                    onChange={handleChange}
-                  ></textarea>
-                </div>
-                <div style={styles.formGroup}>
-                  <label style={styles.label} htmlFor="medicine">
-                    Medicine:
-                  </label>
-                  <textarea
-                    style={styles.input}
-                    id="medicine"
-                    name="medicine"
-                    value={formData.medicine}
-                    onChange={handleChange}
-                  ></textarea>
-                </div>
-                <button type="submit" style={styles.submitButton}>
-                  Create Prescription
-                </button>
-              </form>
-            </>
-          )}
+    <div style={styles.prescriptionContainer}>
+      <h2 style={styles.prescriptionHeader}>Create Prescription</h2>
+      <form onSubmit={handleSubmit}>
+        <div style={styles.formGroup}>
+          <label style={styles.label} htmlFor="disease">
+            Disease:
+          </label>
+          <input
+            style={styles.input}
+            type="text"
+            id="disease"
+            name="disease"
+            value={formData.disease}
+            onChange={handleChange}
+          />
         </div>
-      </div>
-      <Footer /> {/* Include the Footer component */}
+        <div style={styles.formGroup}>
+          <label style={styles.label} htmlFor="tests">
+            Tests:
+          </label>
+          <input
+            style={styles.input}
+            type="text"
+            id="tests"
+            name="tests"
+            value={formData.tests}
+            onChange={handleChange}
+          />
+        </div>
+        <div style={styles.formGroup}>
+          <label style={styles.label} htmlFor="suggestions">
+            Suggestions:
+          </label>
+          <textarea
+            style={styles.input}
+            id="suggestions"
+            name="suggestions"
+            value={formData.suggestions}
+            onChange={handleChange}
+          />
+        </div>
+        <div style={styles.formGroup}>
+          <label style={styles.label} htmlFor="medicine">
+            Medicine:
+          </label>
+          <textarea
+            style={styles.input}
+            id="medicine"
+            name="medicine"
+            value={formData.medicine}
+            onChange={handleChange}
+          />
+        </div>
+        <button type="submit" style={styles.submitButton}>
+          Create Prescription
+        </button>
+      </form>
     </div>
   );
-  
 }
 
 export default Prescription;

@@ -252,6 +252,46 @@ const testAllSearch = async () => {
         throw error;
     }
 };
+
+const viewPrescriptionQuery = `
+    SELECT
+        p.booking_id,
+        p.disease,
+        p.tests,
+        p.suggestions,
+        p.medicine,
+        b.appointment_serial,
+        u.uname AS patient_name,
+        u.mobile_no AS patient_mobile,
+        h.hospital_name,
+        u1.uname AS doctor_name,
+        d.speciality,
+        d.designation,
+        d.qualification
+    FROM prescription p
+    JOIN booking b ON p.booking_id = b.booking_id
+    JOIN hospital h ON b.hospital_id = h.hospital_id
+    JOIN doctor d ON b.doctor_id = d.doctor_id
+    JOIN users u ON b.patient_id = u.uid
+    JOiN users u1 ON d.doctor_id = u1.uid
+    WHERE p.booking_id = $1
+`;
+
+const viewPrescriptionUser = async (booking_id) => {
+    try {
+        const client = await getConnection.connect();
+        const result = await client.query(viewPrescriptionQuery, [booking_id]);
+        client.release();
+        if(result.rows.length === 0) {
+            return null;
+        }
+        return result.rows[0];
+    } catch (error) {
+        console.error('Error fetching prescription details:', error.message);
+        throw error;
+    }
+};
+
 module.exports = { 
     allAppointments,
     onlineAppointments,
@@ -263,5 +303,6 @@ module.exports = {
     getPatientProfile,
     update_profile,
     doctorAllSearch,
-    testAllSearch
+    testAllSearch,
+    viewPrescriptionUser
 }

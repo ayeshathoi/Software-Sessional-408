@@ -136,7 +136,9 @@ const getUserDetailsByIDUtil = async (uid) => {
 };
 const getUserDetailsByID = async (req, res) => {
     try {
+        // console.log(req);
         const userDetails = await user.GET_USER_DETAIL(req.user.uid);
+        
         res.send(userDetails);
     } catch (error) {
         console.error(error);

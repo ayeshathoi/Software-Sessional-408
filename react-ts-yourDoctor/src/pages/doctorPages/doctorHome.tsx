@@ -7,13 +7,13 @@ import Tab from '@mui/material/Tab';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import PersonRemoveSharpIcon from '@mui/icons-material/PersonRemoveSharp';
-import { Toolbar, Button } from '@mui/material';
+import { Toolbar, Button, Tooltip } from '@mui/material';
 import DoctorImage from '@/assets/doctor.jpg';
 import patient from '@/assets/appointment.jpg';
-import HeaderDoctor from '../navbar/headerdoctor';
+import HeaderDoctor from '../navbar/header';
 import Footer from '../navbar/footer';
 import PatientArray from './patient_List';
-import { getDoctorDetails } from '@/api/apiCalls';
+import { getDoctorDetails, logout } from '@/api/apiCalls';
 
 function DoctorHome() {
   const [user, setUser] = useState({
@@ -62,11 +62,21 @@ function DoctorHome() {
     console.log(selectedHospital);
   };
 
+  const handleLogout = async () => {
+    try {
+      await logout();
+      window.location.href = '/login';
+    } catch (error) {
+      console.error('Error during logout:', error);
+    }
+  };
+
   return (
     <>
       <div>
         <HeaderDoctor />
-        <div className="mt-16 bg-green-100">
+
+        <div className="mt-20 bg-green-100">
           <Toolbar
             disableGutters
             className="flex items-center justify-between ml-24"
@@ -90,9 +100,15 @@ function DoctorHome() {
               </Link>
             </Box>
             <div className="mr-24 font-bold">
-              <Button variant="contained" color="inherit">
-                <PersonRemoveSharpIcon />
-              </Button>
+              <Tooltip title="Logout">
+                <Button
+                  variant="contained"
+                  color="inherit"
+                  onClick={handleLogout}
+                >
+                  <PersonRemoveSharpIcon />
+                </Button>
+              </Tooltip>
             </div>
           </Toolbar>
         </div>

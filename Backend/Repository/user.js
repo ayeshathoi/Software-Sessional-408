@@ -206,7 +206,7 @@ const create_driver = async (username,email,pass,mobile,dob,gender,type,fare,
     hospital_name,street,thana,city,district,nid) => {
   try {
       const client = await getConnection.connect();
-      const user_type = "driver";nurse_test
+      const user_type = "driver";
       const user = await create_user(username,user_type,email,pass,mobile,dob,gender);
       const drid = await findpid(email);
       const drid2 = drid[0].uid.toString();

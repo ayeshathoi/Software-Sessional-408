@@ -1,5 +1,6 @@
+/* eslint-disable import/extensions */
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
@@ -40,14 +41,12 @@ function NurseHome() {
     //     console.error('userprofile not found', error);
     //   });
     nurse_profile().then((nurse_profile_list) => {
-    if (nurse_profile_list) {
-      setUser(nurse_profile_list[0]);
-    }
-    else {
-      console.log("No Nurse Found");
-    }
-  });
-
+      if (nurse_profile_list) {
+        setUser(nurse_profile_list[0]);
+      } else {
+        console.log('No Nurse Found');
+      }
+    });
   }, [user]);
 
   if (!user) {

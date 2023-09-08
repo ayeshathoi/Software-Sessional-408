@@ -324,7 +324,23 @@ const pendingNurse = async (hid) => {
     }
 }
 
+const Pending_Drivers = "SELECT u.uid, u.user_type, u.uname, u."+ constant.TABLE_USER_MOBILE_NO + ",n.ambulance_type, u.email " +
+                        "FROM driver n "+
+                        "JOIN users u ON n.driver_id = u.uid " +
+                        "WHERE n.hospital_id = $1 AND n.employee_status = 'pending'" 
 
+const pendingDriver = async (hid) => {
+    try {
+        const client = await getConnection.connect();
+        const result = await client.query(Pending_Drivers, [hid]);
+        client.release();
+        return result.rows;
+    }
+    catch (error) {
+        console.error('Error fetching data:', error.message);
+        throw error;
+    }
+}
 
 //doctor er doctor_hospital table e pending_status rakhte hobe prolly
 //
@@ -439,5 +455,6 @@ module.exports = {
     remove_employee_hospital,
     booking_one,
     onetest,
-    deleteTEST
+    deleteTEST,
+    pendingDriver
 }

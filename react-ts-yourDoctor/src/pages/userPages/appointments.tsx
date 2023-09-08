@@ -4,8 +4,9 @@ import { SetStateAction, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ForumTwoToneIcon from '@mui/icons-material/ForumTwoTone';
 import RateReviewOutlinedIcon from '@mui/icons-material/RateReviewOutlined';
+import ReceiptLongTwoToneIcon from '@mui/icons-material/ReceiptLongTwoTone';
 import { useDispatch } from 'react-redux';
-import { Button } from '@mui/material';
+import { Button, Tooltip } from '@mui/material';
 import { addNotification } from '@/store/notificationsSlice';
 import { patient_appointment } from '@/api/apiCalls';
 
@@ -153,44 +154,12 @@ function Appointments() {
                   <p className="text-sm text-gray-500">
                     Hospital : {appointment.hospital_name}
                   </p>
-                  <Button
-                    variant="contained"
-                    color="inherit"
-                    onClick={() =>
-                      navigate('./viewprescription', {
-                        state: {
-                          receiverName: appointment.uname,
-                          bookingId: appointment.booking_id,
-                          userId: userid,
-                          serialNumber: appointment.appointment_serial,
-                        },
-                      })
-                    }
-                  >
-                    View Prescription
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="inherit"
-                    onClick={() =>
-                      navigate('/chatbox', {
-                        state: {
-                          receiverName: appointment.uname,
-                          bookingId: appointment.booking_id,
-                          serialNumber: appointment.appointment_serial,
-                        },
-                      })
-                    }
-                  >
-                    <ForumTwoToneIcon />
-                  </Button>
-                  {selectedSection === 'previous' && (
+                  <Tooltip title="Chat">
                     <Button
                       variant="contained"
                       color="inherit"
-                      className="ml-2"
                       onClick={() =>
-                        navigate('/addReview', {
+                        navigate('/chatbox', {
                           state: {
                             receiverName: appointment.uname,
                             bookingId: appointment.booking_id,
@@ -199,8 +168,44 @@ function Appointments() {
                         })
                       }
                     >
-                      <RateReviewOutlinedIcon />
+                      <ForumTwoToneIcon />
                     </Button>
+                  </Tooltip>
+
+                  <Tooltip title="View Prescription">
+                    <Button
+                      className="text-blue-500, hover:text-blue-800"
+                      onClick={() =>
+                        navigate('/viewPrescriptionUser', {
+                          state: {
+                            bookingId: appointment.booking_id,
+                          },
+                        })
+                      }
+                    >
+                      <ReceiptLongTwoToneIcon />
+                    </Button>
+                  </Tooltip>
+
+                  {selectedSection === 'previous' && (
+                    <Tooltip title="Add Review">
+                      <Button
+                        variant="contained"
+                        color="inherit"
+                        className="ml-2"
+                        onClick={() =>
+                          navigate('/addReview', {
+                            state: {
+                              receiverName: appointment.uname,
+                              bookingId: appointment.booking_id,
+                              serialNumber: appointment.appointment_serial,
+                            },
+                          })
+                        }
+                      >
+                        <RateReviewOutlinedIcon />
+                      </Button>
+                    </Tooltip>
                   )}
                 </div>
               </li>

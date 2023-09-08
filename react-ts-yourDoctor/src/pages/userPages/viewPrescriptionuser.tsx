@@ -2,14 +2,14 @@
 /* eslint-disable react/no-array-index-key */
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import './viewPrescription.css'; // Import the CSS file
+import './viewPrescriptionuser.css'; // Import the CSS file
 import DoctorImage from '@/assets/doctor.jpg';
 import User from '@/assets/user.webp';
 import HeaderDoctor from '../navbar/headerdoctor';
 import Footer from '../navbar/footer';
-import { viewPrescription } from '@/api/apiCalls';
+import { viewPrescriptionUser } from '@/api/apiCalls';
 
-function ViewPrescription() {
+function ViewPrescriptionUser() {
   const location = useLocation();
   const { bookingId } = location.state;
   const [prescriptionDetails, setPrescriptionDetails] = useState(null);
@@ -19,7 +19,7 @@ function ViewPrescription() {
     // Fetch prescription data when component mounts
     const fetchData = async () => {
       try {
-        const data = await viewPrescription(bookingId);
+        const data = await viewPrescriptionUser(bookingId);
 
         // const data2 = await data.json();
         if (data.prescriptionDetails === 'No prescriptions found') {
@@ -97,4 +97,4 @@ function ViewPrescription() {
     </div>
   );
 }
-export default ViewPrescription;
+export default ViewPrescriptionUser;

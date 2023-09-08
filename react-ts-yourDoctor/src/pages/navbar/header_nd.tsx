@@ -1,16 +1,18 @@
+/* eslint-disable import/extensions */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { Link } from 'react-router-dom';
-import { ChangeEvent, useState } from 'react';
+import PersonRemoveSharpIcon from '@mui/icons-material/PersonRemoveSharp';
+import { Button, Tooltip } from '@mui/material';
+import { logout } from '@/api/apiCalls';
 
 function Navbar() {
-  const [searchValue, setSearchValue] = useState('');
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value);
-  };
-  const handleSearchIconClick = () => {
-    // Implement the logic to handle the search icon click if needed
-    // console.log('Search icon clicked');
+  const handleLogout = async () => {
+    try {
+      await logout();
+      window.location.href = '/login';
+    } catch (error) {
+      console.error('Error during logout:', error);
+    }
   };
   return (
     <nav>
@@ -24,7 +26,17 @@ function Navbar() {
             </Link>
             <div className="flex-grow-0 flex-shrink-0 ml-auto mt-2" />
           </div>
-
+          <div className="mr-24 font-bold ml-auto">
+            <Tooltip title="Logout">
+              <Button
+                variant="contained"
+                color="inherit"
+                onClick={handleLogout}
+              >
+                <PersonRemoveSharpIcon />
+              </Button>
+            </Tooltip>
+          </div>
         </div>
       </div>
     </nav>

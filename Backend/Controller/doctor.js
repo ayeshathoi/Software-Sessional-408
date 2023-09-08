@@ -1,6 +1,5 @@
 const user = require('../Repository/doctor')
 const http_status = require('./HTTPStatus')
-const { viewPrescription } = require('../Repository/doctor');
 
 const getPatient_List = async (req, res) => {
     const doctor_id = req.user.uid;
@@ -63,7 +62,9 @@ const getProfile = async (req, res) => {
 const getDoctorDetails = async (req, res) => {
     const doctor_id = req.user.uid;
     try {
+        console.log('here');
         const result = await user.getDoctorDetails(doctor_id);
+        console.log('Ashse', result);
         res.send(result);
     } catch (error) {
         console.error('Error getting doctor details:', error.message);
@@ -106,6 +107,7 @@ const updateSchedule = async (req, res) => {
         const start_time=req.body.start_time;
         const end_time=req.body.end_time;
         
+        console.log(timeline_id,weekday,slot,start_time,end_time)
     
         const updated = await user.editSchedule(weekday, slot, start_time, end_time,timeline_id);
 
@@ -119,6 +121,7 @@ const updateSchedule = async (req, res) => {
 
 const deleteSCHEDULE = async (req, res) => {
     const timeline_id = req.params.timeline_id;
+    console.log(timeline_id)
     try {
         const result = await user.deleteSchedule(timeline_id);
         res.status(http_status.OK).json({delete : "deleted timeline"});
@@ -128,15 +131,11 @@ const deleteSCHEDULE = async (req, res) => {
     }
 }
 
-
-
-
-
 const viewPrescriptionDetails = async (req, res) => {
-    const { booking_id } = req.params;
+    const  booking_id  = req.params.booking_id;
 
     try {
-        const prescriptionDetails = await viewPrescription(booking_id);
+        const prescriptionDetails = await user.viewPrescription(booking_id);
         if(prescriptionDetails==null){
             res.status(http_status.OK).json({prescriptionDetails:"No prescriptions found"});
         }
@@ -151,37 +150,16 @@ const viewPrescriptionDetails = async (req, res) => {
     }
 };
 
-const checkPrescription = async (req, res) => {
-    const { booking_id } = req.params;
-  
-    try {
-      const prescriptionDetails = await viewPrescription(booking_id);
-  
-      if (prescriptionDetails === null) {
-        // If no prescription found, serve the "Create Prescription" form
-        res.status(http_status.OK).json({ prescriptionExists: false });
-      } else {
-        // If prescription details are found, serve a message indicating it already exists
-        res.status(http_status.OK).json({ prescriptionExists: true });
-      }
-    } catch (error) {
-      console.error('Error checking prescription:', error.message);
-      res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while checking prescription.' });
-    }
-  };
-  
-
 
 module.exports = {
     getPatient_List,
     getProfile,
     updateDoctorProfile,
     addPrescription,
-    viewPrescriptionDetails,
-    checkPrescription,
     addSchedule,
     getDoctorDetails,
     getTimeline,
     updateSchedule,
-    deleteSCHEDULE
+    deleteSCHEDULE,
+    viewPrescriptionDetails
 }

@@ -1,7 +1,6 @@
+/* eslint-disable import/extensions */
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-
-import { available_doctor_hospital,available_driver_hospital,available_nurse_hospital,remove_employee } from '@/api/apiCalls';
 
 import {
   Grid,
@@ -11,6 +10,12 @@ import {
   Typography,
   Box,
 } from '@mui/material';
+import {
+  available_doctor_hospital,
+  available_driver_hospital,
+  available_nurse_hospital,
+  remove_employee,
+} from '@/api/apiCalls';
 
 function AvailableEmployee() {
   const [doctor, setDoctor] = useState([]);
@@ -38,7 +43,7 @@ function AvailableEmployee() {
   const handleUpdateStatus = async (employeeEmail: string) => {
     const data = { email: employeeEmail };
     try {
-      const res = remove_employee(data);      
+      const res = remove_employee(data);
     } catch (err) {
       console.log(err);
     }

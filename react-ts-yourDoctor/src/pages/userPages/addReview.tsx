@@ -2,7 +2,8 @@
 /* eslint-disable react/no-array-index-key */
 import { useState, FormEvent } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { TextField, Button, Typography, Paper } from '@mui/material';
+import { TextField, Button, Typography, Paper, Rating } from '@mui/material';
+import AddCommentOutlinedIcon from '@mui/icons-material/AddCommentOutlined';
 import HeaderDoctor from '../navbar/headerdoctor';
 import Footer from '../navbar/footer';
 
@@ -10,13 +11,13 @@ import { addreview } from '@/api/apiCalls';
 
 interface FormData {
   complaint_text: string;
-  rating: number;
+  rating: number | null;
 }
 
 function AddReview() {
   const [formData, setFormData] = useState<FormData>({
     complaint_text: '',
-    rating: 0,
+    rating: null,
   });
 
   const location = useLocation();
@@ -62,10 +63,21 @@ function AddReview() {
           <p>{serialNumber}</p>
           <form
             onSubmit={handleSubmit}
-            className="w-full items-center justify-center mt-8"
+            className="w-full items-center justify-center mt-10"
           >
             {/* Form fields for updating timeline data */}
+
             <div className="flex justify-between mt-4">
+              <Typography component="legend">Rating:</Typography>
+              <Rating
+                name="rating"
+                value={formData.rating || 0}
+                onChange={(event, newValue) =>
+                  setFormData({ ...formData, rating: newValue })
+                }
+              />
+            </div>
+            <div className="flex justify-between mt-4 w-full">
               <TextField
                 label="Complaint Text"
                 name="complaint_text"
@@ -73,23 +85,6 @@ function AddReview() {
                 value={formData.complaint_text}
                 onChange={(e) =>
                   setFormData({ ...formData, complaint_text: e.target.value })
-                }
-                variant="outlined"
-                required
-                fullWidth
-              />
-            </div>
-            <div className="flex justify-between mt-4">
-              <TextField
-                label="Rating"
-                name="rating"
-                type="number"
-                value={formData.rating}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    rating: parseInt(e.target.value, 10),
-                  })
                 }
                 variant="outlined"
                 required
@@ -105,7 +100,7 @@ function AddReview() {
                 color="success"
                 className="mt-4 ml-10"
               >
-                Add Review
+                <AddCommentOutlinedIcon />
               </Button>
             </div>
           </form>

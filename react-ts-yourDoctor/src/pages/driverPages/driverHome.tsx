@@ -1,5 +1,6 @@
+/* eslint-disable import/extensions */
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Paper from '@mui/material/Paper';
@@ -10,8 +11,7 @@ import Footer from '../navbar/footer';
 import User from '@/assets/user.webp';
 import AmbulanceImage from '@/assets/ambulance.jpg';
 import Order from './patient_list_order';
-import {driverDetails} from '@/api/apiCalls';
-
+import { driverDetails } from '@/api/apiCalls';
 
 function DriverHome() {
   const [user, setUser] = useState({
@@ -33,7 +33,7 @@ function DriverHome() {
     // axios
     //   .get(`http://localhost:3000/driver`)
     driverDetails().then((res) => {
-    if(res){
+      if (res) {
         setUser(res);
         user.ambulance_type = res.ambulance_type;
         user.ambulance_fare = res.ambulance_fare;
@@ -46,13 +46,11 @@ function DriverHome() {
         user.driver_name = res.driver_name;
         user.driver_phone = res.driver_phone;
         user.hospital = res.hospital;
+      } else {
+        console.log('No Profile Found');
       }
-      else {
-        console.log("No Profile Found");
-      }
-  }
-  )}
-  , [user]);
+    });
+  }, [user]);
 
   if (!user) {
     return <div>Loading...</div>; // Display a loading message while fetching data
@@ -112,7 +110,6 @@ function DriverHome() {
                 className="w-48 h-48 rounded-full mx-auto mb-4"
               />
               <Order />
-
             </div>
           )}
         </Box>

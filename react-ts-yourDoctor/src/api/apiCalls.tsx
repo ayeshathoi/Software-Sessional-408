@@ -238,11 +238,9 @@ export const login = async (formData) => {
   return ret.data;
 };
 
-
 export const logout = async () => {
-  await axios .post('http://localhost:3000/auth/logout');
-}
-
+  await axios.post('http://localhost:3000/auth/logout');
+};
 
 export const patient_ambulance = async () => {
   const ret = await axios.get(`http://localhost:3000/patient/ambulance`);
@@ -292,6 +290,31 @@ export const addreview = async (booking_id, requestData) => {
   console.log('request data', requestData);
   const ret = await axios.post(
     `http://localhost:3000/review/${booking_id}`,
+    requestData
+  );
+  return ret.data;
+};
+
+export const viewPrescription = async (bookingId) => {
+  const ret = await axios.get(
+    `http://localhost:3000/doctor/viewPrescriptionDetails/${bookingId}`
+  );
+  console.log(ret.data);
+  return ret.data;
+};
+
+export const viewPrescriptionUser = async (booking_id) => {
+  const ret = await axios.get(
+    `http://localhost:3000/patient/viewPrescriptionUser/${booking_id}`
+  );
+  console.log('retttttttett', ret);
+  return ret.data;
+};
+
+export const addprescription = async (bookingId, requestData) => {
+  console.log('request data', requestData);
+  const ret = await axios.post(
+    `http://localhost:3000/doctor/addPrescription/${bookingId}`,
     requestData
   );
   return ret.data;

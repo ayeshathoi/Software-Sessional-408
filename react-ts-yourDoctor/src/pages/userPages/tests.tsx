@@ -4,7 +4,7 @@ import { SetStateAction, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ForumTwoToneIcon from '@mui/icons-material/ForumTwoTone';
 import RateReviewOutlinedIcon from '@mui/icons-material/RateReviewOutlined';
-import { Button } from '@mui/material';
+import { Button, Tooltip } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { patient_checkup } from '@/api/apiCalls';
 import { addNotification } from '@/store/notificationsSlice';
@@ -142,37 +142,41 @@ function Tests() {
                   <p className="text-sm text-gray-500">
                     Time: {test.time.split('T')[0]}
                   </p>
-                  <Button
-                    variant="contained"
-                    color="inherit"
-                    onClick={() =>
-                      navigate('/Chatbox', {
-                        state: {
-                          receiverName: test.nurse_name,
-                          bookingId: test.booking_id,
-                        },
-                      })
-                    }
-                  >
-                    <ForumTwoToneIcon />
-                  </Button>
-                  {selectedSection === 'previous' && (
+                  <Tooltip title="Chat">
                     <Button
                       variant="contained"
                       color="inherit"
-                      className="ml-2"
                       onClick={() =>
-                        navigate('/addReview', {
+                        navigate('/Chatbox', {
                           state: {
                             receiverName: test.nurse_name,
                             bookingId: test.booking_id,
-                            serialNumber: test.price,
                           },
                         })
                       }
                     >
-                      <RateReviewOutlinedIcon />
+                      <ForumTwoToneIcon />
                     </Button>
+                  </Tooltip>
+                  {selectedSection === 'previous' && (
+                    <Tooltip title="Add Review">
+                      <Button
+                        variant="contained"
+                        color="inherit"
+                        className="ml-2"
+                        onClick={() =>
+                          navigate('/addReview', {
+                            state: {
+                              receiverName: test.nurse_name,
+                              bookingId: test.booking_id,
+                              serialNumber: test.price,
+                            },
+                          })
+                        }
+                      >
+                        <RateReviewOutlinedIcon />
+                      </Button>
+                    </Tooltip>
                   )}
                 </div>
               </li>

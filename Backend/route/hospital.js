@@ -29,6 +29,7 @@ router.get('/pending/patient', userController.show_pending_checkup);
 router.post('/pending/test', userController.show_pending_test);
 router.get('/pending/doctor', userController.getpending_Doctor);
 router.get('/pending/nurse', userController.getpending_Nurse);
+router.get('/pending/driver', userController.getpending_Driver);
 router.post('/remove', userController.remove_employee);
 
 router.get('/test', userController.show_all_test);

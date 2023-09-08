@@ -125,6 +125,24 @@ const test_all_search = async (req, res) => {
     }
 }
 
+const viewPrescriptionDetailsUser = async (req, res) => {
+    const  booking_id  = req.params.booking_id;
+
+    try {
+        const prescriptionDetails = await user.viewPrescriptionUser(booking_id);
+        if(prescriptionDetails==null){
+            res.status(http_status.OK).json({prescriptionDetails:"No prescriptions found"});
+        }
+        else if (!prescriptionDetails) {
+            res.status(http_status.NOT_FOUND).json({ error: 'Prescription not found for the given booking_id.' });
+        } else {
+            res.status(http_status.OK).json(prescriptionDetails);
+        }
+    } catch (error) {
+        console.error('Error viewing prescription details:', error.message);
+        res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while viewing prescription details.' });
+    }
+};
 
 
 module.exports = {
@@ -138,5 +156,6 @@ module.exports = {
     getProfile,
     update_profile,
     doctor_all_search,
-    test_all_search
+    test_all_search,
+    viewPrescriptionDetailsUser
 };

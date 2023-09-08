@@ -5,7 +5,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
-import { Button } from '@mui/material';
+import { Button, Tooltip } from '@mui/material';
 import { useSelector } from 'react-redux';
 import NotificationsActiveTwoToneIcon from '@mui/icons-material/NotificationsActiveTwoTone';
 import NotificationsOffIcon from '@mui/icons-material/NotificationsOff';
@@ -73,6 +73,13 @@ function UserHome() {
       setNotificationlist(updatedNotifications);
     }
   };
+  useEffect(() => {
+    // Store notifications in local storage whenever 'notifications' prop changes
+    notifications.forEach((notification) => {
+      addNotificationToLocalStorage(notification.message);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [notifications, notificationStorageKey]);
 
   if (!user) {
     return <div>Loading...</div>; // Display a loading message while fetching data
@@ -117,17 +124,19 @@ function UserHome() {
         <Header />
       </div>
       <div className="flex ml-24 mt-4">
-        <Button
-          onClick={handleToggleNotifications} // Toggle notifications when the button is clicked
-          color="success"
-          variant="contained"
-        >
-          {showNotifications ? (
-            <NotificationsOffIcon /> // Render the icon when showNotifications is true
-          ) : (
-            <NotificationsActiveTwoToneIcon /> // Otherwise, show the text
-          )}
-        </Button>
+        <Tooltip title="Notifications">
+          <Button
+            onClick={handleToggleNotifications} // Toggle notifications when the button is clicked
+            color="success"
+            variant="contained"
+          >
+            {showNotifications ? (
+              <NotificationsOffIcon /> // Render the icon when showNotifications is true
+            ) : (
+              <NotificationsActiveTwoToneIcon /> // Otherwise, show the text
+            )}
+          </Button>
+        </Tooltip>
         <div className="ml-4">
           <Paper elevation={1}>
             {showNotifications && (
@@ -135,13 +144,15 @@ function UserHome() {
                 {notificationlist.map((notification, index) => (
                   <div key={index} className="notification">
                     {notification}
-                    <button
-                      type="button"
-                      onClick={() => handleDeleteNotification(index)}
-                      className="ml-4 text-red-500 hover:text-red-700"
-                    >
-                      <ClearIcon />
-                    </button>
+                    <Tooltip title="Delete">
+                      <Button
+                        color="error"
+                        onClick={() => handleDeleteNotification(index)}
+                        className="ml-4 text-red-500 hover:text-red-700"
+                      >
+                        <ClearIcon />
+                      </Button>
+                    </Tooltip>
                   </div>
                 ))}
               </div>
@@ -149,13 +160,15 @@ function UserHome() {
           </Paper>
         </div>
         <div className="ml-6">
-          <Button
-            onClick={handleClearNotifications}
-            color="error"
-            variant="outlined"
-          >
-            <DeleteForeverTwoToneIcon />
-          </Button>
+          <Tooltip title="Clear Notifications">
+            <Button
+              onClick={handleClearNotifications}
+              color="error"
+              variant="outlined"
+            >
+              <DeleteForeverTwoToneIcon />
+            </Button>
+          </Tooltip>
         </div>
       </div>
       <div className="flex mt-40 ml-24">

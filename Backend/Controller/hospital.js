@@ -209,6 +209,17 @@ const getpending_Nurse = async (req, res) => {
     }
 }
 
+const getpending_Driver = async (req, res) => {
+    const hospital_id = req.user.uid;
+    try {
+        const result = await user.pendingDriver(hospital_id);
+        res.status(http_status.OK).json({ result });
+    } catch (error) {
+        console.error('Error getting available doctor:', error.message);
+        res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while getting available doctor.' });
+    }
+}
+
 
 
 const show_all_test = async (req, res) => {
@@ -254,6 +265,7 @@ module.exports = {
     remove_employee,
     one_booking,
     show_one_test,
-    deleteTESTQuery
+    deleteTESTQuery,
+    getpending_Driver
 }
 

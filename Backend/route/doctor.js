@@ -20,10 +20,9 @@ router.get('/profile', doctorController.getProfile);
 
 router.get('/timeline/:doctor_id', doctorController.getTimeline);
 router.post('/addPrescription/:booking_id', doctorController.addPrescription);
-router.get('/viewprescription/:booking_id', doctorController.viewPrescriptionDetails);
-router.get('/checkprescription/:booking_id', doctorController.checkPrescription);
 router.post('/update-Schedule/:timeline_id', doctorController.updateSchedule);
 router.post('/deleteSCHEDULE/:timeline_id', doctorController.deleteSCHEDULE);
+router.get('/viewPrescriptionDetails/:booking_id', doctorController.viewPrescriptionDetails);
 
 
 module.exports = router;

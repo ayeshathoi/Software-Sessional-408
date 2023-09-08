@@ -3,7 +3,7 @@
 import { SetStateAction, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import RateReviewOutlinedIcon from '@mui/icons-material/RateReviewOutlined';
-import { Button } from '@mui/material';
+import { Button, Tooltip } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { patient_ambulance } from '@/api/apiCalls';
 import { addNotification } from '@/store/notificationsSlice';
@@ -159,22 +159,24 @@ function Ambulances() {
                     Time: {ambulance.time.split('T')[0]}
                   </p>
                   {selectedSection === 'previous' && (
-                    <Button
-                      variant="contained"
-                      color="inherit"
-                      className="ml-2"
-                      onClick={() =>
-                        navigate('/addReview', {
-                          state: {
-                            receiverName: ambulance.uname,
-                            bookingId: ambulance.booking_id,
-                            serialNumber: ambulance.time.split('T')[0],
-                          },
-                        })
-                      }
-                    >
-                      <RateReviewOutlinedIcon />
-                    </Button>
+                    <Tooltip title="Add Review">
+                      <Button
+                        variant="contained"
+                        color="inherit"
+                        className="ml-2"
+                        onClick={() =>
+                          navigate('/addReview', {
+                            state: {
+                              receiverName: ambulance.uname,
+                              bookingId: ambulance.booking_id,
+                              serialNumber: ambulance.time.split('T')[0],
+                            },
+                          })
+                        }
+                      >
+                        <RateReviewOutlinedIcon />
+                      </Button>
+                    </Tooltip>
                   )}
                 </div>
               </li>

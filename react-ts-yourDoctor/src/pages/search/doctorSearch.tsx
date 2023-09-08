@@ -242,6 +242,7 @@ function DoctorSearch() {
                   onChange={(e) => setSelectedWeekday(e.target.value)} // Add this line
                 >
                   <option value="">Select</option>
+                  <option value="Saturday">Saturday</option>
                   <option value="Sunday">Sunday</option>
                   <option value="Monday">Monday</option>
                   <option value="Tuesday">Tuesday</option>

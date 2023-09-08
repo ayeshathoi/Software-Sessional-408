@@ -27,4 +27,5 @@ router.get('/doctorall', patient.doctor_all_search);
 router.get('/testall', patient.test_all_search);
 router.get('/ambulanceall', search.alldriver);
 router.get('/viewPrescriptionUser/:booking_id', patient.viewPrescriptionDetailsUser);
+router.get('/check/:did',patient.Check_OLD_PATIENT_OR_NOT);
 module.exports = router;

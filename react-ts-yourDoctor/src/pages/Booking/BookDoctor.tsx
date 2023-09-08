@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, ChangeEvent, FormEvent, useEffect } from 'react';
 import { useParams,useLocation, useNavigate } from 'react-router-dom';
-import { bookDoctor, getTimeline } from '@/api/apiCalls';
+import { bookDoctor, checkOld, getTimeline } from '@/api/apiCalls';
 import {
   Autocomplete,
   MenuItem,
@@ -34,7 +34,7 @@ import Footer from '../navbar/footer';
 function BookDoctor() {
   const location = useLocation();
 
-  const { doctorName, doctorId, newPatientFee, hospitalName} =
+  const { doctorName, doctorId,oldPatientFee, newPatientFee, hospitalName} =
     location.state;
 
   const navigate = useNavigate();
@@ -66,9 +66,18 @@ function BookDoctor() {
   const [selectedWeekday, setSelectedWeekday] = useState(null);
   useEffect(() => {
     getTimeline(doctorId).then((ret) => {
+      console.log(oldPatientFee);
     setTimetable(ret);
     });
+    checkOld(doctorId).then((ret) => {
+      if(ret == true){
+        setFormData((prevData) => ({ ...prevData, price: parseInt(oldPatientFee, 10) }));
+      }
+    }
+    );
   }, [doctorId]);
+
+
 
   const filteredTimetable = timetable.filter((item) => {
     if (selectedWeekday === null) return false;
@@ -108,12 +117,7 @@ function BookDoctor() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      // Format time to "hh:mm A" (e.g., "10:00 AM")
-      // const formattedTime = format(new Date(formData.time), 'hh:mm a');
-
-      // Format date to "yyyy-MM-dd" (e.g., "2021-02-02")
       const formattedDate = format(new Date(formData.date), 'yyyy-MM-dd');
-      // Create the data object with the formatted values
       const dataToSend = {
         price: formData.price,
         time: formData.selectedTime,
@@ -128,16 +132,6 @@ function BookDoctor() {
 
       console.log('frontend Request', dataToSend);
       var status = true;
-      // await axios
-      //   .post(`http://localhost:3000/booking/appointment`, dataToSend)
-      //   .then((res) => {
-      //     console.log('Backend Response', res);
-      //     if (res.data === 'This serial is already booked.') {
-      //       alert('Slot is already booked. try another slot');
-      //       status = false;
-      //       console.log('status', status);
-      //     }
-      //   });
       const res = await bookDoctor(dataToSend);
       console.log('Backend Response', res);
       if (res === 'This serial is already booked.') {
@@ -151,14 +145,6 @@ function BookDoctor() {
     if (status == true) navigate(`/userHome`);
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleTimeChange = (time: any) => {
-    setFormData((prevData) => ({ ...prevData, time }));
-  };
-
-  // ... previous code ...
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDateChange = (date: any) => {
     setFormData((prevData) => ({ ...prevData, date }));
     const selectedDate = new Date(date);
@@ -192,9 +178,19 @@ function BookDoctor() {
             <Grid item xs={12} md={6}>
               <Paper className="p-4">
                 <h1 className="text-sm font-bold text-green-500">
-                  Dr. {doctorName}
+                {formData.price === parseInt(oldPatientFee, 10) ? (
+                      <>
+                        You are an old patient of {doctorName}
+                        <hr />
+                      </>
+                    ) : (
+                      <>
+                        You are a new patient of {doctorName}
+                      </>
+                    )} 
                 </h1>
                 <hr />
+                
 
                 <div className="mb-8 mt-8">
                   <TextField
@@ -216,7 +212,7 @@ function BookDoctor() {
                     >
                       Available Days:{' '}
                       {availableWeek.map((item) => (
-                        <label key={item}>{item}</label>
+                        <label key={item}>{item} </label>
                       ))}
                     </Typography>
                   )}
@@ -274,15 +270,20 @@ function BookDoctor() {
                     />
                   </RadioGroup>
 
-                  <div className="mt-4">
-                    <Typography
-                      variant="h6"
-                      className="text-sm font-bold text-green-500"
-                    >
-                      Visit Fee: {formData.price}
-                    </Typography>
-                    <hr />
-                  </div>
+                  <div>
+                  <Typography variant="h6" className="text-sm font-bold text-green-400">
+                    {formData.price === parseInt(oldPatientFee, 10) ? (
+                      <>
+                         Fee : {formData.price} BDT
+                      </>
+                    ) : (
+                      <>
+                        Fee : {formData.price} BDT
+                      </>
+                    )}
+                  </Typography>
+                </div>
+
                 </div>
               </Paper>
             </Grid>

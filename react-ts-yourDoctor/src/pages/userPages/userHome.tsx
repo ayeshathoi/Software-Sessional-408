@@ -197,9 +197,9 @@ function UserHome() {
               className="bg-white rounded-lg shadow"
             >
               <Tab label="Appointments" />
-              <Tab label="Ambulance" />
               <Tab label="Health Check" />
-              <div className="flex justify-center mr-10">
+              <Tab label="Ambulance" />
+              <div className="flex justify-center mr-15">
                 <Link to="PatientProfileUpdate">
                   <Tab label="Edit Profile" />
                 </Link>
@@ -223,18 +223,6 @@ function UserHome() {
           {value === 1 && (
             <div>
               <img
-                src={AmbulanceImage}
-                alt="Ambulance"
-                className="w-48 h-48 rounded-full mx-auto mb-4"
-              />
-              <h2 className="text-xl font-semibold mb-2">Ambulance Order</h2>
-              {/* Add content related to ambulance */}
-              <Ambulances />
-            </div>
-          )}
-          {value === 2 && (
-            <div>
-              <img
                 src={HealthCheckImage}
                 alt="Health Check"
                 className="w-48 h-48 rounded-full mx-auto mb-4"
@@ -242,6 +230,18 @@ function UserHome() {
               <h2 className="text-xl font-semibold mb-2">Health Check</h2>
               <Tests />
               {/* Add content related to health check */}
+            </div>
+          )}
+          {value === 2 && (
+            <div>
+              <img
+                src={AmbulanceImage}
+                alt="Ambulance"
+                className="w-48 h-48 rounded-full mx-auto mb-4"
+              />
+              <h2 className="text-xl font-semibold mb-2">Ambulance Order</h2>
+              {/* Add content related to ambulance */}
+              <Ambulances />
             </div>
           )}
         </Box>

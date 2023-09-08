@@ -79,6 +79,17 @@ const choose_test = async (req, res) => {
     }
 }
 
+const Check_OLD_PATIENT_OR_NOT = async (req, res) => { 
+    try {
+        const pid = req.user.uid;
+        const did = req.params.did;
+        const result = await user.checkOldPatient(pid,did);
+        res.status(http_status.OK).json(result);
+    } catch (error) {
+        res.status(http_status.BAD_REQUEST).json({ error: 'An error occurred while fetching user details.' });
+    }
+}
+
 const getProfile = async (req, res) => {
     const pid = req.user.uid;
 
@@ -157,5 +168,6 @@ module.exports = {
     update_profile,
     doctor_all_search,
     test_all_search,
-    viewPrescriptionDetailsUser
+    viewPrescriptionDetailsUser,
+    Check_OLD_PATIENT_OR_NOT
 };

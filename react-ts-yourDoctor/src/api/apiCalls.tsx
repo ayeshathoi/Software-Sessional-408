@@ -26,6 +26,12 @@ export const getTimeline = async (doctorID) => {
   return ret.data;
 };
 
+export const checkOld = async (doctorID) => {
+  const ret = await axios.get(`${baseURL}/patient/check/${doctorID}`);
+  console.log(ret.data);
+  return ret.data;
+}
+
 export const getComments_Chatbox = async (bookingID) => {
   const ret = await axios.post(`${baseURL}/comment/get`, {
     booking_id: bookingID,

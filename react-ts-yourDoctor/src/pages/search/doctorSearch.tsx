@@ -1,9 +1,11 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-plusplus */
+/* eslint-disable import/extensions */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import {doctorSearch} from '@/api/apiCalls';
+import { useNavigate } from 'react-router-dom';
 import {
   Autocomplete,
   Button,
@@ -14,6 +16,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import { doctorSearch } from '@/api/apiCalls';
 import Header from '../navbar/header_nd';
 import Footer from '../navbar/footer';
 
@@ -24,6 +27,7 @@ interface Doctor {
   qualification: string;
   speciality: string;
   designation: string;
+  old_patient_fee: number;
   new_patient_fee: number;
   hospital_name: string;
   doctor_id: number;
@@ -40,36 +44,45 @@ function DoctorSearch() {
   const [selectedQualification, setSelectedQualification] =
     useState<string>('');
   const [selectedWeekday, setSelectedWeekday] = useState<string>('');
+  const [selectedSearchCriteria, setSelectedSearchCriteria] = useState<
+    'speciality' | 'doctorname'
+  >('speciality'); // Track selected search criteria
 
   useEffect(() => {
-
     doctorSearch().then((ret) => {
-    if(ret){
-      for (let i = 0; i < ret.length; i++) {
-
-          if(ret[i].popularity == null)
-            ret[i].popularity = 0;
+      if (ret) {
+        for (let i = 0; i < ret.length; i++) {
+          if (ret[i].popularity == null) ret[i].popularity = 0;
         }
+        console.log(ret);
         setuserData(ret);
         setCount(ret.length);
         // Sort the data based on the selected sorting option
-        if (sortBy === 'Price Low to High') {
+        if (sortBy === 'New Price Low to High') {
           const sortedData = [...ret];
           sortedData.sort((a, b) => a.new_patient_fee - b.new_patient_fee);
           setuserData(sortedData);
-        } else if (sortBy === 'Price High to Low') {
+        } else if (sortBy === 'New Price High to Low') {
           const sortedData = [...ret];
           sortedData.sort((a, b) => b.new_patient_fee - a.new_patient_fee);
           setuserData(sortedData);
         }
+        if (sortBy === 'Old  Price Low to High') {
+          const sortedData = [...ret];
+          sortedData.sort((a, b) => a.old_patient_fee - b.old_patient_fee);
+          setuserData(sortedData);
+        } else if (sortBy === 'Old Price High to Low') {
+          const sortedData = [...ret];
+          sortedData.sort((a, b) => b.old_patient_fee - a.old_patient_fee);
+          setuserData(sortedData);
+        } 
         else if (sortBy === 'Popularity') {
           const sortedData = [...ret];
           sortedData.sort((a, b) => b.popularity - a.popularity);
           setuserData(sortedData);
         }
-      }
-      else{
-        console.error('Error fetching user profile:', error);
+      } else {
+        console.error('Error fetching user profile:', Error);
       }
     });
   }, [sortBy]);
@@ -92,25 +105,32 @@ function DoctorSearch() {
     return uniqueSpecialtiesArray;
   };
 
-  const getUniqueNames = () => {
-    const namesSet = new Set();
+  const getUniqueDoctorNames = () => {
+    const uniqueDoctorsSet = new Set();
+
     user.forEach((doctor) => {
-      if (!namesSet.has(doctor.uname)) {
-        namesSet.add(doctor.uname);
+      if (!uniqueDoctorsSet.has(doctor.uname)) {
+        uniqueDoctorsSet.add(doctor.uname);
       }
     });
-    const uniqueNameArray = Array.from(namesSet);
 
-    return uniqueNameArray;
+    const uniqueDoctorsArray = Array.from(uniqueDoctorsSet);
+
+    return uniqueDoctorsArray;
   };
 
-  const filteredDoctors = user.filter(
-    (doctor) =>
-      doctor.speciality.toLowerCase().includes(searchTerm.toLowerCase()) &&
+  const filteredDoctors = user.filter((doctor) => {
+    const searchTermLowerCase = searchTerm.toLowerCase();
+    return (
+      ((selectedSearchCriteria === 'speciality' &&
+        doctor.speciality.toLowerCase().includes(searchTermLowerCase)) ||
+        (selectedSearchCriteria === 'doctorname' &&
+          doctor.uname.toLowerCase().includes(searchTermLowerCase))) &&
       (selectedQualification === '' ||
         doctor.qualification === selectedQualification) &&
       (selectedWeekday === '' || doctor.weekday === selectedWeekday)
-  );
+    );
+  });
 
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSortBy(e.target.value);
@@ -123,20 +143,50 @@ function DoctorSearch() {
       </div>
 
       <div className="text-above-line my-10 text-left p-20 ">
-        <Autocomplete
-          options={getUniqueSpecialties()} // Get unique specialties from user data
-          getOptionLabel={(option) => option}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Type the Speciality"
-              variant="outlined"
-              value={searchTerm}
-              onChange={handleSearchChange}
-            />
-          )}
-        />
-        
+        <select
+          name="searchCriteria"
+          id="searchCriteria"
+          value={selectedSearchCriteria}
+          onChange={(e) =>
+            setSelectedSearchCriteria(
+              e.target.value as 'speciality' | 'doctorname'
+            )
+          }
+        >
+          <option value="speciality">Search by Speciality</option>
+          <option value="doctorname">Search by Doctor Name</option>
+        </select>
+        {selectedSearchCriteria === 'speciality' && (
+          <Autocomplete
+            options={getUniqueSpecialties()} // Get unique specialties from user data
+            getOptionLabel={(option) => option}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Type the Speciality"
+                variant="outlined"
+                value={searchTerm}
+                onChange={handleSearchChange}
+              />
+            )}
+          />
+        )}
+        {selectedSearchCriteria === 'doctorname' && (
+          <Autocomplete
+            options={getUniqueDoctorNames()} // Get unique doctor names from user data
+            getOptionLabel={(option) => option}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Type the Doctor Name"
+                variant="outlined"
+                value={searchTerm}
+                onChange={handleSearchChange}
+              />
+            )}
+          />
+        )}
+
         <hr className="line-below-text my-4 border-t-2 border-gray-300" />
 
         <div className="flex justify-end items-center">
@@ -149,8 +199,10 @@ function DoctorSearch() {
           >
             <option value="">Select</option>
             <option value="Popularity">Popularity</option>
-            <option value="Price Low to High">Visit Low to High</option>
-            <option value="Price High to Low">Visit High to Low</option>
+            <option value="New Price Low to High">New Visit Low to High</option>
+            <option value="New Price High to Low">New Visit High to Low</option>
+            <option value="Old Price Low to High">Old Visit Low to High</option>
+            <option value="Old Price High to Low">Old Visit High to Low</option>
           </select>
         </div>
 
@@ -224,6 +276,9 @@ function DoctorSearch() {
                         Designation: {doctor.designation}
                       </Typography>
                       <Typography variant="body2">
+                        Old Patient Fee: {doctor.old_patient_fee}
+                      </Typography>
+                      <Typography variant="body2">
                         New Patient Fee: {doctor.new_patient_fee}
                       </Typography>
                       <Typography variant="body2">
@@ -241,6 +296,7 @@ function DoctorSearch() {
                             state: {
                               doctorName: doctor.uname,
                               doctorId: doctor.doctor_id,
+                              oldPatientFee: doctor.old_patient_fee,
                               newPatientFee: doctor.new_patient_fee,
                               hospitalName: doctor.hospital_name,
                             },

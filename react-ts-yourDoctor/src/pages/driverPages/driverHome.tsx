@@ -8,7 +8,7 @@ import Box from '@mui/material/Box';
 
 import Header from '../navbar/header_nd';
 import Footer from '../navbar/footer';
-import User from '@/assets/user.webp';
+import User from '@/assets/driver.jpg';
 import AmbulanceImage from '@/assets/ambulance.jpg';
 import Order from './patient_list_order';
 import { driverDetails } from '@/api/apiCalls';
@@ -26,6 +26,7 @@ function DriverHome() {
     driver_name: '',
     driver_phone: '',
     hospital: '',
+    employee_status: '',
   });
 
   const [value, setValue] = useState<number>(0);
@@ -46,10 +47,19 @@ function DriverHome() {
         user.driver_name = res.driver_name;
         user.driver_phone = res.driver_phone;
         user.hospital = res.hospital;
+        user.employee_status = res.employee_status;
       } else {
         console.log('No Profile Found');
       }
     });
+    const alertShown2 = sessionStorage.getItem('employeeStatusAlertShown2');
+
+    if (user.employee_status === 'Available' && !alertShown2) {
+      alert('You are available for driving');
+
+      // Set the flag in sessionStorage to prevent showing the alert again
+      sessionStorage.setItem('employeeStatusAlertShown2', 'true');
+    }
   }, [user]);
 
   if (!user) {
@@ -79,6 +89,7 @@ function DriverHome() {
             />
             <h2 className="text-lg font-semibold">{user.driver_name}</h2>
             <p className="text-gray-500">Driver,{user.hospital}</p>
+            <p className="text-gray-500">Driver,{user.employee_status}</p>
           </div>
 
           {/* Tabs */}

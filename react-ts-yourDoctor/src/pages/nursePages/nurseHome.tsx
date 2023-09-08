@@ -22,6 +22,7 @@ function NurseHome() {
     designation: '',
     hospital: '',
     mobile_no: '',
+    employee_status: '',
   });
 
   const [value, setValue] = useState<number>(0);
@@ -47,6 +48,14 @@ function NurseHome() {
         console.log('No Nurse Found');
       }
     });
+    const alertShown = sessionStorage.getItem('employeeStatusAlertShown');
+
+    if (user.employee_status === 'Available' && !alertShown) {
+      alert('You are available for checkup');
+
+      // Set the flag in sessionStorage to prevent showing the alert again
+      sessionStorage.setItem('employeeStatusAlertShown', 'true');
+    }
   }, [user]);
 
   if (!user) {
@@ -76,6 +85,7 @@ function NurseHome() {
             />
             <h2 className="text-lg font-semibold">{user.uname}</h2>
             <p className="text-gray-500">{user.email}</p>
+            <p className="text-gray-500">{user.employee_status}</p>
             <p>
               {user.designation},{user.hospital}
             </p>

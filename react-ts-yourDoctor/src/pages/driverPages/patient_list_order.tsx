@@ -1,3 +1,4 @@
+/* eslint-disable import/extensions */
 /* eslint-disable react/no-array-index-key */
 import { SetStateAction, useEffect, useState } from 'react';
 import { driver_patient_list } from '@/api/apiCalls';
@@ -26,6 +27,17 @@ function Order() {
     //   })
     driver_patient_list().then((res) => {
       if (res) {
+        const currentData: Ambulance[] = res.result || [];
+        const previousPatientListDriver: Ambulance[] = JSON.parse(
+          localStorage.getItem('previousPatientListDriver') || '[]'
+        );
+        if (currentData.length > previousPatientListDriver.length) {
+          alert('New Patient Added For Ambulance!');
+        }
+        localStorage.setItem(
+          'previousPatientListDriver',
+          JSON.stringify(currentData)
+        );
         setAmbulances(res.result);
       } else {
         console.log('error');

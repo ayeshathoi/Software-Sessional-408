@@ -1,6 +1,7 @@
+/* eslint-disable import/extensions */
 // page for hospital home and verify employee
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Grid, Paper, Typography, Button, Container } from '@mui/material';
 import { pending_patient_req } from '@/api/apiCalls';
 
@@ -18,15 +19,21 @@ function PatientRequests() {
   const [resquest, setRequests] = useState([]);
   useEffect(() => {
     pending_patient_req().then((ret) => {
-    if (ret) {
-      setRequests(ret.result);
-    }
-    else {
-      console.log('error');
-    }
+      if (ret) {
+        const currentData = ret.result;
+        const previousRequests = JSON.parse(
+          localStorage.getItem('previousRequests') || '[]'
+        );
+        if (currentData.length > previousRequests.length) {
+          alert('New Request Added!');
+        }
+        localStorage.setItem('previousRequests', JSON.stringify(currentData));
+        setRequests(ret.result);
+      } else {
+        console.log('error');
+      }
+    });
   });
-  });
-
 
   return (
     <div className="mt-40 ml-40 mr-20 mb-20">
@@ -74,9 +81,7 @@ function PatientRequests() {
                         {request.time}
                       </td>
                       <td className="px-6 py-4 whitespace-no-wrap">
-                        <Link
-                          to={`/hospitalHome/${request.booking_id}`}
-                        >
+                        <Link to={`/hospitalHome/${request.booking_id}`}>
                           <Button variant="contained" color="primary">
                             Assign Nurse
                           </Button>

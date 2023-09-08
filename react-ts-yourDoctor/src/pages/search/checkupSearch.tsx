@@ -1,6 +1,6 @@
+/* eslint-disable import/extensions */
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import {checkupSearch} from '@/api/apiCalls';
+import { useNavigate } from 'react-router-dom';
 import {
   Autocomplete,
   Button,
@@ -15,9 +15,9 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import { checkupSearch } from '@/api/apiCalls';
 import Header from '../navbar/loginHeader';
 import Footer from '../navbar/footer';
-
 
 interface Checkup {
   testname: string;
@@ -55,14 +55,13 @@ function CheckupSearch() {
     //     console.error('Error fetching user profile:', err);
     //   });
     checkupSearch().then((ret) => {
-    if (ret) {
-      setUserData(ret);
-      setCount(ret.length);
-    }
-    else {
-      console.log('error');
-    }
-  });
+      if (ret) {
+        setUserData(ret);
+        setCount(ret.length);
+      } else {
+        console.log('error');
+      }
+    });
   });
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {

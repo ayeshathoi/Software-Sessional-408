@@ -1,8 +1,10 @@
+/* eslint-disable import/extensions */
 /* eslint-disable react/no-array-index-key */
 import { SetStateAction, useEffect, useState } from 'react';
-import { useParams,useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-import { Button } from '@mui/material';
+import { Button, Tooltip } from '@mui/material';
+import ForumTwoToneIcon from '@mui/icons-material/ForumTwoTone';
 import { nurse_patient_list } from '@/api/apiCalls';
 
 interface Checkup {
@@ -10,9 +12,8 @@ interface Checkup {
   date: string;
   uname: string;
   mobile_no: string;
+  booking_id: number;
 }
-
-
 
 function PatientArray() {
   const [selectedSection, setSelectedSection] = useState('upcoming');
@@ -34,13 +35,23 @@ function PatientArray() {
     //     console.error('Error fetching Patient_list:', error);
     //   });
     nurse_patient_list().then((ret) => {
-    if (ret) {
-      setTests(ret);
-    }
-    else {
-      console.log('error');
-    }
-  });
+      if (ret) {
+        const currentData: Checkup[] = ret || [];
+        const previousPatientList: Checkup[] = JSON.parse(
+          localStorage.getItem('previousPatientList') || '[]'
+        );
+        if (currentData.length > previousPatientList.length) {
+          alert('New Patient Added For Checkup!');
+        }
+        localStorage.setItem(
+          'previousPatientList',
+          JSON.stringify(currentData)
+        );
+        setTests(ret);
+      } else {
+        console.log('error');
+      }
+    });
   });
 
   const currentDate = new Date().toISOString();
@@ -85,8 +96,8 @@ function PatientArray() {
         </div>
         <div className="bg-white p-4 rounded-lg shadow-md">
           <h2 className="text-lg font-semibold mb-3">
-            {selectedSection === 'upcoming' ? 'Upcoming' : 'Previous'}{' '}
-            Checkup Duty
+            {selectedSection === 'upcoming' ? 'Upcoming' : 'Previous'} Checkup
+            Duty
           </h2>
           <ul className="space-y-4">
             {AmbulancesToShow.map((test, index) => (
@@ -103,20 +114,22 @@ function PatientArray() {
                   <p className="text-sm text-gray-500">
                     Time: {test.time.split('T')[0]}
                   </p>
-                  <Button
-                    variant="contained"
-                    color="inherit"
-                    onClick={() =>
-                      navigate('/Chatbox', {
-                        state: {
-                          receiverName: test.uname,
-                          bookingId: test.booking_id,
-                        },
-                      })
-                    }
-                  >
-                    Chat
-                  </Button>
+                  <Tooltip title="Chat">
+                    <Button
+                      variant="contained"
+                      color="inherit"
+                      onClick={() =>
+                        navigate('/Chatbox', {
+                          state: {
+                            receiverName: test.uname,
+                            bookingId: test.booking_id,
+                          },
+                        })
+                      }
+                    >
+                      <ForumTwoToneIcon />
+                    </Button>
+                  </Tooltip>
                 </div>
               </li>
             ))}

@@ -14,6 +14,7 @@ const patientList =         "SELECT a.booking_id,u.uname, u."+ constant.TABLE_US
 const nursedetail = "SELECT u.uname, u."+ constant.TABLE_USER_MOBILE_NO +
                     " ,u." + constant.TABLE_USER_TYPE + 
                     ", n." + constant.TABLE_NURSE_DESIGNATION + 
+                    ", n." + constant.TABLE_NURSE_STATUS + 
                     ", n." + constant.TABLE_NURSE_HOSPITAL + " " +
                     ", u." + constant.TABLE_USER_EMAIL + " " +
                     "FROM nurse n " +

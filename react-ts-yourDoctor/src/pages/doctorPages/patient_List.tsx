@@ -41,6 +41,17 @@ function PatientArray({ selectedHospital }: PatientArrayProps) {
       //   .post(`http://localhost:3000/doctor/patientlist`, requestBody)
       doctor_patient_list(requestBody).then((res) => {
         if (res) {
+          const currentData: PatientDetails[] = res || [];
+          const previousPatientListDoctor: PatientDetails[] = JSON.parse(
+            localStorage.getItem('previousPatientListDoctor') || '[]'
+          );
+          if (currentData.length > previousPatientListDoctor.length) {
+            alert('New Patient Added!');
+          }
+          localStorage.setItem(
+            'previousPatientListDoctor',
+            JSON.stringify(currentData)
+          );
           setpatients(res);
         } else {
           console.log('No Patients Found');

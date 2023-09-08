@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 /* eslint-disable import/extensions */
 /* eslint-disable no-restricted-syntax */
 import React, { useEffect, useState } from 'react';
@@ -50,7 +51,32 @@ function DoctorHome() {
       }
       setHospitals(hospitalNames);
     });
-  });
+    const alertShown3 = sessionStorage.getItem('employeeStatusAlertShown3');
+
+    if (user.employee_status === 'Available' && !alertShown3) {
+      console.log('You are available for appointments');
+      alert('You are available for appointments');
+
+      // Set the flag in sessionStorage to prevent showing the alert again
+      sessionStorage.setItem('employeeStatusAlertShown3', 'true');
+    } else if (user.employee_status === 'pending') {
+      alert('Your account is pending for approval');
+    }
+  }, [user]);
+
+  console.log('STATUS', user.employee_status);
+  // useEffect(() => {
+  //   const alertShown3 = sessionStorage.getItem('employeeStatusAlertShown3');
+
+  //   if (user.employee_status === 'Available' && !alertShown3) {
+  //     console.log('You are available for appointments');
+  //     alert('You are available for appointments');
+
+  //     // Set the flag in sessionStorage to prevent showing the alert again
+  //     sessionStorage.setItem('employeeStatusAlertShown3', 'true');
+  //   }
+  // }, [user]);
+
   const handleChange = (
     _event: React.ChangeEvent<object>,
     newValue: number
@@ -130,6 +156,7 @@ function DoctorHome() {
             <p className="text-gray-500">{user.qualification}</p>
             <p className="text-gray-500">Contact no. {user.mobile_no}</p>
             <p className="text-gray-500">mail : {user.email}</p>
+            <p className="text-gray-500">{user.employee_status}</p>
           </div>
           <Paper elevation={0}>
             <Tabs

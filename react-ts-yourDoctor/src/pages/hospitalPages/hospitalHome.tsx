@@ -50,6 +50,19 @@ function HospitalHome() {
         const drivers = responses[2].result;
 
         const combinedEmployees = [...doctors, ...nurses, ...drivers];
+        const previousPendingEmployees = JSON.parse(
+          localStorage.getItem('pendingEmployees') || '[]'
+        );
+
+        if (combinedEmployees.length > previousPendingEmployees.length) {
+          alert('New pending employee added!');
+        }
+
+        localStorage.setItem(
+          'pendingEmployees',
+          JSON.stringify(combinedEmployees)
+        );
+
         setEmployees(combinedEmployees);
       })
       .catch((error) => {

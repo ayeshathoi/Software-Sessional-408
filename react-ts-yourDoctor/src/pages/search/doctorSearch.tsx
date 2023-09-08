@@ -1,9 +1,9 @@
+/* eslint-disable import/extensions */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import {doctorSearch} from '@/api/apiCalls';
+import { useNavigate } from 'react-router-dom';
 import {
   Autocomplete,
   Button,
@@ -14,6 +14,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import { doctorSearch } from '@/api/apiCalls';
 import Header from '../navbar/header';
 import Footer from '../navbar/footer';
 
@@ -39,6 +40,9 @@ function DoctorSearch() {
   const [selectedQualification, setSelectedQualification] =
     useState<string>('');
   const [selectedWeekday, setSelectedWeekday] = useState<string>('');
+  const [selectedSearchCriteria, setSelectedSearchCriteria] = useState<
+    'speciality' | 'doctorname'
+  >('speciality'); // Track selected search criteria
 
   useEffect(() => {
     // Make the HTTP GET request to the backend API
@@ -50,9 +54,9 @@ function DoctorSearch() {
     //     console.log(response.data);
 
     doctorSearch().then((ret) => {
-    if(ret){
-      setuserData(ret);
-      setCount(ret.length);
+      if (ret) {
+        setuserData(ret);
+        setCount(ret.length);
         // Sort the data based on the selected sorting option
         if (sortBy === 'Price Low to High') {
           const sortedData = [...ret];
@@ -63,8 +67,7 @@ function DoctorSearch() {
           sortedData.sort((a, b) => b.new_patient_fee - a.new_patient_fee);
           setuserData(sortedData);
         }
-      }
-      else{
+      } else {
         console.error('Error fetching user profile:', error);
       }
     });
@@ -91,13 +94,32 @@ function DoctorSearch() {
     return uniqueSpecialtiesArray;
   };
 
-  const filteredDoctors = user.filter(
-    (doctor) =>
-      doctor.speciality.toLowerCase().includes(searchTerm.toLowerCase()) &&
+  const getUniqueDoctorNames = () => {
+    const uniqueDoctorsSet = new Set();
+
+    user.forEach((doctor) => {
+      if (!uniqueDoctorsSet.has(doctor.uname)) {
+        uniqueDoctorsSet.add(doctor.uname);
+      }
+    });
+
+    const uniqueDoctorsArray = Array.from(uniqueDoctorsSet);
+
+    return uniqueDoctorsArray;
+  };
+
+  const filteredDoctors = user.filter((doctor) => {
+    const searchTermLowerCase = searchTerm.toLowerCase();
+    return (
+      ((selectedSearchCriteria === 'speciality' &&
+        doctor.speciality.toLowerCase().includes(searchTermLowerCase)) ||
+        (selectedSearchCriteria === 'doctorname' &&
+          doctor.uname.toLowerCase().includes(searchTermLowerCase))) &&
       (selectedQualification === '' ||
         doctor.qualification === selectedQualification) &&
       (selectedWeekday === '' || doctor.weekday === selectedWeekday)
-  );
+    );
+  });
 
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSortBy(e.target.value);
@@ -110,19 +132,50 @@ function DoctorSearch() {
       </div>
 
       <div className="text-above-line my-10 text-left p-20 ">
-        <Autocomplete
-          options={getUniqueSpecialties()} // Get unique specialties from user data
-          getOptionLabel={(option) => option}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Type the Speciality"
-              variant="outlined"
-              value={searchTerm}
-              onChange={handleSearchChange}
-            />
-          )}
-        />
+        <select
+          name="searchCriteria"
+          id="searchCriteria"
+          value={selectedSearchCriteria}
+          onChange={(e) =>
+            setSelectedSearchCriteria(
+              e.target.value as 'speciality' | 'doctorname'
+            )
+          }
+        >
+          <option value="speciality">Search by Speciality</option>
+          <option value="doctorname">Search by Doctor Name</option>
+        </select>
+        {selectedSearchCriteria === 'speciality' && (
+          <Autocomplete
+            options={getUniqueSpecialties()} // Get unique specialties from user data
+            getOptionLabel={(option) => option}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Type the Speciality"
+                variant="outlined"
+                value={searchTerm}
+                onChange={handleSearchChange}
+              />
+            )}
+          />
+        )}
+        {selectedSearchCriteria === 'doctorname' && (
+          <Autocomplete
+            options={getUniqueDoctorNames()} // Get unique doctor names from user data
+            getOptionLabel={(option) => option}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Type the Doctor Name"
+                variant="outlined"
+                value={searchTerm}
+                onChange={handleSearchChange}
+              />
+            )}
+          />
+        )}
+
         <hr className="line-below-text my-4 border-t-2 border-gray-300" />
 
         <div className="flex justify-end items-center">

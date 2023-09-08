@@ -28,6 +28,7 @@ interface Doctor {
   hospital_name: string;
   doctor_id: number;
   weekday: string;
+  popularity: number;
 }
 
 function DoctorSearch() {
@@ -44,8 +45,13 @@ function DoctorSearch() {
 
     doctorSearch().then((ret) => {
     if(ret){
-      setuserData(ret);
-      setCount(ret.length);
+      for (let i = 0; i < ret.length; i++) {
+
+          if(ret[i].popularity == null)
+            ret[i].popularity = 0;
+        }
+        setuserData(ret);
+        setCount(ret.length);
         // Sort the data based on the selected sorting option
         if (sortBy === 'Price Low to High') {
           const sortedData = [...ret];
@@ -54,6 +60,11 @@ function DoctorSearch() {
         } else if (sortBy === 'Price High to Low') {
           const sortedData = [...ret];
           sortedData.sort((a, b) => b.new_patient_fee - a.new_patient_fee);
+          setuserData(sortedData);
+        }
+        else if (sortBy === 'Popularity') {
+          const sortedData = [...ret];
+          sortedData.sort((a, b) => b.popularity - a.popularity);
           setuserData(sortedData);
         }
       }
@@ -68,10 +79,7 @@ function DoctorSearch() {
   };
 
   const getUniqueSpecialties = () => {
-    // Create a Set to store unique specialties
     const uniqueSpecialtiesSet = new Set();
-
-    // Iterate through user data and add specialties to the Set
     user.forEach((doctor) => {
       if (!uniqueSpecialtiesSet.has(doctor.speciality)) {
         uniqueSpecialtiesSet.add(doctor.speciality);
@@ -82,6 +90,18 @@ function DoctorSearch() {
     const uniqueSpecialtiesArray = Array.from(uniqueSpecialtiesSet);
 
     return uniqueSpecialtiesArray;
+  };
+
+  const getUniqueNames = () => {
+    const namesSet = new Set();
+    user.forEach((doctor) => {
+      if (!namesSet.has(doctor.uname)) {
+        namesSet.add(doctor.uname);
+      }
+    });
+    const uniqueNameArray = Array.from(namesSet);
+
+    return uniqueNameArray;
   };
 
   const filteredDoctors = user.filter(
@@ -116,6 +136,7 @@ function DoctorSearch() {
             />
           )}
         />
+        
         <hr className="line-below-text my-4 border-t-2 border-gray-300" />
 
         <div className="flex justify-end items-center">
@@ -127,6 +148,7 @@ function DoctorSearch() {
             onChange={handleSortChange}
           >
             <option value="">Select</option>
+            <option value="Popularity">Popularity</option>
             <option value="Price Low to High">Visit Low to High</option>
             <option value="Price High to Low">Visit High to Low</option>
           </select>
@@ -143,11 +165,6 @@ function DoctorSearch() {
             </div>
             <div className="side-nav-item">
               <label className="flex items-center text-sm">
-                <input
-                  type="checkbox"
-                  className="form-checkbox h-5 w-5 text-gray-600 mr-2"
-                  onChange={(e) => setSelectedQualification(e.target.value)}
-                />
                 Qualification
                 <select
                   name="qualification"
@@ -164,11 +181,6 @@ function DoctorSearch() {
                 </select>
               </label>
               <label className="flex items-center text-sm mt-4">
-                <input
-                  type="checkbox"
-                  className="form-checkbox h-5 w-5 text-gray-600 mr-2"
-                  onChange={(e) => setSelectedWeekday(e.target.value)}
-                />
                 WeekDay
                 <select
                   name="weekday"
@@ -185,13 +197,6 @@ function DoctorSearch() {
                   <option value="Thrusday">Thrusday</option>
                   <option value="Friday">Friday</option>
                 </select>
-              </label>
-              <label className="flex items-center text-sm mt-4">
-                <input
-                  type="checkbox"
-                  className="form-checkbox h-5 w-5 text-gray-600 mr-2"
-                />
-                Popularity
               </label>
             </div>
           </div>

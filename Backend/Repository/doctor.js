@@ -204,7 +204,6 @@ const doctor_hospitals = "SELECT hospital_name FROM hospital h JOIN doctor_hospi
 
 const getDoctorDetails = async (doctor_id) => {
     try {
-        console.log(doctor_id);
         const client = await getConnection.connect();
         const result = await client.query(doctorDetails, [doctor_id]);
         const result1 = await client.query(doctor_user, [doctor_id]);
@@ -218,7 +217,6 @@ const getDoctorDetails = async (doctor_id) => {
             var name = hospital +" " + i;
             result.rows[0][name] = result2.rows[i].hospital_name;
         }
-        console.log(result);
         client.release();
         return result.rows[0];
     }
@@ -307,10 +305,8 @@ const viewPrescriptionQuery = `
 
 const viewPrescription = async (booking_id) => {
     try {
-        console.log("bhhhhhhhhhhhhhhhhhhguy",booking_id);
         const client = await getConnection.connect();
         const result = await client.query(viewPrescriptionQuery, [booking_id]);
-        console.log(result.rows[0]);
         client.release();
         if(result.rows.length === 0) {
             return null;

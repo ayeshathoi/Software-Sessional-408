@@ -219,7 +219,7 @@ const update_profile = async (street,thana,city, district,pid,mobile_no) => {
     }
 }
 
-const DoctorList= "SELECT d.qualification, u.uname,u.mobile_no,u.email, d.designation, d.speciality,d.new_patient_fee, d.doctor_id, h.hospital_name, t.weekday " + 
+const DoctorList= "SELECT d.popularity,d.qualification, u.uname,u.mobile_no,u.email, d.designation, d.speciality,d.new_patient_fee, d.doctor_id, h.hospital_name, t.weekday " + 
                   "FROM doctor d " +
                   "JOIN users u ON d.doctor_id = u.uid "+
                   "JOIN doctor_hospital dh ON d.doctor_id = dh.doctor_id " +

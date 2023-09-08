@@ -25,15 +25,6 @@ function PatientArray() {
   };
 
   useEffect(() => {
-    // axios
-    //   .get(`http://localhost:3000/nurse/checkup`)
-    //   .then((response) => {
-    //     setTests(response.data);
-    //     console.log(response.data);
-    //   })
-    //   .catch((error) => {
-    //     console.error('Error fetching Patient_list:', error);
-    //   });
     nurse_patient_list().then((ret) => {
       if (ret) {
         const currentData: Checkup[] = ret || [];

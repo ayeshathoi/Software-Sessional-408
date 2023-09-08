@@ -3,7 +3,6 @@ const constant = require("./constants")
 const user = require("./user")
 
 
-//appointment e total fare rakhte hobe
 const patientList =         "SELECT a.booking_id,u.uname, u."+ constant.TABLE_USER_MOBILE_NO + ", a.time, a.date " +
                             "FROM booking a " +
                             "JOIN nurse n ON a.nurse_id = n.nurse_id " +
@@ -21,11 +20,22 @@ const nursedetail = "SELECT u.uname, u."+ constant.TABLE_USER_MOBILE_NO +
                     "JOIN users u ON n.nurse_id = u.uid " +
                     "WHERE n.nurse_id = $1"
 
+const testNames = "SELECT testname FROM test " +
+                    "Join booking_tests  ON test.testid = booking_tests.test_id " +
+                    "Join booking ON booking_tests.booking_id = booking.booking_id " +
+                    "WHERE booking.nurse_id = $1";
 
 const patientListDetails_nurse = async (nid) => {
     try {
         const client = await getConnection.connect();
         const result = await client.query(patientList, [nid]);
+        for (let i = 0; i < result.rows.length; i++) {
+            const test = await client.query(testNames, [nid]);
+            result.rows[i].test = [];
+            for (let j = 0; j < test.rows.length; j++) {
+                result.rows[i].test[j]= test.rows[j].testname;
+            }
+        }
         client.release();
         return result.rows;
     }

@@ -49,21 +49,40 @@ const allAppointments = async (pid) => {
 
 
 
-const CheckUP = `
-  SELECT a.booking_id, a.time, a.date, t.testname, t.price, u.uname AS patient_name, a.nurse_id, 
-         (SELECT u2.uname FROM nurse n2 JOIN users u2 ON n2.nurse_id = u2.uid WHERE n2.nurse_id = a.nurse_id) AS nurse_name
-  FROM booking a
-  JOIN booking_tests bt ON a.booking_id = bt.booking_id
-  JOIN test t ON t.testid = bt.test_id
-  JOIN patient p ON a.patient_id = p.pid
-  JOIN users u ON p.pid = u.uid
-  WHERE a.patient_id = $1 AND a.type = 'Checkup' AND a.nurse_id IS NOT NULL
-`;
+// const CheckUP = `
+//   SELECT a.booking_id, a.time, a.date, t.testname, t.price, u.uname AS patient_name, a.nurse_id, 
+//          (SELECT u2.uname FROM nurse n2 JOIN users u2 ON n2.nurse_id = u2.uid WHERE n2.nurse_id = a.nurse_id) AS nurse_name
+//   FROM booking a
+//   JOIN booking_tests bt ON a.booking_id = bt.booking_id
+//   JOIN test t ON t.testid = bt.test_id
+//   JOIN patient p ON a.patient_id = p.pid
+//   JOIN users u ON p.pid = u.uid
+//   WHERE a.patient_id = $1 AND a.type = 'Checkup' AND a.nurse_id IS NOT NULL
+// `;
+
+const testNames = "SELECT testname FROM test " +
+                    "Join booking_tests  ON test.testid = booking_tests.test_id " +
+                    "Join booking ON booking_tests.booking_id = booking.booking_id " +
+                    "WHERE booking.patient_id = $1";
+
+const CheckUp = "SELECT a.booking_id,a.total_price, a.time, a.date, u.uname, n.designation " +
+                "FROM booking a " + 
+                "JOIN nurse n ON a.nurse_id = n.nurse_id " +
+                "JOIN users u ON n.nurse_id = u.uid " +
+                "WHERE a.patient_id = $1 AND a.type = 'Checkup' AND a.nurse_id IS NOT NULL";
+
 
 const checkUpDetails = async (pid) => {
     try {
         const client = await getConnection.connect();
-        const result = await client.query(CheckUP, [pid]);
+        const result = await client.query(CheckUp, [pid]);
+        for (let i = 0; i < result.rows.length; i++) {
+            const test = await client.query(testNames, [pid]);
+            result.rows[i].test = [];
+            for (let j = 0; j < test.rows.length; j++) {
+                result.rows[i].test[j]= test.rows[j].testname;
+            }
+        }
         client.release();
         return result.rows;
     }

@@ -8,12 +8,14 @@ import { Button, Tooltip } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { patient_checkup } from '@/api/apiCalls';
 import { addNotification } from '@/store/notificationsSlice';
+import { all } from 'axios';
+import { set } from 'date-fns';
 
 interface Checkup {
   time: string;
   date: string;
-  testname: string;
-  price: number;
+  testname: string[];
+  total_price: number;
   uname: string;
   booking_id: number;
   nurse_name: string;
@@ -22,6 +24,7 @@ interface Checkup {
 function Tests() {
   const [selectedSection, setSelectedSection] = useState('upcoming');
   const [tests, setTests] = useState<Checkup[]>([]);
+  const [testnamesall, setTestnames] = useState<string[]>([]);
   const navigate = useNavigate();
 
   const handleSectionChange = (section: SetStateAction<string>) => {
@@ -33,9 +36,19 @@ function Tests() {
   const [, setUpcomingCount3] = useState<number>(0);
   const currentDate = new Date().toISOString();
 
+  var testnames: string[] = [];
   useEffect(() => {
     patient_checkup()
       .then((patient_checkup_list) => {
+
+        for (let i = 0; i < patient_checkup_list[0].test.length; i++) {
+          testnames.push(patient_checkup_list[0].test[i]);
+        }     
+
+        setTestnames(testnames);
+
+       
+        
         const currentTests: Checkup[] = patient_checkup_list || [];
 
         const storedUppcomingCount3: number =
@@ -129,16 +142,22 @@ function Tests() {
               <li key={index} className="flex justify-between items-center">
                 <div>
                   <p className="text-lg font-semibold">
-                    Name: {test.nurse_name}
+                    Name: {test.uname}
                   </p>
-                  <p className="text-gray-600">TEST NAME: {test.testname}</p>
-                  <hr />
+                  <p className="text-sm text-gray-500">
+                    Tests : 
+                    {testnamesall.map((index) => (
+                      <p className="text-sm text-gray-500">
+                        {index}
+                      </p>
+                    ))}
+                  </p>
                 </div>
                 <div className="text-right">
                   <p className="text-sm text-gray-500">
                     {test.date.split('T')[0]}
                   </p>
-                  <p className="text-sm text-gray-500">Fee: {test.price}</p>
+                  <p className="text-sm text-gray-500">Fee: {test.total_price}</p>
                   <p className="text-sm text-gray-500">
                     Time: {test.time.split('T')[0]}
                   </p>
@@ -167,9 +186,8 @@ function Tests() {
                         onClick={() =>
                           navigate('/addReview', {
                             state: {
-                              receiverName: test.nurse_name,
+                              receiverName: test.uname,
                               bookingId: test.booking_id,
-                              serialNumber: test.price,
                             },
                           })
                         }

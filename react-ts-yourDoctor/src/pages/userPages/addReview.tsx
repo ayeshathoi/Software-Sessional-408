@@ -21,8 +21,7 @@ function AddReview() {
   });
 
   const location = useLocation();
-  const { receiverName, bookingId, serialNumber } = location.state;
-
+  const { receiverName, bookingId} = location.state;
   const navigate = useNavigate();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {

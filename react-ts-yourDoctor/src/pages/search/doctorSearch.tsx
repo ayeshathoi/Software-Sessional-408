@@ -227,7 +227,7 @@ function DoctorSearch() {
                 >
                   <option value="">Select</option>
                   <option value="MBBS">MBBS</option>
-                  <option value="MS">MS</option>
+                  <option value="MD">MD</option>
                   <option value="MCH">MCH</option>
                   <option value="DM">DM</option>
                 </select>

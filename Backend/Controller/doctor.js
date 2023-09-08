@@ -34,8 +34,6 @@ const updateDoctorProfile = async (req, res) => {
         const designation=req.body.designation;
         const qualification=req.body.qualification;
         const mobile_no=req.body.mobile_no;
-
-    
         const updated = await user.updateDoctorProfile(doctor_id, speciality, designation, qualification, mobile_no);
 
         res.status(http_status.OK).json(updated);

@@ -57,7 +57,7 @@ function DoctorProfileUpdate() {
     try {
       // Send the formData to the server for update
       const response = await axios.post(
-        `http://localhost:3000/doctor/update-profile`,
+        `http://localhost:3000/doctor/updateProfile`,
         formData
       );
       console.log('Updated Data:', response.data);

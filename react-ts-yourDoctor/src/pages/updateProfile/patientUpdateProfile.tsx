@@ -1,12 +1,12 @@
-import { SetStateAction, useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Header from '../navbar/header';
 import Footer from '../navbar/footer';
 import User from '@/assets/user.webp';
+
 axios.defaults.withCredentials = true;
 
-function PatientProfileUpdate() {  
+function PatientProfileUpdate() {
   const [isEditing, setIsEditing] = useState(false);
   const [prevForm, setPrevForm] = useState({
     name: '',
@@ -30,38 +30,27 @@ function PatientProfileUpdate() {
     axios
       .get(`http://localhost:3000/patient/profile`)
       .then((response) => {
-        setPrevForm({
-          name: response.data.name,
-          street: response.data.street,
-          thana: response.data.thana,
-          city: response.data.city,
-          district: response.data.district,
-          mobile_no: response.data.mobile_no,
-        });
-        setFormData({
-          name: response.data.name,
-          street: response.data.street,
-          thana: response.data.thana,
-          city: response.data.city,
-          district: response.data.district,
-          mobile_no: response.data.mobile_no,
-        });
-
+        const userData = response.data;
+        setPrevForm(userData);
+        setFormData(userData);
       })
       .catch((error) => {
         console.error('Error fetching patient profile:', error);
       });
-  });
+  }, []);
 
-  console.log("dehfbk",prevForm);
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
+
   const handleUpdate = async () => {
     try {
-      const response = await axios.post(`http://localhost:3000/patient`, formData); 
-      console.log('Updated Data:', response.data); 
+      const response = await axios.post(
+        `http://localhost:3000/patient/updateProfile`,
+        formData
+      );
+      console.log('Updated Data:', response.data);
       setIsEditing(false);
     } catch (error) {
       console.error('Error updating profile:', error);
@@ -76,7 +65,11 @@ function PatientProfileUpdate() {
       <div className="mt-16 pt-16 py-8 px-4 flex justify-center items-center">
         {/* User's Photo, Name, and Number */}
         <div className="w-1/5 p-6 bg-white shadow-md">
-          <img src={User} alt="User" className="w-32 h-32 rounded-full mx-auto" />
+          <img
+            src={User}
+            alt="User"
+            className="w-32 h-32 rounded-full mx-auto"
+          />
           <h2 className="text-xl font-semibold mb-2">{formData.name}</h2>
         </div>
         <div className="w-1/2">
@@ -87,7 +80,7 @@ function PatientProfileUpdate() {
               <div className="mb-4 mt-4">
                 <div className="flex">
                   <div className="w-1/2 bg-lightblue p-2 rounded-tl rounded-bl">
-                    <label className="font-semibold">Street: </label>
+                    <label className="font-semibold">Street</label>
                   </div>
                   <div className="w-1/2 border border-lightblue rounded-tr rounded-br">
                     {isEditing ? (
@@ -104,11 +97,11 @@ function PatientProfileUpdate() {
                   </div>
                 </div>
               </div>
-              {/* thana */}
+              {/* Thana */}
               <div className="mb-4">
                 <div className="flex">
                   <div className="w-1/2 bg-lightblue p-2 rounded-tl rounded-bl">
-                    <label className="font-semibold">Thana:</label>
+                    <label className="font-semibold">Thana</label>
                   </div>
                   <div className="w-1/2 border border-lightblue rounded-tr rounded-br">
                     {isEditing ? (
@@ -125,11 +118,11 @@ function PatientProfileUpdate() {
                   </div>
                 </div>
               </div>
-              {/* city */}
+              {/* City */}
               <div className="mb-4">
                 <div className="flex">
                   <div className="w-1/2 bg-lightblue p-2 rounded-tl rounded-bl">
-                    <label className="font-semibold">City:</label>
+                    <label className="font-semibold">City</label>
                   </div>
                   <div className="w-1/2 border border-lightblue rounded-tr rounded-br">
                     {isEditing ? (
@@ -146,11 +139,11 @@ function PatientProfileUpdate() {
                   </div>
                 </div>
               </div>
-              {/* district */}
+              {/* District */}
               <div className="mb-4">
                 <div className="flex">
                   <div className="w-1/2 bg-lightblue p-2 rounded-tl rounded-bl">
-                    <label className="font-semibold">District:</label>
+                    <label className="font-semibold">District</label>
                   </div>
                   <div className="w-1/2 border border-lightblue rounded-tr rounded-br">
                     {isEditing ? (
@@ -171,7 +164,7 @@ function PatientProfileUpdate() {
               <div className="mb-4">
                 <div className="flex">
                   <div className="w-1/2 bg-lightblue p-2 rounded-tl rounded-bl">
-                    <label className="font-semibold">Contact no.:</label>
+                    <label className="font-semibold">Contact no </label>
                   </div>
                   <div className="w-1/2 border border-lightblue rounded-tr rounded-br">
                     {isEditing ? (

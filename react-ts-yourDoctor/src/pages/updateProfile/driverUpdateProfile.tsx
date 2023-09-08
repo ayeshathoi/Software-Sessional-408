@@ -42,8 +42,7 @@ function DriverProfileUpdate() {
         console.error('Error fetching driver profile:', error);
       });
   },);
-  
-  console.log("dehfxxkxmk",prevForm);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));

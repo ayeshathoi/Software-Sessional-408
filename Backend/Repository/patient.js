@@ -22,12 +22,12 @@ const onlineAppointments = async (pid) => {
     }
 };
 
-const all = "SELECT u.uname, b.booking_id, b.time, b.date,d.designation, b.appointment_serial, b.time,h.hospital_name, d.speciality, b.total_price "+
+const all = "SELECT u.uname,b.type,d.zoom_link ,b.booking_id, b.time, b.date,d.designation, b.appointment_serial, b.time,h.hospital_name, d.speciality, b.total_price "+
                             "FROM booking b " +
                             "JOIN doctor d ON b.doctor_id = d.doctor_id " +
                             "JOIN hospital h ON b.hospital_id = h.hospital_id " +
                             "JOIN users u ON d.doctor_id = u.uid " +
-                            "WHERE b.patient_id = $1 AND b.type = 'Appointment'"
+                            "WHERE b.patient_id = $1 AND (b.type = 'Appointment' OR b.type ='Online')"
 
 const allAppointments = async (pid) => {
     try {

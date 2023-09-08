@@ -38,6 +38,7 @@ function BookDoctor() {
     location.state;
 
   const navigate = useNavigate();
+  const online_hospital = hospitalName + " Online";
 
   const [formData, setFormData] = useState<{
     patient_mobile: string;
@@ -269,6 +270,18 @@ function BookDoctor() {
                       label={hospitalName}
                     />
                   </RadioGroup>
+                  <RadioGroup
+                    row
+                    name="hospital_name"
+                    value={formData.hospital_name}
+                    onChange={handleChange}
+                  >
+                    <FormControlLabel
+                      value={online_hospital}
+                      control={<Radio />}
+                      label= "Online"
+                    />
+                  </RadioGroup>
 
                   <div>
                   <Typography variant="h6" className="text-sm font-bold text-green-400">
@@ -305,7 +318,7 @@ function BookDoctor() {
                       label="Cash on Delivery"
                       className="mt-4"
                     />
-                    {/* <FormControlLabel
+                    <FormControlLabel
                       value="Bkash"
                       control={<Radio />}
                       label="Bkash"
@@ -322,7 +335,7 @@ function BookDoctor() {
                       control={<Radio />}
                       label="Rocket"
                       className="mt-4"
-                    /> */}
+                    />
                   </RadioGroup>
                 </FormControl>
               </Paper>

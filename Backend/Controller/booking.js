@@ -5,10 +5,14 @@ const DoctorBooking = async (req, res) => {
     try {
         const uid = req.user.uid;
         const {price,time,date,payment_method,payment_status,patient_mobile,doctor_id,hospital_name,weekday} = req.body
-        if(hospital_name == undefined){
-        const type="Online"
-        const result = await user.appointmentBooking(type,weekday,price,time,date,payment_method,payment_status,patient_mobile,uid,doctor_id,hospital_name); 
-        res.status(http_status.OK).json({ result });
+
+        console.log(hospital_name);
+        if(hospital_name.split(" ")[1] == "Online"){
+            const hospital = hospital_name.split(" ")[0] ;
+            const type="Online"
+            //create an api and join dem
+            const result = await user.appointmentBooking(type,weekday,price,time,date,payment_method,payment_status,patient_mobile,uid,doctor_id,hospital); 
+            res.status(http_status.OK).json({ result });
         }
        else {
         const type = "Appointment";

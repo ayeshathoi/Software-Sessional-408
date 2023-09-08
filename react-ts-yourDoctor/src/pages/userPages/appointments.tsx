@@ -20,6 +20,8 @@ interface Appointment {
   total_price: number;
   hospital_name: string;
   booking_id: number;
+  type: string;
+  zoom_link: string;
 }
 
 function Appointments() {
@@ -131,17 +133,39 @@ function Appointments() {
                   <p className="text-lg font-semibold">
                     Name: {appointment.uname}
                   </p>
-                  <p className="text-gray-600">
+                  <p className="text-sm text-gray-600">
                     Designation: {appointment.designation}
                   </p>
-                  <p className="text-gray-600">
-                    serial : {appointment.appointment_serial}
-                  </p>
-                </div>
-                <div className="text-right">
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-gray-600">
                     Speciality: {appointment.speciality}
                   </p>
+                  <p className="text-sm text-gray-600">
+                  {appointment.type === 'Online' ? 'Online' : 'In Person'}{' '}
+                    Appointment
+                    {appointment.type === 'Online' ? (
+                      <a
+                        href={appointment.zoom_link}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-blue-500 hover:text-blue-800"
+                      >
+                        <br />
+                        <small>Zoom Link</small>
+                      </a>
+                    ) : (
+                      ''
+                    )}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    
+                    serial : {appointment.appointment_serial}
+                  </p>
+                  
+                  
+                  
+                </div>
+                <div className="text-right">
+                  
                   <p className="text-sm text-gray-500">
                     Fee: {appointment.total_price}
                   </p>
@@ -153,6 +177,7 @@ function Appointments() {
                   </p>
                   <p className="text-sm text-gray-500">
                     Hospital : {appointment.hospital_name}
+                    
                   </p>
                   <Tooltip title="Chat">
                     <Button

@@ -14,7 +14,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import Header from '../navbar/header';
+import Header from '../navbar/header_nd';
 import Footer from '../navbar/footer';
 
 interface Doctor {
@@ -41,13 +41,6 @@ function DoctorSearch() {
   const [selectedWeekday, setSelectedWeekday] = useState<string>('');
 
   useEffect(() => {
-    // Make the HTTP GET request to the backend API
-    // axios
-    //   .get(`http://localhost:3000/patient/doctorall`)
-    //   .then((response) => {
-    //     setuserData(response.data); // Set the fetched data to the state
-    //     setCount(response.data.length);
-    //     console.log(response.data);
 
     doctorSearch().then((ret) => {
     if(ret){
@@ -212,7 +205,7 @@ function DoctorSearch() {
                       component="img"
                       alt="Doctor"
                       height="100"
-                      image="https://cdn.vectorstock.com/i/1000x1000/27/71/female-doctor-vector-38002771.webp"
+                      image="https://hips.hearstapps.com/hmg-prod/images/types-of-doctors-1600114658.jpg?crop=1.00xw:1.00xh;0,0&resize=800:*"
                     />
                     <CardContent>
                       <Typography variant="h6">{doctor.uname}</Typography>

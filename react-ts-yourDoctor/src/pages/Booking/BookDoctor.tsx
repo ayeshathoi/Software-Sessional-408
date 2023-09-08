@@ -25,8 +25,11 @@ import {
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { format } from 'date-fns';
-import Header from '../navbar/loginHeader';
+import Header from '../navbar/header_nd';
 import Footer from '../navbar/footer';
+
+
+
 
 function BookDoctor() {
   const location = useLocation();
@@ -298,10 +301,10 @@ function BookDoctor() {
                     <FormControlLabel
                       value="Cash"
                       control={<Radio />}
-                      label="Cash"
+                      label="Cash on Delivery"
                       className="mt-4"
                     />
-                    <FormControlLabel
+                    {/* <FormControlLabel
                       value="Bkash"
                       control={<Radio />}
                       label="Bkash"
@@ -318,7 +321,7 @@ function BookDoctor() {
                       control={<Radio />}
                       label="Rocket"
                       className="mt-4"
-                    />
+                    /> */}
                   </RadioGroup>
                 </FormControl>
               </Paper>

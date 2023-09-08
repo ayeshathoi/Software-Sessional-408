@@ -15,7 +15,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import Header from '../navbar/loginHeader';
+import Header from '../navbar/header_nd';
 import Footer from '../navbar/footer';
 
 
@@ -43,17 +43,6 @@ function CheckupSearch() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Make the HTTP GET request to the backend API
-    // axios
-    //   .get(`http://localhost:3000/patient/testall`)
-    //   .then((response) => {
-    //     setUserData(response.data);
-    //     console.log(response.data.length);
-    //     setCount(response.data.length);
-    //   })
-    //   .catch((err) => {
-    //     console.error('Error fetching user profile:', err);
-    //   });
     checkupSearch().then((ret) => {
     if (ret) {
       setUserData(ret);

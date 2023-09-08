@@ -1,3 +1,4 @@
+/* eslint-disable import/extensions */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 // /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, ChangeEvent, FormEvent } from 'react';
@@ -31,7 +32,7 @@ function DriverSignup() {
     thana: '',
     city: '',
     district: '',
-    hospital_name: '',
+    hospital_name: null,
     nid: '',
   });
 
@@ -39,14 +40,19 @@ function DriverSignup() {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
+
+    // Check if the input name is 'hospital_name' and the value is an empty string
+    if (name === 'hospital_name' && value.trim() === '') {
+      setFormData((prevFormData) => ({ ...prevFormData, [name]: null }));
+    } else {
+      setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
+    }
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDateChange = (date: any) => {
     setFormData((prevData) => ({ ...prevData, dob: date }));
   };
-
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -79,9 +85,7 @@ function DriverSignup() {
         }}
       >
         <div className="pt-20 flex flex-col items-center justify-center pb-8 px-12 mb-8 border border-gray-300 round-lg">
-          <h1
-            style={{ fontWeight: 'bold', fontSize: '24px', color: 'green' }}
-          >
+          <h1 style={{ fontWeight: 'bold', fontSize: '24px', color: 'green' }}>
             Driver Signup
           </h1>
           <form
@@ -236,7 +240,6 @@ function DriverSignup() {
               value={formData.hospital_name}
               onChange={handleChange}
               variant="outlined"
-              required
               className="w-full"
             />
 

@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-plusplus */
 /* eslint-disable import/extensions */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/no-array-index-key */
@@ -14,6 +16,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import { doctorSearch } from '@/api/apiCalls';
 import Header from '../navbar/header_nd';
 import Footer from '../navbar/footer';
 
@@ -45,14 +48,10 @@ function DoctorSearch() {
   >('speciality'); // Track selected search criteria
 
   useEffect(() => {
-
     doctorSearch().then((ret) => {
-      
-    if(ret){
-      for (let i = 0; i < ret.length; i++) {
-
-          if(ret[i].popularity == null)
-            ret[i].popularity = 0;
+      if (ret) {
+        for (let i = 0; i < ret.length; i++) {
+          if (ret[i].popularity == null) ret[i].popularity = 0;
         }
         setuserData(ret);
         setCount(ret.length);
@@ -65,15 +64,12 @@ function DoctorSearch() {
           const sortedData = [...ret];
           sortedData.sort((a, b) => b.new_patient_fee - a.new_patient_fee);
           setuserData(sortedData);
-        }
-      
-        else if (sortBy === 'Popularity') {
+        } else if (sortBy === 'Popularity') {
           const sortedData = [...ret];
           sortedData.sort((a, b) => b.popularity - a.popularity);
           setuserData(sortedData);
         }
-      }
-      else{
+      } else {
         console.error('Error fetching user profile:', Error);
       }
     });

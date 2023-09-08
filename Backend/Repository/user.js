@@ -219,8 +219,7 @@ const create_driver = async (username,email,pass,mobile,dob,gender,type,fare,
       }
       else{
         if(street != null && thana != null && city != null && district != null){
-        result = await client.query(CREATE_DRIVER, [drid2,type,fare,stat,
-            document,document_content,street,thana,city,district,nid,null]);
+        result = await client.query(CREATE_DRIVER, [drid2,type,fare,stat,street,thana,city,district,nid,null]);
         }
         else
             {return false;}

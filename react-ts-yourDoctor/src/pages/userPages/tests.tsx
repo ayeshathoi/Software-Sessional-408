@@ -24,7 +24,7 @@ interface Checkup {
 function Tests() {
   const [selectedSection, setSelectedSection] = useState('upcoming');
   const [tests, setTests] = useState<Checkup[]>([]);
-  const [testnamesall, setTestnames] = useState<string[]>([]);
+  
   const navigate = useNavigate();
 
   const handleSectionChange = (section: SetStateAction<string>) => {
@@ -36,18 +36,13 @@ function Tests() {
   const [, setUpcomingCount3] = useState<number>(0);
   const currentDate = new Date().toISOString();
 
-  var testnames: string[] = [];
   useEffect(() => {
     patient_checkup()
       .then((patient_checkup_list) => {
 
-        for (let i = 0; i < patient_checkup_list[0].test.length; i++) {
-          testnames.push(patient_checkup_list[0].test[i]);
-        }     
-
-        setTestnames(testnames);
-
-       
+        testname = patient_checkup_list.map((test));
+        console.log(testname);
+    
         
         const currentTests: Checkup[] = patient_checkup_list || [];
 
@@ -145,12 +140,11 @@ function Tests() {
                     Name: {test.uname}
                   </p>
                   <p className="text-sm text-gray-500">
-                    Tests : 
-                    {testnamesall.map((index) => (
-                      <p className="text-sm text-gray-500">
-                        {index}
-                      </p>
-                    ))}
+                    Tests: 
+                    {testnamesall.map((testname, index) =>
+                      <p>{testnamesall[index]}</p>
+                    )}
+
                   </p>
                 </div>
                 <div className="text-right">

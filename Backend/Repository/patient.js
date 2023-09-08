@@ -63,7 +63,7 @@ const allAppointments = async (pid) => {
 const testNames = "SELECT testname FROM test " +
                     "Join booking_tests  ON test.testid = booking_tests.test_id " +
                     "Join booking ON booking_tests.booking_id = booking.booking_id " +
-                    "WHERE booking.patient_id = $1";
+                    "WHERE booking.booking_id = $1";
 
 const CheckUp = "SELECT a.booking_id,a.total_price, a.time, a.date, u.uname, n.designation " +
                 "FROM booking a " + 
@@ -76,8 +76,9 @@ const checkUpDetails = async (pid) => {
     try {
         const client = await getConnection.connect();
         const result = await client.query(CheckUp, [pid]);
+
         for (let i = 0; i < result.rows.length; i++) {
-            const test = await client.query(testNames, [pid]);
+            const test = await client.query(testNames, [result.rows[i].booking_id]);
             result.rows[i].test = [];
             for (let j = 0; j < test.rows.length; j++) {
                 result.rows[i].test[j]= test.rows[j].testname;

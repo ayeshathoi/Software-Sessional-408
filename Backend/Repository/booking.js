@@ -33,7 +33,7 @@ const onlineAppointments = "INSERT INTO " + constant.TABLE_BOOKING + " ("
                 + "VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)";
 
 
-const check_serial = "select * from booking where doctor_id = $1 and date = $2 and time = $3 and hospital_id = $4";
+const check_serial = "select * from booking where doctor_id = $1 and date = $2 and time = $3";
 
 const popularity = "UPDATE doctor SET popularity = $1 WHERE doctor_id = $2";
 const total_booking = "select * from booking where doctor_id = $1";
@@ -61,9 +61,7 @@ const appointmentBooking = async (type,day,price,time,date,payment_method,paymen
         }
 
         var res_string = "This serial is already booked.";
-
-        const hospital_id = await user.findhid(hospital_name);
-        const result2 = await client.query(check_serial, [doctor_id,date,time,hospital_id[0].hospital_id]);
+        const result2 = await client.query(check_serial, [doctor_id,date,time]);
         if(result2.rows.length > 0)
         {
                 return res_string;

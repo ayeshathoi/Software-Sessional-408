@@ -51,12 +51,10 @@ passport.serializeUser((user,done) => {
 
 passport.deserializeUser (async (uid,done) => {
     try{
-        console.log(uid);
         const user = await userController.getUserDetailsByIDUtil(uid);
         if(!user || user.length != 1){
             done(new Error('Unauthorized'), null);
         }else{
-            console.log(user[0]);
             done(null,user[0]);
         }
     }

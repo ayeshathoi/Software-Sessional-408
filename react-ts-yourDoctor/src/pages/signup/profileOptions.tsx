@@ -2,7 +2,7 @@
 /* eslint-disable import/extensions */
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import Navbar from '../navbar/header';
+import Navbar from '../navbar/headerCommon';
 import Footer from '@/pages/navbar/footer';
 import PatientImage from '@/assets/patient.jpg';
 import DoctorImage from '@/assets/doctor.jpg';

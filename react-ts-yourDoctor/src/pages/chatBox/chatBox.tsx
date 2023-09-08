@@ -2,7 +2,7 @@ import { useState, ChangeEvent, FormEvent, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import { TextField, Button, Typography } from '@mui/material';
-import Header from '../navbar/header';
+import Header from '../navbar/loginHeader';
 import Footer from '../navbar/footer';
 import { getComments_Chatbox, addComment_Chatbox } from '@/api/apiCalls';
 
@@ -45,10 +45,6 @@ function Chatbox() {
   };
 
   useEffect(() => {
-    // axiosz
-    //   .post(`http://localhost:3000/comment/get`, {
-    //     booking_id: bookingId,
-    //   })
     getComments_Chatbox(bookingId).then((res) => {
       if (res) {
         const sortedComments = res.result.sort(
@@ -74,7 +70,6 @@ function Chatbox() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      // await axios.post(`http://localhost:3000/comment/add`, formData);
       const res = await addComment_Chatbox(formData);
       setFormData({ ...formData, message: '' }); // Clear the input field after sending
     } catch (err) {
@@ -94,7 +89,7 @@ function Chatbox() {
       </div>
 
       <div className="fit-content p-40 mx-auto px-20  ">
-        <div className="header-container bg-red-400 p-4 flex justify-between items-center">
+        <div className="header-container bg-green-400 p-4 flex justify-between items-center">
           <Typography className="receiver-name text-white text-2xl">
             Chat with {receiverName}
           </Typography>

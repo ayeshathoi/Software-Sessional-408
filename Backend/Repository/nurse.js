@@ -62,29 +62,16 @@ const update_user = "UPDATE users SET " + constant.TABLE_USER_MOBILE_NO + " = $1
                    // , " + constant.TABLE_USER_EMAIL + " = $2 " +
                     "WHERE " + constant.TABLE_USER_ID + " = $2";
 
-const updateProfile = "UPDATE nurse SET " + constant.TABLE_NURSE_DESIGNATION + " = $1, " +
-                    constant.TABLE_NURSE_HOSPITAL + " = $2 " +
-                    "WHERE " + constant.TABLE_NURSE_ID + " = $3";
+const updateProfile = "UPDATE nurse SET " + constant.TABLE_NURSE_DESIGNATION + " = $1 " +
+                    "WHERE " + constant.TABLE_NURSE_ID + " = $2";
 
 
 
-//confused about document Update
-const update_profile = async (designation, hospital, nid,mobile_no) => {
+const update_profile = async (designation,nid,mobile_no) => {
     try {
         const client = await getConnection.connect();
-
-        
-        const hidResult = await user.findhid(hospital);
-        if (hidResult.length === 0) {
-            
-            console.error('Hospital ID not found for:', hospital);
-            client.release();
-            return false;
-        }
-
-        const hid2 = hidResult[0].hospital_id.toString();
         const result2 = await client.query(update_user, [mobile_no, nid]);
-        const result = await client.query(updateProfile, [designation,hid2, nid]);
+        const result = await client.query(updateProfile, [designation,nid]);
         client.release();
         return result.rowsAffected === 1;
     } catch (error) {

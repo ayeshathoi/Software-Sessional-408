@@ -74,9 +74,9 @@ export const allTest = async () => {
   return ret.data;
 };
 
-export const deleteTest = async (data) => {
+export const deletetestItem = async (data) => {
   const ret = await axios.post(
-    `http://localhost:3000/hospital/test/delete/${testid}`,
+    `http://localhost:3000/hospital/test/delete/${data.test_id}`,
     data
   );
   return ret;

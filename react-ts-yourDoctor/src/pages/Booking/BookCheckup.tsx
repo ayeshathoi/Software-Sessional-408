@@ -21,7 +21,7 @@ import {
   TimePicker,
 } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import Header from '../navbar/header';
+import Header from '../navbar/header_nd';
 import Footer from '../navbar/footer';
 function BookCheckup() {
   const location = useLocation();
@@ -153,14 +153,13 @@ function BookCheckup() {
                     Tests: {selectedTests}
                   </Typography>
                 </div>
-                <label className="text-sm text-gray-300">Meeting type</label>
                 <div className="mb-8">
                   <div className="mt-4">
                     <Typography
                       variant="h6"
                       className="text-sm font-bold text-green-500"
                     >
-                      Visit Fee: {formData.price}
+                      Checkup Fee : {formData.price}
                     </Typography>
                     <hr />
                   </div>
@@ -182,10 +181,10 @@ function BookCheckup() {
                     <FormControlLabel
                       value="Cash"
                       control={<Radio />}
-                      label="Cash"
+                      label="Cash On delivery"
                       className="mt-4"
                     />
-                    <FormControlLabel
+                    {/* <FormControlLabel
                       value="Bkash"
                       control={<Radio />}
                       label="Bkash"
@@ -202,7 +201,7 @@ function BookCheckup() {
                       control={<Radio />}
                       label="Rocket"
                       className="mt-4"
-                    />
+                    /> */}
                   </RadioGroup>
                 </FormControl>
               </Paper>

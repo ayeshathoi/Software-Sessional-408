@@ -14,7 +14,7 @@ router.use(async (req,res,next) => {
 
 router.get('/details', doctorController.getDoctorDetails);
 router.post('/patientlist', doctorController.getPatient_List);
-router.post('/update-profile', doctorController.updateDoctorProfile);
+router.post('/updateProfile', doctorController.updateDoctorProfile);
 router.post('/addschedule', doctorController.addSchedule);
 router.get('/profile', doctorController.getProfile);
 

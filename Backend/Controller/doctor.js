@@ -34,9 +34,9 @@ const updateDoctorProfile = async (req, res) => {
         const designation=req.body.designation;
         const qualification=req.body.qualification;
         const mobile_no=req.body.mobile_no;
-
-    
-        const updated = await user.updateDoctorProfile(doctor_id, speciality, designation, qualification, mobile_no);
+        const new_patient_fee=req.body.new_patient_fee;
+        const old_patient_fee=req.body.old_patient_fee;
+        const updated = await user.updateDoctorProfile(doctor_id,new_patient_fee,old_patient_fee, speciality, designation, qualification, mobile_no);
 
         res.status(http_status.OK).json(updated);
     } catch (error) {
@@ -62,9 +62,7 @@ const getProfile = async (req, res) => {
 const getDoctorDetails = async (req, res) => {
     const doctor_id = req.user.uid;
     try {
-        console.log('here');
         const result = await user.getDoctorDetails(doctor_id);
-        console.log('Ashse', result);
         res.send(result);
     } catch (error) {
         console.error('Error getting doctor details:', error.message);
@@ -106,8 +104,6 @@ const updateSchedule = async (req, res) => {
         const slot=req.body.slot;
         const start_time=req.body.start_time;
         const end_time=req.body.end_time;
-        
-        console.log(timeline_id,weekday,slot,start_time,end_time)
     
         const updated = await user.editSchedule(weekday, slot, start_time, end_time,timeline_id);
 
@@ -121,7 +117,6 @@ const updateSchedule = async (req, res) => {
 
 const deleteSCHEDULE = async (req, res) => {
     const timeline_id = req.params.timeline_id;
-    console.log(timeline_id)
     try {
         const result = await user.deleteSchedule(timeline_id);
         res.status(http_status.OK).json({delete : "deleted timeline"});

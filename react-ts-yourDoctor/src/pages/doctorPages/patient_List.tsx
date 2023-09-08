@@ -1,5 +1,3 @@
-/* eslint-disable import/extensions */
-/* eslint-disable react/no-array-index-key */
 import { SetStateAction, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Tooltip } from '@mui/material';
@@ -34,11 +32,7 @@ function PatientArray({ selectedHospital }: PatientArrayProps) {
 
   useEffect(() => {
     if (selectedHospital) {
-      // const hospitalName = 'DMC'; // Replace with the actual hospital name
       const requestBody = { hospital_name: selectedHospital };
-
-      // axios
-      //   .post(`http://localhost:3000/doctor/patientlist`, requestBody)
       doctor_patient_list(requestBody).then((res) => {
         if (res) {
           const currentData: PatientDetails[] = res || [];

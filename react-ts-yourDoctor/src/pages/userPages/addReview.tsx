@@ -58,17 +58,14 @@ function AddReview() {
       <div className="flex flex-col items-center justify-center mt-36">
         <Paper elevation={3} className="p-4">
           <Typography variant="h5" align="center" color="primary" gutterBottom>
-            Add Review for {receiverName}
+            Review for {receiverName}
           </Typography>
-          <p>{serialNumber}</p>
           <form
             onSubmit={handleSubmit}
             className="w-full items-center justify-center mt-10"
           >
-            {/* Form fields for updating timeline data */}
-
             <div className="flex justify-between mt-4">
-              <Typography component="legend">Rating:</Typography>
+              <Typography component="legend">Rate the service : </Typography>
               <Rating
                 name="rating"
                 value={formData.rating || 0}
@@ -79,7 +76,7 @@ function AddReview() {
             </div>
             <div className="flex justify-between mt-4 w-full">
               <TextField
-                label="Complaint Text"
+                label="Any Recommendation"
                 name="complaint_text"
                 type="text"
                 value={formData.complaint_text}

@@ -35,6 +35,9 @@ const onlineAppointments = "INSERT INTO " + constant.TABLE_BOOKING + " ("
 
 const check_serial = "select * from booking where doctor_id = $1 and date = $2 and time = $3 and hospital_id = $4";
 
+const popularity = "UPDATE doctor SET popularity = $1 WHERE doctor_id = $2";
+const total_booking = "select * from booking where doctor_id = $1";
+
 const appointmentBooking = async (type,day,price,time,date,payment_method,payment_status,patient_mobile,patient_id,doctor_id,hospital_name) => {
     
     try {
@@ -66,6 +69,8 @@ const appointmentBooking = async (type,day,price,time,date,payment_method,paymen
                 return res_string;
         }
 
+        const result3 = await client.query(total_booking, [doctor_id]);
+        const popularity_result = await client.query(popularity, [result3.rows.length + 1,doctor_id]);
 
         if(hospital_name !=null){
             const hid = await user.findhid(hospital_name);

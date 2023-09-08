@@ -14,7 +14,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import Header from '../navbar/header';
+import Header from '../navbar/header_nd';
 import Footer from '../navbar/footer';
 
 interface Driver {
@@ -38,16 +38,6 @@ function AmbulanceSearch() {
   const [sortBy, setSortBy] = useState<'PriceLowToHigh' | 'PriceHighToLow'>('PriceLowToHigh'); // Default sorting order
 
   useEffect(() => {
-    // Make the HTTP GET request to the backend API
-    // axios
-    //   .get(`http://localhost:3000/patient/ambulanceall`)
-    //   .then((response) => {
-    //     setuserData(response.data);
-    //     setCount(response.data.length);
-    //   })
-    //   .catch((error) => {
-    //     console.error('Error fetching user profile:', error);
-    //   });
     ambulanceSearch().then((ret) => {
     if (ret) {
       setuserData(ret);
@@ -133,7 +123,7 @@ function AmbulanceSearch() {
           <div className="flex ml-4">
             <Grid container spacing={3}>
               {filteredDriver.map((driver, index) => (
-                <Grid item xs={4} key={index}>
+                <Grid item xs={5} key={index}>
                   <Card>
                     <CardMedia
                       component="img"
@@ -147,16 +137,22 @@ function AmbulanceSearch() {
                         Mobile No: {driver.driver_phone}
                       </Typography>
                       <Typography variant="body2">
-                        Ambulance Type: {driver.ambulance_type}
+                        {driver.ambulance_type} Ambulance
                       </Typography>
                       <Typography variant="body2">
                         Ambulance Fare: {driver.ambulance_fare}
                       </Typography>
                       <Typography variant="body2">
-                        Thana : {driver.thana}
+                        Street   : {driver.street}
                       </Typography>
                       <Typography variant="body2">
-                        City: {driver.city}
+                        Thana    : {driver.thana}
+                      </Typography>
+                      <Typography variant="body2">
+                        City     : {driver.city}
+                      </Typography>
+                      <Typography variant="body2">
+                        District : {driver.district}
                       </Typography>
                       <Typography variant="body2">
                         Hospital: {driver.hospital}

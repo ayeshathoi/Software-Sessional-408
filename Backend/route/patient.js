@@ -12,7 +12,7 @@ router.use(async (req,res,next) => {
         res.send("UNAUTHORIZED");
     }
 });
-router.post('/', patient.update_profile);
+router.post('/updateProfile', patient.update_profile);
 router.post('/speciality', patient.doctor_speciality_search);
 router.post('/name', patient.doctor_name_search);
 router.get('/appointment', patient.all_Appointments);

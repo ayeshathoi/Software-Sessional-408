@@ -14,8 +14,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { doctorSearch } from '@/api/apiCalls';
-import Header from '../navbar/header';
+import Header from '../navbar/header_nd';
 import Footer from '../navbar/footer';
 
 interface Doctor {
@@ -29,6 +28,7 @@ interface Doctor {
   hospital_name: string;
   doctor_id: number;
   weekday: string;
+  popularity: number;
 }
 
 function DoctorSearch() {
@@ -45,16 +45,15 @@ function DoctorSearch() {
   >('speciality'); // Track selected search criteria
 
   useEffect(() => {
-    // Make the HTTP GET request to the backend API
-    // axios
-    //   .get(`http://localhost:3000/patient/doctorall`)
-    //   .then((response) => {
-    //     setuserData(response.data); // Set the fetched data to the state
-    //     setCount(response.data.length);
-    //     console.log(response.data);
 
     doctorSearch().then((ret) => {
-      if (ret) {
+      
+    if(ret){
+      for (let i = 0; i < ret.length; i++) {
+
+          if(ret[i].popularity == null)
+            ret[i].popularity = 0;
+        }
         setuserData(ret);
         setCount(ret.length);
         // Sort the data based on the selected sorting option
@@ -67,8 +66,15 @@ function DoctorSearch() {
           sortedData.sort((a, b) => b.new_patient_fee - a.new_patient_fee);
           setuserData(sortedData);
         }
-      } else {
-        console.error('Error fetching user profile:', error);
+      
+        else if (sortBy === 'Popularity') {
+          const sortedData = [...ret];
+          sortedData.sort((a, b) => b.popularity - a.popularity);
+          setuserData(sortedData);
+        }
+      }
+      else{
+        console.error('Error fetching user profile:', Error);
       }
     });
   }, [sortBy]);
@@ -78,10 +84,7 @@ function DoctorSearch() {
   };
 
   const getUniqueSpecialties = () => {
-    // Create a Set to store unique specialties
     const uniqueSpecialtiesSet = new Set();
-
-    // Iterate through user data and add specialties to the Set
     user.forEach((doctor) => {
       if (!uniqueSpecialtiesSet.has(doctor.speciality)) {
         uniqueSpecialtiesSet.add(doctor.speciality);
@@ -187,6 +190,7 @@ function DoctorSearch() {
             onChange={handleSortChange}
           >
             <option value="">Select</option>
+            <option value="Popularity">Popularity</option>
             <option value="Price Low to High">Visit Low to High</option>
             <option value="Price High to Low">Visit High to Low</option>
           </select>
@@ -203,11 +207,6 @@ function DoctorSearch() {
             </div>
             <div className="side-nav-item">
               <label className="flex items-center text-sm">
-                <input
-                  type="checkbox"
-                  className="form-checkbox h-5 w-5 text-gray-600 mr-2"
-                  onChange={(e) => setSelectedQualification(e.target.value)}
-                />
                 Qualification
                 <select
                   name="qualification"
@@ -224,11 +223,6 @@ function DoctorSearch() {
                 </select>
               </label>
               <label className="flex items-center text-sm mt-4">
-                <input
-                  type="checkbox"
-                  className="form-checkbox h-5 w-5 text-gray-600 mr-2"
-                  onChange={(e) => setSelectedWeekday(e.target.value)}
-                />
                 WeekDay
                 <select
                   name="weekday"
@@ -246,13 +240,6 @@ function DoctorSearch() {
                   <option value="Friday">Friday</option>
                 </select>
               </label>
-              <label className="flex items-center text-sm mt-4">
-                <input
-                  type="checkbox"
-                  className="form-checkbox h-5 w-5 text-gray-600 mr-2"
-                />
-                Popularity
-              </label>
             </div>
           </div>
 
@@ -265,7 +252,7 @@ function DoctorSearch() {
                       component="img"
                       alt="Doctor"
                       height="100"
-                      image="https://cdn.vectorstock.com/i/1000x1000/27/71/female-doctor-vector-38002771.webp"
+                      image="https://hips.hearstapps.com/hmg-prod/images/types-of-doctors-1600114658.jpg?crop=1.00xw:1.00xh;0,0&resize=800:*"
                     />
                     <CardContent>
                       <Typography variant="h6">{doctor.uname}</Typography>

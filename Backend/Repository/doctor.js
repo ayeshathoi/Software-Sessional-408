@@ -152,16 +152,16 @@ const updated_user = "UPDATE users SET " + constant.TABLE_USER_MOBILE_NO + " = $
                     "WHERE " + constant.TABLE_USER_ID + " = $2";
 const updatedDoctor = `
                     UPDATE doctor 
-                    SET speciality = $1, designation = $2, qualification = $3
-                    WHERE doctor_id = $4
+                    SET speciality = $1, designation = $2, qualification = $3, new_patient_fee = $4, old_patient_fee = $5
+                    WHERE doctor_id = $6
                 `;
 
-const updateDoctorProfile = async (doctor_id, speciality,designation,qualification,mobile_no) => {
+const updateDoctorProfile = async (doctor_id,new_patient_fee,old_patient_fee,speciality,designation,qualification,mobile_no) => {
     try {
 	    const client = await getConnection.connect();
 	    
         const result2 = await client.query(updated_user, [mobile_no, doctor_id]);
-        const result = await client.query(updatedDoctor, [speciality,designation,qualification,doctor_id]);       
+        const result = await client.query(updatedDoctor, [speciality,designation,qualification,new_patient_fee,old_patient_fee,doctor_id]);       
         
         client.release();
         return updatedDoctor.rowsAffected === 1;
@@ -179,6 +179,8 @@ const getDoctorProfile = async (doctor_id) => {
                 d.speciality,
                 d.qualification,
                 d.designation,
+                d.new_patient_fee,
+                d.old_patient_fee,
                 u.${constant.TABLE_USER_USERNAME} AS name,
                 u.${constant.TABLE_USER_MOBILE_NO} AS mobile_no
             FROM doctor d

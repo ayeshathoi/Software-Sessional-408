@@ -26,12 +26,15 @@ const getProfile = async (req, res) => {
 
 const update_profile = async (req, res) => {
     const driver_id = req.user.uid;
-    const hospital = req.body.hospital;
     const mobile_no = req.body.mobile_no;
+    const street = req.body.street;
+    const thana = req.body.thana;
+    const city = req.body.city;
+    const district = req.body.district;
     
     try
     {
-        const result = await user.update_profile(hospital, driver_id,mobile_no);
+        const result = await user.update_profile(driver_id,mobile_no,street,thana,city,district);
         res.status(http_status.OK).json({ result });
     } catch (error) {
         console.error('Error :', error.message);

@@ -1,11 +1,10 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import HeaderDoctor from '../navbar/headerdoctor';
 import Footer from '../navbar/footer';
 import Doctor from '@/assets/doctor.jpg';
 axios.defaults.withCredentials = true;
+
 function DoctorProfileUpdate() {
   const [isEditing, setIsEditing] = useState(false);
   const [prevForm, setPrevForm] = useState({
@@ -14,6 +13,8 @@ function DoctorProfileUpdate() {
     designation: '',
     qualification: '',
     mobile_no: '',
+    old_patient_fee: '',
+    new_patient_fee: '',
   });
 
   const [formData, setFormData] = useState({
@@ -22,40 +23,30 @@ function DoctorProfileUpdate() {
     designation: '',
     qualification: '',
     mobile_no: '',
+    old_patient_fee: '',
+    new_patient_fee: '',
   });
 
   useEffect(() => {
     axios
       .get(`http://localhost:3000/doctor/profile`)
       .then((response) => {
-        setPrevForm({
-          name: response.data.name,
-          speciality: response.data.speciality,
-          designation: response.data.designation,
-          qualification: response.data.qualification,
-          mobile_no: response.data.mobile_no,
-        });
-        setFormData({
-          name: response.data.name,
-          speciality: response.data.speciality,
-          designation: response.data.designation,
-          qualification: response.data.qualification,
-          mobile_no: response.data.mobile_no,
-        });
+        const userData = response.data;
+        setPrevForm(userData);
+        setFormData(userData);
       })
       .catch((error) => {
         console.error('Error fetching doctor profile:', error);
       });
-  });
+  }, []);
 
-  console.log('dehfbk', prevForm);
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
+
   const handleUpdate = async () => {
     try {
-      // Send the formData to the server for update
       const response = await axios.post(
         `http://localhost:3000/doctor/updateProfile`,
         formData
@@ -69,22 +60,21 @@ function DoctorProfileUpdate() {
 
   return (
     <>
-      <div >
+      <div>
         <HeaderDoctor />
       </div>
       <div className="mt-16 pt-16 py-8 px-4 flex justify-center items-center">
-
-      <div className="w-1/5 p-6 bg-white shadow-md">
+        <div className="w-1/5 p-6 bg-white shadow-md">
           <img src={Doctor} alt="Doctor" className="w-32 h-32 rounded-full mx-auto" />
           <h2 className="text-xl font-semibold mb-2">{formData.name}</h2>
-          <p className="text-gray-600">{formData.speciality},{formData.designation}</p>
+          <p className="text-gray-600">{formData.speciality}, {formData.designation}</p>
           <p className="text-gray-600">{formData.qualification}</p>
         </div>
         <div className="w-1/2">
           <div className="w-96 p-6 rounded-lg bg-white shadow-md">
             <h1 className="text-2xl font-bold mb-4">Update Doctor Profile</h1>
             <form>
-              {/* Specialist */}
+              {/* Speciality */}
               <div className="mb-4">
                 <div className="flex justify-center items-center">
                   <div className="w-1/2 bg-lightblue p-2 rounded-tl rounded-bl">
@@ -105,7 +95,7 @@ function DoctorProfileUpdate() {
                   </div>
                 </div>
               </div>
-              {/* designation */}
+              {/* Designation */}
               <div className="mb-4">
                 <div className="flex">
                   <div className="w-1/2 bg-lightblue p-2 rounded-tl rounded-bl">
@@ -122,12 +112,11 @@ function DoctorProfileUpdate() {
                       />
                     ) : (
                       <p>{formData.designation}</p>
-
                     )}
                   </div>
                 </div>
               </div>
-              {/* qualification */}
+              {/* Qualification */}
               <div className="mb-4">
                 <div className="flex">
                   <div className="w-1/2 bg-lightblue p-2 rounded-tl rounded-bl">
@@ -148,7 +137,6 @@ function DoctorProfileUpdate() {
                   </div>
                 </div>
               </div>
-
               {/* Contact no. */}
               <div className="mb-4">
                 <div className="flex">
@@ -166,6 +154,47 @@ function DoctorProfileUpdate() {
                       />
                     ) : (
                       <p>{formData.mobile_no}</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className="mb-4">
+                <div className="flex justify-center items-center">
+                  <div className="w-1/2 bg-lightblue p-2 rounded-tl rounded-bl">
+                    <label className="font-semibold">New Patient Fee:</label>
+                  </div>
+                  <div className="w-1/2 border border-lightblue rounded-tr rounded-br">
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        name="new_patient_fee"
+                        value={formData.new_patient_fee}
+                        onChange={handleChange}
+                        className="w-full rounded border-none px-3 py-2"
+                      />
+                    ) : (
+                      <p>{formData.new_patient_fee}</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+              {/* Old Patient Fee */}
+              <div className="mb-4">
+                <div className="flex justify-center items-center">
+                  <div className="w-1/2 bg-lightblue p-2 rounded-tl rounded-bl">
+                    <label className="font-semibold">Old Patient Fee:</label>
+                  </div>
+                  <div className="w-1/2 border border-lightblue rounded-tr rounded-br">
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        name="old_patient_fee"
+                        value={formData.old_patient_fee}
+                        onChange={handleChange}
+                        className="w-full rounded border-none px-3 py-2"
+                      />
+                    ) : (
+                      <p>{formData.old_patient_fee}</p>
                     )}
                   </div>
                 </div>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Header from '../navbar/header';
+import Header from '../navbar/header_nd';
 import Footer from '../navbar/footer';
 import User from '@/assets/user.webp';
 

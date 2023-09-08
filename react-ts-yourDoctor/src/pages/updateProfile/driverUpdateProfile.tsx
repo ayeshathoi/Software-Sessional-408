@@ -1,59 +1,44 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-import { SetStateAction, useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import HeaderCommon from '../navbar/headerdoctor';
 import Footer from '../navbar/footer';
-import axios from 'axios';
 import Driver from '@/assets/driver.jpg';
 axios.defaults.withCredentials = true;
 
-function DriverProfileUpdate() {  
+function DriverProfileUpdate() {
   const [isEditing, setIsEditing] = useState(false);
-  const [prevForm, setPrevForm] = useState({
-    name: '',
-    hospital: '',
-    mobile_no: '',
-   
-  });
   const [formData, setFormData] = useState({
     name: '',
-    hospital: '',
     mobile_no: '',
-   
+    street: '',
+    thana: '',
+    city: '',
+    district: '',
   });
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:3000/driver/profile`)
-      .then((response) => {
-        console.log('API Response:', response.data); 
-        setPrevForm({
-          name: response.data.name,
-          hospital: response.data.hospital,
-          mobile_no: response.data.mobile_no,
-        });
-        setFormData({
-          name: response.data.name,
-          hospital: response.data.hospital,
-          mobile_no: response.data.mobile_no,
-        });
-      })
-      .catch((error) => {
+    async function fetchData() {
+      try {
+        const response = await axios.get('http://localhost:3000/driver/profile');
+        const userData = response.data;
+        setFormData(userData);
+      } catch (error) {
         console.error('Error fetching driver profile:', error);
-      });
-  },);
+      }
+    }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    fetchData();
+  }, []);
+
+  const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
-  
- 
+
   const handleUpdate = async () => {
     try {
-      // Send the formData to the server for update
-      const response = await axios.put(` http://localhost:3000/driver/editProfile`, formData); 
-      console.log('Updated Data:', response.data); 
+      const response = await axios.put('http://localhost:3000/driver/editProfile', formData);
+      console.log('Updated Data:', response.data);
       setIsEditing(false);
     } catch (error) {
       console.error('Error updating profile:', error);
@@ -65,44 +50,21 @@ function DriverProfileUpdate() {
       <div className="bg-lightpink py-6">
         <HeaderCommon />
       </div>
-      <div className="flex">
-        {/* Driver's Photo, Name*/}
-        <div className="w-1/4 p-6 bg-white shadow-md">
-          <img src={Driver} alt="Driver" className="h-40 w-full object-cover" />
+      <div className="mt-16 pt-16 py-8 px-4 flex justify-center items-center">
+        <div className="w-1/5 p-6 bg-white shadow-md">
+          <img src={Driver} alt="Driver" className="w-32 h-32 rounded-full mx-auto" />
           <h2 className="text-xl font-semibold mb-2">{formData.name}</h2>
-          
         </div>
-        <div className="w-3/4 p-6 bg-lightpink">
+        <div className="w-1/2">
           <div className="w-96 p-6 rounded-lg bg-white shadow-md">
             <h1 className="text-2xl font-bold mb-4">Update Driver Profile</h1>
             <form>
-              {/* Workplace */}
               <div className="mb-4">
-                <div className="flex">
-                  <div className="w-1/2 bg-lightblue p-2 rounded-tl rounded-bl">
-                    <label className="font-semibold">Workplace:</label>
-                  </div>
-                  <div className="w-1/2 border border-lightblue rounded-tr rounded-br">
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        name="hospital"
-                        value={formData.hospital}
-                        onChange={handleChange}
-                        className="w-full rounded border-none px-3 py-2"
-                      />
-                    ) : (
-                      <p>{formData.hospital}</p>
-                    )}
-                  </div>
-                </div>
               </div>
-              
-              {/* Contact no. */}
               <div className="mb-4">
                 <div className="flex">
                   <div className="w-1/2 bg-lightblue p-2 rounded-tl rounded-bl">
-                    <label className="font-semibold">Contact no.:</label>
+                    <label className="font-semibold">Mobile No.:</label>
                   </div>
                   <div className="w-1/2 border border-lightblue rounded-tr rounded-br">
                     {isEditing ? (
@@ -115,6 +77,86 @@ function DriverProfileUpdate() {
                       />
                     ) : (
                       <p>{formData.mobile_no}</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className="mb-4">
+                <div className="flex">
+                  <div className="w-1/2 bg-lightblue p-2 rounded-tl rounded-bl">
+                    <label className="font-semibold">Street:</label>
+                  </div>
+                  <div className="w-1/2 border border-lightblue rounded-tr rounded-br">
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        name="street"
+                        value={formData.street}
+                        onChange={handleChange}
+                        className="w-full rounded border-none px-3 py-2"
+                      />
+                    ) : (
+                      <p>{formData.street}</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className="mb-4">
+                <div className="flex">
+                  <div className="w-1/2 bg-lightblue p-2 rounded-tl rounded-bl">
+                    <label className="font-semibold">Thana:</label>
+                  </div>
+                  <div className="w-1/2 border border-lightblue rounded-tr rounded-br">
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        name="thana"
+                        value={formData.thana}
+                        onChange={handleChange}
+                        className="w-full rounded border-none px-3 py-2"
+                      />
+                    ) : (
+                      <p>{formData.thana}</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className="mb-4">
+                <div className="flex">
+                  <div className="w-1/2 bg-lightblue p-2 rounded-tl rounded-bl">
+                    <label className="font-semibold">City:</label>
+                  </div>
+                  <div className="w-1/2 border border-lightblue rounded-tr rounded-br">
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        name="city"
+                        value={formData.city}
+                        onChange={handleChange}
+                        className="w-full rounded border-none px-3 py-2"
+                      />
+                    ) : (
+                      <p>{formData.city}</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className="mb-4">
+                <div className="flex">
+                  <div className="w-1/2 bg-lightblue p-2 rounded-tl rounded-bl">
+                    <label className="font-semibold">District:</label>
+                  </div>
+                  <div className="w-1/2 border border-lightblue rounded-tr rounded-br">
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        name="district"
+                        value={formData.district}
+                        onChange={handleChange}
+                        className="w-full rounded border-none px-3 py-2"
+                      />
+                    ) : (
+                      <p>{formData.district}</p>
                     )}
                   </div>
                 </div>

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Grid, Paper, Button, Typography, Container } from '@mui/material';
 
-import {allTest , deleteTest} from '@/api/apiCalls';
+import {allTest , deletetestItem} from '@/api/apiCalls';
 
 interface Tests {
   testid: number;
@@ -17,16 +17,6 @@ function PatientTests() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Make the HTTP GET tests to the backend API
-    // axios
-    //   .get(`http://localhost:3000/hospital/test`)
-    //   // api call
-    //   .then((response) => {
-    //     setTests(response.data); // Set the fetched data to the state
-    //   })
-      // .catch((error) => {
-      //   console.error('Error fetching data:', error);
-      // });
       allTest().then((res) => {
       if(res){
         setTests(res);
@@ -40,16 +30,8 @@ function PatientTests() {
   const deleteTest = async (testid: number) => {
     try {
       const data = {test_id: testid}
-    //   await axios
-    //     .post(`http://localhost:3000/hospital/test/delete/${testid}`,data)
-    //     .then((res) => {
-    //       alert('Test Deleted Successfully');
-    //       navigate(`/hospitalHome`);
-    //     });
-    // } catch (err) {
-    //   console.log(err);
-    // }
-    const res = await deleteTest(data);
+      console.log("test id ",data);
+    const res = await deletetestItem(data);
     if(res){
         alert('Test Deleted Successfully');
         navigate(`/hospitalHome`);

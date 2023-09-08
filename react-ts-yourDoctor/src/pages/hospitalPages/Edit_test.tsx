@@ -35,13 +35,6 @@ function EditTest() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      // await axios
-      //   .post(`http://localhost:3000/hospital/updateprice`, formData)
-      //   .then((res) => {
-      //     console.log(formData);
-      //     alert('Test Updated Successfully');
-      //     navigate(`/hospitalHome`);
-      //   });
       const res = await editTestprice(formData);
       if(res){
         alert('Test Updated Successfully');

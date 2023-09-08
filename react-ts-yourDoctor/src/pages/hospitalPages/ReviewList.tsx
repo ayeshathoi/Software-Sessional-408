@@ -1,7 +1,7 @@
 /* eslint-disable import/extensions */
 // page for hospital home and verify employee
 import { useEffect, useState } from 'react';
-import { Grid, Paper, Typography, Container } from '@mui/material';
+import { Grid, Paper, Typography, Container, Rating  } from '@mui/material';
 import { allReview_hospital } from '@/api/apiCalls';
 
 interface Reviews {
@@ -19,16 +19,6 @@ interface Reviews {
 function ReviewsPatient() {
   const [reviews, setRevies] = useState([]);
   useEffect(() => {
-    // Make the HTTP GET request to the backend API
-    // axios
-    //   .get(`http://localhost:3000/review`)
-    //   // api call
-    //   .then((response) => {
-    //     setRevies(response.data); // Set the fetched data to the state
-    //   })
-    //   .catch((error) => {
-    //     console.error('Error fetching data:', error);
-    //   });
     allReview_hospital().then((ret) => {
       if (ret) {
         setRevies(ret);
@@ -94,7 +84,7 @@ function ReviewsPatient() {
                         {request.time}
                       </td>
                       <td className="px-6 py-4 whitespace-no-wrap">
-                        {request.rating} Add Stars Here
+                        {request.rating}/5
                       </td>
                       <td className="px-6 py-4 whitespace-no-wrap">
                         {request.complaint_text}

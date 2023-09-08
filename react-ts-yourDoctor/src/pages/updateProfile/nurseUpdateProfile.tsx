@@ -1,82 +1,44 @@
-import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import HeaderCommon from '../navbar/headerdoctor';
 import Footer from '../navbar/footer';
 import Nurse from '@/assets/nurse.jpg';
 axios.defaults.withCredentials = true;
-interface FormData {
-  hospital: string;
-  designation: string;
-  mobile: string;
-}
-
-interface ProfileSectionProps {
-  label: string;
-  value: string;
-  isEditing: boolean;
-  onChange: (field: string, value: string) => void;
-}
-
-function ProfileSection({
-  label,
-  value,
-  isEditing,
-  onChange,
-}: ProfileSectionProps) {
-  return (
-    <div className="mb-4">
-      <div className="flex">
-        <div className="w-1/2 bg-lightblue p-2 rounded-tl rounded-bl">
-          <label className="font-semibold">{label}:</label>
-        </div>
-        <div className="w-1/2 border border-lightblue rounded-tr rounded-br">
-          {isEditing ? (
-            <input
-              type="text"
-              value={value}
-              onChange={(e) => onChange(label, e.target.value)}
-              className="w-full rounded border-none px-3 py-2"
-            />
-          ) : (
-            <p>{value}</p>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
 
 function NurseProfileUpdate() {
-  const { nurse_id } = useParams<{ nurse_id: string }>();
-  const initialData: FormData = {
-    hospital: 'City Medical Hospital',
-    designation: 'Senior Nurse',
-    mobile: '123-456-7890',
-  };
-
-  const [formData, setFormData] = useState(initialData);
   const [isEditing, setIsEditing] = useState(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    designation: '',
+    mobile_no: '',
+  });
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await axios.get('http://localhost:3000/nurse/profile');
+        const userData = response.data;
+        setFormData(userData);
+      } catch (error) {
+        console.error('Error fetching nurse profile:', error);
+      }
+    }
+
+    fetchData();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
-  // const { doctor_id } = useParams();
+
   const handleUpdate = async () => {
     try {
-      setIsLoading(true);
-      const response = await axios.put(
-        `http://localhost:3000/doctor/update-profile/${nurse_id}`,
-        formData
-      );
+      const response = await axios.put('http://localhost:3000/nurse/editProfile', formData);
       console.log('Updated Data:', response.data);
       setIsEditing(false);
     } catch (error) {
-      console.error('Error updating doctor profile:', error);
-    } finally {
-      setIsLoading(false);
+      console.error('Error updating profile:', error);
     }
   };
 
@@ -86,55 +48,75 @@ function NurseProfileUpdate() {
         <HeaderCommon />
       </div>
       <div className="mt-16 pt-16 py-8 px-4 flex justify-center items-center">
-        <div className="w-1/4 p-6 bg-white shadow-md">
-          <img src={Nurse} alt="Doctor" className="w-32 h-32 rounded-full mx-auto" />
+        <div className="w-1/5 p-6 bg-white shadow-md">
+          <img src={Nurse} alt="Nurse" className="w-32 h-32 rounded-full mx-auto" />
+          <h2 className="text-xl font-semibold mb-2">{formData.name}</h2>
         </div>
         <div className="w-1/2">
           <div className="w-96 p-6 rounded-lg bg-white shadow-md">
             <h1 className="text-2xl font-bold mb-4">Update Nurse Profile</h1>
             <form>
-              {/* designation */}
-              <ProfileSection
-                label="Designation"
-                value={formData.designation}
-                isEditing={isEditing}
-                onChange={handleChange}
-              />
-              {/* workplace */}
-              <ProfileSection
-                label="Hospital Name"
-                value={formData.hospital}
-                isEditing={isEditing}
-                onChange={handleChange}
-              />
-
-              {/* Contact no. */}
-              <ProfileSection
-                label="Contact no"
-                value={formData.mobile}
-                isEditing={isEditing}
-                onChange={handleChange}
-              />
+              <div className="mb-4">
+                <div className="flex">
+                  <div className="w-1/2 bg-lightblue p-2 rounded-tl rounded-bl">
+                    <label className="font-semibold">Designation</label>
+                  </div>
+                  <div className="w-1/2 border border-lightblue rounded-tr rounded-br">
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        name="designation"
+                        value={formData.designation}
+                        onChange={handleChange}
+                        className="w-full rounded border-none px-3 py-2"
+                      />
+                    ) : (
+                      <p>{formData.designation}</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className="mb-4">
+                <div className="flex">
+                  <div className="w-1/2 bg-lightblue p-2 rounded-tl rounded-bl">
+                    <label className="font-semibold">Contact No :</label>
+                  </div>
+                  <div className="w-1/2 border border-lightblue rounded-tr rounded-br">
+                    {isEditing ? (
+                      <input
+                        type="tel"
+                        name="mobile_no"
+                        value={formData.mobile_no}
+                        onChange={handleChange}
+                        className="w-full rounded border-none px-3 py-2"
+                      />
+                    ) : (
+                      <p>{formData.mobile_no}</p>
+                    )}
+                  </div>
+                </div>
+              </div>
             </form>
-            {isLoading ? (
-              <button
-                type="button"
-                className="mt-4 mx-auto px-4 py-2 bg-blue-500 text-white rounded cursor-not-allowed"
-              >
-                Updating...
-              </button>
+            {isEditing ? (
+              <div className="relative z-10">
+                <button
+                  type="button"
+                  onClick={handleUpdate}
+                  className="mt-4 mx-auto px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                >
+                  Update
+                </button>
+              </div>
             ) : (
-              <button
-                type="button"
-                onClick={isEditing ? handleUpdate : () => setIsEditing(true)}
-                className={`mt-4 mx-auto px-4 py-2 ${
-                  isEditing ? 'bg-blue-500' : 'bg-green-500'
-                } text-white rounded hover:bg-${
-                  isEditing ? 'blue-600' : 'green-600'
-                }`}
-              >
-                {isEditing ? 'Update' : 'Edit Profile'}
-              </button>
+              <div className="relative z-10">
+                <button
+                  type="button"
+                  onClick={() => setIsEditing(true)}
+                  className="mt-4 mx-auto px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                >
+                  Edit Profile
+                </button>
+              </div>
             )}
           </div>
         </div>

@@ -13,6 +13,7 @@ interface Checkup {
   uname: string;
   mobile_no: string;
   booking_id: number;
+  testnames: string;
 }
 
 function PatientArray() {
@@ -96,6 +97,9 @@ function PatientArray() {
                 <div>
                   <p className="text-lg font-semibold">Name: {test.uname}</p>
                   <p className="text-gray-600">mobile no. : {test.mobile_no}</p>
+                  <p className="text-sm text-gray-500">
+                    Tests : {test.testnames}
+                  </p>
                   <hr />
                 </div>
                 <div className="text-right">

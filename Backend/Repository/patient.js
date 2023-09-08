@@ -76,14 +76,21 @@ const checkUpDetails = async (pid) => {
     try {
         const client = await getConnection.connect();
         const result = await client.query(CheckUp, [pid]);
+        var testnames = "";
 
         for (let i = 0; i < result.rows.length; i++) {
             const test = await client.query(testNames, [result.rows[i].booking_id]);
-            result.rows[i].test = [];
             for (let j = 0; j < test.rows.length; j++) {
-                result.rows[i].test[j]= test.rows[j].testname;
+                if (j === test.rows.length - 1) {
+                    testnames += test.rows[j].testname;
+                }
+                else
+                    testnames += test.rows[j].testname + ", ";
             }
+            result.rows[i].testnames = testnames;
+            testnames = "";
         }
+        
         client.release();
         return result.rows;
     }

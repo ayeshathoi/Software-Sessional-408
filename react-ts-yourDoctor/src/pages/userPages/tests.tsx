@@ -14,7 +14,7 @@ import { set } from 'date-fns';
 interface Checkup {
   time: string;
   date: string;
-  testname: string[];
+  testnames: string;
   total_price: number;
   uname: string;
   booking_id: number;
@@ -38,11 +38,7 @@ function Tests() {
 
   useEffect(() => {
     patient_checkup()
-      .then((patient_checkup_list) => {
-
-        testname = patient_checkup_list.map((test));
-        console.log(testname);
-    
+      .then((patient_checkup_list) => {    
         
         const currentTests: Checkup[] = patient_checkup_list || [];
 
@@ -140,11 +136,7 @@ function Tests() {
                     Name: {test.uname}
                   </p>
                   <p className="text-sm text-gray-500">
-                    Tests: 
-                    {testnamesall.map((testname, index) =>
-                      <p>{testnamesall[index]}</p>
-                    )}
-
+                    Tests : {test.testnames}
                   </p>
                 </div>
                 <div className="text-right">

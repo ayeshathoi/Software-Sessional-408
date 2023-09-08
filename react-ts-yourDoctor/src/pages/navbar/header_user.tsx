@@ -2,7 +2,7 @@
 import { Link } from 'react-router-dom';
 import { Box, Button, Toolbar, Tooltip } from '@mui/material';
 import PersonRemoveSharpIcon from '@mui/icons-material/PersonRemoveSharp';
-import Header from '@/pages/navbar/header.tsx';
+import Header from '../navbar/loginHeader';
 import { logout } from '@/api/apiCalls';
 
 function HeaderUser() {

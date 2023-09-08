@@ -10,7 +10,7 @@ import PersonRemoveSharpIcon from '@mui/icons-material/PersonRemoveSharp';
 import { Toolbar, Button, Tooltip } from '@mui/material';
 import DoctorImage from '@/assets/doctor.jpg';
 import patient from '@/assets/appointment.jpg';
-import HeaderDoctor from '../navbar/header';
+import HeaderDoctor from '../navbar/loginHeader';
 import Footer from '../navbar/footer';
 import PatientArray from './patient_List';
 import { getDoctorDetails, logout } from '@/api/apiCalls';

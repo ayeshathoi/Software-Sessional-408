@@ -21,7 +21,7 @@ import {
   TimePicker,
 } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import Header from '../navbar/header';
+import Header from '../navbar/loginHeader';
 import Footer from '../navbar/footer';
 function BookCheckup() {
   const location = useLocation();

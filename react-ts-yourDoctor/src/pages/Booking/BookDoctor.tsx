@@ -25,7 +25,7 @@ import {
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { format } from 'date-fns';
-import Header from '../navbar/header';
+import Header from '../navbar/loginHeader';
 import Footer from '../navbar/footer';
 
 function BookDoctor() {

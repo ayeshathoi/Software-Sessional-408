@@ -2,16 +2,16 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { viewPrescription, addprescription } from '@/api/apiCalls';
-
+import HeaderDoctor from '../navbar/headerdoctor';
+import Footer from '../navbar/footer';
 // Define the CSS styles as JavaScript objects
 const styles = {
   prescriptionContainer: {
-    maxWidth: '400px',
+    maxWidth: '600px',
     margin: '0 auto',
-    padding: '20px',
+    padding: '100px',
     border: '1px solid #ccc',
     borderRadius: '5px',
-    backgroundColor: '#f7f7f7',
   },
   prescriptionHeader: {
     textAlign: 'center',
@@ -61,14 +61,10 @@ function Prescription() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch prescription data when component mounts
     const fetchData = async () => {
       try {
         const data = await viewPrescription(bookingId);
-
-        // const data2 = await data.json();
         if (data.prescriptionDetails === 'No prescriptions found') {
-          // Set the state to indicate no prescription found
           setNoPrescriptionFound(true);
           alert('No prescription found for this booking.');
         } else {
@@ -109,6 +105,9 @@ function Prescription() {
   };
 
   return (
+    <>
+      <div>
+        <HeaderDoctor />
     <div style={styles.prescriptionContainer}>
       <h2 style={styles.prescriptionHeader}>Create Prescription</h2>
       <form onSubmit={handleSubmit}>
@@ -167,6 +166,10 @@ function Prescription() {
         </button>
       </form>
     </div>
+
+        <Footer />
+      </div>
+    </>
   );
 }
 

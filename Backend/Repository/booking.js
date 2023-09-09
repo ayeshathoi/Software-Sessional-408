@@ -98,6 +98,7 @@ const checkup = "INSERT INTO " + constant.TABLE_BOOKING + " ("
                 + constant.TABLE_BOOKING_TYPE + ", "
                 + constant.TABLE_BOOKING_TOTAL_PRICE + ", "
                 + constant.TABLE_BOOKING_TIME + ", "
+                + "end_time ,"
                 + constant.TABLE_BOOKING_DATE + ", "
                 + constant.TABLE_BOOKING_PAYMENT_METHOD + ", "
                 + constant.TABLE_BOOKING_PAYMENT_STATUS + ", "
@@ -105,7 +106,7 @@ const checkup = "INSERT INTO " + constant.TABLE_BOOKING + " ("
                 + constant.TABLE_BOOKING_STATUS + ", "
                 + constant.TABLE_BOOKING_PATIENT_ID + ", "
                 + constant.TABLE_HOSPITAL_ID + ") "
-                + "VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)";
+                + "VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)";
 
 const search_testID = "SELECT testid,price FROM  test " + 
                         " WHERE " + constant.TABLE_TEST_NAME + " = $1 "
@@ -142,7 +143,7 @@ const select_test = async (test_names,hospital_name) =>
 }                            
 
 
-const bookingCheckup = async (type,price,time,date,payment_method,payment_status,patient_mobile,patient_id,hospital_name,test_names) =>
+const bookingCheckup = async (type,price,time,end_time,date,payment_method,payment_status,patient_mobile,patient_id,hospital_name,test_names) =>
 {
     try {
         const stat = "pending";
@@ -154,7 +155,7 @@ const bookingCheckup = async (type,price,time,date,payment_method,payment_status
             const result = await client.query(search_testID, [test_names[i],hid2]);
             test_id.push(result.rows[0].testid);
         }
-        const result = await client.query(checkup, [type,price,time,date,payment_method,payment_status,
+        const result = await client.query(checkup, [type,price,time,end_time,date,payment_method,payment_status,
             patient_mobile,stat,patient_id,hid2]);
         
         const bid = await client.query(last_booking_id);

@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, Paper, Typography, Button, Container } from '@mui/material';
-import { pending_patient_req } from '@/api/apiCalls';
+import { pending_patient_req,remove_req_patient } from '@/api/apiCalls';
 
 interface Requests {
   booking_id: number;
@@ -13,6 +13,7 @@ interface Requests {
   patient_mobile: string;
   date: string;
   time: string;
+  end_time: string;
 }
 
 function PatientRequests() {
@@ -35,11 +36,23 @@ function PatientRequests() {
     });
   });
 
+  const handleRemove = (booking_id : number) => {
+    const data = {booking_id : booking_id};
+    remove_req_patient(data).then((ret) => {
+      if (ret) {
+        alert('Request Removed!');
+      } else {
+        console.log('error');
+      }
+    });
+  };
+
+
   return (
     <div className="mt-40 ml-40 mr-20 mb-20">
       <Container>
         <Grid container spacing={3}>
-          <Grid item xs={12} md={8}>
+          <Grid item xs={12} md={12}>
             {/* Adjust the grid item width based on your layout */}
             <Paper elevation={3} className="p-4">
               <Typography variant="h6" gutterBottom>
@@ -55,10 +68,16 @@ function PatientRequests() {
                       Date
                     </th>
                     <th className="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                      Time
+                      Start time
+                    </th>
+                    <th className="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                      End time
                     </th>
                     <th className="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                       Assigning Nurse
+                    </th>
+                    <th className="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                      Remove Request
                     </th>
                   </tr>
                 </thead>
@@ -81,12 +100,21 @@ function PatientRequests() {
                         {request.time}
                       </td>
                       <td className="px-6 py-4 whitespace-no-wrap">
+                        {request.end_time}
+                      </td>
+                      <td className="px-6 py-4 whitespace-no-wrap">
                         <Link to={`/hospitalHome/${request.booking_id}`}>
                           <Button variant="contained" color="primary">
                             Assign Nurse
                           </Button>
                         </Link>
                       </td>
+                      <td className="px-6 py-4 whitespace-no-wrap">
+                        <Button variant="contained" color="secondary" onClick={() => handleRemove(request.booking_id)}>
+                          Remove Request
+                        </Button>
+                      </td>
+
                     </tr>
                   ))}
                 </tbody>

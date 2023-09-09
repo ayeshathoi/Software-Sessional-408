@@ -72,19 +72,15 @@ function BookCheckup() {
       // console.log('here is the form', formData);
       const formattedTime = format(new Date(formData.time), 'HH:mm:ss');
       const formattedDate = format(new Date(formData.date), 'yyyy-MM-dd');
+      const formattedEndTime = format(new Date(formData.end_time), 'HH:mm:ss');
       const testNamesArray = JSON.parse(selectedTests);
       const dataToSend = {
         ...formData,
         date: formattedDate,
+        end_time: formattedEndTime,
         time: formattedTime,
         test_names: testNamesArray,
       };
-      console.log('here is the form', dataToSend);
-      // await axios
-      //   .post(`http://localhost:3000/booking/checkup`, dataToSend)
-      //   .then((res) => {
-      //     console.log('here is the form', res.data);
-      //   });
       const res = await bookCheckup(dataToSend);
       console.log(res);
     } catch (err) {

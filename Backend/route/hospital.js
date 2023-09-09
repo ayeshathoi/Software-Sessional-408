@@ -25,6 +25,9 @@ router.get('/complaint/:aid', userController.show_complaint);
 
 
 router.post('/assign/nurse', userController.assign_nurse);
+router.post('/remove/booking', userController.remove_req);
+
+
 router.post('/update/employee', userController.update_employee);
 router.get('/booking', userController.all_booking);
 router.get('/onebooking/:bookId', userController.one_booking);

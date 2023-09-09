@@ -48,8 +48,8 @@ const CheckupBooking = async (req, res) => {
     try {
         const uid = req.user.uid;
         const type = "Checkup";
-        const {price,time,date,payment_method,payment_status,patient_mobile,hospital_name,test_names} = req.body
-        const result = await user.bookingCheckup(type,price,time,date,payment_method,payment_status,patient_mobile,uid,hospital_name,test_names); 
+        const {price,time,end_time,date,payment_method,payment_status,patient_mobile,hospital_name,test_names} = req.body
+        const result = await user.bookingCheckup(type,price,time,end_time,date,payment_method,payment_status,patient_mobile,uid,hospital_name,test_names); 
         res.status(http_status.OK).json({ result });
     } catch (error) {
         console.error('Error :', error.message);

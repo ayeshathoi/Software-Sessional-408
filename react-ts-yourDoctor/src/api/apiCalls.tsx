@@ -22,7 +22,6 @@ export const bookDoctor = async (dataToSend) => {
 
 export const getTimeline = async (doctorID) => {
   const ret = await axios.get(`${baseURL}/doctor/timeline/${doctorID}`);
-  console.log(ret.data);
   return ret.data;
 };
 
@@ -36,7 +35,6 @@ export const getComments_Chatbox = async (bookingID) => {
   const ret = await axios.post(`${baseURL}/comment/get`, {
     booking_id: bookingID,
   });
-  console.log(ret.data);
   return ret.data;
 };
 
@@ -168,6 +166,14 @@ export const pending_patient_req = async () => {
   const ret = await axios.get(`http://localhost:3000/hospital/booking`);
   return ret.data;
 };
+
+export const remove_req_patient = async (data) => {
+  const ret = await axios.post(
+    `http://localhost:3000/hospital/remove/booking`,
+    data
+  );
+  return ret.data;
+}
 
 export const allReview_hospital = async () => {
   const ret = await axios.get(`http://localhost:3000/review`);

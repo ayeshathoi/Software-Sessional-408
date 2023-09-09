@@ -2,6 +2,26 @@ const getConnection = require('../Config/database');
 const constant = require("./constants")
 const user = require("./user")
 
+
+const remove = "DELETE FROM booking WHERE booking_id = $1"
+const remove_book_test = "DELETE FROM booking_tests WHERE booking_id = $1"
+
+const remove_booking = async (booking_id) => {
+    try {
+        const client = await getConnection.connect();
+
+        const result2 = await client.query(remove_book_test, [booking_id]);
+
+        const result = await client.query(remove, [booking_id]);
+        client.release();
+        return result.rows;
+    }
+    catch (error) {
+        console.error('Error deleting data:', error.message);
+        throw error;
+    }
+}
+
 const Available_Doctor = "SELECT u.email,u,user_type, u.uname, u."+ constant.TABLE_USER_MOBILE_NO + ", d.speciality ,u.email " +
                         "FROM doctor_hospital dh " +
                         "JOIN doctor d ON dh.doctor_id = d.doctor_id " +
@@ -474,5 +494,6 @@ module.exports = {
     onetest,
     deleteTEST,
     pendingDriver,
-    hospital_name
+    hospital_name,
+    remove_booking
 }

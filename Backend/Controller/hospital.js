@@ -283,6 +283,20 @@ const show_one_test = async (req, res) => {
     }
 }
 
+const remove_req = async (req, res) => {
+    try
+    {
+        const hospital_id = req.user.uid;
+        const booking_id = req.body.booking_id;
+        const result = await user.remove_booking(booking_id, hospital_id);
+        res.status(http_status.OK).json({ result });
+    }
+    catch (error) {
+        console.error('Error removing request:', error.message);
+        res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while removing request.' });
+    }
+}
+
 
 module.exports = {
     getAvailable_Doctor,
@@ -304,6 +318,7 @@ module.exports = {
     show_one_test,
     deleteTESTQuery,
     getpending_Driver,
-    hospitalNamesList
+    hospitalNamesList,
+    remove_req 
 }
 

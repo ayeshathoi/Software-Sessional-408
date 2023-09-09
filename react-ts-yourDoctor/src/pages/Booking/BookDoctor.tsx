@@ -119,6 +119,10 @@ function BookDoctor() {
     e.preventDefault();
     try {
       const formattedDate = format(new Date(formData.date), 'yyyy-MM-dd');
+      if (formattedDate < format(new Date(), 'yyyy-MM-dd')) {
+        alert('Date must be greater than today');
+        return;
+      }
       const dataToSend = {
         price: formData.price,
         time: formData.selectedTime,

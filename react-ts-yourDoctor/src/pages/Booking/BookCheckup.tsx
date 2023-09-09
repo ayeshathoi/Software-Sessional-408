@@ -41,7 +41,9 @@ function BookCheckup() {
     }
   }
 
-  console.log(list)
+
+  const endTimeForHospital = format(new Date("2021-10-10T16:00:00.000Z"), 'HH:mm:ss');
+  const startTimeForHospital = format(new Date("2021-10-10T02:00:00.000Z"), 'HH:mm:ss');
 
   const [formData, setFormData] = useState<{
     patient_mobile: string;
@@ -87,8 +89,18 @@ function BookCheckup() {
       const formattedTime = format(new Date(formData.time), 'HH:mm:ss');
       const formattedDate = format(new Date(formData.date), 'yyyy-MM-dd');
       const formattedEndTime = format(new Date(formData.end_time), 'HH:mm:ss');
+      if (formattedDate < format(new Date(), 'yyyy-MM-dd')) {
+        alert('Date must be greater than today');
+        return;
+      }
       if (formattedTime > formattedEndTime) {
         alert('End time must be greater than start time');
+        return;
+      }
+
+     
+      if(formattedTime < startTimeForHospital || formattedEndTime > endTimeForHospital){
+        alert('Hospital is open from 8am to 10pm');
         return;
       }
 
@@ -134,7 +146,7 @@ function BookCheckup() {
             <Grid item xs={12} md={6}>
               <Paper className="p-4">
                 <h1 className="text-sm font-bold text-green-500">
-                  {selectedHospital}
+                  {selectedHospital} is open from 8am to 10pm
                 </h1>
                 <hr />
 

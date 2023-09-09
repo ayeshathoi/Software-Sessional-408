@@ -82,6 +82,10 @@ function BookAmbulance() {
       }
       
       const formattedDate = format(new Date(formData.date), 'yyyy-MM-dd');
+      if (formattedDate < format(new Date(), 'yyyy-MM-dd')) {
+        alert('Date must be greater than today');
+        return;
+      }
       const hospitalNameToSend =
         formData.hospital_name === 'Online' ? null : formData.hospital_name;
       const dataToSend = {

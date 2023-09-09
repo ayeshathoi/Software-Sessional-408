@@ -28,7 +28,6 @@ const hospital_name = async () => {
         const client = await getConnection.connect();
         const result = await client.query(hospitalName, []);
         client.release();
-        console.log(result.rows);
         return result.rows;
     }
     catch (error) {
@@ -157,8 +156,8 @@ const update_nurse_employee = "UPDATE nurse SET employee_status = 'Available' WH
 const update_driver_employee = "UPDATE driver SET employee_status = 'Available' WHERE driver_id = $1 AND hospital_id = $2"
 
 const update_employee_hospital = async (email, hospital_id) => {
-    const client = await getConnection.connect();
     try {
+        const client = await getConnection.connect();
         const found_id = await client.query(find_id, [email]);
         const id = found_id.rows[0].uid;
         const employee_type = found_id.rows[0].user_type;
@@ -369,8 +368,9 @@ const update_nurse_employee_pending = "UPDATE nurse SET employee_status = 'delet
 const update_driver_employee_pending = "UPDATE driver SET employee_status = 'deleted' WHERE driver_id = $1 AND hospital_id = $2"
 
 const remove_employee_hospital = async (email, hospital_id) => {
-    const client = await getConnection.connect();
+    
     try {
+        const client = await getConnection.connect();
         const found_id = await client.query(find_id, [email]);
         const id = found_id.rows[0].uid;
         const employee_type = found_id.rows[0].user_type;

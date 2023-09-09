@@ -3,8 +3,8 @@ const http_status = require('./HTTPStatus')
 
 
 const getAvailable_Doctor = async (req, res) => {
-    const hospital_id = req.user.uid;
     try {
+        const hospital_id = req.user.uid;
         const result = await user.availableDoctor(hospital_id);
         res.status(http_status.OK).json({ result });
     } catch (error) {
@@ -15,8 +15,8 @@ const getAvailable_Doctor = async (req, res) => {
 
 
 const getAvailable_Nurse = async (req, res) => {
-    const hospital_id = req.user.uid;
     try {
+        const hospital_id = req.user.uid;
         const result = await user.available_nurse(hospital_id);
         res.status(http_status.OK).json({ result });
     } catch (error) {
@@ -37,8 +37,8 @@ const hospitalNamesList = async (req, res) => {
 
 
 const getAvailable_Driver = async (req, res) => {
-    const hospital_id = req.user.uid;
     try {
+        const hospital_id = req.user.uid;
         const result = await user.available_driver(hospital_id);
         res.status(http_status.OK).json({ result });
     } catch (error) {
@@ -49,9 +49,11 @@ const getAvailable_Driver = async (req, res) => {
 
 
 const remove_employee = async (req, res) => {
-    const hospital_id = req.user.uid;
-    const email = req.body.email;
+    // const hospital_id = req.user.uid;
+    // const email = req.body.email;
     try {
+        const hospital_id = req.user.uid;
+        const email = req.body.email;
         const result = await user.remove_employee_hospital(email, hospital_id);
         res.status(http_status.OK).json({ result });
     } catch (error) {
@@ -65,10 +67,13 @@ const remove_employee = async (req, res) => {
 
 
 const addTEST = async (req, res) => {
-    const testname = req.body.testname;
-    const price = req.body.price;
-    const hospital_id = req.user.uid;
+    // const testname = req.body.testname;
+    // const price = req.body.price;
+    // const hospital_id = req.user.uid;
     try {
+        const testname = req.body.testname;
+        const price = req.body.price;
+        const hospital_id = req.user.uid;
         const result = await user.addtest(testname, price, hospital_id);
         res.status(http_status.OK).json({add : "added test"});
     } catch (error) {
@@ -79,10 +84,13 @@ const addTEST = async (req, res) => {
 
 
 const update_price = async (req, res) => {
-    const testname = req.body.testname;
-    const price = req.body.price;
-    const hospital_id = req.user.uid;
+    // const testname = req.body.testname;
+    // const price = req.body.price;
+    // const hospital_id = req.user.uid;
     try {
+        const testname = req.body.testname;
+        const price = req.body.price;
+        const hospital_id = req.user.uid;
         const result = await user.updateTESTPrice(testname, price, hospital_id);
         res.status(http_status.OK).json({update : "updated test price"});
     } catch (error) {
@@ -93,9 +101,11 @@ const update_price = async (req, res) => {
 
 
 const deleteTESTQuery = async (req, res) => {
-    const test_id = req.body.test_id;
-    const hospital_id = req.user.uid;
+    // const test_id = req.body.test_id;
+    // const hospital_id = req.user.uid;
     try {
+        const test_id = req.body.test_id;
+        const hospital_id = req.user.uid;
         const result = await user.deleteTEST(test_id, hospital_id);
         res.status(http_status.OK).json({delete : "deleted test"});
     } catch (error) {
@@ -106,9 +116,11 @@ const deleteTESTQuery = async (req, res) => {
 
 
 const show_complaint = async (req, res) => {
-    const hospital_id = req.user.uid;
-    const booking_id = req.body.booking_id;
+    // const hospital_id = req.user.uid;
+    // const booking_id = req.body.booking_id;
     try {
+        const hospital_id = req.user.uid;
+        const booking_id = req.body.booking_id;
         const result = await user.show_complaint(booking_id,hospital_id);
         res.status(http_status.OK).json({ result });
     } catch (error) {
@@ -118,8 +130,9 @@ const show_complaint = async (req, res) => {
 }
 
 const all_booking = async (req, res) => {
-    const hospital_id = req.user.uid;
+    // const hospital_id = req.user.uid;
     try {
+        const hospital_id = req.user.uid;
         const result = await user.booking_total(hospital_id);
         res.status(http_status.OK).json({ result });
     } catch (error) {
@@ -130,9 +143,11 @@ const all_booking = async (req, res) => {
 
 //const one booking
 const one_booking = async (req, res) => {
-    const hospital_id = req.user.uid;
-    const booking_id = req.params.bookId;
+    // const hospital_id = req.user.uid;
+    // const booking_id = req.params.bookId;
     try {
+        const hospital_id = req.user.uid;
+        const booking_id = req.params.bookId;
         const result = await user.booking_one(hospital_id,booking_id);
         res.status(http_status.OK).json({ result });
     } catch (error) {
@@ -142,9 +157,11 @@ const one_booking = async (req, res) => {
 }
 
 const assign_nurse = async (req, res) => {
-    const nurse_email = req.body.nurse_email;
-    const booking_id = req.body.booking_id;
+    // const nurse_email = req.body.nurse_email;
+    // const booking_id = req.body.booking_id;
     try {
+        const nurse_email = req.body.nurse_email;
+        const booking_id = req.body.booking_id;
         const result = await user.assign_nurse_to_test(nurse_email, booking_id);
         if(result == "Nurse is booked in this slot")
         {
@@ -160,10 +177,12 @@ const assign_nurse = async (req, res) => {
 
 
 const update_employee = async (req, res) => {
-    const hospital_id = req.user.uid;
-    const email = req.body.email;
+    // const hospital_id = req.user.uid;
+    // const email = req.body.email;
     try
     {
+        const hospital_id = req.user.uid;
+        const email = req.body.email;
         const result = await user.update_employee_hospital(email, hospital_id);
         res.status(http_status.OK).json({ result });
     }
@@ -175,8 +194,9 @@ const update_employee = async (req, res) => {
 
 
 const show_pending_checkup = async (req, res) => {
-    const hospital_id = req.user.uid;
+    // const hospital_id = req.user.uid;
     try {
+        const hospital_id = req.user.uid;
         const result = await user.show_patient_request_checkup(hospital_id);
         res.status(http_status.OK).json({ result });
     } catch (error) {
@@ -187,8 +207,9 @@ const show_pending_checkup = async (req, res) => {
 
 
 const show_pending_test = async (req, res) => {
-    const booking_id = req.body.booking_id;
+    // const booking_id = req.body.booking_id;
     try {
+        const booking_id = req.body.booking_id;
         const result = await user.pending_test(booking_id);
         res.status(http_status.OK).json({ result });
     } catch (error) {
@@ -198,8 +219,9 @@ const show_pending_test = async (req, res) => {
 } 
 
 const getpending_Doctor = async (req, res) => {
-    const hospital_id = req.user.uid;
+    // const hospital_id = req.user.uid;
     try {
+        const hospital_id = req.user.uid;
         const result = await user.pendingDoctor(hospital_id);
         res.status(http_status.OK).json({ result });
     } catch (error) {
@@ -209,8 +231,9 @@ const getpending_Doctor = async (req, res) => {
 }
 
 const getpending_Nurse = async (req, res) => {
-    const hospital_id = req.user.uid;
+    // const hospital_id = req.user.uid;
     try {
+        const hospital_id = req.user.uid;
         const result = await user.pendingNurse(hospital_id);
         res.status(http_status.OK).json({ result });
     } catch (error) {
@@ -220,8 +243,9 @@ const getpending_Nurse = async (req, res) => {
 }
 
 const getpending_Driver = async (req, res) => {
-    const hospital_id = req.user.uid;
+    // const hospital_id = req.user.uid;
     try {
+        const hospital_id = req.user.uid;
         const result = await user.pendingDriver(hospital_id);
         res.status(http_status.OK).json({ result });
     } catch (error) {
@@ -233,8 +257,9 @@ const getpending_Driver = async (req, res) => {
 
 
 const show_all_test = async (req, res) => {
-    const hospital_id = req.user.uid;
+    // const hospital_id = req.user.uid;
     try {
+        const hospital_id = req.user.uid;
         const result = await user.showtest(hospital_id);
         res.send(result);
     } catch (error) {
@@ -244,10 +269,12 @@ const show_all_test = async (req, res) => {
 }
 
 const show_one_test = async (req, res) => {
-    const hospital_id = req.user.uid;
-    const test_id = req.params.tid;
+    // const hospital_id = req.user.uid;
+    // const test_id = req.params.tid;
   
     try {
+        const hospital_id = req.user.uid;
+        const test_id = req.params.tid;
         const result = await user.onetest(test_id);
         res.send(result);
     } catch (error) {

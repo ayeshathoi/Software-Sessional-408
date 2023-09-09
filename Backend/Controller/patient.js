@@ -91,9 +91,10 @@ const Check_OLD_PATIENT_OR_NOT = async (req, res) => {
 }
 
 const getProfile = async (req, res) => {
-    const pid = req.user.uid;
+    // const pid = req.user.uid;
 
     try {
+        const pid = req.user.uid;
         const profile = await user.getPatientProfile(pid);
         res.send(profile);
     } catch (error) {
@@ -137,9 +138,10 @@ const test_all_search = async (req, res) => {
 }
 
 const viewPrescriptionDetailsUser = async (req, res) => {
-    const  booking_id  = req.params.booking_id;
+    // const  booking_id  = req.params.booking_id;
 
     try {
+        const  booking_id  = req.params.booking_id;
         const prescriptionDetails = await user.viewPrescriptionUser(booking_id);
         if(prescriptionDetails==null){
             res.status(http_status.OK).json({prescriptionDetails:"No prescriptions found"});

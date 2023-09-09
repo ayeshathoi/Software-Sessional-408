@@ -5,10 +5,13 @@ const http_status = require('./HTTPStatus')
 
 
 const Driver_search_Thana = async (req, res) => {
-    const thana = req.body.thana;
+    // const thana = req.body.thana;
     
-    if(!thana) return res.status(http_status.BAD_REQUEST).json({ error: 'Missing thana.' });
+    // if(!thana) return res.status(http_status.BAD_REQUEST).json({ error: 'Missing thana.' });
     try {
+        const thana = req.body.thana;
+    
+        if(!thana) return res.status(http_status.BAD_REQUEST).json({ error: 'Missing thana.' });
         const result = await user.driverSearchByThana(thana);
         res.send(result);
     } catch (error) {
@@ -18,9 +21,11 @@ const Driver_search_Thana = async (req, res) => {
 };
 
 const patient_thana = async (req, res) => {
-    const uid = req.user.uid;
-    if(!uid) return res.status(http_status.BAD_REQUEST).json({ error: 'Missing uid.' });
+    // const uid = req.user.uid;
+    // if(!uid) return res.status(http_status.BAD_REQUEST).json({ error: 'Missing uid.' });
     try {
+        const uid = req.user.uid;
+        if(!uid) return res.status(http_status.BAD_REQUEST).json({ error: 'Missing uid.' });
         const result = await user.driverSearchByPatientThana(uid);
         res.send(result);
     } catch (error) {

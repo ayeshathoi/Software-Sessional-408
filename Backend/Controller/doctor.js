@@ -2,9 +2,9 @@ const user = require('../Repository/doctor')
 const http_status = require('./HTTPStatus')
 
 const getPatient_List = async (req, res) => {
-    const doctor_id = req.user.uid;
-    const hospital_name = req.body.hospital_name;
     try {
+        const doctor_id = req.user.uid;
+        const hospital_name = req.body.hospital_name;
         const result = await user.patientListDetails_doctor(doctor_id,hospital_name);
         res.send(result);
     } catch (error) {
@@ -14,9 +14,9 @@ const getPatient_List = async (req, res) => {
     };
 
 const addSchedule = async (req, res) => {
-    const doctor_id = req.user.uid;
-    const {timeline} = req.body;
     try {
+        const doctor_id = req.user.uid;
+        const {timeline} = req.body;
         const result = await user.ADD_SCHEDULE(doctor_id,timeline);
         res.send(result);
     } catch (error) {
@@ -46,9 +46,9 @@ const updateDoctorProfile = async (req, res) => {
 };
 
 const getProfile = async (req, res) => {
-    const doctor_id = req.user.uid;
 
     try {
+        const doctor_id = req.user.uid;
         const profile = await user.getDoctorProfile(doctor_id);
         res.send(profile);
     } catch (error) {
@@ -60,8 +60,8 @@ const getProfile = async (req, res) => {
 
 
 const getDoctorDetails = async (req, res) => {
-    const doctor_id = req.user.uid;
     try {
+        const doctor_id = req.user.uid;
         const result = await user.getDoctorDetails(doctor_id);
         res.send(result);
     } catch (error) {
@@ -72,8 +72,8 @@ const getDoctorDetails = async (req, res) => {
 
 
 const getTimeline = async (req, res) => {
-    const doctor_id = req.params.doctor_id;
     try {
+        const doctor_id = req.params.doctor_id;
         const result = await user.getTimelineDetails(doctor_id);
         res.send(result);
     } catch (error) {
@@ -83,10 +83,10 @@ const getTimeline = async (req, res) => {
 };
 
 const addPrescription = async (req, res) => {
-    const { booking_id } = req.params; // Extract booking_id from URL params
-    const { disease, tests, suggestions, medicine } = req.body;
 
     try {
+        const { booking_id } = req.params; // Extract booking_id from URL params
+        const { disease, tests, suggestions, medicine } = req.body;
         const prescriptionId = await user.addPrescriptionDetails(booking_id, disease, tests, suggestions, medicine);
         res.status(http_status.CREATED).json({ prescription_id: prescriptionId });
     } catch (error) {
@@ -116,8 +116,8 @@ const updateSchedule = async (req, res) => {
 
 
 const deleteSCHEDULE = async (req, res) => {
-    const timeline_id = req.params.timeline_id;
     try {
+        const timeline_id = req.params.timeline_id;
         const result = await user.deleteSchedule(timeline_id);
         res.status(http_status.OK).json({delete : "deleted timeline"});
     } catch (error) {
@@ -127,9 +127,8 @@ const deleteSCHEDULE = async (req, res) => {
 }
 
 const viewPrescriptionDetails = async (req, res) => {
-    const  booking_id  = req.params.booking_id;
-
     try {
+        const  booking_id  = req.params.booking_id;
         const prescriptionDetails = await user.viewPrescription(booking_id);
         if(prescriptionDetails==null){
             res.status(http_status.OK).json({prescriptionDetails:"No prescriptions found"});

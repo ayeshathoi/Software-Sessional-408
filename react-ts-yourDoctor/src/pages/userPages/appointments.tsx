@@ -41,6 +41,13 @@ function Appointments() {
   useEffect(() => {
     patient_appointment()
       .then((patient_appointment_list) => {
+
+        //sort 
+        const sort = patient_appointment_list.sort(
+          (a: Appointment, b: Appointment) =>
+            new Date(a.date).getTime() - new Date(b.date).getTime()
+        );
+        
         const currentAppointments: Appointment[] =
           patient_appointment_list || [];
 

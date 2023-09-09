@@ -21,7 +21,27 @@ function PatientRequests() {
   useEffect(() => {
     pending_patient_req().then((ret) => {
       if (ret) {
-        const currentData = ret.result;
+        const sort = ret.result.sort(
+          (a: Requests, b: Requests) =>
+            new Date(a.date).getTime() - new Date(b.date).getTime()
+            //console.log((a.date).getTime() - new Date(b.date).getTime())
+        );
+
+        const currentData = sort.map((item: Requests) => {
+          return {
+            booking_id: item.booking_id,
+            payment_status: item.payment_status,
+            total_price: item.total_price,
+            patient_name: item.patient_name,
+            patient_mobile: item.patient_mobile,
+            date: item.date,
+            time: item.time,
+            end_time: item.end_time,
+          };
+        });
+
+        console.log(currentData);
+
         const previousRequests = JSON.parse(
           localStorage.getItem('previousRequests') || '[]'
         );

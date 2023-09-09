@@ -71,11 +71,29 @@ function Chatbox() {
     e.preventDefault();
     try {
       const res = await addComment_Chatbox(formData);
-      setFormData({ ...formData, message: '' }); // Clear the input field after sending
+      if (res) {
+        getComments_Chatbox(bookingId).then((res) => {
+          if (res) {
+            const sortedComments = res.result.sort(
+              (a: Comments, b: Comments) =>
+                new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+            );
+            setComments(sortedComments);
+            scrollToBottom();
+          } else {
+            console.log('No Comments Found');
+          }
+        });
+      }
+      
+      setFormData({ ...formData, message: '' });
+      //back korle navigate to homepage
+
     } catch (err) {
       console.log(err);
     }
   };
+
 
   // Scroll to the bottom of the chat container
   useEffect(() => {

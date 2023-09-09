@@ -37,7 +37,11 @@ function PatientArray({ selectedHospital }: PatientArrayProps) {
       const requestBody = { hospital_name: selectedHospital };
       doctor_patient_list(requestBody).then((res) => {
         if (res) {
-          console.log(res);
+          //sort
+          const sort = res.sort(
+            (a: PatientDetails, b: PatientDetails) =>
+              new Date(a.date).getTime() - new Date(b.date).getTime()
+          );
           const currentData: PatientDetails[] = res || [];
           const previousPatientListDoctor: PatientDetails[] = JSON.parse(
             localStorage.getItem('previousPatientListDoctor') || '[]'

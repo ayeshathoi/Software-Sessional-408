@@ -27,6 +27,12 @@ function Order() {
     //   })
     driver_patient_list().then((res) => {
       if (res) {
+        //sort
+        const sort = res.result.sort(
+          (a: Ambulance, b: Ambulance) =>
+            new Date(a.date).getTime() - new Date(b.date).getTime()
+        );
+        
         const currentData: Ambulance[] = res.result || [];
         const previousPatientListDriver: Ambulance[] = JSON.parse(
           localStorage.getItem('previousPatientListDriver') || '[]'

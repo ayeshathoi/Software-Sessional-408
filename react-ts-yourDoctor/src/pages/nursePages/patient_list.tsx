@@ -28,6 +28,11 @@ function PatientArray() {
   useEffect(() => {
     nurse_patient_list().then((ret) => {
       if (ret) {
+        //sort
+        const sort = ret.sort(
+          (a: Checkup, b: Checkup) =>
+            new Date(a.date).getTime() - new Date(b.date).getTime()
+        );
         const currentData: Checkup[] = ret || [];
         const previousPatientList: Checkup[] = JSON.parse(
           localStorage.getItem('previousPatientList') || '[]'

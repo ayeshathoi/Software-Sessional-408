@@ -39,6 +39,11 @@ function Tests() {
   useEffect(() => {
     patient_checkup()
       .then((patient_checkup_list) => {    
+        //sort
+        const sort = patient_checkup_list.sort(
+          (a: Checkup, b: Checkup) =>
+            new Date(a.date).getTime() - new Date(b.date).getTime()
+        );
         
         const currentTests: Checkup[] = patient_checkup_list || [];
 

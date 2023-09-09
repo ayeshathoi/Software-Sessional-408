@@ -40,6 +40,12 @@ function Ambulances() {
     patient_ambulance()
       .then((patient_ambulance_list) => {
         if (patient_ambulance_list) {
+          //sort 
+          const sort = patient_ambulance_list.sort(
+            (a: Ambulance, b: Ambulance) =>
+              new Date(a.date).getTime() - new Date(b.date).getTime()
+          );
+          
           const currentAmbulances: Ambulance[] = patient_ambulance_list || [];
 
           // console.log(patient_ambulance_list);

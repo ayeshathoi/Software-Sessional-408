@@ -44,7 +44,6 @@ const allAppointments = async (pid) => {
                 allMeeting.rows[i].booked = "Old Patient";
             }
         }
-        console.log(allMeeting.rows);
 
         client.release();
         return allMeeting.rows;

@@ -57,7 +57,7 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
      res.status(error.OK).send(user.user_type);
     }
     catch(err){
-        console.log(err);
+
         res.status(error.BAD_REQUEST).json({ error: 'An error occurred while logging in.' });
     }
 });
@@ -69,13 +69,12 @@ router.post('/logout' ,async (request, response) => {
         }else{
             request.logout((err) => {
                 if(err){
-                    console.log(err);
+                    
                 }
             });
             response.status(200).send("User logged out");
         }
     }catch(err){
-        console.log(err);
         response.status(400).send("User not Logged in yet");
     }
 }

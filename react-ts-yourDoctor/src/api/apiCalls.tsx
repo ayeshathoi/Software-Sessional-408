@@ -22,6 +22,7 @@ export const bookDoctor = async (dataToSend) => {
 
 export const getTimeline = async (doctorID) => {
   const ret = await axios.get(`${baseURL}/doctor/timeline/${doctorID}`);
+  console.log(ret.data);
   return ret.data;
 };
 
@@ -35,6 +36,7 @@ export const getComments_Chatbox = async (bookingID) => {
   const ret = await axios.post(`${baseURL}/comment/get`, {
     booking_id: bookingID,
   });
+  console.log(ret.data);
   return ret.data;
 };
 
@@ -55,6 +57,7 @@ export const getDoctorDetails = async () => {
 
 export const doctor_patient_list = async (requestBody) => {
   const ret = await axios.post(`${baseURL}/doctor/patientlist`, requestBody);
+  console.log(ret.data.type);
   return ret.data;
 };
 

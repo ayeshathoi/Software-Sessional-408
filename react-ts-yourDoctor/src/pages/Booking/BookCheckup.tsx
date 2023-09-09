@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, ChangeEvent, FormEvent } from 'react';
 import { format } from 'date-fns';
-import { useLocation } from 'react-router-dom';
+import { useNavigate,useLocation } from 'react-router-dom';
 import { bookCheckup } from '@/api/apiCalls';
 import {
   Button,
@@ -25,9 +25,23 @@ import Header from '../navbar/header_nd';
 import Footer from '../navbar/footer';
 function BookCheckup() {
   const location = useLocation();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const { selectedTests, combinedPrice, selectedHospital} =
     location.state;
+
+  var alltests = JSON.parse(selectedTests)
+  var alltestsname = alltests.map((test: any) => test)
+  var list = " "
+  for (let i = 0; i < alltestsname.length; i++) {
+    if(i == alltestsname.length-1){
+      list = list + alltestsname[i]
+    }
+    else{
+      list = list + alltestsname[i] + ", "
+    }
+  }
+
+  console.log(list)
 
   const [formData, setFormData] = useState<{
     patient_mobile: string;
@@ -73,6 +87,11 @@ function BookCheckup() {
       const formattedTime = format(new Date(formData.time), 'HH:mm:ss');
       const formattedDate = format(new Date(formData.date), 'yyyy-MM-dd');
       const formattedEndTime = format(new Date(formData.end_time), 'HH:mm:ss');
+      if (formattedTime > formattedEndTime) {
+        alert('End time must be greater than start time');
+        return;
+      }
+
       const testNamesArray = JSON.parse(selectedTests);
       const dataToSend = {
         ...formData,
@@ -82,7 +101,9 @@ function BookCheckup() {
         test_names: testNamesArray,
       };
       const res = await bookCheckup(dataToSend);
-      console.log(res);
+        alert('If Hospital confirms your booking, req will be shown in your chekcup list');
+        navigate('/userHome')
+
     } catch (err) {
       console.log(err);
     }
@@ -141,7 +162,7 @@ function BookCheckup() {
                 <div className="mb-8">
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <TimePicker
-                      label="Time"
+                      label="Start time"
                       value={formData.time}
                       onChange={handleTimeChange}
                     />
@@ -150,7 +171,7 @@ function BookCheckup() {
                 <div className="mb-8">
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <TimePicker
-                      label="delivery end Time"
+                      label="End Time"
                       value={formData.end_time}
                       onChange={handleEndTimeChange}
                     />
@@ -159,16 +180,16 @@ function BookCheckup() {
                 <div>
                   <Typography
                     variant="h6"
-                    className="text-sm font-bold text-green-500"
+                    className="text-sm font-bold text-gray-500"
                   >
-                    Tests: {selectedTests}
+                    Tests: {list}
                   </Typography>
                 </div>
                 <div className="mb-8">
                   <div className="mt-4">
                     <Typography
                       variant="h6"
-                      className="text-sm font-bold text-green-500"
+                      className="text-sm font-bold text-gray-500"
                     >
                       Checkup Fee : {formData.price}
                     </Typography>

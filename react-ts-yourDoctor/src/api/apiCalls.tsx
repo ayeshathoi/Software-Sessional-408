@@ -264,6 +264,12 @@ export const patient_checkup = async () => {
   return ret.data;
 };
 
+
+export const hospital_name_list = async () => {
+  const ret = await axios.get(`http://localhost:3000/hospital/hospitalnames`);
+  return ret.data;
+}
+
 export const patient_profile = async () => {
   const ret = await axios.get(`http://localhost:3000/user/frontend`);
   return ret.data;

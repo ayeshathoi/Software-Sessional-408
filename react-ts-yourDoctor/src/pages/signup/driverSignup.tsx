@@ -1,7 +1,7 @@
 /* eslint-disable import/extensions */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 // /* eslint-disable jsx-a11y/label-has-associated-control */
-import { useState, ChangeEvent, FormEvent } from 'react';
+import {useEffect, useState, ChangeEvent, FormEvent } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import {
@@ -16,7 +16,13 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Navbar from '../navbar/headerdoctor';
 import Footer from '../navbar/footer';
-import { reg_driver } from '@/api/apiCalls';
+import { hospital_name_list, reg_driver } from '@/api/apiCalls';
+
+interface hospitalNames {
+  hospital_name: string;
+}
+
+
 
 function DriverSignup() {
   const [formData, setFormData] = useState({
@@ -37,6 +43,7 @@ function DriverSignup() {
   });
 
   const navigate = useNavigate();
+  const [hospitalList, setHospitalNames] = useState<string[]>([]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -48,6 +55,12 @@ function DriverSignup() {
       setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
     }
   };
+
+  useEffect(() => {
+    hospital_name_list().then((res) => {
+      setHospitalNames(res.result);
+    });
+  }, []);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDateChange = (date: any) => {
@@ -234,14 +247,31 @@ function DriverSignup() {
               required
               className="w-full"
             />
-            <TextField
+            {/* <TextField
               label="Hospital Name"
               name="hospital_name"
               value={formData.hospital_name}
               onChange={handleChange}
               variant="outlined"
               className="w-full"
-            />
+            /> */}
+
+            <div>
+
+              <select
+                name="hospital_name"
+                value={formData.hospital_name}
+                onChange={handleChange}
+                className="w-full bg-white border border-gray-300 rounded-md px-4 py-3 mt-1 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent"
+              >
+               <option value="0">Select Hospital if any</option>
+                {hospitalList.map((hospital) => (
+                  <option value={hospital.hospital_name}>
+                    {hospital.hospital_name}
+                  </option>
+                ))}
+              </select>
+            </div>
 
             <div className="col-span-2 flex justify-center">
               <Button type="submit" variant="contained" color="success">

@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 // /* eslint-disable jsx-a11y/label-has-associated-control */
-import { useState, ChangeEvent, FormEvent } from 'react';
+import { useEffect,useState, ChangeEvent, FormEvent } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import {
@@ -16,7 +16,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Navbar from '../navbar/headerdoctor';
 import Footer from '../navbar/footer';
 
-import {reg_doctor} from '@/api/apiCalls';
+import {hospital_name_list,reg_doctor} from '@/api/apiCalls';
 
 interface FormData {
   uname: string;
@@ -58,6 +58,14 @@ function DoctorSignup() {
   });
 
   const navigate = useNavigate();
+  const [hospitalList, setHospitalNames] = useState<string[]>([]);
+
+  useEffect(() => {
+    hospital_name_list().then((res) => {
+      setHospitalNames(res.result);
+    });
+  }, []);
+
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -78,12 +86,6 @@ function DoctorSignup() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      // await axios
-      //   .post('http://localhost:3000/auth/register/doctor', formData)
-      //   .then((res) => {
-      //     console.log('here is the form', res.data);
-      //     navigate('/LogIn');
-      //   });
       const ret = reg_doctor(formData);
       navigate('/LogIn');
     } catch (err) {
@@ -240,6 +242,8 @@ function DoctorSignup() {
               className="w-full"
             />
 
+            
+
             <TextField
               label="Hospital Names"
               name="hospital_name"
@@ -252,6 +256,8 @@ function DoctorSignup() {
               inputProps={{
                 style: { minHeight: '20px' },
               }}
+
+              
             />
             <TextField
               label="Old Patient Fee"

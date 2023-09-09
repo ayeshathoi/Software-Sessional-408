@@ -25,6 +25,16 @@ const getAvailable_Nurse = async (req, res) => {
     }
 }
 
+const hospitalNamesList = async (req, res) => {
+    try {
+        const result = await user.hospital_name();
+        res.status(http_status.OK).json({ result });
+    } catch (error) {
+        console.error('Error getting hospitalnames:', error.message);
+        res.status(http_status.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred while getting hospitalNames.' });
+    }
+}
+
 
 const getAvailable_Driver = async (req, res) => {
     const hospital_id = req.user.uid;
@@ -266,6 +276,7 @@ module.exports = {
     one_booking,
     show_one_test,
     deleteTESTQuery,
-    getpending_Driver
+    getpending_Driver,
+    hospitalNamesList
 }
 

@@ -21,6 +21,23 @@ const availableDoctor = async (hid) => {
     }
 }
 
+const hospitalName = "Select hospital_name from hospital"
+
+const hospital_name = async () => {
+    try {
+        const client = await getConnection.connect();
+        const result = await client.query(hospitalName, []);
+        client.release();
+        console.log(result.rows);
+        return result.rows;
+    }
+    catch (error) {
+        console.error('Error fetching data:', error.message);
+        throw error;
+    }
+}
+
+
 
 const AVAILABE_NURSE =  "SELECT u.email,u,user_type,u.uname, u."+ constant.TABLE_USER_MOBILE_NO + ", n.designation,u.email " +
                         "FROM nurse n " +
@@ -456,5 +473,6 @@ module.exports = {
     booking_one,
     onetest,
     deleteTEST,
-    pendingDriver
+    pendingDriver,
+    hospital_name
 }

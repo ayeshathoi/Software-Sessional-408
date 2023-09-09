@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../Controller/hospital');
+
+
+router.get('/hospitalnames', userController.hospitalNamesList);
+
 router.use(async (req,res,next) => {
     if(req.user && req.user.user_type == 'hospital'){
         next();

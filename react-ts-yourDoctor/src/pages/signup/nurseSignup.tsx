@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 // /* eslint-disable jsx-a11y/label-has-associated-control */
-import { useState, ChangeEvent, FormEvent } from 'react';
+import { useEffect,useState, ChangeEvent, FormEvent } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import {
@@ -9,13 +9,20 @@ import {
   RadioGroup,
   FormControlLabel,
   Button,
+  MenuItem,
 } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Navbar from '../navbar/headerdoctor';
 import Footer from '../navbar/footer';
-import { reg_nurse } from '@/api/apiCalls';
+import { hospital_name_list, reg_nurse } from '@/api/apiCalls';
+
+
+interface hospitalNames {
+  hospital_name: string;
+}
+
 
 function NurseSignup() {
   const [formData, setFormData] = useState({
@@ -31,6 +38,7 @@ function NurseSignup() {
   });
 
   const navigate = useNavigate();
+  const [hospitalList, setHospitalNames] = useState<hospitalNames[]>([]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -42,15 +50,17 @@ function NurseSignup() {
     setFormData((prevData) => ({ ...prevData, dob: date }));
   };
 
+  useEffect(() => {
+    hospital_name_list().then((res) => {
+      setHospitalNames(res.result);
+
+    });
+
+  }, []);
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      // await axios
-      //   .post('http://localhost:3000/auth/register/nurse', formData)
-      //   .then((res) => {
-      //     console.log('here is the form', res.data);
-      //     navigate('/LogIn');
-      //   });
       const ret = reg_nurse(formData);
       navigate('/LogIn');
     } catch (err) {
@@ -181,18 +191,26 @@ function NurseSignup() {
               className="w-full"
             />
 
-            <TextField
-              label="Hospital(Compulsory)"
-              name="hospital_name"
-              value={formData.hospital_name}
-              onChange={handleChange}
-              variant="outlined"
-              required
-              className="w-full"
-            />
-
-
-
+            <div>
+              <label
+                htmlFor="Hospital"
+                className="text-gray-400 text-sm font-semibold "
+              >
+              </label>
+              <select
+                name="hospital_name"
+                value={formData.hospital_name}
+                onChange={handleChange}
+                className="w-full bg-white border border-gray-300 rounded-md px-4 py-2 mt-2 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent"
+              >
+                <option value="0">Select the hospital you work</option>
+                {hospitalList.map((hospital) => (
+                  <option value={hospital.hospital_name}>
+                    {hospital.hospital_name}
+                  </option>
+                ))}
+              </select>
+            </div>
             <div className="col-span-2 flex justify-center">
               <Button type="submit" variant="contained" color="success">
                 Sign Up

@@ -186,6 +186,9 @@ function AddSchedule() {
             onSubmit={handleSubmit}
             className="w-full items-center justify-center mt-8"
           >
+            <div className="flex justify-between mt-8 text-gray-300">
+              <label htmlFor="weekday">Select Hospital </label>
+              </div>
             <div className="flex justify-between mt-4">
               <Select
                 label="Select Hospital"
@@ -203,7 +206,10 @@ function AddSchedule() {
                 ))}
               </Select>
             </div>
-            <div className="flex justify-between mt-8">
+            <div className="flex justify-between mt-8 text-gray-300">
+              <label htmlFor="weekday">Number of days</label>
+              </div>
+            <div className="flex justify-between text-black">
               <Select
                 label="Number of Days"
                 name="number_of_days"

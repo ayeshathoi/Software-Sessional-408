@@ -251,6 +251,7 @@ export const reg_patient = async (formData) => {
 export const login = async (formData) => {
   const ret = await axios.post('http://localhost:3000/auth/login', formData);
   return ret.data;
+
 };
 
 export const logout = async () => {

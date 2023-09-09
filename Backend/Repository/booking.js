@@ -88,7 +88,6 @@ const appointmentBooking = async (type,day,price,time,date,payment_method,paymen
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 }
 
@@ -138,7 +137,6 @@ const select_test = async (test_names,hospital_name) =>
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 }                            
 
@@ -171,7 +169,6 @@ const bookingCheckup = async (type,price,time,end_time,date,payment_method,payme
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 
 }
@@ -251,7 +248,6 @@ const bookingAmbulance = async (type,price,time,end_time,date,payment_method,pay
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 
 }

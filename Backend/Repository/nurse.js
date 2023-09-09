@@ -48,7 +48,6 @@ const patientListDetails_nurse = async (nid) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 }
 const getNurseProfile = async (nurse_id) => {
@@ -70,7 +69,6 @@ const getNurseProfile = async (nurse_id) => {
         return result.rows[0];
     } catch (error) {
         console.error('Error fetching nurse profile:', error.message);
-        throw error;
     }
 };
 
@@ -93,7 +91,6 @@ const update_profile = async (designation,nid,mobile_no) => {
         return result.rowsAffected === 1;
     } catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 }
 const hospitalname = "SELECT * FROM " + constant.TABLE_HOSPITAL + " WHERE " +
@@ -111,7 +108,6 @@ const nurse = async (nid) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 }
 

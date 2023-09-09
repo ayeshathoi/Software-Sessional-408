@@ -28,7 +28,7 @@ function PatientArray() {
   useEffect(() => {
     nurse_patient_list().then((ret) => {
       if (ret) {
-        // sort
+        //sort
         const sort = ret.sort(
           (a: Checkup, b: Checkup) =>
             new Date(a.date).getTime() - new Date(b.date).getTime()

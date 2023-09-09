@@ -36,7 +36,7 @@ const create_hospital = async (hospital_name,reg_id, email, pass, mobile, street
         return result.rowsAffected === 1;
     } catch (err) {
         console.error("Error creating hospital:", err);
-        throw err;
+        
     }
 };
 
@@ -60,7 +60,6 @@ const findpid = async (email) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 };            
 
@@ -80,7 +79,7 @@ const create_user = async(username,usrtype,email,pass,mobile,dob,gender) => {
         return result.rowsAffected === 1;
     } catch (err) {
         console.error("Error creating user:", err);
-        throw err;
+        
     }
 };
 
@@ -96,7 +95,7 @@ const create_patient = async (username,email,pass,mobile,dob,gender,street,thana
         return result.rowsAffected === 1;
     } catch (err) {
         console.error("Error creating patient:", err);
-        throw err;
+        
     }
 };
 
@@ -125,7 +124,6 @@ const findhid = async (hospital_name) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 };
 
@@ -156,7 +154,7 @@ const create_doctor = async (username,nid,email,pass,mobile,dob,gender,qualifica
       return result.rows;
   } catch (err) {
       console.error("Error creating patient:", err);
-      throw err;
+      
   }
 };
 
@@ -185,7 +183,7 @@ const create_nurse = async (username,nid_no,email,pass,mobile,dob,gender,designa
       return result.rowsAffected === 1;
   } catch (err) {
       console.error("Error creating nurse:", err);
-      throw err;
+      
   }
 };
 
@@ -229,7 +227,7 @@ const create_driver = async (username,email,pass,mobile,dob,gender,type,fare,
       return result.rowsAffected === 1;
   } catch (err) {
       console.error("Error creating driver:", err);
-      throw err;
+      
   }
 };
 
@@ -246,7 +244,6 @@ const GET_USER_DETAIL = async (uid) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 };
 
@@ -262,7 +259,6 @@ const GET_USER_DETAILEmail = async (email) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 };
 
@@ -278,7 +274,7 @@ const GET_USER_DETAILEmail = async (email) => {
 //     }
 //     catch (error) {
 //         console.error('Error fetching data:', error.message);
-//         throw error;
+//      
 //     }
 // };
 
@@ -294,7 +290,6 @@ const GET_HOSPITAL_DETAILID = async (hospital_id) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 };
 

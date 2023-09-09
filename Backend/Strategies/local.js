@@ -25,15 +25,16 @@ passport.use(
 
             const match = await bcrypt.compare(password,user[0].pass);
             if(match){
-                return done (null,user[0]);
+                done (null,user[0]);
             }
             
             else{
-                return done(new Error('Invalid Email or Password'), null);
+
+                done(new Error('Invalid Email or Password'), null);
             }
         }
         catch(err){
-            return done(err,null);
+            done(err,null);
         }
         }
         catch(err){

@@ -36,7 +36,6 @@ const patientListDetails_doctor = async (did , hospital_name) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 }
 
@@ -57,7 +56,6 @@ const editSchedule = async (weekday,slot,start_time,end_time,timeline_id) => {
         return update_schedule.rowsAffected === 1;
     } catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 };
 
@@ -73,7 +71,6 @@ const deleteSchedule = async (timeline_id) => {
     }
     catch (error) {
         console.error('Error deleting data:', error.message);
-        throw error;
     }
 }
 
@@ -114,6 +111,7 @@ const ADD_SCHEDULE = async (doctor_id,timeline) => {
             var start_time = timeline[i].start_time;
             var end_time = timeline[i].end_time;
             var hospital_name = timeline[i].hospital_name;
+            //console.log(hospital_name + " " + slot + " " + start_time + " " + end_time + " " + weekday);
             if(hospital_name != undefined)
             {
                 var hid = (await user.findhid(hospital_name))[0].hospital_id;
@@ -125,17 +123,15 @@ const ADD_SCHEDULE = async (doctor_id,timeline) => {
             {
                 var meeting_type = "Online";
                 const result = await client.query(online_add_schedule, [doctor_id,weekday,slot,start_time,end_time,meeting_type]);
-            }
-            
-            
+            } 
         }
+
         client.release();
         return;
         
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 } 
 
@@ -156,7 +152,6 @@ const addPrescriptionDetails = async (booking_id, disease, tests, suggestions, m
         return result.rows[0].prescription_id;
     } catch (error) {
         console.error('Error inserting prescription details:', error.message);
-        throw error;
     }
 };
 
@@ -182,7 +177,6 @@ const updateDoctorProfile = async (doctor_id,new_patient_fee,old_patient_fee,spe
         return updatedDoctor.rowsAffected === 1;
     } catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 };
 
@@ -207,7 +201,6 @@ const getDoctorProfile = async (doctor_id) => {
         return result.rows[0];
     } catch (error) {
         console.error('Error fetching doctor profile:', error.message);
-        throw error;
     }
 };
 
@@ -239,7 +232,6 @@ const getDoctorDetails = async (doctor_id) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 }
 
@@ -292,7 +284,6 @@ const getTimelineDetails = async (doctor_id) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 }
 
@@ -331,7 +322,6 @@ const viewPrescription = async (booking_id) => {
         return result.rows[0];
     } catch (error) {
         console.error('Error fetching prescription details:', error.message);
-        throw error;
     }
 };
 

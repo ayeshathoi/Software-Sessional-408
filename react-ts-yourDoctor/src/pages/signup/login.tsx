@@ -35,6 +35,8 @@ function LogIn() {
     e.preventDefault();
     try {
       const ret = await login(formData);
+      console.log(ret);
+
       if (ret) {
         let userProfileUrl = '';
         if (ret === 'doctor') {
@@ -52,25 +54,8 @@ function LogIn() {
         alert('Login Successful');
       }
 
-      // await axios
-      //   .post('http://localhost:3000/auth/login', formData)
-      // .then((res) => {
-      //   console.log(res.data);
-      //   let userProfileUrl = '';
-      //   if (res.data === 'doctor') {
-      //     userProfileUrl = `/doctorHome/`;
-      //   } else if (res.data === 'patient') {
-      //     userProfileUrl = `/userHome`;
-      //   } else if (res.data === 'driver') {
-      //     userProfileUrl = `/driverHome`;
-      //   } else if (res.data === 'nurse') {
-      //     userProfileUrl = `/nurseHome`;
-      //   } else if (res.data === 'hospital') {
-      //     userProfileUrl = `/hospitalHome`;
-      //   }
-      //   navigate(userProfileUrl);
-      // });
     } catch (err) {
+      alert('Invalid email or password');
       console.log(err);
     }
   };

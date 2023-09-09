@@ -18,7 +18,7 @@ const onlineAppointments = async (pid) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
+        
     }
 };
 
@@ -50,7 +50,7 @@ const allAppointments = async (pid) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
+        
     }
 };
 
@@ -107,7 +107,7 @@ const checkUpDetails = async (pid) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
+        
     }
 };
 
@@ -119,6 +119,7 @@ const Ambulance = "SELECT a.time,a.date,a.booking_id, u.uname, d.ambulance_type,
                   //"JOIN ambulance am ON d.ambulance_type = am.ambulance_type " +
                   "WHERE a.patient_id = $1 AND a.type = 'Ambulance'";
 
+
 const hospitalname = "SELECT hospital_name,street,city,thana,district FROM hospital WHERE hospital_id = $1"
 const ambulanceDetails = async (pid) => {
     try {
@@ -129,6 +130,7 @@ const ambulanceDetails = async (pid) => {
             const hospital_id = result.rows[i].hospital_id;
         if(result.rows[i].hospital_id == null){
             result.rows[i].hospital = "Self";
+
         }
 
         else {
@@ -139,6 +141,7 @@ const ambulanceDetails = async (pid) => {
         result.rows[i].thana = hospital_name.rows[i].thana;
         result.rows[i].district = hospital_name.rows[i].district;
         }
+        
     }
 
         client.release();
@@ -146,7 +149,7 @@ const ambulanceDetails = async (pid) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
+        
     }
 };
 
@@ -166,7 +169,7 @@ const doctorSpecialitySearch = async (speciality) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
+        
     }
 };
 
@@ -185,7 +188,7 @@ const doctorNameSearch = async (name) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
+        
     }
 };
 
@@ -201,7 +204,7 @@ const checkUpHospitalDetails = async (hospital) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
+        
     }
 };
         
@@ -226,7 +229,7 @@ const getPatientProfile = async (pid) => {
         return result.rows[0];
     } catch (error) {
         console.error('Error fetching patient profile:', error.message);
-        throw error;
+        
     }
 };
 
@@ -243,7 +246,7 @@ const checkOldPatient = async (pid, did) => {
         else return true;
     } catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
+        
     }
 };
 
@@ -269,7 +272,7 @@ const update_profile = async (street,thana,city, district,pid,mobile_no) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
+        
     }
 }
 
@@ -289,7 +292,7 @@ const doctorAllSearch = async () => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
+        
     }
 };
 
@@ -303,7 +306,7 @@ const testAllSearch = async () => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
+        
     }
 };
 
@@ -342,7 +345,7 @@ const viewPrescriptionUser = async (booking_id) => {
         return result.rows[0];
     } catch (error) {
         console.error('Error fetching prescription details:', error.message);
-        throw error;
+        
     }
 };
 

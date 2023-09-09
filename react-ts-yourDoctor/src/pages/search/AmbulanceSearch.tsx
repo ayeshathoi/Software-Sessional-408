@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import {ambulanceSearch} from '@/api/apiCalls';
 
@@ -11,11 +11,14 @@ import {
   CardContent,
   CardMedia,
   Grid,
+  Radio,
+  RadioGroup,
   TextField,
   Typography,
 } from '@mui/material';
 import Header from '../navbar/header_nd';
 import Footer from '../navbar/footer';
+import { add } from 'date-fns';
 
 interface Driver {
   driver_id: number;
@@ -28,18 +31,26 @@ interface Driver {
   city: string;
   district: string;
   hospital: string;
+  patient_street: string;
+  patient_thana: string;
+  patient_city: string;
+  patient_district: string;
 }
 
 function AmbulanceSearch() {
   const [user, setuserData] = useState<Driver[]>([]);
+  var address = [];
   const [searchTerm, setSearchTerm] = useState<string>('');
   const navigate = useNavigate();
   const [count, setCount] = useState<number>(0);
-  const [sortBy, setSortBy] = useState<'PriceLowToHigh' | 'PriceHighToLow'>('PriceLowToHigh'); // Default sorting order
-
+  const [sortBy, setSortBy] = useState<'PriceLowToHigh' | 'PriceHighToLow' | 'Searchbycity'>('PriceLowToHigh');
   useEffect(() => {
     ambulanceSearch().then((ret) => {
     if (ret) {
+      address.push(ret[0].patient_street);
+      address.push(ret[0].patient_thana);
+      address.push(ret[0].patient_city);
+      address.push(ret[0].patient_district);
       setuserData(ret);
       setCount(ret.length);
     }
@@ -49,8 +60,24 @@ function AmbulanceSearch() {
   });
   });
 
+
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
+  };
+
+  const checkcityanddistrict = (driver: Driver) => {  
+    if (driver.city == driver.patient_city && driver.district == driver.patient_district) {
+      
+        navigate('/BookAmbulance', {
+          state: {
+            driverName: driver.driver_name,
+            driverID: driver.driver_id,
+            price: driver.ambulance_fare,
+            hospitalName: driver.hospital,
+          },
+        });
+    }
+    else return alert('Sorry, this ambulance is not available in your area');
   };
 
   const getThana = () => {
@@ -75,6 +102,8 @@ function AmbulanceSearch() {
     sortedDriver.sort((a, b) => b.ambulance_fare - a.ambulance_fare);
   }
 
+
+
   const filteredDriver = sortedDriver.filter((Driver) =>
     Driver.thana.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -90,22 +119,27 @@ function AmbulanceSearch() {
       </div>
 
       <div className="text-above-line my-10 text-left p-20 ">
+        <p className="text-xl font-medium">
+          you can book only the ambulances which has same city and district as you
+        </p>
         <Autocomplete
           options={getThana()}
           getOptionLabel={(option) => option}
           renderInput={(params) => (
             <TextField
               {...params}
-              label="Search by Thana"
+              label="Search by preferred thana"
               variant="outlined"
               value={searchTerm}
               onChange={handleSearchChange}
             />
           )}
         />
+        
         <hr className="line-below-text my-4 border-t-2 border-gray-300" />
 
         <div className="flex justify-end items-center">
+          
           <div className="text-gray-400 p-2">Sort By Price</div>
           <select
             name="sort"
@@ -157,21 +191,10 @@ function AmbulanceSearch() {
                       <Typography variant="body2">
                         Hospital: {driver.hospital}
                       </Typography>
-
                       <Button
                         variant="contained"
                         color="inherit"
-                        onClick={() =>
-                          navigate('/BookAmbulance', {
-                            state: {
-                              driverName: driver.driver_name,
-                              driverID: driver.driver_id,
-                              price: driver.ambulance_fare,
-                              hospitalName: driver.hospital,
-                              userId: 7,
-                            },
-                          })
-                        }
+                        onClick={() => checkcityanddistrict(driver)}
                       >
                         Book
                       </Button>

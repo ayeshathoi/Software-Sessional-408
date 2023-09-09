@@ -40,7 +40,6 @@ const selectTEST = async (req,res) =>
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 }
 

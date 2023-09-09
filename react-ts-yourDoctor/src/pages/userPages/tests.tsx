@@ -8,6 +8,8 @@ import { Button, Tooltip } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { patient_checkup } from '@/api/apiCalls';
 import { addNotification } from '@/store/notificationsSlice';
+import { all } from 'axios';
+import { set } from 'date-fns';
 
 interface Checkup {
   time: string;
@@ -22,7 +24,7 @@ interface Checkup {
 function Tests() {
   const [selectedSection, setSelectedSection] = useState('upcoming');
   const [tests, setTests] = useState<Checkup[]>([]);
-
+  
   const navigate = useNavigate();
 
   const handleSectionChange = (section: SetStateAction<string>) => {
@@ -36,13 +38,13 @@ function Tests() {
 
   useEffect(() => {
     patient_checkup()
-      .then((patient_checkup_list) => {
-        // sort
+      .then((patient_checkup_list) => {    
+        //sort
         const sort = patient_checkup_list.sort(
           (a: Checkup, b: Checkup) =>
             new Date(a.date).getTime() - new Date(b.date).getTime()
         );
-
+        
         const currentTests: Checkup[] = patient_checkup_list || [];
 
         const storedUppcomingCount3: number =
@@ -135,7 +137,9 @@ function Tests() {
             {AmbulancesToShow.map((test, index) => (
               <li key={index} className="flex justify-between items-center">
                 <div>
-                  <p className="text-lg font-semibold">Name: {test.uname}</p>
+                  <p className="text-lg font-semibold">
+                    Name: {test.uname}
+                  </p>
                   <p className="text-sm text-gray-500">
                     Tests : {test.testnames}
                   </p>
@@ -144,9 +148,7 @@ function Tests() {
                   <p className="text-sm text-gray-500">
                     {test.date.split('T')[0]}
                   </p>
-                  <p className="text-sm text-gray-500">
-                    Fee: {test.total_price}
-                  </p>
+                  <p className="text-sm text-gray-500">Fee: {test.total_price}</p>
                   <p className="text-sm text-gray-500">
                     Time: {test.time.split('T')[0]}
                   </p>
@@ -157,7 +159,7 @@ function Tests() {
                       onClick={() =>
                         navigate('/Chatbox', {
                           state: {
-                            receiverName: test.uname,
+                            receiverName: test.nurse_name,
                             bookingId: test.booking_id,
                           },
                         })

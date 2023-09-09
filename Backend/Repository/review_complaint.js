@@ -11,7 +11,7 @@ const rating_complaint_insert = async (rating, complaint, booking_id) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
+        
     }
 }
 
@@ -48,7 +48,7 @@ const show_complaints = async (hospital_id) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
+        
     }
 }
 

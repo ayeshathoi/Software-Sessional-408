@@ -16,6 +16,7 @@ const getPatient_List = async (req, res) => {
 const addSchedule = async (req, res) => {
     try {
         const doctor_id = req.user.uid;
+
         const {timeline} = req.body;
         const result = await user.ADD_SCHEDULE(doctor_id,timeline);
         res.send(result);

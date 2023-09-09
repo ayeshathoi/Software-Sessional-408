@@ -10,7 +10,6 @@ const addingComment = async (req, res) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 }
 
@@ -27,7 +26,6 @@ const all_Comment = async (req, res) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 }
 

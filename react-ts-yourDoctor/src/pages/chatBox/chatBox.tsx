@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import { useState, ChangeEvent, FormEvent, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
@@ -45,8 +44,6 @@ function Chatbox() {
     }
   };
 
-  console.log('booking id', bookingId);
-
   useEffect(() => {
     getComments_Chatbox(bookingId).then((res) => {
       if (res) {
@@ -55,7 +52,6 @@ function Chatbox() {
             new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
         );
         setComments(sortedComments);
-        console.log(sortedComments);
         scrollToBottom();
         navigate('/chatbox', {
           state: { receiverName, bookingId, serialNumber },
@@ -64,7 +60,7 @@ function Chatbox() {
         console.log('No Comments Found');
       }
     });
-  }, [bookingId, navigate, receiverName, serialNumber]);
+  }, [bookingId]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -80,8 +76,7 @@ function Chatbox() {
           if (res) {
             const sortedComments = res.result.sort(
               (a: Comments, b: Comments) =>
-                new Date(a.timestamp).getTime() -
-                new Date(b.timestamp).getTime()
+                new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
             );
             setComments(sortedComments);
             scrollToBottom();
@@ -90,15 +85,15 @@ function Chatbox() {
           }
         });
       }
-
+      
       setFormData({ ...formData, message: '' });
-      // back korle navigate to homepage
+      //back korle navigate to homepage
+
     } catch (err) {
       console.log(err);
     }
   };
 
-  console.log('previous comments', comments);
 
   // Scroll to the bottom of the chat container
   useEffect(() => {

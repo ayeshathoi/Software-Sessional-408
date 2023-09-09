@@ -36,7 +36,8 @@ const patient_thana = async (req, res) => {
 
 const alldriver = async (req, res) => {
     try {
-        const result = await user.driverAll();
+        const uid = req.user.uid;
+        const result = await user.driverAll(uid);
         res.send(result);
     } catch (error) {
         console.error('Error fetching data:', error.message);

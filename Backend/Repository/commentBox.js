@@ -16,7 +16,6 @@ const new_Comment_add = async (booking_id , sender_id , message) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 }
 
@@ -31,7 +30,6 @@ const show_all_Comment = async (booking_id) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 }
 

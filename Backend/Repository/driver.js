@@ -3,7 +3,7 @@ const constant = require("./constants")
 const user = require("./user")
 
 //appointment e total fare rakhte hobe
-const patientList =         "SELECT u.uname, u."+ constant.TABLE_USER_MOBILE_NO + ", a.date, a.time, a.booking_id " +
+const patientList =         "SELECT u.uname, u."+ constant.TABLE_USER_MOBILE_NO + ", a.date, a.time " +
                             "FROM booking a " +
                             "JOIN driver n ON a.driver_id = n.driver_id " +
                             "JOIN users u ON a.patient_id = u.uid " +
@@ -19,7 +19,6 @@ const patientListDetails_driver = async (drid) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 }
 
@@ -42,7 +41,6 @@ const getDriverProfile = async (driver_id) => {
         return result.rows[0];
     } catch (error) {
         console.error('Error fetching driver profile:', error.message);
-        throw error;
     }
 };
 
@@ -68,7 +66,6 @@ const update_profile = async (did, mobile_no,street,thana,city,district) => {
         return result.rowsAffected === 1;
     } catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 };
 

@@ -18,7 +18,6 @@ const remove_booking = async (booking_id) => {
     }
     catch (error) {
         console.error('Error deleting data:', error.message);
-        throw error;
     }
 }
 
@@ -37,7 +36,6 @@ const availableDoctor = async (hid) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 }
 
@@ -52,7 +50,6 @@ const hospital_name = async () => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 }
 
@@ -73,7 +70,6 @@ const available_nurse = async (hid) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 }
 
@@ -91,7 +87,6 @@ const available_driver = async (hid) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 }
 
@@ -114,7 +109,6 @@ const addtest = async (testname, price, hospital_id) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 }
 
@@ -129,7 +123,6 @@ const showtest = async (hospital_id) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 }
 
@@ -146,7 +139,6 @@ const updateTESTPrice = async (testname, price, hospital_id) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 }
 
@@ -161,7 +153,6 @@ const deleteTEST = async (testid, hospital_id) => {
     }
     catch (error) {
         console.error('Error deleting data:', error.message);
-        throw error;
     }
 }
 
@@ -205,7 +196,6 @@ const update_employee_hospital = async (email, hospital_id) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 }
 //------------------------------------------------------------------------
@@ -238,7 +228,6 @@ const assign_nurse_to_test = async (nurse_email, booking_id) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 }
 
@@ -260,7 +249,6 @@ const booking_total = async (hospital_id) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 }
 
@@ -279,7 +267,6 @@ const show_complaint = async (booking_id,hospital_id) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 }
 
@@ -298,7 +285,6 @@ const show_patient_request_checkup = async (hospital_id) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 }
 
@@ -318,7 +304,6 @@ const pending_test = async (booking_id) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 }
 
@@ -338,7 +323,6 @@ const pendingDoctor = async (hid) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 }
 
@@ -356,7 +340,6 @@ const pendingNurse = async (hid) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 }
 
@@ -374,7 +357,6 @@ const pendingDriver = async (hid) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 }
 
@@ -418,7 +400,6 @@ const remove_employee_hospital = async (email, hospital_id) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 }
 
@@ -453,7 +434,6 @@ const booking_one = async (hospital_id, booking_id) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 }
 
@@ -467,7 +447,6 @@ const onetest = async (test_id) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
     }
 }
 

@@ -42,7 +42,7 @@ const driverSearchByThana = async (thana) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
+        
     }
 }
 
@@ -76,25 +76,36 @@ const driverSearchByPatientThana = async (uid) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
+        
     }
 }
 
 const all = "SELECT * FROM " + constant.TABLE_DRIVER ;
 
 const one = "SELECT * FROM driver where driver_id = $1";
+const patient_address = "SELECT street,thana,city,district FROM patient WHERE pid = $1"
 
-const driverAll = async () => {
+const driverAll = async (pid) => {
     try {
         const client = await getConnection.connect();
         const result = await client.query(all);
+        const patient_address_details = await client.query(patient_address,[pid]);
         for(var i = 0; i < result.rows.length; i++){
             const hospital_id = result.rows[i].hospital_id;
             const driver = await client.query(userDetail,[result.rows[i].driver_id]);
             result.rows[i].driver_name = driver.rows[0].uname;
             result.rows[i].driver_phone = driver.rows[0].mobile_no;
+            result.rows[i].street = result.rows[0].street;
+            result.rows[i].city = result.rows[0].city;
+            result.rows[i].thana = result.rows[0].thana;
+            result.rows[i].district = result.rows[0].district;
+            result.rows[i].patient_street = patient_address_details.rows[0].street;
+            result.rows[i].patient_city = patient_address_details.rows[0].city;
+            result.rows[i].patient_thana = patient_address_details.rows[0].thana;
+            result.rows[i].patient_district = patient_address_details.rows[0].district;
             if(hospital_id == null){
                 result.rows[i].hospital = "Self";
+               
                 continue;
             }
             else {
@@ -105,13 +116,15 @@ const driverAll = async () => {
             result.rows[i].thana = hospital_name.rows[0].thana;
             result.rows[i].district = hospital_name.rows[0].district;
             }
+            
+
         }
         client.release();
         return result.rows;
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
+        
     }
 }
 
@@ -139,7 +152,7 @@ const onedriver = async (did) => {
     }
     catch (error) {
         console.error('Error fetching data:', error.message);
-        throw error;
+        
     }
 }
 

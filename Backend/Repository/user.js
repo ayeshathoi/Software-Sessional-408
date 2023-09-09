@@ -74,7 +74,6 @@ const CREATE_PATIENT = "INSERT INTO " + constant.TABLE_PATIENT +
 const create_user = async(username,usrtype,email,pass,mobile,dob,gender) => {
     try {
         const client = await getConnection.connect();
-        console.log(username , usrtype, email, pass, mobile,dob,gender);
         const result = await client.query(CREATE_USER, [username,usrtype,email,pass,mobile,dob,gender]);
         client.release();
         return result.rowsAffected === 1;
@@ -174,7 +173,6 @@ const create_nurse = async (username,nid_no,email,pass,mobile,dob,gender,designa
       const user_type = "nurse";
       await create_user(username,user_type,email,pass,mobile,dob,gender);
       const nid = await findpid(email);
-      console.log(nid);
       const nid2 = nid[0].uid;
       const stat = "pending";
       const hid = await findhid(hospital_name);
@@ -261,7 +259,6 @@ const GET_USER_DETAILEmail = async (email) => {
         var result = await client.query(UserDetailbyEmail, [email]);
         if(result.rows[0].user_type == "doctor"){
             const result2 = await client.query(doctor, [result.rows[0].uid]);
-            console.log(result2.rows[0]);
             result.rows[0].status = result2.rows[0].employee_status;
         }
         else if(result.rows[0].user_type == "driver"){

@@ -35,8 +35,6 @@ function LogIn() {
     e.preventDefault();
     try {
       const ret = await login(formData);
-      console.log(ret);
-
       if (ret) {
         let userProfileUrl = '';
         if (ret === 'doctor') {

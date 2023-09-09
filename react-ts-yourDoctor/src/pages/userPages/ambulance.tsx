@@ -16,7 +16,7 @@ interface Ambulance {
   ambulance_type: string;
   total_price: number;
   hospital_id: number;
-  hospital: string;
+  hospital_name: string;
   street: string;
   city: string;
   thana: string;
@@ -40,6 +40,7 @@ function Ambulances() {
   useEffect(() => {
     patient_ambulance()
       .then((patient_ambulance_list) => {
+        console.log(patient_ambulance_list);
         if (patient_ambulance_list) {
           // sort
           const sort = patient_ambulance_list.sort(
@@ -139,6 +140,7 @@ function Ambulances() {
           </button>
         </div>
         <div className="bg-white p-4 rounded-lg shadow-md">
+        Call if you want to contact
           <ul className="space-y-4">
             {AmbulancesToShow.map((ambulance, index) => (
               <li key={index} className="flex justify-between items-center">
@@ -149,11 +151,13 @@ function Ambulances() {
                   <p className="text-gray-600">
                     Ambulance Type : {ambulance.ambulance_type}
                   </p>
-                  <hr />
                 </div>
                 <div className="text-right">
                   <p className="text-sm text-gray-500">
                     {ambulance.date.split('T')[0]}
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    Hospital Name: {ambulance.hospital_name}
                   </p>
                   <p className="text-sm text-gray-500">
                     Fee: {ambulance.total_price}
@@ -161,7 +165,7 @@ function Ambulances() {
                   <p className="text-sm text-gray-500">
                     Time: {ambulance.time.split('T')[0]}
                   </p>
-                  <Tooltip title="Chat">
+                  {/* <Tooltip title="Chat">
                     <Button
                       variant="contained"
                       color="inherit"
@@ -176,7 +180,7 @@ function Ambulances() {
                     >
                       <ForumTwoToneIcon />
                     </Button>
-                  </Tooltip>
+                  </Tooltip> */}
                   {selectedSection === 'previous' && (
                     <Tooltip title="Add Review">
                       <Button

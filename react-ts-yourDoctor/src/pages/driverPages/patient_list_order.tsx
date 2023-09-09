@@ -100,7 +100,7 @@ function Order() {
         </div>
         <div className="bg-white p-4 rounded-lg shadow-md">
           <h2 className="text-lg font-semibold mb-3">
-            {selectedSection === 'upcoming' ? 'Upcoming' : 'Previous'} Order
+            Call if you want to contact
           </h2>
           <ul className="space-y-4">
             {AmbulancesToShow.map((ambulance, index) => (
@@ -122,7 +122,7 @@ function Order() {
                     Time: {ambulance.time}
                   </p>
                   <p>{ambulance.booking_id}</p>
-                  <Tooltip title="Chat">
+                  {/* <Tooltip title="Chat">
                     <Button
                       variant="contained"
                       color="inherit"
@@ -137,7 +137,7 @@ function Order() {
                     >
                       <ForumTwoToneIcon />
                     </Button>
-                  </Tooltip>
+                  </Tooltip> */}
                 </div>
               </li>
             ))}

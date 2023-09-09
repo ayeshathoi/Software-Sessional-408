@@ -95,16 +95,19 @@ const driverAll = async (pid) => {
             const driver = await client.query(userDetail,[result.rows[i].driver_id]);
             result.rows[i].driver_name = driver.rows[0].uname;
             result.rows[i].driver_phone = driver.rows[0].mobile_no;
-            result.rows[i].street = result.rows[0].street;
-            result.rows[i].city = result.rows[0].city;
-            result.rows[i].thana = result.rows[0].thana;
-            result.rows[i].district = result.rows[0].district;
+            
             result.rows[i].patient_street = patient_address_details.rows[0].street;
             result.rows[i].patient_city = patient_address_details.rows[0].city;
             result.rows[i].patient_thana = patient_address_details.rows[0].thana;
             result.rows[i].patient_district = patient_address_details.rows[0].district;
             if(hospital_id == null){
                 result.rows[i].hospital = "Self";
+                const one_details = await client.query(one,[result.rows[i].driver_id]);
+                result.rows[i].street = one_details.rows[0].street;
+                result.rows[i].city = one_details.rows[0].city;
+                result.rows[i].thana = one_details.rows[0].thana;
+                result.rows[i].district = one_details.rows[0].district;
+
                
                 continue;
             }

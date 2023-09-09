@@ -112,7 +112,7 @@ const checkUpDetails = async (pid) => {
 };
 
 //driver er hospital eishob fixed kra lagbe
-const Ambulance = "SELECT a.time,a.date,a.booking_id, u.uname, d.ambulance_type,a.hospital_id,a.total_price " +
+const Ambulance = "SELECT a.driver_id,a.time,a.date,a.booking_id, u.uname, d.ambulance_type,a.hospital_id,a.total_price " +
                   "FROM booking a " +
                   "JOIN driver d ON a.driver_id = d.driver_id " +
                   "JOIN users u ON d.driver_id = u.uid " +
@@ -121,28 +121,35 @@ const Ambulance = "SELECT a.time,a.date,a.booking_id, u.uname, d.ambulance_type,
 
 
 const hospitalname = "SELECT hospital_name,street,city,thana,district FROM hospital WHERE hospital_id = $1"
+const driver = "SELECT * FROM driver WHERE driver_id = $1"
 const ambulanceDetails = async (pid) => {
     try {
         const client = await getConnection.connect();
         const result = await client.query(Ambulance, [pid]);
+
         for (let i = 0; i < result.rows.length; i++) 
         {
             const hospital_id = result.rows[i].hospital_id;
             if(result.rows[i].hospital_id == null){
+
                 result.rows[i].hospital_name = "Self";
+                const driver_check = await client.query(driver, [result.rows[i].driver_id]);
+                result.rows[i].street = driver_check.rows[0].street;
+                result.rows[i].city = driver_check.rows[0].city;
+                result.rows[i].thana = driver_check.rows[0].thana;
+                result.rows[i].district = driver_check.rows[0].district;
             }
 
             else {
             const hospital_name = await client.query(hospitalname,[hospital_id]);
-            result.rows[i].hospital_name = hospital_name.rows[0].hospital_name;
-            result.rows[i].street = hospital_name.rows[0].street;
-            result.rows[i].city = hospital_name.rows[0].city;
-            result.rows[i].thana = hospital_name.rows[0].thana;
-            result.rows[i].district = hospital_name.rows[0].district;
+                result.rows[i].hospital_name = hospital_name.rows[0].hospital_name;
+                result.rows[i].street = hospital_name.rows[0].street;
+                result.rows[i].city = hospital_name.rows[0].city;
+                result.rows[i].thana = hospital_name.rows[0].thana;
+                result.rows[i].district = hospital_name.rows[0].district;
             }
         
         }
-        console.log(result.rows);
 
         client.release();
         return result.rows;

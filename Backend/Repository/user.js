@@ -74,6 +74,7 @@ const CREATE_PATIENT = "INSERT INTO " + constant.TABLE_PATIENT +
 const create_user = async(username,usrtype,email,pass,mobile,dob,gender) => {
     try {
         const client = await getConnection.connect();
+        console.log(username , usrtype, email, pass, mobile,dob,gender);
         const result = await client.query(CREATE_USER, [username,usrtype,email,pass,mobile,dob,gender]);
         client.release();
         return result.rowsAffected === 1;
@@ -169,15 +170,15 @@ const CREATE_NURSE = "INSERT INTO " + constant.TABLE_NURSE +
 
 const create_nurse = async (username,nid_no,email,pass,mobile,dob,gender,designation,hospital_name) => {
   try {
-
       const client = await getConnection.connect();
       const user_type = "nurse";
       await create_user(username,user_type,email,pass,mobile,dob,gender);
       const nid = await findpid(email);
-      const nid2 = nid[0].uid.toString();
+      console.log(nid);
+      const nid2 = nid[0].uid;
       const stat = "pending";
       const hid = await findhid(hospital_name);
-      const hid2 = hid[0].hospital_id.toString();
+      const hid2 = hid[0].hospital_id;
       const result = await client.query(CREATE_NURSE, [nid2,designation,stat,nid_no,hid2]);
       client.release();
       return result.rowsAffected === 1;
@@ -216,8 +217,9 @@ const create_driver = async (username,email,pass,mobile,dob,gender,type,fare,
       result = await client.query(CREATE_DRIVER, [drid2,type,fare,stat,street,thana,city,district,nid,hid2]);
       }
       else{
+        const status = "Available";
         if(street != null && thana != null && city != null && district != null){
-        result = await client.query(CREATE_DRIVER, [drid2,type,fare,stat,street,thana,city,district,nid,null]);
+        result = await client.query(CREATE_DRIVER, [drid2,type,fare,status,street,thana,city,district,nid,null]);
         }
         else
             {return false;}
@@ -249,11 +251,37 @@ const GET_USER_DETAIL = async (uid) => {
 
 //-------------------------------------------------------------------------
 const UserDetailbyEmail = "SELECT * FROM users where email = $1"
-
+const doctor = "SELECT * FROM doctor where doctor_id = $1"
+const driver = "SELECT * FROM driver where driver_id = $1"
+const nurse = "SELECT * FROM nurse where nurse_id = $1"
+const hospital = "SELECT * FROM hospital where hospital_id = $1"
 const GET_USER_DETAILEmail = async (email) => {
     try {
         const client = await getConnection.connect();
-        const result = await client.query(UserDetailbyEmail, [email]);
+        var result = await client.query(UserDetailbyEmail, [email]);
+        if(result.rows[0].user_type == "doctor"){
+            const result2 = await client.query(doctor, [result.rows[0].uid]);
+            console.log(result2.rows[0]);
+            result.rows[0].status = result2.rows[0].employee_status;
+        }
+        else if(result.rows[0].user_type == "driver"){
+            const result2 = await client.query(driver, [result.rows[0].uid]);
+            result.rows[0].status = result2.rows[0].employee_status;
+        }
+        else if(result.rows[0].user_type == "nurse"){
+            const result2 = await client.query(nurse, [result.rows[0].uid]);
+            result.rows[0].status = result2.rows[0].employee_status;
+        }
+        else if(result.rows[0].user_type == "hospital"){
+            const result2 = await client.query(hospital, [result.rows[0].uid]);
+            result.rows[0].status = result2.rows[0].verification_status;
+        }
+
+        else if(result.rows[0].user_type == "patient"){
+            result.rows[0].status = "Available";
+        }
+
+
         client.release();
         return result.rows;
     }
@@ -262,25 +290,7 @@ const GET_USER_DETAILEmail = async (email) => {
     }
 };
 
-//-------------------------------------------------------------------------
-// const HospitalDetail = "SELECT * FROM hospital where email = $1"
-
-// const GET_HOSPITAL_DETAIL = async (email) => {
-//     try {
-//         const client = await getConnection.connect();
-//         const result = await client.query(HospitalDetail, [email]);
-//         client.release();
-//         return result.rows;
-//     }
-//     catch (error) {
-//         console.error('Error fetching data:', error.message);
-//      
-//     }
-// };
-
-
 const HospitalDetailbyId = "SELECT * FROM hospital where hospital_id = $1"
-
 const GET_HOSPITAL_DETAILID = async (hospital_id) => {
     try {
         const client = await getConnection.connect();

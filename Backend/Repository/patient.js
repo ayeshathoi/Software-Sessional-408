@@ -296,11 +296,26 @@ const doctorAllSearch = async () => {
     }
 };
 
-const TestList="SELECT t.testname,t.price ,h.hospital_name " +"FROM test t "+"JOIN hospital h ON t.hospital_id = h.hospital_id " ;
-const testAllSearch = async () => {
+const check_patient = "select street, thana, city, district from patient where pid = $1";
+
+const TestList="SELECT t.testname,t.price ,h.hospital_name,t.hospital_id FROM test t "+"JOIN hospital h ON t.hospital_id = h.hospital_id " ;
+const testAllSearch = async (pid) => {
     try {
         const client = await getConnection.connect();
         const result = await client.query(TestList);
+        const result2 = await client.query(check_patient, [pid]);
+        for (let i = 0; i < result.rows.length; i++) {
+            const hospital_id = result.rows[i].hospital_id;
+            const hospital_name = await client.query(hospitalname,[hospital_id]);
+            result.rows[i].street = hospital_name.rows[0].street;
+            result.rows[i].city = hospital_name.rows[0].city;
+            result.rows[i].thana = hospital_name.rows[0].thana;
+            result.rows[i].district = hospital_name.rows[0].district;
+            result.rows[i].patient_street = result2.rows[0].street;
+            result.rows[i].patient_city = result2.rows[0].city;
+            result.rows[i].patient_thana = result2.rows[0].thana;
+            result.rows[i].patient_district = result2.rows[0].district;
+        }
         client.release();
         return result.rows;
     }

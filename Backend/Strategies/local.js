@@ -21,10 +21,20 @@ passport.use(
                  done(new Error('Invalid Email or Password'), null);
             }
 
-            try {
+            if(user[0].status == "pending")
+            {
+                done(new Error('Your account is pending approval'), null);
+            }
 
+            //admin query to update verification status of hospital to available
+            // UPDATE hospital
+            // SET verification_status = 'Available'
+            // WHERE hospital_id = 1;
+
+            try {
             const match = await bcrypt.compare(password,user[0].pass);
             if(match){
+
                 done (null,user[0]);
             }
             

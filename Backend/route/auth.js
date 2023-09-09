@@ -51,8 +51,7 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
     if(user.user_type != 'patient' && user.user_type != 'hospital' && user.user_type != 'driver' && user.user_type != 'doctor' && user.user_type != 'nurse'){
         res.status(error.BAD_REQUEST).json({ error: 'An error occurred while logging in.' });
     }
-    
-    
+        
     else 
      res.status(error.OK).send(user.user_type);
     }

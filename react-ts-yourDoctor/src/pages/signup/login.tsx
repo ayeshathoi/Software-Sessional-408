@@ -55,7 +55,7 @@ function LogIn() {
       }
 
     } catch (err) {
-      alert('Invalid email or password');
+      alert('Invalid credentials or your account is not verified');
       console.log(err);
     }
   };

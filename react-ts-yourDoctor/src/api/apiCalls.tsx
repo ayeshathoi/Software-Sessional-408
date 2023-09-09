@@ -221,6 +221,7 @@ export const reg_nurse = async (formData) => {
     'http://localhost:3000/auth/register/nurse',
     formData
   );
+  console.log(ret.data);
   return ret.data;
 };
 

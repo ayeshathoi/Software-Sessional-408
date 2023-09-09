@@ -130,7 +130,8 @@ const doctor_all_search = async (req, res) => {
 }
 const test_all_search = async (req, res) => {
     try {
-        const testDetails = await user.testAllSearch();
+        const uid = req.user.uid;
+        const testDetails = await user.testAllSearch(uid);
         res.status(http_status.OK).json(testDetails);
     } catch (error) {
         res.status(http_status.BAD_REQUEST).json({ error: 'An error occurred while fetching user details.' });

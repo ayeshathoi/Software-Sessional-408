@@ -23,6 +23,7 @@ function DoctorHome() {
     speciality: '',
     qualification: '',
     employee_status: '',
+    type: '',
     zoom_link: '',
     old_patient_fee: 0,
     new_patient_fee: 0,
@@ -64,7 +65,7 @@ function DoctorHome() {
     }
   }, [user]);
 
-  console.log('STATUS', user.employee_status);
+
   // useEffect(() => {
   //   const alertShown3 = sessionStorage.getItem('employeeStatusAlertShown3');
 

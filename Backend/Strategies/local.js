@@ -11,6 +11,7 @@ passport.use(
             usernameField : 'email',
         },
         async (email,password,done) => {
+            try {
             if(!email || !password){
                  done(new Error('Email and Password are required'), null);
             }
@@ -19,8 +20,10 @@ passport.use(
             if(!user){
                  done(new Error('Invalid Email or Password'), null);
             }
-            const match = bcrypt.compare(password,user[0].pass);
 
+            try {
+
+            const match = await bcrypt.compare(password,user[0].pass);
             if(match){
                 return done (null,user[0]);
             }
@@ -28,6 +31,14 @@ passport.use(
             else{
                 return done(new Error('Invalid Email or Password'), null);
             }
+        }
+        catch(err){
+            return done(err,null);
+        }
+        }
+        catch(err){
+            return done(err,null);
+        }
             
         }
         )

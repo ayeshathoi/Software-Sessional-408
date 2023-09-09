@@ -6,7 +6,6 @@ const DoctorBooking = async (req, res) => {
         const uid = req.user.uid;
         const {price,time,date,payment_method,payment_status,patient_mobile,doctor_id,hospital_name,weekday} = req.body
 
-        console.log(hospital_name);
         if(hospital_name.split(" ")[1] == "Online"){
             const hospital = hospital_name.split(" ")[0] ;
             const type="Online"
@@ -62,15 +61,15 @@ const AmbulanceBooking = async (req, res) => {
     try {
         const uid = req.user.uid;
         const type = "Ambulance";
-        const {price,time,date,payment_method,payment_status,patient_mobile,driver_id,hospital_name} = req.body
+        const {price,time,end_time,date,payment_method,payment_status,patient_mobile,driver_id,hospital_name} = req.body
         if(hospital_name == undefined)
         {
-        const result = await user.bookingAmbulance(type, price,time,date,payment_method,payment_status,patient_mobile,uid,driver_id,null); 
+        const result = await user.bookingAmbulance(type, price,time,end_time,date,payment_method,payment_status,patient_mobile,uid,driver_id,null); 
         res.status(http_status.OK).json({ result });
         }
         else
         {
-            const result = await user.bookingAmbulance(type, price,time,date,payment_method,payment_status,patient_mobile,uid,driver_id,hospital_name); 
+            const result = await user.bookingAmbulance(type, price,time,end_time,date,payment_method,payment_status,patient_mobile,uid,driver_id,hospital_name); 
             res.status(http_status.OK).json({ result });
 
         }

@@ -33,6 +33,7 @@ function BookCheckup() {
     patient_mobile: string;
     date: string;
     time: string;
+    end_time: string;
     payment_method: string;
     price: number;
     payment_status: string;
@@ -42,6 +43,7 @@ function BookCheckup() {
     patient_mobile: '',
     date: '',
     time: '',
+    end_time: '',
     payment_method: '',
     price: parseInt(combinedPrice, 10),
     payment_status: '',
@@ -84,6 +86,7 @@ function BookCheckup() {
       //     console.log('here is the form', res.data);
       //   });
       const res = await bookCheckup(dataToSend);
+      console.log(res);
     } catch (err) {
       console.log(err);
     }
@@ -95,6 +98,9 @@ function BookCheckup() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleTimeChange = (time: any) => {
     setFormData((prevData) => ({ ...prevData, time }));
+  };
+  const handleEndTimeChange = (end_time: any) => {
+    setFormData((prevData) => ({ ...prevData, end_time }));
   };
 
   return (
@@ -142,6 +148,15 @@ function BookCheckup() {
                       label="Time"
                       value={formData.time}
                       onChange={handleTimeChange}
+                    />
+                  </LocalizationProvider>
+                </div>
+                <div className="mb-8">
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <TimePicker
+                      label="delivery end Time"
+                      value={formData.end_time}
+                      onChange={handleEndTimeChange}
                     />
                   </LocalizationProvider>
                 </div>

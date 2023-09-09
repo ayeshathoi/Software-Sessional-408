@@ -180,6 +180,7 @@ const ambulance = "INSERT INTO " + constant.TABLE_BOOKING + " ("
                 + constant.TABLE_BOOKING_TYPE + ", "
                 + constant.TABLE_BOOKING_TOTAL_PRICE + ", "
                 + constant.TABLE_BOOKING_TIME + ", "
+                + "end_time ,"
                 + constant.TABLE_BOOKING_DATE + ", "
                 + constant.TABLE_BOOKING_PAYMENT_METHOD + ", "
                 + constant.TABLE_BOOKING_PAYMENT_STATUS + ", "
@@ -188,13 +189,14 @@ const ambulance = "INSERT INTO " + constant.TABLE_BOOKING + " ("
                 + constant.TABLE_BOOKING_PATIENT_ID + ", "
                 + constant.TABLE_BOOKING_DRIVER_ID + ", "
                 + constant.TABLE_HOSPITAL_ID + ") "
-                + "VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)";
+                + "VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)";
 
 const self_driver_ambulance = 
                 "INSERT INTO " + constant.TABLE_BOOKING + " ("
                 + constant.TABLE_BOOKING_TYPE + ", "
                 + constant.TABLE_BOOKING_TOTAL_PRICE + ", "
                 + constant.TABLE_BOOKING_TIME + ", "
+                + "end_time ,"
                 + constant.TABLE_BOOKING_DATE + ", "
                 + constant.TABLE_BOOKING_PAYMENT_METHOD + ", "
                 + constant.TABLE_BOOKING_PAYMENT_STATUS + ", "
@@ -202,25 +204,43 @@ const self_driver_ambulance =
                 + constant.TABLE_BOOKING_STATUS + ", "
                 + constant.TABLE_BOOKING_PATIENT_ID + ", "
                 + constant.TABLE_BOOKING_DRIVER_ID + ") "
-                + "VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)";
+                + "VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)";
 
-const bookingAmbulance = async (type,price,time,date,payment_method,payment_status,patient_mobile,patient_id,driver_id,hospital_name) =>
+
+const checkbookingbefore = "select * from booking where driver_id = $1 and date = $2";
+
+
+const insideRange = (start, end, value) => {
+    return (value >= start && value <= end);
+}
+
+
+const bookingAmbulance = async (type,price,time,end_time,date,payment_method,payment_status,patient_mobile,patient_id,driver_id,hospital_name) =>
 {
     try {
         const stat = "approved";
+        //console.log(type," ", price," ", time," ", end_time," ", date," ", payment_method," ", payment_status," ", patient_mobile," ", patient_id," ", driver_id," ", hospital_name);
         const client = await getConnection.connect();
         
+        const check = await client.query(checkbookingbefore, [driver_id,date]);
+        for (let index = 0; index < check.rows.length; index++) {
+            if(check.rows[index].time <= end_time && check.rows[index].end_time >= time)
+            {
+                return "Driver is not available at this time.";
+            }
+        }
+
         if (hospital_name == "self")
         {const hid = await user.findhid(hospital_name);
         const hid2 = hid[0].hospital_id;
-        const result = await client.query(ambulance, [type,price,time,date,payment_method,payment_status,
+        const result = await client.query(ambulance, [type,price,time,end_time,date,payment_method,payment_status,
             patient_mobile,stat,patient_id,driver_id,hid2]);
             client.release();
             return result.rows;
         }
         else 
         {
-            const result = await client.query(self_driver_ambulance, [type,price,time,date,payment_method,payment_status,
+            const result = await client.query(self_driver_ambulance, [type,price,time,end_time,date,payment_method,payment_status,
                 patient_mobile,stat,patient_id,driver_id]);
                 client.release();
                 return result.rows;

@@ -22,6 +22,8 @@ interface Appointment {
   booking_id: number;
   type: string;
   zoom_link: string;
+  booked : string;
+ 
 }
 
 function Appointments() {
@@ -131,7 +133,7 @@ function Appointments() {
               <li key={index} className="flex justify-between items-center">
                 <div>
                   <p className="text-lg font-semibold">
-                    Name: {appointment.uname}
+                    {appointment.uname}
                   </p>
                   <p className="text-sm text-gray-600">
                     Designation: {appointment.designation}
@@ -160,6 +162,11 @@ function Appointments() {
                     
                     serial : {appointment.appointment_serial}
                   </p>
+                  <p className="text-sm text-red-600">
+                    {appointment.booked === 'Old Patient' ? 'you are an old patient of this doctor' :
+                    'you are a new patient of this doctor'}
+                    
+                    </p>
                   
                   
                   

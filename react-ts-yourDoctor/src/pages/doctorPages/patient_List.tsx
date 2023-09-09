@@ -15,6 +15,9 @@ interface PatientDetails {
   appointment_serial: number;
   hospital_name: string;
   booking_id: number;
+  type: string;
+  zoom_link: string;
+  booked : string;
 }
 interface PatientArrayProps {
   selectedHospital: string | null;
@@ -28,13 +31,13 @@ function PatientArray({ selectedHospital }: PatientArrayProps) {
     setSelectedSection(section);
   };
   const navigate = useNavigate();
-  console.log('newhospital ', selectedHospital);
 
   useEffect(() => {
     if (selectedHospital) {
       const requestBody = { hospital_name: selectedHospital };
       doctor_patient_list(requestBody).then((res) => {
         if (res) {
+          console.log(res);
           const currentData: PatientDetails[] = res || [];
           const previousPatientListDoctor: PatientDetails[] = JSON.parse(
             localStorage.getItem('previousPatientListDoctor') || '[]'
@@ -95,24 +98,38 @@ function PatientArray({ selectedHospital }: PatientArrayProps) {
           </button>
         </div>
         <div className="bg-white p-4 rounded-lg shadow-md">
-          <h2 className="text-lg font-semibold mr-4">
-            {selectedSection === 'upcoming' ? 'Upcoming' : 'Previous'} Serial
-          </h2>
+
           <ul className="space-y-4">
             {PatientToShow.map((patient, index) => (
               <li key={index} className="flex justify-between items-center">
                 <div>
-                  <p className="text-lg font-semibold">Name: {patient.uname}</p>
-                  <p className="text-gray-600">
+                  <p className="text-lg font-semibold">{patient.uname}</p>
+                  <p className="text-gray-600 text-sm">
+                    {patient.booked}
+                  </p>
+                  <p className="text-gray-600 text-sm">
                     mobile no. : {patient.patient_mobile}
                   </p>
-                  <p className="text-gray-600">
+                  <p className="text-gray-600 text-sm">
                     Serial:{patient.appointment_serial}
                   </p>
-                  <p className="text-gray-600">
-                    Hospital:{patient.hospital_name}
+                  
+                  <p className="text-gray-600 text-sm">
+                    {patient.type === 'Online' ? 'Online Appointment' : 'In Person Appointment'}
+                  {patient.type === 'Online' ? (
+                      <a
+                        href={patient.zoom_link}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-blue-500 hover:text-blue-800"
+                      >
+                        <br />
+                        <small>Zoom Link</small>
+                      </a>
+                    ) : (
+                      ''
+                    )}
                   </p>
-                  <hr />
                 </div>
                 <div className="text-right">
                   <p className="text-sm text-gray-500">

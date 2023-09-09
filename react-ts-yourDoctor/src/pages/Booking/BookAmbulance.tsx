@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, ChangeEvent, FormEvent } from 'react';
 import { format } from 'date-fns';
-import { useLocation } from 'react-router-dom';
+import { useNavigate,useLocation } from 'react-router-dom';
 import { bookAmbulance } from '@/api/apiCalls';
 import {
   Button,
@@ -27,12 +27,14 @@ function BookAmbulance() {
   const location = useLocation();
   // const navigate = useNavigate();
   const { driverName, driverID, price, hospitalName,  } = location.state;
+  const navigator = useNavigate();
 
   // const {  } = ;
   const [formData, setFormData] = useState<{
     patient_mobile: string;
     date: string;
     time: string;
+    end_time: string;
     payment_method: string;
     price: number;
     payment_status: string;
@@ -42,6 +44,7 @@ function BookAmbulance() {
     patient_mobile: '',
     date: '',
     time: '',
+    end_time: '',
     payment_method: '',
     price: parseInt(price, 10),
     payment_status: '',
@@ -60,15 +63,24 @@ function BookAmbulance() {
       ...prevFormData,
       [name]: value,
       payment_status: paymentStatus,
-      // hospital_name: hospitalname,
     }));
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      // console.log('here is the form', formData);
       const formattedTime = format(new Date(formData.time), 'HH:mm:ss');
+      
+      const formattedEndTime = format(new Date(formData.end_time), 'HH:mm:ss');
+      //add 1 hr to end time
+      var d = new Date(formData.end_time);
+      d.setHours(d.getHours() + 5);
+      const formattedEndTimePlusOne = format(new Date(d), 'HH:mm:ss');
+      if (formattedTime > formattedEndTime) {
+        alert('Start time must be less than end time');
+        return;
+      }
+      
       const formattedDate = format(new Date(formData.date), 'yyyy-MM-dd');
       const hospitalNameToSend =
         formData.hospital_name === 'Online' ? null : formData.hospital_name;
@@ -76,15 +88,19 @@ function BookAmbulance() {
         ...formData,
         date: formattedDate,
         time: formattedTime,
+        end_time: formattedEndTimePlusOne,
         hospital_name: hospitalNameToSend,
       };
 
-      // await axios
-      //   .post(`http://localhost:3000/booking/ambulance`, dataToSend)
-      //   .then((res) => {
-      //     console.log('here is the form', res.data);
-      //   });
       const res = await bookAmbulance(dataToSend);
+      console.log(res);
+      if (res.result!= "Driver is not available at this time.") {
+        alert('Ambulance Booked Successfully');
+        navigator('/userHome')
+      }
+      else {
+        alert('Driver is not available at this time.')
+      }
     } catch (err) {
       console.log(err);
     }
@@ -96,6 +112,10 @@ function BookAmbulance() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleTimeChange = (time: any) => {
     setFormData((prevData) => ({ ...prevData, time }));
+  };
+
+  const handleEndTimeChange = (end_time: any) => {
+    setFormData((prevData) => ({ ...prevData, end_time }));
   };
 
   return (
@@ -139,9 +159,18 @@ function BookAmbulance() {
                 <div className="mb-8">
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <TimePicker
-                      label="delivery Time"
+                      label="delivery start Time"
                       value={formData.time}
                       onChange={handleTimeChange}
+                    />
+                  </LocalizationProvider>
+                </div>
+                <div className="mb-8">
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <TimePicker
+                      label="delivery end Time"
+                      value={formData.end_time}
+                      onChange={handleEndTimeChange}
                     />
                   </LocalizationProvider>
                 </div>

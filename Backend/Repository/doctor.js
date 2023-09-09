@@ -4,18 +4,33 @@ const constant = require("./constants")
 const user = require("./user")
 
 
-const patientList = "SELECT b.appointment_serial,u.uname,b.booking_id, b.patient_mobile, b.total_price"
-                    + " , b.time ,b.date, h.hospital_name " +
+const patientList = "SELECT u.uid,d.zoom_link,b.appointment_serial,u.uname,b.booking_id, b.patient_mobile, b.total_price"
+                    + " ,b.type, b.time ,b.date, h.hospital_name " +
                     "FROM booking b " +
                     "JOIN doctor d ON b.doctor_id = d.doctor_id " +
                     "JOIN hospital h ON h.hospital_id = b.hospital_id " +
                     "JOIN users u ON b.patient_id = u.uid " +
                     "WHERE b.doctor_id = $1 AND h.hospital_name = $2"
 
+const check = "SELECT * FROM booking WHERE doctor_id = $1 AND patient_id = $2 AND appointment_serial != -1"
+
+
 const patientListDetails_doctor = async (did , hospital_name) => {
     try {
         const client = await getConnection.connect();
         const result = await client.query(patientList, [did,hospital_name]);
+        for (var i = 0;i<result.rows.length;i++)
+        {
+            const check1 = await client.query(check, [did,result.rows[i].uid]);
+            if(check1.rows.length == 1 && check1.rows[0].appointment_serial !=-1)
+            {
+                result.rows[i].booked = "New Patient"
+            }
+            else if (check1.rows.length > 1)
+            {
+                result.rows[i].booked = "Old Patient"
+            }
+        }
         client.release();
         return result.rows;
     }

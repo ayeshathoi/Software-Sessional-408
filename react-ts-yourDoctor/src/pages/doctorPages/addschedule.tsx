@@ -1,6 +1,6 @@
 /* eslint-disable react/no-array-index-key */
 import { useState, ChangeEvent, FormEvent, useEffect } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import {useNavigate, useParams, useLocation } from 'react-router-dom';
 import {
   TextField,
   Button,
@@ -73,6 +73,7 @@ function AddSchedule() {
 
   const [selectedHospital, setSelectedHospital] = useState<string>('');
   const [numberOfDays, setNumberOfDays] = useState<number | string>('');
+  const navigator = useNavigate();
 
   useEffect(() => {
     if (hospitalNames) {
@@ -100,6 +101,7 @@ function AddSchedule() {
 
     try {
       const ret = await addSchedule_Doctor(requestData); // Use the api call from apiCalls.tsx
+      navigator('/doctorHome');
     } catch (err) {
       console.log(err);
     }

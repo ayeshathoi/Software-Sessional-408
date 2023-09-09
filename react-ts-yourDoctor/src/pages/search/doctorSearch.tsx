@@ -67,9 +67,10 @@ function DoctorSearch() {
           sortedData.sort((a, b) => b.new_patient_fee - a.new_patient_fee);
           setuserData(sortedData);
         }
-        if (sortBy === 'Old  Price Low to High') {
+        else if (sortBy === 'Old  Price Low to High') {
           const sortedData = [...ret];
-          sortedData.sort((a, b) => a.old_patient_fee - b.old_patient_fee);
+          sortedData.sort((a, b) =>
+          a.old_patient_fee - b.old_patient_fee);
           setuserData(sortedData);
         } else if (sortBy === 'Old Price High to Low') {
           const sortedData = [...ret];
@@ -201,7 +202,7 @@ function DoctorSearch() {
             <option value="Popularity">Popularity</option>
             <option value="New Price Low to High">New Visit Low to High</option>
             <option value="New Price High to Low">New Visit High to Low</option>
-            <option value="Old Price Low to High">Old Visit Low to High</option>
+            <option value="Old  Price Low to High">Old Visit Low to High</option>
             <option value="Old Price High to Low">Old Visit High to Low</option>
           </select>
         </div>
@@ -247,7 +248,7 @@ function DoctorSearch() {
                   <option value="Monday">Monday</option>
                   <option value="Tuesday">Tuesday</option>
                   <option value="Wednesday">Wednesday</option>
-                  <option value="Thrusday">Thrusday</option>
+                  <option value="Thursday">Thursday</option>
                   <option value="Friday">Friday</option>
                 </select>
               </label>

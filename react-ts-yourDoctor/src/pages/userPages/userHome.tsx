@@ -227,7 +227,6 @@ function UserHome() {
                 alt="Health Check"
                 className="w-48 h-48 rounded-full mx-auto mb-4"
               />
-              <h2 className="text-xl font-semibold mb-2">Health Check</h2>
               <Tests />
               {/* Add content related to health check */}
             </div>
@@ -239,7 +238,6 @@ function UserHome() {
                 alt="Ambulance"
                 className="w-48 h-48 rounded-full mx-auto mb-4"
               />
-              <h2 className="text-xl font-semibold mb-2">Ambulance Order</h2>
               {/* Add content related to ambulance */}
               <Ambulances />
             </div>

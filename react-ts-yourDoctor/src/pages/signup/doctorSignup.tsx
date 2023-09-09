@@ -150,8 +150,8 @@ function DoctorSignup() {
     else if (formData.designation.length < 3) {
       alert('Designation should be at least 3 characters.');
     }
-    else if (formData.qualification.length < 3) {
-      alert('Qualification should be at least 3 characters.');
+    else if (formData.qualification.length < 2) {
+      alert('Qualification should be at least 2 characters.');
     }
 
     else if (formData.speciality.length < 3) {
@@ -307,7 +307,7 @@ function DoctorSignup() {
               className="w-full"
             />
 
-            <TextField
+            {/* <TextField
               label="Designation"
               name="designation"
               value={formData.designation}
@@ -315,8 +315,27 @@ function DoctorSignup() {
               variant="outlined"
               required
               className="w-full"
-            />
-            <TextField
+            /> */}
+            <select
+              name="designation"
+              value={formData.designation}
+              onChange={handleChange}
+              className="w-full bg-white border border-gray-300 rounded-md px-4 py-2 mt-2 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent"
+            >
+              <option value="0">Select your designation</option>
+              <option value="Consultant">Consultant</option>
+              <option value="Assistant Professor">Assistant Professor</option>
+              <option value="Associate Professor">
+                Associate Professor
+              </option>
+              <option value="Professor">Professor</option>
+              <option value="Senior Consultant">Senior Consultant</option>
+              <option value="Senior Registrar">Senior Registrar</option>
+              <option value="Registrar">Registrar</option>
+              <option value="Medical Officer">Medical Officer</option>
+              <option value="Medical Student">Medical Student</option>
+            </select>
+            {/* <TextField
               label="Qualification"
               name="qualification"
               value={formData.qualification}
@@ -324,9 +343,21 @@ function DoctorSignup() {
               variant="outlined"
               required
               className="w-full"
-            />
+            /> */}
+            <select
+              name="qualification"
+              value={formData.qualification}
+              onChange={handleChange}
+              className="w-full bg-white border border-gray-300 rounded-md px-4 py-2 mt-2 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent"
+            >
+              <option value="0">Select your qualification</option>
+              <option value="MBBS">MBBS</option>
+              <option value="MD">MD</option>
+              <option value="MCH">MCH</option>
+              <option value="DM">DM</option>
+              </select>
 
-            <TextField
+            {/* <TextField
               label="Speciality"
               name="speciality"
               value={formData.speciality}
@@ -334,7 +365,31 @@ function DoctorSignup() {
               variant="outlined"
               required
               className="w-full"
-            />
+            /> */}
+            <select
+              name="speciality"
+              value={formData.speciality}
+              onChange={handleChange}
+              className="w-full bg-white border border-gray-300 rounded-md px-4 py-2 mt-2 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent"
+            >
+              <option value="0">Select your speciality</option>
+              <option value="Cardiology">Cardiology</option>
+              <option value="Dermatology">Dermatology</option>
+              <option value="Endocrinology">Endocrinology</option>
+              <option value="Gastroenterology">Gastroenterology</option>
+              <option value="General Medicine">General Medicine</option>
+              <option value="General Surgery">General Surgery</option>
+              <option value="Gynaecology">Gynaecology</option>
+              <option value="Neurology">Neurology</option>
+              <option value="Oncology">Oncology</option>
+              <option value="Ophthalmology">Ophthalmology</option>
+              <option value="Orthopaedics">Orthopaedics</option>
+              <option value="Paediatrics">Paediatrics</option>
+              <option value="Psychiatry">Psychiatry</option>
+              <option value="Radiology">Radiology</option>
+              <option value="Urology">Urology</option>
+            </select>
+            
             <select
               name="hospitalname"
               value="0"

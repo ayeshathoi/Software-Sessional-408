@@ -35,11 +35,13 @@ import EditSchedule from './pages/doctorPages/editschedule';
 import AddReview from './pages/userPages/addReview';
 import ViewPrescription from './pages/doctorPages/viewPrescription';
 import ViewPrescriptionUser from './pages/userPages/viewPrescriptionuser';
+import Unauthorized from './Unauthorized';
 
 export function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/unauthorized" element={<Unauthorized />} />
         <Route path="/" element={<Home />} />
         <Route path="*" element={<NotFound />} />
         <Route path="/ProfileOptions" element={<ProfileOptions />} />

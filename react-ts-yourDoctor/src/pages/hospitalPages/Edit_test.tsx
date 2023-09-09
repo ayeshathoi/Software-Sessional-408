@@ -1,5 +1,5 @@
 import { useEffect, useState, ChangeEvent, FormEvent } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import {useLocation, useParams, useNavigate } from 'react-router-dom';
 
 import { TextField, Button } from '@mui/material';
 import HeaderDoctor from '../navbar/headerdoctor';
@@ -18,6 +18,8 @@ function EditTest() {
     testname: '',
     price: 0,
   });
+
+  const location = useLocation();
 
   useEffect(() => {
     test_Details(testID).then((ret) => {

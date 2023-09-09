@@ -1,4 +1,4 @@
-// next time add profile_picture in users table
+
 CREATE TABLE users (
   uid SERIAL PRIMARY KEY,
   uname TEXT,
@@ -10,8 +10,6 @@ CREATE TABLE users (
   gender TEXT
 );
 
-
-
 CREATE TABLE patient (
   pid INTEGER PRIMARY KEY REFERENCES users(uid),
   street TEXT NOT NULL,
@@ -19,6 +17,7 @@ CREATE TABLE patient (
   city TEXT NOT NULL,
   district TEXT NOT NULL
 );
+
 
 CREATE TABLE hospital (
   hospital_id INTEGER PRIMARY KEY REFERENCES users(uid),
@@ -99,7 +98,7 @@ CREATE TABLE booking (
     total_price INTEGER NOT NULL,
     date DATE,
     time TIME,
-    end_time TIME;
+    end_time TIME,
     payment_method TEXT NOT NULL,
     payment_status TEXT NOT NULL,
     patient_mobile VARCHAR(11), 
@@ -133,7 +132,7 @@ CREATE TABLE Chat_message (
     message TEXT NOT NULL,
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-//prescription table
+
 CREATE TABLE prescription (
   prescription_id SERIAL PRIMARY KEY,
   booking_id INTEGER REFERENCES booking(booking_id),

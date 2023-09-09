@@ -97,7 +97,6 @@ function BookAmbulance() {
       };
 
       const res = await bookAmbulance(dataToSend);
-      console.log(res);
       if (res.result!= "Driver is not available at this time.") {
         alert('Ambulance Booked Successfully');
         navigator('/userHome')
@@ -105,6 +104,7 @@ function BookAmbulance() {
       else {
         alert('Driver is not available at this time.')
       }
+      
     } catch (err) {
       console.log(err);
     }

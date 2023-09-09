@@ -61,7 +61,7 @@ function AddTest() {
           onSubmit={handleSubmit}
           className="grid grid-cols-2 gap-y-4 gap-x-6 mt-4"
         >
-          <TextField
+          {/* <TextField
             label="Test Name"
             name="testname"
             value={formData.testname}
@@ -69,7 +69,50 @@ function AddTest() {
             variant="outlined"
             required
             className="w-full"
-          />
+          /> */}
+          <select name="testname" 
+          value={formData.testname}
+          onChange={handleChange} 
+          className="w-full bg-white border border-gray-300 rounded-md px-4 py-2 mt-2 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent">
+            <option value="Select Test">Select Test</option>
+            <option value="Blood Test">Blood Test</option>
+            <option value="Urine Test">Urine Test</option>
+            <option value="X-Ray">X-Ray</option>
+            <option value="CT Scan">CT Scan</option>
+            <option value="MRI">MRI</option>
+            <option value="ECG">ECG</option>
+            <option value="EEG">EEG</option>
+            <option value="EMG">EMG</option>
+            <option value="TMT">TMT</option>
+            <option value="Endoscopy">Endoscopy</option>
+            <option value="Colonoscopy">Colonoscopy</option>
+            <option value="Laparoscopy">Laparoscopy</option>
+            <option value="Biopsy">Biopsy</option>
+            <option value="Mammography">Mammography</option>
+            <option value="Cardiac Stress Test">Cardiac Stress Test</option>
+            <option value="Bone Marrow Aspiration">Bone Marrow Aspiration</option>
+            <option value="Lumbar Puncture">Lumbar Puncture</option>
+            <option value="Angiography">Angiography</option>
+            <option value="Angioplasty">Angioplasty</option>
+            <option value="Cardiac Catheterization">Cardiac Catheterization</option>
+            <option value="Cardiac Electrophysiology">Cardiac Electrophysiology</option>
+            <option value="Cardiac Imaging">Cardiac Imaging</option>
+            <option value="Cardiac MRI">Cardiac MRI</option>
+            <option value="Cardiac Stress Test">Cardiac Stress Test</option>
+            <option value="Cardiac Ultrasound">Cardiac Ultrasound</option>
+            <option value="Cardiac CT">Cardiac CT</option>
+            <option value="Cardiac CT Angiography">Cardiac CT Angiography</option>
+            <option value="Cardiac PET">Cardiac PET</option>
+            <option value="Doppler Ultrasound">Doppler Ultrasound</option>
+            <option value="Echocardiogram">Echocardiogram</option>
+            <option value="Electrocardiogram (EKG)">Electrocardiogram (EKG)</option>
+            <option value="Electrophysiology Study">Electrophysiology Study</option>
+            <option value="Holter Monitor">Holter Monitor</option>
+            <option value="Nuclear Stress Test">Nuclear Stress Test</option>
+            <option value="Stress Echocardiogram">Stress Echocardiogram</option>
+            <option value="Tilt Table Test">Tilt Table Test</option>
+            </select>
+
 
           <TextField
             label="price"
@@ -79,7 +122,7 @@ function AddTest() {
             onChange={handleChange}
             variant="outlined"
             required
-            className="w-full"
+            className="w-full bg-white border border-gray-300 rounded-md px-4 py-2 mt-2 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent"
           />
 
           <div className="col-span-2 flex justify-center">

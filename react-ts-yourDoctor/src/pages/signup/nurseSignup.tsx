@@ -74,7 +74,7 @@ function NurseSignup() {
       else if(formData.password.length < 4){
         alert('Password must be at least 4 characters');
       }
-      else if(formData.nid.length < 10){
+      else if(formData.nid.length < 4){
         alert('NID must be at least 4 characters');
 
       }
@@ -221,7 +221,7 @@ function NurseSignup() {
               </RadioGroup>
             </div>
 
-            <TextField
+            {/* <TextField
               label="Designation"
               name="designation"
               value={formData.designation}
@@ -229,7 +229,13 @@ function NurseSignup() {
               variant="outlined"
               required
               className="w-full"
-            />
+            /> */}
+            <select name="designation" value={formData.designation} onChange={handleChange} className="w-full bg-white border border-gray-300 rounded-md px-4 py-2 mt-2 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent">
+              <option value="0">Select your designation</option>
+              <option value="Junior Nurse">Junior Nurse</option>
+              <option value="Senior Nurse">Senior Nurse</option>
+              <option value="Head Nurse">Head Nurse</option>
+            </select>
 
             <div>
               <label

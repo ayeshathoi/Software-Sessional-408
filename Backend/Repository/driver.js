@@ -3,7 +3,7 @@ const constant = require("./constants")
 const user = require("./user")
 
 //appointment e total fare rakhte hobe
-const patientList =         "SELECT u.uname, u."+ constant.TABLE_USER_MOBILE_NO + ", a.date, a.time " +
+const patientList =         "SELECT u.uname, u."+ constant.TABLE_USER_MOBILE_NO + ", a.date, a.time, a.booking_id " +
                             "FROM booking a " +
                             "JOIN driver n ON a.driver_id = n.driver_id " +
                             "JOIN users u ON a.patient_id = u.uid " +

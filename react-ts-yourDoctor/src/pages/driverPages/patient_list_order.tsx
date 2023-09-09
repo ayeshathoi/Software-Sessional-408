@@ -1,6 +1,9 @@
 /* eslint-disable import/extensions */
 /* eslint-disable react/no-array-index-key */
 import { SetStateAction, useEffect, useState } from 'react';
+import { Button, Tooltip } from '@mui/material';
+import ForumTwoToneIcon from '@mui/icons-material/ForumTwoTone';
+import { useNavigate } from 'react-router-dom';
 import { driver_patient_list } from '@/api/apiCalls';
 
 interface Ambulance {
@@ -8,6 +11,7 @@ interface Ambulance {
   date: string;
   uname: string;
   mobile_no: string;
+  booking_id: number;
 }
 
 function Order() {
@@ -18,6 +22,8 @@ function Order() {
     setSelectedSection(section);
   };
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     // axios
     //   .get(`http://localhost:3000/driver/order`)
@@ -27,12 +33,12 @@ function Order() {
     //   })
     driver_patient_list().then((res) => {
       if (res) {
-        //sort
+        // sort
         const sort = res.result.sort(
           (a: Ambulance, b: Ambulance) =>
             new Date(a.date).getTime() - new Date(b.date).getTime()
         );
-        
+
         const currentData: Ambulance[] = res.result || [];
         const previousPatientListDriver: Ambulance[] = JSON.parse(
           localStorage.getItem('previousPatientListDriver') || '[]'
@@ -115,6 +121,23 @@ function Order() {
                   <p className="text-sm text-gray-500">
                     Time: {ambulance.time}
                   </p>
+                  <p>{ambulance.booking_id}</p>
+                  <Tooltip title="Chat">
+                    <Button
+                      variant="contained"
+                      color="inherit"
+                      onClick={() =>
+                        navigate('/Chatbox', {
+                          state: {
+                            receiverName: ambulance.uname,
+                            bookingId: ambulance.booking_id,
+                          },
+                        })
+                      }
+                    >
+                      <ForumTwoToneIcon />
+                    </Button>
+                  </Tooltip>
                 </div>
               </li>
             ))}

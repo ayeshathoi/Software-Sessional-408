@@ -1,3 +1,4 @@
+/* eslint-disable import/extensions */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, ChangeEvent, FormEvent } from 'react';
 
@@ -26,19 +27,25 @@ function HospitalSignup() {
     setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
   };
 
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log('pending', e.target);
-  };
-
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      // await axios
-      //   .post('http://localhost:3000/auth/register/hospital', formData)
-      //   .then((res) => {
-      //     console.log('here is the form', res.data);
-      //     navigate('/LogIn/');
-      //   });
+      if (formData.password.length < 4 || formData.password.length > 8) {
+        alert('Password should be between 4 and 8 characters.');
+        return;
+      }
+      if (!/^\d+$/.test(formData.reg_id)) {
+        alert('Registration Id should contain numbers only.');
+        return;
+      }
+      if (formData.mobile.length !== 11) {
+        alert('Mobile number should be 11 digits.');
+        return;
+      }
+      if (!/^\d+$/.test(formData.mobile)) {
+        alert('Mobile number should contain numbers only.');
+        return;
+      }
       const ret = reg_hospital(formData);
       navigate('/LogIn');
     } catch (err) {
@@ -60,9 +67,7 @@ function HospitalSignup() {
         }}
       >
         <div className="pt-20 flex flex-col items-center justify-center pb-8 px-12 mb-8 border border-gray-300 round-lg ">
-          <h1
-            style={{ fontWeight: 'bold', fontSize: '24px', color: 'green' }}
-          >
+          <h1 style={{ fontWeight: 'bold', fontSize: '24px', color: 'green' }}>
             Hospital Signup
           </h1>
           <form
@@ -78,7 +83,7 @@ function HospitalSignup() {
               required
               className="w-full"
             />
-             <TextField
+            <TextField
               label="Registration ID"
               name="reg_id"
               value={formData.reg_id}
@@ -154,8 +159,6 @@ function HospitalSignup() {
               required
               className="w-full"
             />
-
-
 
             <div className="col-span-2 flex justify-center">
               <Button type="submit" variant="contained" color="success">

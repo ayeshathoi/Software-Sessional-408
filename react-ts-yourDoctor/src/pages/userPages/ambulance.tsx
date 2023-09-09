@@ -2,6 +2,7 @@
 /* eslint-disable react/no-array-index-key */
 import { SetStateAction, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import ForumTwoToneIcon from '@mui/icons-material/ForumTwoTone';
 import RateReviewOutlinedIcon from '@mui/icons-material/RateReviewOutlined';
 import { Button, Tooltip } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
@@ -40,12 +41,12 @@ function Ambulances() {
     patient_ambulance()
       .then((patient_ambulance_list) => {
         if (patient_ambulance_list) {
-          //sort 
+          // sort
           const sort = patient_ambulance_list.sort(
             (a: Ambulance, b: Ambulance) =>
               new Date(a.date).getTime() - new Date(b.date).getTime()
           );
-          
+
           const currentAmbulances: Ambulance[] = patient_ambulance_list || [];
 
           // console.log(patient_ambulance_list);
@@ -164,6 +165,22 @@ function Ambulances() {
                   <p className="text-sm text-gray-500">
                     Time: {ambulance.time.split('T')[0]}
                   </p>
+                  <Tooltip title="Chat">
+                    <Button
+                      variant="contained"
+                      color="inherit"
+                      onClick={() =>
+                        navigate('/Chatbox', {
+                          state: {
+                            receiverName: ambulance.uname,
+                            bookingId: ambulance.booking_id,
+                          },
+                        })
+                      }
+                    >
+                      <ForumTwoToneIcon />
+                    </Button>
+                  </Tooltip>
                   {selectedSection === 'previous' && (
                     <Tooltip title="Add Review">
                       <Button

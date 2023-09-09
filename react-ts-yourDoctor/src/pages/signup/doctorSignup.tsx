@@ -1,6 +1,9 @@
+/* eslint-disable react/jsx-key */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable import/extensions */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 // /* eslint-disable jsx-a11y/label-has-associated-control */
-import { useEffect,useState, ChangeEvent, FormEvent } from 'react';
+import { useEffect, useState, ChangeEvent, FormEvent } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import {
@@ -9,6 +12,7 @@ import {
   RadioGroup,
   FormControlLabel,
   Button,
+  Tooltip,
 } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -16,7 +20,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Navbar from '../navbar/headerdoctor';
 import Footer from '../navbar/footer';
 
-import {hospital_name_list,reg_doctor} from '@/api/apiCalls';
+import { hospital_name_list, reg_doctor } from '@/api/apiCalls';
 
 interface FormData {
   uname: string;
@@ -35,6 +39,10 @@ interface FormData {
   old_patient_fee: number;
   new_patient_fee: number;
   nid: string;
+}
+// eslint-disable-next-line @typescript-eslint/naming-convention
+interface hospitalNames {
+  hospital_name: string;
 }
 
 function DoctorSignup() {
@@ -66,7 +74,6 @@ function DoctorSignup() {
     });
   }, []);
 
-
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
@@ -77,14 +84,68 @@ function DoctorSignup() {
       hospital_name: e.target.value.split(',').map((name) => name.trim()),
     }));
   };
+  console.log('gfgug', formData.hospital_name);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDateChange = (date: any) => {
     setFormData((prevData) => ({ ...prevData, dob: date }));
   };
 
-
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const requiredFields = ['dob', 'zoom_link'];
+    const emptyFields = requiredFields.filter(
+      (fieldName) => !formData[fieldName]
+    );
+
+    if (emptyFields.length > 0) {
+      alert(`Please fill in all required fields: ${emptyFields.join(', ')}`);
+      return;
+    }
+
+    if (formData.mobile.length !== 11) {
+      alert('Mobile number should be 11 digits.');
+      return;
+    }
+
+    if (formData.password.length < 4 || formData.password.length > 8) {
+      alert('Password should be between 4 and 8 characters.');
+      return;
+    }
+
+    if (!/^\d+$/.test(formData.mobile)) {
+      alert('Mobile number should contain numbers only.');
+      return;
+    }
+    if (!/^\d+$/.test(formData.nid)) {
+      alert('NID should contain numbers only.');
+      return;
+    }
+
+    if (formData.new_patient_fee === 0) {
+      alert('Patient fees cannot be 0');
+      return;
+    }
+    if (formData.old_patient_fee === 0) {
+      alert('Patient fees cannot be 0');
+      return;
+    }
+
+    const validHospitalNames = hospitalList.map(
+      (hospital) => hospital.hospital_name
+    );
+
+    // Check for invalid hospitals by comparing with validHospitalNames
+    const invalidHospitals = formData.hospital_name.filter(
+      (enteredHospital) => !validHospitalNames.includes(enteredHospital)
+    );
+
+    if (invalidHospitals.length > 0) {
+      alert(
+        `The following hospitals are not valid: ${invalidHospitals.join(', ')}`
+      );
+      return;
+    }
+
     try {
       const ret = reg_doctor(formData);
       navigate('/LogIn');
@@ -108,9 +169,7 @@ function DoctorSignup() {
         }}
       >
         <div className="pt-20 flex flex-col items-center justify-center pb-8 px-12 mb-8 border border-gray-300 round-lg ">
-          <h1
-            style={{ fontWeight: 'bold', fontSize: '24px', color: 'green' }}
-          >
+          <h1 style={{ fontWeight: 'bold', fontSize: '24px', color: 'green' }}>
             Doctor Signup
           </h1>
           <form
@@ -135,7 +194,7 @@ function DoctorSignup() {
               required
               className="w-full"
             />
-            
+
             <TextField
               label="Email"
               type="email"
@@ -242,23 +301,22 @@ function DoctorSignup() {
               className="w-full"
             />
 
-            
+            <Tooltip title="Type hospitals from Available hopsitals">
+              <TextField
+                label="Hospital Names"
+                name="hospital_name"
+                value={formData.hospital_name.join(', ')}
+                onChange={handleHospitalChange}
+                variant="outlined"
+                className="w-full"
+                multiline
+                rows={1}
+                inputProps={{
+                  style: { minHeight: '20px' },
+                }}
+              />
+            </Tooltip>
 
-            <TextField
-              label="Hospital Names"
-              name="hospital_name"
-              value={formData.hospital_name.join(', ')}
-              onChange={handleHospitalChange}
-              variant="outlined"
-              className="w-full"
-              multiline
-              rows={1}
-              inputProps={{
-                style: { minHeight: '20px' },
-              }}
-
-              
-            />
             <TextField
               label="Old Patient Fee"
               name="old_patient_fee"
@@ -269,6 +327,18 @@ function DoctorSignup() {
               required
               className="w-full"
             />
+            <select
+              name="hospitalname"
+              value="0"
+              className="w-full bg-white border border-gray-300 rounded-md px-4 py-2 mt-2 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent"
+            >
+              <option value="0">Available hospitals</option>
+              {hospitalList.map((hospital) => (
+                <option value={hospital.hospital_name}>
+                  {hospital.hospital_name}
+                </option>
+              ))}
+            </select>
 
             <TextField
               label="New Patient Fee"
@@ -280,7 +350,6 @@ function DoctorSignup() {
               required
               className="w-full"
             />
-
 
             <div className="col-span-2 flex justify-center">
               <Button type="submit" variant="contained" color="success">

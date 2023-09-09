@@ -22,8 +22,7 @@ interface Appointment {
   booking_id: number;
   type: string;
   zoom_link: string;
-  booked : string;
- 
+  booked: string;
 }
 
 function Appointments() {
@@ -41,13 +40,12 @@ function Appointments() {
   useEffect(() => {
     patient_appointment()
       .then((patient_appointment_list) => {
-
-        //sort 
+        // sort
         const sort = patient_appointment_list.sort(
           (a: Appointment, b: Appointment) =>
             new Date(a.date).getTime() - new Date(b.date).getTime()
         );
-        
+
         const currentAppointments: Appointment[] =
           patient_appointment_list || [];
 
@@ -139,9 +137,7 @@ function Appointments() {
             {appointmentsToShow.map((appointment, index) => (
               <li key={index} className="flex justify-between items-center">
                 <div>
-                  <p className="text-lg font-semibold">
-                    {appointment.uname}
-                  </p>
+                  <p className="text-lg font-semibold">{appointment.uname}</p>
                   <p className="text-sm text-gray-600">
                     Designation: {appointment.designation}
                   </p>
@@ -149,7 +145,7 @@ function Appointments() {
                     Speciality: {appointment.speciality}
                   </p>
                   <p className="text-sm text-gray-600">
-                  {appointment.type === 'Online' ? 'Online' : 'In Person'}{' '}
+                    {appointment.type === 'Online' ? 'Online' : 'In Person'}{' '}
                     Appointment
                     {appointment.type === 'Online' ? (
                       <a
@@ -166,20 +162,15 @@ function Appointments() {
                     )}
                   </p>
                   <p className="text-sm text-gray-600">
-                    
                     serial : {appointment.appointment_serial}
                   </p>
                   <p className="text-sm text-red-600">
-                    {appointment.booked === 'Old Patient' ? 'you are an old patient of this doctor' :
-                    'you are a new patient of this doctor'}
-                    
-                    </p>
-                  
-                  
-                  
+                    {appointment.booked === 'Old Patient'
+                      ? 'you are an old patient of this doctor'
+                      : 'you are a new patient of this doctor'}
+                  </p>
                 </div>
                 <div className="text-right">
-                  
                   <p className="text-sm text-gray-500">
                     Fee: {appointment.total_price}
                   </p>
@@ -191,7 +182,6 @@ function Appointments() {
                   </p>
                   <p className="text-sm text-gray-500">
                     Hospital : {appointment.hospital_name}
-                    
                   </p>
                   <Tooltip title="Chat">
                     <Button

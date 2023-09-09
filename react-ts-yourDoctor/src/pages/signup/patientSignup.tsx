@@ -1,3 +1,4 @@
+/* eslint-disable import/extensions */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState, ChangeEvent, FormEvent } from 'react';
 
@@ -43,12 +44,27 @@ function PatientSignup() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      // await axios
-      //   .post('http://localhost:3000/auth/register/patient', formData)
-      //   .then((res) => {
-      //     console.log('here is the form', res.data);
-      //     navigate('/LogIn');
-      //   });
+      const requiredFields = ['dob'];
+      const emptyFields = requiredFields.filter(
+        (fieldName) => !formData[fieldName]
+      );
+
+      if (emptyFields.length > 0) {
+        alert(`Please fill in all required fields: ${emptyFields.join(', ')}`);
+        return;
+      }
+      if (formData.password.length < 4 || formData.password.length > 8) {
+        alert('Password should be between 4 and 8 characters.');
+        return;
+      }
+      if (!/^\d+$/.test(formData.mobile)) {
+        alert('Mobile number should contain numbers only.');
+        return;
+      }
+      if (formData.mobile.length !== 11) {
+        alert('Mobile number should be 11 digits.');
+        return;
+      }
       const ret = reg_patient(formData);
       navigate('/LogIn');
     } catch (err) {
@@ -71,9 +87,7 @@ function PatientSignup() {
         }}
       >
         <div className="pt-20 flex flex-col items-center justify-center pb-8 px-12 mb-8 border border-gray-300 round-lg">
-          <h1
-            style={{ fontWeight: 'bold', fontSize: '24px', color: 'green' }}
-          >
+          <h1 style={{ fontWeight: 'bold', fontSize: '24px', color: 'green' }}>
             Patient Signup
           </h1>
           <form
@@ -89,7 +103,7 @@ function PatientSignup() {
               required
               className="w-full"
             />
-             <TextField
+            <TextField
               label="Mobile Number"
               name="mobile"
               value={formData.mobile}

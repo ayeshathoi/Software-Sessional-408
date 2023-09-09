@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, Paper, Typography, Button, Container } from '@mui/material';
-import { pending_patient_req,remove_req_patient } from '@/api/apiCalls';
+import { pending_patient_req, remove_req_patient } from '@/api/apiCalls';
 
 interface Requests {
   booking_id: number;
@@ -24,7 +24,7 @@ function PatientRequests() {
         const sort = ret.result.sort(
           (a: Requests, b: Requests) =>
             new Date(a.date).getTime() - new Date(b.date).getTime()
-            //console.log((a.date).getTime() - new Date(b.date).getTime())
+          // console.log((a.date).getTime() - new Date(b.date).getTime())
         );
 
         const currentData = sort.map((item: Requests) => {
@@ -56,8 +56,8 @@ function PatientRequests() {
     });
   });
 
-  const handleRemove = (booking_id : number) => {
-    const data = {booking_id : booking_id};
+  const handleRemove = (booking_id: number) => {
+    const data = { booking_id };
     remove_req_patient(data).then((ret) => {
       if (ret) {
         alert('Request Removed!');
@@ -66,7 +66,6 @@ function PatientRequests() {
       }
     });
   };
-
 
   return (
     <div className="mt-40 ml-40 mr-20 mb-20">
@@ -130,11 +129,14 @@ function PatientRequests() {
                         </Link>
                       </td>
                       <td className="px-6 py-4 whitespace-no-wrap">
-                        <Button variant="contained" color="secondary" onClick={() => handleRemove(request.booking_id)}>
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          onClick={() => handleRemove(request.booking_id)}
+                        >
                           Remove Request
                         </Button>
                       </td>
-
                     </tr>
                   ))}
                 </tbody>

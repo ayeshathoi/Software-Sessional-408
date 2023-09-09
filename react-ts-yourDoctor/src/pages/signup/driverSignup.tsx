@@ -1,7 +1,7 @@
 /* eslint-disable import/extensions */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 // /* eslint-disable jsx-a11y/label-has-associated-control */
-import {useEffect, useState, ChangeEvent, FormEvent } from 'react';
+import { useEffect, useState, ChangeEvent, FormEvent } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import {
@@ -21,8 +21,6 @@ import { hospital_name_list, reg_driver } from '@/api/apiCalls';
 interface hospitalNames {
   hospital_name: string;
 }
-
-
 
 function DriverSignup() {
   const [formData, setFormData] = useState({
@@ -70,12 +68,37 @@ function DriverSignup() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      // await axios
-      //   .post('http://localhost:3000/auth/register/driver', formData)
-      //   .then((res) => {
-      //     console.log('here is the form', res.data);
-      //     navigate('/LogIn'); // signup er por login kora lagbe
-      //   });
+      const requiredFields = ['dob'];
+      const emptyFields = requiredFields.filter(
+        (fieldName) => !formData[fieldName]
+      );
+
+      if (emptyFields.length > 0) {
+        alert(`Please fill in all required fields: ${emptyFields.join(', ')}`);
+        return;
+      }
+
+      if (formData.mobile.length !== 11) {
+        alert('Mobile number should be 11 digits.');
+        return;
+      }
+      if (!/^\d+$/.test(formData.mobile)) {
+        alert('Mobile number should contain numbers only.');
+        return;
+      }
+      if (formData.fare === '0') {
+        alert('Fare should be greater than 0.');
+        return;
+      }
+
+      if (formData.password.length < 4 || formData.password.length > 8) {
+        alert('Password should be between 4 and 8 characters.');
+        return;
+      }
+      if (!/^\d+$/.test(formData.nid)) {
+        alert('MNID should contain numbers only.');
+        return;
+      }
       const ret = reg_driver(formData);
       navigate('/LogIn');
     } catch (err) {
@@ -257,14 +280,13 @@ function DriverSignup() {
             /> */}
 
             <div>
-
               <select
                 name="hospital_name"
                 value={formData.hospital_name}
                 onChange={handleChange}
                 className="w-full bg-white border border-gray-300 rounded-md px-4 py-3 mt-1 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent"
               >
-               <option value="0">Select Hospital if any</option>
+                <option value="0">Select Hospital if any</option>
                 {hospitalList.map((hospital) => (
                   <option value={hospital.hospital_name}>
                     {hospital.hospital_name}

@@ -228,7 +228,7 @@ const bookingAmbulance = async (type,price,time,end_time,date,payment_method,pay
             }
         }
 
-        if (hospital_name == "self")
+        if (hospital_name != "self")
         {const hid = await user.findhid(hospital_name);
         const hid2 = hid[0].hospital_id;
         const result = await client.query(ambulance, [type,price,time,end_time,date,payment_method,payment_status,

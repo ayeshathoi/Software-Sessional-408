@@ -128,21 +128,21 @@ const ambulanceDetails = async (pid) => {
         for (let i = 0; i < result.rows.length; i++) 
         {
             const hospital_id = result.rows[i].hospital_id;
-        if(result.rows[i].hospital_id == null){
-            result.rows[i].hospital = "Self";
+            if(result.rows[i].hospital_id == null){
+                result.rows[i].hospital_name = "Self";
+            }
 
-        }
-
-        else {
-        const hospital_name = await client.query(hospitalname,[hospital_id]);
-        result.rows[i].hospital = hospital_name.rows[i].hospital_name;
-        result.rows[i].street = hospital_name.rows[i].street;
-        result.rows[i].city = hospital_name.rows[i].city;
-        result.rows[i].thana = hospital_name.rows[i].thana;
-        result.rows[i].district = hospital_name.rows[i].district;
-        }
+            else {
+            const hospital_name = await client.query(hospitalname,[hospital_id]);
+            result.rows[i].hospital_name = hospital_name.rows[0].hospital_name;
+            result.rows[i].street = hospital_name.rows[0].street;
+            result.rows[i].city = hospital_name.rows[0].city;
+            result.rows[i].thana = hospital_name.rows[0].thana;
+            result.rows[i].district = hospital_name.rows[0].district;
+            }
         
-    }
+        }
+        console.log(result.rows);
 
         client.release();
         return result.rows;

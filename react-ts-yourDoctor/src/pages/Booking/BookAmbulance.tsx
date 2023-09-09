@@ -86,14 +86,12 @@ function BookAmbulance() {
         alert('Date must be greater than today');
         return;
       }
-      const hospitalNameToSend =
-        formData.hospital_name === 'Online' ? null : formData.hospital_name;
       const dataToSend = {
         ...formData,
         date: formattedDate,
         time: formattedTime,
         end_time: formattedEndTimePlusOne,
-        hospital_name: hospitalNameToSend,
+        hospital_name: formData.hospital_name,
       };
 
       const res = await bookAmbulance(dataToSend);

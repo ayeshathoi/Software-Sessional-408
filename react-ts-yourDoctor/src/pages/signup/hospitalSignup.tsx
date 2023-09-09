@@ -30,24 +30,45 @@ function HospitalSignup() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      if (formData.password.length < 4 || formData.password.length > 8) {
+      if (formData.hospital_name.length < 3) {
+        alert('Hospital name should be at least 3 characters.');
+      }
+      else if (formData.password.length < 4) {
         alert('Password should be between 4 and 8 characters.');
-        return;
       }
-      if (!/^\d+$/.test(formData.reg_id)) {
+      else if (!/^\d+$/.test(formData.reg_id)) {
         alert('Registration Id should contain numbers only.');
-        return;
       }
-      if (formData.mobile.length !== 11) {
+      else if (formData.reg_id.length < 3) {
+        alert('Registration Id should be at least 3 digits.');
+      }
+      else if (formData.street.length < 3) {
+        alert('Street name should be at least 3 characters.');
+      }
+      else if (formData.thana.length < 3) {
+        alert('Thana name should be at least 3 characters.');
+      }
+      else if (formData.city.length < 3) {
+        alert('City name should be at least 3 characters.');
+      }
+      else if (formData.district.length < 3) {
+        alert('District name should be at least 3 characters.');
+      }
+      else if (formData.mobile.length !== 11) {
         alert('Mobile number should be 11 digits.');
-        return;
       }
-      if (!/^\d+$/.test(formData.mobile)) {
+      else if (!/^\d+$/.test(formData.mobile)) {
         alert('Mobile number should contain numbers only.');
-        return;
       }
+      else {
+
       const ret = reg_hospital(formData);
+      if(ret)
+      {
+      alert ('Registration Successful');
       navigate('/LogIn');
+      }
+      }
     } catch (err) {
       console.log(err);
     }

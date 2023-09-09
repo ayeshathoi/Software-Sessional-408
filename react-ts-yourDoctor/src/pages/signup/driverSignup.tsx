@@ -17,6 +17,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Navbar from '../navbar/headerdoctor';
 import Footer from '../navbar/footer';
 import { hospital_name_list, reg_driver } from '@/api/apiCalls';
+import { parse } from 'date-fns';
 
 interface hospitalNames {
   hospital_name: string;
@@ -68,39 +69,76 @@ function DriverSignup() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const requiredFields = ['dob'];
-      const emptyFields = requiredFields.filter(
-        (fieldName) => !formData[fieldName]
-      );
 
-      if (emptyFields.length > 0) {
-        alert(`Please fill in all required fields: ${emptyFields.join(', ')}`);
-        return;
+      var formattedDate = formData.dob.format('YYYY-MM-DD');
+      formattedDate = formattedDate.split('T')[0];
+      setFormData((prevData) => ({ ...prevData, dob: formattedDate }));
+      if(formData.hospital_name === ''){
+        alert('Please select a hospital');
+      }
+      else if(formData.dob === ''){
+        alert('Please select a date');
       }
 
-      if (formData.mobile.length !== 11) {
+      else if (formData.mobile.length !== 11) {
         alert('Mobile number should be 11 digits.');
-        return;
       }
-      if (!/^\d+$/.test(formData.mobile)) {
+      else if (!/^\d+$/.test(formData.mobile)) {
         alert('Mobile number should contain numbers only.');
-        return;
       }
-      if (formData.fare === '0') {
-        alert('Fare should be greater than 0.');
-        return;
+      else if (formData.nid.length !== 4) {
+        alert('NID number should be 4 digits.');
+      }
+      else if (!/^\d+$/.test(formData.nid)) {
+        alert('NID number should contain numbers only.');
+      }
+      else if (formData.street.length < 3) {
+        alert('Street name should be at least 3 characters.');
+      }
+      else if (formData.thana.length < 3) {
+        alert('Thana name should be at least 3 characters.');
+      }
+      else if (formData.city.length < 3) {
+        alert('City name should be at least 3 characters.');
+      }
+      else if (formData.district.length < 3) {
+        alert('District name should be at least 3 characters.');
+      }
+      else if (formData.type.length < 3) {
+        alert('Ambulance type should be at least 3 characters.');
+      }
+      else if (formData.fare.length < 1) {
+        alert('Fare should be at least 1 digit.');
+      }
+      else if (!/^\d+$/.test(formData.mobile)) {
+        alert('Mobile number should contain numbers only.');
+        
+      }
+      else if (parseInt(formData.fare) < 0) {
+        alert('Fare should be greater than 0.'); 
       }
 
-      if (formData.password.length < 4 || formData.password.length > 8) {
-        alert('Password should be between 4 and 8 characters.');
-        return;
+      else if (formData.password.length != 4) {
+        alert('Password should be 4 characters.');
+        
       }
-      if (!/^\d+$/.test(formData.nid)) {
+      else if (!/^\d+$/.test(formData.nid)) {
         alert('MNID should contain numbers only.');
-        return;
+        
       }
+      else {
       const ret = reg_driver(formData);
-      navigate('/LogIn');
+      if(ret)
+      {
+        alert('Driver Registered Successfully');
+        navigate('/LogIn');
+      }
+      else{
+        alert('Driver Registration Failed');
+      }
+      
+      }
+
     } catch (err) {
       console.log(err);
     }

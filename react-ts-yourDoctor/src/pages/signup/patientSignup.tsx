@@ -44,29 +44,33 @@ function PatientSignup() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const requiredFields = ['dob'];
-      const emptyFields = requiredFields.filter(
-        (fieldName) => !formData[fieldName]
-      );
 
-      if (emptyFields.length > 0) {
-        alert(`Please fill in all required fields: ${emptyFields.join(', ')}`);
-        return;
-      }
-      if (formData.password.length < 4 || formData.password.length > 8) {
+      if (formData.password.length < 4) {
         alert('Password should be between 4 and 8 characters.');
-        return;
       }
-      if (!/^\d+$/.test(formData.mobile)) {
+      else if (!/^\d+$/.test(formData.mobile)) {
         alert('Mobile number should contain numbers only.');
-        return;
       }
-      if (formData.mobile.length !== 11) {
+      else if (formData.mobile.length !== 11) {
         alert('Mobile number should be 11 digits.');
-        return;
       }
+      else if (formData.street.length < 3) {
+        alert('Street name should be at least 3 characters.');
+      }
+      else if (formData.thana.length < 3) {
+        alert('Thana name should be at least 3 characters.');
+      }
+      else if (formData.city.length < 3) {
+        alert('City name should be at least 3 characters.');
+      }
+      else if (formData.district.length < 3) {
+        alert('District name should be at least 3 characters.');
+      }
+      else {
       const ret = reg_patient(formData);
+      alert ('Patient Registered Successfully');
       navigate('/LogIn');
+      }
     } catch (err) {
       console.log(err);
     }

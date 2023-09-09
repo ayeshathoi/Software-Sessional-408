@@ -84,7 +84,6 @@ function DoctorSignup() {
       hospital_name: e.target.value.split(',').map((name) => name.trim()),
     }));
   };
-  console.log('gfgug', formData.hospital_name);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDateChange = (date: any) => {
     setFormData((prevData) => ({ ...prevData, dob: date }));
@@ -92,44 +91,11 @@ function DoctorSignup() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const requiredFields = ['dob', 'zoom_link'];
-    const emptyFields = requiredFields.filter(
-      (fieldName) => !formData[fieldName]
-    );
 
-    if (emptyFields.length > 0) {
-      alert(`Please fill in all required fields: ${emptyFields.join(', ')}`);
-      return;
-    }
 
-    if (formData.mobile.length !== 11) {
-      alert('Mobile number should be 11 digits.');
-      return;
-    }
-
-    if (formData.password.length < 4 || formData.password.length > 8) {
-      alert('Password should be between 4 and 8 characters.');
-      return;
-    }
-
-    if (!/^\d+$/.test(formData.mobile)) {
-      alert('Mobile number should contain numbers only.');
-      return;
-    }
-    if (!/^\d+$/.test(formData.nid)) {
-      alert('NID should contain numbers only.');
-      return;
-    }
-
-    if (formData.new_patient_fee === 0) {
-      alert('Patient fees cannot be 0');
-      return;
-    }
-    if (formData.old_patient_fee === 0) {
-      alert('Patient fees cannot be 0');
-      return;
-    }
-
+    var formattedDate = formData.dob.format('YYYY-MM-DD');
+    formattedDate = formattedDate.split('T')[0];
+    setFormData((prevData) => ({ ...prevData, dob: formattedDate }));
     const validHospitalNames = hospitalList.map(
       (hospital) => hospital.hospital_name
     );
@@ -143,15 +109,84 @@ function DoctorSignup() {
       alert(
         `The following hospitals are not valid: ${invalidHospitals.join(', ')}`
       );
-      return;
+      
     }
 
+    if (formData.uname.length < 3) {
+      alert('Name should be at least 3 characters.');
+    }
+
+    else if (formData.mobile.length !== 11) {
+      alert('Mobile number should be 11 digits.');
+      
+    }
+    else if (!/^\d+$/.test(formData.nid)) {
+      alert('Nid should contain numbers only.');
+    }
+    else if (!/^\d+$/.test(formData.mobile)) {
+      alert('Mobile should contain numbers only.');
+    }
+
+    else if (formData.password.length != 4) {
+      alert('Password should be 4 characters.');
+    }
+
+    else if (!/^\d+$/.test(formData.mobile)) {
+      alert('Mobile number should contain numbers only.');
+      
+    }
+    else if (!/^\d+$/.test(formData.nid)) {
+      alert('NID should contain numbers only.');
+    }
+
+    else if (formData.nid.length !== 4) {
+      alert('NID should be 4 digits.');
+    }
+    else if(formData.zoom_link.length < 3)
+    {
+      alert('Zoom link should be at least 3 characters.');
+    }
+    
+    else if (formData.designation.length < 3) {
+      alert('Designation should be at least 3 characters.');
+    }
+    else if (formData.qualification.length < 3) {
+      alert('Qualification should be at least 3 characters.');
+    }
+
+    else if (formData.speciality.length < 3) {
+      alert('Speciality should be at least 3 characters.');
+    }
+
+    else if (formData.old_patient_fee < 0) {
+      alert('Patient fees cannot be negative');
+    }
+    else if (formData.new_patient_fee < 0) {
+      alert('Patient fees cannot be negative');
+    }
+
+
+    else if (formData.new_patient_fee === 0) {
+      alert('Patient fees cannot be 0');
+      
+    }
+    else if (formData.old_patient_fee === 0) {
+      alert('Patient fees cannot be 0');
+      
+    }
+    else {
     try {
       const ret = reg_doctor(formData);
+      if(ret)
+      {
+      alert ('Registration Successful');
       navigate('/LogIn');
+      }
+      
     } catch (err) {
       console.log(err);
     }
+  }
   };
 
   return (
@@ -300,10 +335,22 @@ function DoctorSignup() {
               required
               className="w-full"
             />
+            <select
+              name="hospitalname"
+              value="0"
+              className="w-full bg-white border border-gray-300 rounded-md px-4 py-2 mt-2 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent"
+            >
+              <option value="0">See the available hospitals</option>
+              {hospitalList.map((hospital) => (
+                <option value={hospital.hospital_name}>
+                  {hospital.hospital_name}
+                </option>
+              ))}
+            </select>
 
             <Tooltip title="Type hospitals from Available hopsitals">
               <TextField
-                label="Hospital Names"
+                label="write your hospital Names"
                 name="hospital_name"
                 value={formData.hospital_name.join(', ')}
                 onChange={handleHospitalChange}
@@ -327,18 +374,7 @@ function DoctorSignup() {
               required
               className="w-full"
             />
-            <select
-              name="hospitalname"
-              value="0"
-              className="w-full bg-white border border-gray-300 rounded-md px-4 py-2 mt-2 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent"
-            >
-              <option value="0">Available hospitals</option>
-              {hospitalList.map((hospital) => (
-                <option value={hospital.hospital_name}>
-                  {hospital.hospital_name}
-                </option>
-              ))}
-            </select>
+            
 
             <TextField
               label="New Patient Fee"

@@ -1,7 +1,7 @@
 /* eslint-disable import/extensions */
 /* eslint-disable react/no-array-index-key */
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import {useNavigate, useLocation } from 'react-router-dom';
 import './viewPrescription.css'; // Import the CSS file
 import DoctorImage from '@/assets/doctor.jpg';
 import User from '@/assets/user.webp';
@@ -14,6 +14,7 @@ function ViewPrescription() {
   const { bookingId } = location.state;
   const [prescriptionDetails, setPrescriptionDetails] = useState(null);
   const [noPrescriptionFound, setNoPrescriptionFound] = useState(false);
+  const navigate = useNavigate();
   console.log('bookingId', bookingId);
   useEffect(() => {
     // Fetch prescription data when component mounts
@@ -26,7 +27,9 @@ function ViewPrescription() {
           // Set the state to indicate no prescription found
           setNoPrescriptionFound(true);
           alert('No prescription found for this booking.');
+          navigate('/doctorHome');
         } else {
+
           setPrescriptionDetails(data);
         }
       } catch (error) {

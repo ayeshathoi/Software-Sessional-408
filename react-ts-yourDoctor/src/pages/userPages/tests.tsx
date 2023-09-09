@@ -156,7 +156,7 @@ function Tests() {
                       onClick={() =>
                         navigate('/Chatbox', {
                           state: {
-                            receiverName: test.nurse_name,
+                            receiverName: test.uname,
                             bookingId: test.booking_id,
                           },
                         })

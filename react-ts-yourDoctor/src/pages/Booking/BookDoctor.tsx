@@ -138,7 +138,11 @@ function BookDoctor() {
       console.log('frontend Request', dataToSend);
       var status = true;
       const res = await bookDoctor(dataToSend);
-      console.log('Backend Response', res);
+      console.log(formData.hospital_name?.split(" ")[1]);
+      if(formData.hospital_name?.split(" ")[1] == "Online" && res.result === 'This serial is already booked.'){
+        alert('Slot is already booked. try another slot');
+        status = false;
+      }
       if (res === 'This serial is already booked.') {
         alert('Slot is already booked. try another slot');
         status = false;

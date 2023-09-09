@@ -68,6 +68,8 @@ function Prescription() {
           setNoPrescriptionFound(true);
           alert('No prescription found for this booking.');
         } else {
+          alert('Prescription already exists for this booking.');
+          navigate(`/doctorHome`);
           setNoPrescriptionFound(false);
         }
       } catch (error) {

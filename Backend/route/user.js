@@ -6,6 +6,7 @@ router.use(async (req,res,next) => {
         next();
     }
     else{
+        //res.render('error', { title: 'Error', message: 'Unauthorized' });
         
         res.send("UNAUTHORIZED");
         //res.status(error.UNAUTHORIZED).json({ error: 'Unauthorized' });

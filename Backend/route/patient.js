@@ -9,6 +9,7 @@ router.use(async (req,res,next) => {
     }
     else{
         //res.status(error.UNAUTHORIZED).json({ error: 'Unauthorized' });
+        //res.render('error', { title: 'Error', message: 'Unauthorized' });
         res.send("UNAUTHORIZED");
     }
 });

@@ -109,9 +109,10 @@ function Order() {
                   <p className="text-lg font-semibold">
                     Name: {ambulance.uname}
                   </p>
-                  <p className="text-gray-600 text-sm">
+                  <p className="text-gray-600">
                     mobile : {ambulance.mobile_no}
                   </p>
+                  <hr />
                 </div>
                 <div className="text-right">
                   <p className="text-sm text-gray-500">

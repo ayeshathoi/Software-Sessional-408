@@ -22,7 +22,6 @@ interface Ambulance {
   thana: string;
   district: string;
   booking_id: number;
-  mobile_no: string;
 }
 
 function Ambulances() {
@@ -147,15 +146,10 @@ function Ambulances() {
               <li key={index} className="flex justify-between items-center">
                 <div>
                   <p className="text-lg font-semibold">
-                    Name: {ambulance.uname} 
+                    Name: {ambulance.uname}
                   </p>
                   <p className="text-gray-600">
-                    {ambulance.ambulance_type} Ambulance
-
-                  </p>
-                  <p className="text-gray-600 text-sm">
-                    Mobile No : {ambulance.mobile_no}
-
+                    Ambulance Type : {ambulance.ambulance_type}
                   </p>
                 </div>
                 <div className="text-right">

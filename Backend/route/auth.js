@@ -48,6 +48,7 @@ router.post('/register/driver', async (req, res) => {
 router.post('/login', passport.authenticate('local'), (req, res) => {
     try{
     const user = req.user;
+
     if(user.user_type != 'patient' && user.user_type != 'hospital' && user.user_type != 'driver' && user.user_type != 'doctor' && user.user_type != 'nurse'){
         res.status(error.BAD_REQUEST).json({ error: 'An error occurred while logging in.' });
     }

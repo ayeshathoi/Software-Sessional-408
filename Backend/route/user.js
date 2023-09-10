@@ -2,14 +2,12 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../Controller/user');
 router.use(async (req,res,next) => {
+    console.log(req.user);
     if(req.user){
         next();
     }
     else{
-        //res.render('error', { title: 'Error', message: 'Unauthorized' });
-        
         res.send("UNAUTHORIZED");
-        //res.status(error.UNAUTHORIZED).json({ error: 'Unauthorized' });
     }
 });
 router.get('/', userController.getUserDetailsByID);

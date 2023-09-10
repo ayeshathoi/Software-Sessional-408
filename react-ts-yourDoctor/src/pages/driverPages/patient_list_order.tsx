@@ -12,6 +12,7 @@ interface Ambulance {
   uname: string;
   mobile_no: string;
   booking_id: number;
+  addr:string;
 }
 
 function Order() {
@@ -109,10 +110,12 @@ function Order() {
                   <p className="text-lg font-semibold">
                     Name: {ambulance.uname}
                   </p>
-                  <p className="text-gray-600">
+                  <p className="text-gray-600 text-sm">
                     mobile : {ambulance.mobile_no}
                   </p>
-                  <hr />
+                  <p className="text-gray-600 text-sm">
+                    Address : {ambulance.addr}
+                  </p>
                 </div>
                 <div className="text-right">
                   <p className="text-sm text-gray-500">

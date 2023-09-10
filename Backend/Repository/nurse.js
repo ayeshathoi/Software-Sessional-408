@@ -3,7 +3,7 @@ const constant = require("./constants")
 const user = require("./user")
 
 
-const patientList =         "SELECT a.booking_id,u.uname, u."+ constant.TABLE_USER_MOBILE_NO + ", a.time, a.date " +
+const patientList =         "SELECT a.patient_id,a.booking_id,u.uname, u."+ constant.TABLE_USER_MOBILE_NO + ", a.time, a.date " +
                             "FROM booking a " +
                             "JOIN nurse n ON a.nurse_id = n.nurse_id " +
                             "JOIN users u ON a.patient_id = u.uid " +
@@ -25,6 +25,7 @@ const testNames = "SELECT testname FROM test " +
                     "Join booking ON booking_tests.booking_id = booking.booking_id " +
                     "WHERE booking.nurse_id = $1";
 
+const patientAddr = "Select street,thana,city,district from patient where pid = $1";
 const patientListDetails_nurse = async (nid) => {
     try {
         const client = await getConnection.connect();
@@ -32,6 +33,9 @@ const patientListDetails_nurse = async (nid) => {
         var testnames = "";
         for (let i = 0; i < result.rows.length; i++) {
             const test = await client.query(testNames, [nid]);
+
+            const addr  = await client.query(patientAddr,[result.rows[i].patient_id]);
+            result.rows[i].addr = addr.rows[0].street + ", " + addr.rows[0].thana + ", " +addr.rows[0].city + ", " + addr.rows[0].district;
             for (let j = 0; j < test.rows.length; j++) {
                 if (j == test.rows.length - 1) {
                     testnames += test.rows[j].testname;

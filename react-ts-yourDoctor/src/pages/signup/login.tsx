@@ -36,6 +36,7 @@ function LogIn() {
     try {
       const ret = await login(formData);
       if (ret) {
+        console.log(ret);
         let userProfileUrl = '';
         if (ret === 'doctor') {
           userProfileUrl = `/doctorHome/`;

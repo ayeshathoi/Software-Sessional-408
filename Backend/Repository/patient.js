@@ -76,13 +76,13 @@ const testNames = "SELECT testname FROM test " +
                     "Join booking ON booking_tests.booking_id = booking.booking_id " +
                     "WHERE booking.booking_id = $1";
 
-const CheckUp = "SELECT a.booking_id,a.total_price, a.time, a.date, u.uname, n.designation " +
+const CheckUp = "SELECT a.hospital_id,a.booking_id,a.total_price, a.time, a.date,u.mobile_no, u.uname, n.designation " +
                 "FROM booking a " + 
                 "JOIN nurse n ON a.nurse_id = n.nurse_id " +
                 "JOIN users u ON n.nurse_id = u.uid " +
                 "WHERE a.patient_id = $1 AND a.type = 'Checkup' AND a.nurse_id IS NOT NULL";
 
-
+const hospital_name = "Select hospital_name from hospital where hospital_id = $1";
 const checkUpDetails = async (pid) => {
     try {
         const client = await getConnection.connect();
@@ -91,6 +91,8 @@ const checkUpDetails = async (pid) => {
 
         for (let i = 0; i < result.rows.length; i++) {
             const test = await client.query(testNames, [result.rows[i].booking_id]);
+            const hospital = await client.query(hospital_name, [result.rows[i].hospital_id]);
+            result.rows[i].hospitalName = hospital.rows[0].hospital_name;
             for (let j = 0; j < test.rows.length; j++) {
                 if (j === test.rows.length - 1) {
                     testnames += test.rows[j].testname;
@@ -112,7 +114,7 @@ const checkUpDetails = async (pid) => {
 };
 
 //driver er hospital eishob fixed kra lagbe
-const Ambulance = "SELECT a.driver_id,a.time,a.date,a.booking_id, u.uname, d.ambulance_type,a.hospital_id,a.total_price " +
+const Ambulance = "SELECT a.driver_id,a.time,a.date,a.booking_id,u.mobile_no, u.uname, d.ambulance_type,a.hospital_id,a.total_price " +
                   "FROM booking a " +
                   "JOIN driver d ON a.driver_id = d.driver_id " +
                   "JOIN users u ON d.driver_id = u.uid " +

@@ -1,0 +1,10 @@
+UPDATE hospital SET verification_status = 'Available' WHERE hospital_id = 13;
+
+select * from doctor;
+In this example, the popularity column is given a default value of 0. You can adjust the default value as needed for your specific use case.
+select * from users;
+
+
+select * from driver;
+UPDATE booking SET date = '2023-05-11' WHERE booking_id = 9;
+

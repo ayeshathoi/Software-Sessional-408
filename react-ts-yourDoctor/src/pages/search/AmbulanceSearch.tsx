@@ -157,7 +157,7 @@ function AmbulanceSearch() {
           <div className="flex ml-4">
             <Grid container spacing={3}>
               {filteredDriver.map((driver, index) => (
-                <Grid item xs={3} key={index}>
+                <Grid item xs={2} key={index}>
                   <Card>
                     <CardMedia
                       component="img"

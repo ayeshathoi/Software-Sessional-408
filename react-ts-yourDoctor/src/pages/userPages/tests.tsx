@@ -20,7 +20,6 @@ interface Checkup {
   booking_id: number;
   nurse_name: string;
   mobile_no: string;
-  hospitalName: string;
 }
 
 function Tests() {
@@ -144,9 +143,6 @@ function Tests() {
                   </p>
                   <p className="text-sm text-gray-500">
                     Tests : {test.testnames}
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    Related hospital : {test.hospitalName}
                   </p>
                 </div>
                 <div className="text-right">

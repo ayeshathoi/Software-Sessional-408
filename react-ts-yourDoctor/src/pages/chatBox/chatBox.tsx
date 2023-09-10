@@ -134,11 +134,6 @@ function Chatbox() {
                 : 'text-left'
             }`}
           >
-            <Typography
-              variant="body2" className='text-gray-400 text-xs mr-1'
-              >
-                {comment.sender_id === comment.viewer_id ? 'You' : receiverName}
-              </Typography>
             <Box
               style={{
                 backgroundColor:
@@ -152,14 +147,12 @@ function Chatbox() {
                 color: 'white',
               }}
             >
-              
-              {comment.message} 
+              {comment.message}
               <Typography variant="body2">
                 {comment.timestamp.split('T')[1].split('.')[0]},
                 {comment.timestamp.split('T')[0]}
               </Typography>
             </Box>
-            
           </div>
         ))}
       </div>

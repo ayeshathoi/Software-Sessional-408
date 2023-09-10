@@ -3,17 +3,22 @@ const constant = require("./constants")
 const user = require("./user")
 
 //appointment e total fare rakhte hobe
-const patientList =         "SELECT u.uname, u."+ constant.TABLE_USER_MOBILE_NO + ", a.date, a.time " +
+const patientList =         "SELECT a.patient_id,u.uname, u."+ constant.TABLE_USER_MOBILE_NO + ", a.date, a.time " +
                             "FROM booking a " +
                             "JOIN driver n ON a.driver_id = n.driver_id " +
                             "JOIN users u ON a.patient_id = u.uid " +
                             "WHERE a.driver_id = $1 AND a.type = 'Ambulance'"
 
+const patientAddr = "Select street,thana,city,district from patient where pid = $1";
 const patientListDetails_driver = async (drid) => {
     try {
         const client = await getConnection.connect();
         
         const result = await client.query(patientList, [drid]);
+        for (let i = 0; i < result.rows.length; i++) {
+            const addr  = await client.query(patientAddr,[result.rows[i].patient_id]);
+            result.rows[i].addr = addr.rows[0].street + ", " + addr.rows[0].thana + ", " +addr.rows[0].city + ", " + addr.rows[0].district;
+        }
         client.release();
         return result.rows;
     }

@@ -1,7 +1,7 @@
 # YourDoctor
   An Online platform where you can book appointment with doctors, order ambulances and check your health with our nurses!
   Made for Level-4 Term-1 Database Sessional Project created by  Ayesha Binte Mostofa (1805062),Labiba Binte Tashin (1805070) and Nusrat Nur Labiba(1805081) 
- ###### Under the supervision of Tahmid Hasan, Lecturer, CSE, BUET
+ ###### Under the supervision of Tahmid Hasan, assistant professor , CSE, BUET
 
 ### Tools For Database and Frontend
 <li>React-js</li>

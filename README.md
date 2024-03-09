@@ -1,6 +1,3 @@
-![This is an image](![image](https://github.com/ayeshathoi/yourDoctor-408-Sessional/assets/79919256/fb041ee5-968c-47f6-aa92-eef4a47cd4d0)
-)
-
 # YourDoctor
   An Online platform where you can book appointment with doctors, order ambulances and check your health with our nurses!
   Made for Level-4 Term-1 Database Sessional Project created by  Ayesha Binte Mostofa (1805062),Labiba Binte Tashin (1805070) and Nusrat Nur Labiba(1805081) 
@@ -18,7 +15,7 @@
 <li> Doctor </li>
 <li> Driver </li>
 <li> Nurse  </li>
-<li> Admin </li>
+<li> Hospital </li>
 
 
 <h2> Services: </h2>
@@ -26,18 +23,18 @@
 <li> Doctor Service </li>
 <li> Driver Service </li>
 <li> Nurse  Service </li>
-<li> Admin Service </li>
+<li> Hospital Service </li>
 <li> Booking Service (Doctor appointment, Ambulance order, Checkup appointment) </li>
 <li> History Storing Service </li>
 <li> Rating & Complaint Service </li>
 
 
 
-# Intruction
+## Intruction to Run the Project
 
-#### Download Backend and react-ts-yourDoctor folder
-##### open terminal in both folder and run the command "npm i"
+#### --> Download Backend and react-ts-yourDoctor folder
+##### --> Open terminal in both folder and run the command "npm i"
 
-##### in backend, run the command "npm start"
-##### in react-ts-yourDoctor (frontend) run "npm run dev"
-##### open localhost:5173 in firefox or chrome
+##### --> In backend, run the command "npm start"
+##### --> In react-ts-yourDoctor (frontend) run "npm run dev"
+##### --> Open localhost:5173 in firefox or chrome

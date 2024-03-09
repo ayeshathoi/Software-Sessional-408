@@ -32,38 +32,12 @@
 <li> Rating & Complaint Service </li>
 
 
-## Instructions:
 
-## How to set up:
-  <ul>
-    <li>Clone repository or download zip file. Run on terminal
+# Intruction
 
-  
-  <li> Download Oracle 19c. Create a user c##epathshala with password epathshala. Run in SQL-PLUS
-    
-```
-create user c##epathshala identified by epathshala;
-grant dba to c##epathshala;
-```
- <li>Download NAVICAT and create a connection using c##epathshala user and password epathshala. </li>
- <li>Open the sql file with NAVICAT and choose the connection and user. Then run the file</li>
-  
-</ul>
+#### Download Backend and react-ts-yourDoctor folder
+##### open terminal in both folder and run the command "npm i"
 
-
-## How to use:
-<ul>
-  <li> Connect to localhost:8080/login and login using valid credentials
-</ul>
-
-
-# yourDoctor-408-Sessional
-
-
-
-## Download Backend and react-ts-yourDoctor folder
-### open terminal in both folder and run the command "npm i"
-
-### in backend, run the command "npm start"
-### in react-ts-yourDoctor (frontend) run "npm run dev"
-### open localhost:5173 in firefox or chrome
+##### in backend, run the command "npm start"
+##### in react-ts-yourDoctor (frontend) run "npm run dev"
+##### open localhost:5173 in firefox or chrome

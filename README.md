@@ -34,7 +34,7 @@
 
 - Download Backend and react-ts-yourDoctor folder
 - Open terminal in both folder and run the command "npm i"
-- Connect with postgresql database and the project
+- Connect with postgresql database 
 - In backend, run the command "npm start"
 - In react-ts-yourDoctor (frontend) run "npm run dev"
 - Open localhost:5173 in firefox or chrome
